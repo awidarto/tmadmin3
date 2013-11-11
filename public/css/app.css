@@ -1,6 +1,6 @@
 /* Artfully masterminded by ZURB  */
 
-/* -------------------------------------------------- 
+/* --------------------------------------------------
    Table of Contents
 -----------------------------------------------------
 :: Shared Styles
@@ -64,7 +64,7 @@ visibility:hidden;
 
 .sidepanel{
 	background-color: #fff;
-	border: 1px solid #d7d7d7;	
+	border: 1px solid #d7d7d7;
 }
 .center{
 	width:1024px;
@@ -129,7 +129,7 @@ span.action{
 }
 
 .sidemenu{
-	font-size: 1.9em;	
+	font-size: 1.9em;
 }
 .tabs.vertical dd a, .tabs.vertical li a{
 	background-color: #fafafa;
@@ -187,10 +187,10 @@ span.action{
 }
 
 .top-bar ul > li a:not(.button){
-	
+
 	font-size: 12px;
 	font-weight: normal;
-	
+
 }
 .tabs.vertical dd a, .tabs.vertical li a{
 	margin: 0 auto;
@@ -230,7 +230,7 @@ span.action{
 	padding:0 15px;
 }
 .newdoc.action{
-	font-size:1.7em; 
+	font-size:1.7em;
 	background-position: top left;
 
 }
@@ -274,7 +274,7 @@ table tbody tr.even,tr.even td.sorting_1{
 }
 .message-list-item span.category-info{
 	color: #ac9b70;
-	
+
 	font-style: italic;
 	font-size: 1.05em;
 }
@@ -304,7 +304,7 @@ body.front .container-content{
 }
 body.front .container-content #maincontent{
 	margin: 0 auto;
-	text-align: left;	
+	text-align: left;
 	float: none;
 	-webkit-box-shadow: 0px 3px 3px 1px rgba(0, 0, 0, 0.2);
 box-shadow: 0px 3px 3px 1px rgba(0, 0, 0, 0.2);
@@ -329,7 +329,7 @@ table.profile-info{
 	border: none;
 }
 table.profile-info td{
-	padding:9px 10px 9px 0;	
+	padding:9px 10px 9px 0;
 }
 
 table.profile-info tbody tr:nth-child(even){
@@ -531,7 +531,7 @@ i.approvalview{
 .fileviewer-container{
 	margin:0px;
 	padding: 0px;
-	height:400px;	
+	height:400px;
 }
 
 iframe.fileviewer{

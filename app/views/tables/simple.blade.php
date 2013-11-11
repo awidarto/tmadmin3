@@ -2,14 +2,6 @@
 
 @section('content')
 
-
-<!--<div class="tableHeader">
-	@if(isset($addurl) && $addurl != '')
-		<a class="foundicon-add-doc button right newdoc action clearfix" href="{{URL::to($addurl)}}">&nbsp;&nbsp;<span>{{$newbutton}}</span></a>
-	@endif
-</div>
--->
-
 <div class="row-fluid">
 	<div class="span12 command-bar">
 
@@ -96,13 +88,14 @@
 
 		    <thead id="searchinput">
 			    <tr>
+			    <?php $index = -1 ;?>
 		    	@foreach($heads as $in)
 		    		@if( $in[0] != 'select_all' && $in[0] != '')
 			    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
 			    			@if(isset($in[1]['date']) && $in[1]['date'])
 				        		<td>
-									<div id="search_{{$in[0]}}" class="input-append datepickersearch">
-									    <input name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="Search {{$in[0]}}" ></input>
+									<div id="{{ $index }}" class="input-append datepickersearch">
+									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="Search {{$in[0]}}" ></input>
 									    <span class="add-on">
 											<i data-time-icon="icon-clock" data-date-icon="icon-calendar">
 											</i>
@@ -111,8 +104,8 @@
 				        		</td>
 			    			@elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
 				        		<td>
-									<div id="search_{{$in[0]}}" class="input-append datetimepickersearch">
-									    <input name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="Search {{$in[0]}}" ></input>
+									<div id="{{ $index }}" class="input-append datetimepickersearch">
+									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="Search {{$in[0]}}" ></input>
 									    <span class="add-on">
 											<i data-time-icon="icon-clock" data-date-icon="icon-calendar">
 											</i>
@@ -121,28 +114,33 @@
 				        		</td>
 			    			@elseif(isset($in[1]['select']) && is_array($in[1]['select']))
 			    				<td>
-			    					<input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+			    					<input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
 			    					<div class="styled-select">
-				    					{{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small'))}}
+				    					{{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small','id'=>$index ))}}
 			    					</div>
 			    				</td>
 			    			@else
-				        		<td><input type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" /></td>
+				        		<td>
+				        			<input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+				        		</td>
 			    			@endif
 		    			@else
 			    			@if(isset($in[1]['clear']) && $in[1]['clear'] == true)
-			    				<td><span id="clearsearch">Clear Search</span></td>
+			    				<td><span id="clearsearch" style="cursor:pointer;">Clear Search</span></td>
 			    			@else
 				        		<td>&nbsp;</td>
 			    			@endif
 		    			@endif
 
+			    		<?php $index++; ?>
 
 		    		@elseif($in[0] == 'select_all')
 	    				<td>{{ Former::checkbox('select_all') }}</td>
 		    		@elseif($in[0] == '')
 		        		<td>&nbsp;</td>
 		    		@endif
+
+
 		    	@endforeach
 			    </tr>
 		    </thead>
@@ -320,23 +318,25 @@
 		//header search
 
 		$('thead input.filter').keyup( function () {
-			console.log($('thead input').index(this));
+			//console.log($('thead input').index(this));
+			console.log(this.id);
 			/* Filter on the column (the index) of this element */
-			var search_index = $('thead input').index(this);
+			//var search_index = $('thead input').index(this);
+			var search_index = this.id;
 			oTable.fnFilter( this.value, search_index );
 		} );
 
 		$('thead input.dateinput').change( function () {
-			/* Filter on the column (the index) of this element */
 			console.log($('thead input').index(this));
-			var search_index = $('thead input').index(this);
+			var search_index = this.id;
 			oTable.fnFilter( this.value,  search_index  );
 		} );
 
 		$('thead input.datetimeinput').change( function () {
 			/* Filter on the column (the index) of this element */
 			console.log($('thead input').index(this));
-			var search_index = $('thead input').index(this);
+			//var search_index = $('thead input').index(this);
+			var search_index = this.id;
 			oTable.fnFilter( this.value,  search_index  );
 		} );
 
@@ -351,34 +351,44 @@
 
 
 		eldate.on('changeDate', function(e) {
-			console.log(this);
-			var ins = $(this).find('input');
-			console.log(ins);
-			console.log($('thead input').index(ins));
-			var search_index = $('thead input').index(ins);
-			oTable.fnFilter( $(ins).val(),  search_index  );
+			if(e.localDate != null){
+				var dateval = e.localDate.toString();
+			}else{
+				var dateval = '';
+			}
+			var search_index = e.target.id;
+
+			oTable.fnFilter( dateval, search_index );
 		});
 
 		eldatetime.on('changeDate', function(e) {
-			console.log(this);
-			var ins = $(this).find('input');
-			console.log(ins);
-			console.log($('thead input').index(ins));
-			var search_index = $('thead input').index(ins);
-			oTable.fnFilter( $(ins).val(),  search_index  );
+			if(e.localDate != null){
+				var dateval = e.localDate.toString();
+			}else{
+				var dateval = '';
+			}
+			var search_index = e.target.id;
+
+			oTable.fnFilter( dateval, search_index );
 		});
 
 		$('thead select.selector').change( function () {
 			/* Filter on the column (the index) of this element */
-			var prev = $(this).parent().prev('input');
+			//var prev = $(this).parent().prev('input');
 
-			var search_index = $('thead input').index(prev);
+			//var search_index = $('thead input').index(prev);
+			var search_index = this.id;
+
+			console.log(search_index);
 
 			oTable.fnFilter( this.value,  search_index  );
 		} );
 
 		$('#clearsearch').click(function(){
 			$('thead input').val('');
+			$('input.dateinput').change();
+			$('input.datetimeinput').change();
+			oTable.fnDraw();
 		});
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in

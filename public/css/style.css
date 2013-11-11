@@ -1,0 +1,7 @@
+span.tag{
+    float: left;
+    padding: 1px 4px;
+    background-color: #ccc;
+    margin: 2px;
+    font-size: 11px;
+}

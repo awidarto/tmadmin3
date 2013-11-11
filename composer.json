@@ -11,7 +11,8 @@
         "intervention/image": "dev-master",
         "intervention/imagecache": "dev-master",
         "intervention/helper": "dev-master",
-        "intervention/validation": "dev-master"
+        "intervention/validation": "dev-master",
+        "robin-malfait/formgenerator": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

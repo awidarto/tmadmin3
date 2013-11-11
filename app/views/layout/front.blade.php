@@ -28,6 +28,9 @@
     {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
 
     {{ HTML::style('css/summernote.css') }}
+
+    {{ HTML::style('css/style.css') }}
+
     <!-- Le styles -->
 
     <style type="text/css">

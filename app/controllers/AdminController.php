@@ -103,8 +103,8 @@ class AdminController extends Controller {
 		$select_all = Former::checkbox()->name('Select All')->check(false)->id('select_all');
 
 		// add selector and sequence columns
-		array_unshift($heads, array($select_all,array('search'=>false,'sort'=>false)));
-		array_unshift($heads, array('#',array('search'=>false,'sort'=>false)));
+		array_unshift($heads, array($select_all,array('sort'=>false)));
+		array_unshift($heads, array('#',array('sort'=>false)));
 
 		// add action column
 		array_push($heads,
@@ -136,7 +136,7 @@ class AdminController extends Controller {
 	}
 
 
-	public function tableResponder($model = null)
+	public function tableResponder()
 	{
 
 		$fields = $this->fields;
@@ -160,10 +160,6 @@ class AdminController extends Controller {
 		$hilite = array();
 		$hilite_replace = array();
 
-		$model = (is_null($model))? $this->model : $model;
-
-		$count_all = $model->count();
-
 		for($i = 0;$i < count($fields);$i++){
 			$idx = $i;
 
@@ -180,22 +176,25 @@ class AdminController extends Controller {
 					if($fields[$i][1]['query'] == 'like'){
 						$pos = $fields[$i][1]['pos'];
 						if($pos == 'both'){
-							$model->whereRegex($field,'/'.Input::get('sSearch_'.$idx).'/i');
+							//$model->whereRegex($field,'/'.Input::get('sSearch_'.$idx).'/i');
+                            //$this->model->where($field,'like','%'.Input::get('sSearch_'.$idx).'%');
 
 							$qval = new MongoRegex('/'.Input::get('sSearch_'.$idx).'/i');
 						}else if($pos == 'before'){
-							$model->whereRegex($field,'/^'.Input::get('sSearch_'.$idx).'/i');
+							//$this->model->whereRegex($field,'/^'.Input::get('sSearch_'.$idx).'/i');
+                            //$this->model->where($field,'like','%'.Input::get('sSearch_'.$idx));
 
 							$qval = new MongoRegex('/^'.Input::get('sSearch_'.$idx).'/i');
 						}else if($pos == 'after'){
-							$model->whereRegex($field,'/'.Input::get('sSearch_'.$idx).'$/i');
+							//$this->model->whereRegex($field,'/'.Input::get('sSearch_'.$idx).'$/i');
+                            //$this->model->where($field,'like', Input::get('sSearch_'.$idx).'%');
 
 							$qval = new MongoRegex('/'.Input::get('sSearch_'.$idx).'$/i');
 						}
 					}else{
 						$qval = Input::get('sSearch_'.$idx);
 
-						$model->where($field,$qval);
+						//$this->model->where($field,$qval);
 					}
 				}elseif($type == 'numeric' || $type == 'currency'){
 					$str = Input::get('sSearch_'.$idx);
@@ -219,29 +218,34 @@ class AdminController extends Controller {
 					if(strpos($str, "<=") !== false){
 						$sign = '$lte';
 
-						$model->whereLte($field,$qval);
+						//$this->model->whereLte($field,$qval);
+                        //$this->model->where($field,'<=',$qval);
 
 					}elseif(strpos($str, ">=") !== false){
 						$sign = '$gte';
 
-						$model->whereGte($field,$qval);
+						//$this->model->whereGte($field,$qval);
+                        //$this->model->where($field,'>=',$qval);
 
 					}elseif(strpos($str, ">") !== false){
 						$sign = '$gt';
 
-						$model->whereGt($field,$qval);
+						//$this->model->whereGt($field,$qval);
+                        //$this->model->where($field,'>',$qval);
 
 					}elseif(stripos($str, "<") !== false){
 						$sign = '$lt';
 
-						$model->whereLt($field,$qval);
+						//$this->model->whereLt($field,$qval);
+                        //$this->model->where($field,'<',$qval);
 
 					}
 
 					//print $sign;
 
-				}elseif($type == 'date'){
+				}elseif($type == 'date'|| $type == 'datetime'){
 					$datestring = Input::get('sSearch_'.$idx);
+                    $datestring = date('d-m-Y', strtotime($datestring));
 
 					if (($timestamp = strtotime($datestring)) === false) {
 					} else {
@@ -251,20 +255,21 @@ class AdminController extends Controller {
 						$qval = array($field =>array('$gte'=>$daystart,'$lte'=>$dayend));
 					    //echo "$str == " . date('l dS \o\f F Y h:i:s A', $timestamp);
 
-						$model->whereBetween($field,$daystart,$dayend);
+						//$this->model->whereBetween($field,$daystart,$dayend);
 
 					}
 					$qval = array('$gte'=>$daystart,'$lte'=>$dayend);
 					//$qval = Input::get('sSearch_'.$idx);
-				}elseif($type == 'datetime'){
+				}elseif($type == '__datetime'){
 					$datestring = Input::get('sSearch_'.$idx);
+
+                    print $datestring;
 
 					$qval = new MongoDate(strtotime($datestring));
 
-					$model->where($field,$qval);
+					//$this->model->where($field,$qval);
 
 				}
-
 
 				$q[$field] = $qval;
 
@@ -295,14 +300,22 @@ class AdminController extends Controller {
 		}
 		*/
 
+        //$model->where('docFormat','picture');
 
-		$model->skip( $pagestart )->take( $pagelength )->orderBy($sort_col, $sort_dir );
+        $count_all = $this->model->count();
+        $count_display_all = $this->model->count();
 
-		$count_display_all = $model->count();
+        if(is_array($q) && count($q) > 0){
+            $results = $this->model->whereRaw($q)->skip( $pagestart )->take( $pagelength )->orderBy($sort_col, $sort_dir )->get();
 
-		$results = $model->get();
+            $count_display_all = $this->model->whereRaw($q)->count();
 
-		//print_r($results);
+        }else{
+            $results = $this->model->skip( $pagestart )->take( $pagelength )->orderBy($sort_col, $sort_dir )->get();
+
+        }
+
+        //print_r($results->toArray());
 
 		$aadata = array();
 
@@ -351,7 +364,8 @@ class AdminController extends Controller {
                                 }elseif ($doc[$field[0]] instanceof Date) {
                                     $rowitem = date('d-m-Y H:i:s',$doc[$field[0]]);
                                 }else{
-                                    $rowitem = $doc[$field[0]];
+                                    //$rowitem = $doc[$field[0]];
+                                    $rowitem = date('d-m-Y H:i:s',strtotime($doc[$field[0]]) );
                                 }
 							}elseif($field[1]['kind'] == 'date'){
                                 if($doc[$field[0]] instanceof MongoDate){
@@ -359,7 +373,8 @@ class AdminController extends Controller {
                                 }elseif ($doc[$field[0]] instanceof Date) {
                                     $rowitem = date('d-m-Y',$doc[$field[0]]);
                                 }else{
-                                    $rowitem = $doc[$field[0]];
+                                    //$rowitem = $doc[$field[0]];
+                                    $rowitem = date('d-m-Y',strtotime($doc[$field[0]]) );
                                 }
 							}elseif($field[1]['kind'] == 'currency'){
 								$num = (double) $doc[$field[0]];
@@ -394,7 +409,6 @@ class AdminController extends Controller {
 
 			$counter++;
 		}
-
 
 		$result = array(
 			'sEcho'=> Input::get('sEcho'),

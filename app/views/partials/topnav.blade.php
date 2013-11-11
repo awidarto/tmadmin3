@@ -9,7 +9,6 @@
 ?>
 <ul class="nav">
     @if(Auth::check())
-        <li><a href="{{ URL::to('product') }}" {{ sa('product') }} >Media</a></li>
-        <li><a href="{{ URL::to('playlist') }}" {{ sa('playlist') }} >Playlist</a></li>
+        <li><a href="{{ URL::to('document') }}" {{ sa('document') }} >Documents</a></li>
     @endif
 </ul>

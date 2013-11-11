@@ -10,13 +10,17 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
+Route::controller('document', 'DocumentController');
 Route::controller('products', 'ProductsController');
 Route::controller('ajax', 'AjaxController');
 
-Route::get('/', function()
+Route::get('/', 'DocumentController@getIndex');
+
+/*Route::get('/', function()
 {
 	return View::make('hello');
 });
+*/
 
 Route::get('hashme/{mypass}',function($mypass){
 
