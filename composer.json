@@ -12,7 +12,9 @@
         "intervention/imagecache": "dev-master",
         "intervention/helper": "dev-master",
         "intervention/validation": "dev-master",
-        "robin-malfait/formgenerator": "dev-master"
+        "robin-malfait/formgenerator": "dev-master",
+        "way/generators": "1.0.*@dev",
+        "pieter/yaml": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

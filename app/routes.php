@@ -14,6 +14,8 @@ Route::controller('document', 'DocumentController');
 Route::controller('products', 'ProductsController');
 Route::controller('ajax', 'AjaxController');
 
+Route::controller('home', 'HomeController');
+
 Route::get('/', 'DocumentController@getIndex');
 
 /*Route::get('/', function()

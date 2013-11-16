@@ -20,4 +20,12 @@ class HomeController extends BaseController {
 		return View::make('hello');
 	}
 
+    public function getYml(){
+        Yaml::setFile('form.yml');
+
+        $yml = Yaml::parsing();
+
+        print_r($yml);
+    }
+
 }
