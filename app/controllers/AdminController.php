@@ -496,11 +496,13 @@ class AdminController extends Controller {
 
 		//$this->crumb->add(strtolower($this->controller_name).'/edit','Edit',false);
 
-		$model = $this->model;
+		//$model = $this->model;
 
 		$_id = new MongoId($id);
 
-		$population = $model->where('_id',$_id)->first();
+		//$population = $model->where('_id',$_id)->first();
+
+        $population = $this->model->find($id)->toArray();
 
 		$population = $this->beforeUpdateForm($population);
 

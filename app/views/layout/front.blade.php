@@ -98,9 +98,9 @@
 
                 @if(Auth::check())
                     <p class="navbar-text pull-right">
-                        Hello {{ Auth::user()->fullname }}
-                        <a href="#" >Settings</a>
-                        <a href="{{ URL::to('logout')}}" >Logout</a>
+                        Hello {{ Auth::user()->fullname }}&nbsp;&nbsp;
+                        <a href="#" ><i class="icon-cog"></i>&nbsp;Settings</a>
+                        <a href="{{ URL::to('logout')}}" ><i class="icon-logout"></i>&nbsp;Logout</a>
                     </p>
                 @else
                     <form class="navbar-form pull-right">
