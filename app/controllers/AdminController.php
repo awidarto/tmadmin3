@@ -502,7 +502,7 @@ class AdminController extends Controller {
 
 		//$population = $model->where('_id',$_id)->first();
 
-        $population = $this->model->find($id)->toArray();
+        $population = $this->model->find($id);
 
 		$population = $this->beforeUpdateForm($population);
 
