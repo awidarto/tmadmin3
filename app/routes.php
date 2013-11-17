@@ -21,7 +21,7 @@ Route::controller('ajax', 'AjaxController');
 
 Route::controller('home', 'HomeController');
 
-Route::get('/', 'DocumentController@getIndex');
+Route::get('/', 'MusicController@getIndex');
 
 /*Route::get('/', function()
 {
