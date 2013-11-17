@@ -10,7 +10,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var string
 	 */
-
 	protected $table = '';
 
 	/**
@@ -19,6 +18,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * @var array
 	 */
 	protected $hidden = array('password');
+
 
     public function __construct(){
 

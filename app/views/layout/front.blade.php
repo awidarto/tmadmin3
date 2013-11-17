@@ -79,6 +79,10 @@
     {{ HTML::script('js/jquery-1.9.1.js')}}
     {{ HTML::script('js/jquery-ui-1.9.2.custom.min.js')}}
 
+    <script type="text/javascript">
+        var base = '{{ URL::to('/') }}';
+    </script>
+
 
    </head>
 
@@ -149,6 +153,8 @@
 
     {{ HTML::script('js/bootstrap-timepicker.js') }}
     {{ HTML::script('js/bootstrap-datetimepicker.min.js') }}
+
+    {{ HTML::script('js/app.js') }}
 
     {{ HTML::script('js/summernote.min.js') }}
 

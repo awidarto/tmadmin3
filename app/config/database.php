@@ -50,9 +50,9 @@ return array(
             'driver'   => 'mongodb',
             'host'     => 'localhost',
             'port'     => 27017,
-            'username' => 'neodoc',
-            'password' => 'neo234',
-            'database' => 'neodoc'
+            'username' => 'mumomu',
+            'password' => 'mumomu234',
+            'database' => 'mumomu'
         ),
 
 		'sqlite' => array(

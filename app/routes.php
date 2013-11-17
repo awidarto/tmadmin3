@@ -12,6 +12,11 @@
 */
 Route::controller('document', 'DocumentController');
 Route::controller('products', 'ProductsController');
+Route::controller('artist', 'ArtistController');
+Route::controller('music', 'MusicController');
+Route::controller('album', 'AlbumController');
+
+Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 
 Route::controller('home', 'HomeController');

@@ -94,7 +94,7 @@ return array(
 	|
 	*/
 
-	'cookie' => 'neodoc_session',
+	'cookie' => 'mmmadmin_session',
 
 	/*
 	|--------------------------------------------------------------------------
