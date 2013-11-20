@@ -13,6 +13,7 @@
         {{ Former::text('songTitle','Song Title') }}
         {{ Former::text('artist','Artist') }}
         {{ Former::text('album','Album') }}
+        {{ Former::text('genre','Genre')->class('tag_keyword') }}
         {{ Former::select('countryOfOrigin')->options(Config::get('country.countries'))->label('Country of Origin') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
 

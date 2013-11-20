@@ -44,7 +44,7 @@ class MusicController extends AdminController {
             array('songTitle',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'pics','show'=>true)),
             array('artist',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('album',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('genre',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('genre',array('kind'=>'text','query'=>'like','callback'=>'splitGenre','pos'=>'both','show'=>true)),
             array('ownerName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'splitTag','show'=>true)),
             array('lastUpdate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
@@ -128,6 +128,20 @@ class MusicController extends AdminController {
             return implode('', $ts);
         }else{
             return $data['tags'];
+        }
+    }
+
+    public function splitGenre($data){
+        $tags = explode(',',$data['genre']);
+        if(is_array($tags) && count($tags) > 0 && $data['genre'] != ''){
+            $ts = array();
+            foreach($tags as $t){
+                $ts[] = '<span class="tag">'.$t.'</span>';
+            }
+
+            return implode('', $ts);
+        }else{
+            return $data['genre'];
         }
     }
 
