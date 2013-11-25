@@ -14,7 +14,8 @@
         "intervention/validation": "dev-master",
         "robin-malfait/formgenerator": "dev-master",
         "way/generators": "1.0.*@dev",
-        "pieter/yaml": "dev-master"
+        "pieter/yaml": "dev-master",
+        "maatwebsite/excel": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

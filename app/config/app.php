@@ -122,7 +122,8 @@ return array(
         'Intervention\Helper\StringServiceProvider',
         'RobinMalfait\Formgenerator\FormgeneratorServiceProvider',
         'Way\Generators\GeneratorsServiceProvider',
-        'Pieter\Yaml\YamlServiceProvider'
+        'Pieter\Yaml\YamlServiceProvider',
+        'Maatwebsite\Excel\ExcelServiceProvider'
 	),
 
 	/*
@@ -193,7 +194,8 @@ return array(
         'String'          => 'Intervention\Helper\Facades\String',
         'Image'           => 'Intervention\Image\Facades\Image',
         'Formgenerator'   => 'RobinMalfait\Formgenerator\Facades\Formgenerator',
-        'Yaml'            => 'Pieter\Yaml\Facades\Yaml'
+        'Yaml'            => 'Pieter\Yaml\Facades\Yaml',
+        'Excel' => 'Maatwebsite\Excel\Facades\Excel'
 
 	),
 

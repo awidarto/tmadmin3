@@ -11,17 +11,28 @@
 |
 */
 Route::controller('document', 'DocumentController');
-Route::controller('products', 'ProductsController');
-Route::controller('artist', 'ArtistController');
-Route::controller('music', 'MusicController');
-Route::controller('album', 'AlbumController');
+Route::controller('property', 'PropertyController');
+Route::controller('agent', 'AgentController');
+Route::controller('buyer', 'BuyerController');
+Route::controller('report', 'ReportController');
+Route::controller('pages', 'PagesController');
+Route::controller('posts', 'PostsController');
+Route::controller('category', 'CategoryController');
+Route::controller('menu', 'MenuController');
 
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 
 Route::controller('home', 'HomeController');
 
-Route::get('/', 'MusicController@getIndex');
+Route::get('/', 'PropertyController@getIndex');
+
+
+Route::get('content/pages', 'PagesController@getIndex');
+Route::get('content/posts', 'PostsController@getIndex');
+Route::get('content/category', 'CategoryController@getIndex');
+Route::get('content/menu', 'MenuController@getIndex');
+
 
 /*Route::get('/', function()
 {
@@ -32,6 +43,10 @@ Route::get('/', 'MusicController@getIndex');
 Route::get('hashme/{mypass}',function($mypass){
 
     print Hash::make($mypass);
+});
+
+Route::get('xtest',function(){
+    Excel::load('WEBSITE_INVESTORS_ALLIANCE.xlsx')->calculate()->dump();
 });
 
 Route::get('media',function(){
