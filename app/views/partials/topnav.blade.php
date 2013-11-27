@@ -12,7 +12,7 @@
         <li><a href="{{ URL::to('property') }}" {{ sa('property') }} >Property</a></li>
         <li><a href="{{ URL::to('agent') }}" {{ sa('agent') }} >Agents</a></li>
         <li><a href="{{ URL::to('buyer') }}" {{ sa('buyer') }} >Buyers</a></li>
-        <li><a href="{{ URL::to('document') }}" {{ sa('document') }} >Documents</a></li>
+        <li><a href="{{ URL::to('user') }}" {{ sa('user') }} >Admins</a></li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 Reports

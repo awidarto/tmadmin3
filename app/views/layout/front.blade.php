@@ -27,7 +27,7 @@
 
     {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
 
-    {{ HTML::style('css/summernote.css') }}
+    {{ HTML::style('css/blueimp-gallery.min.css') }}
 
     {{ HTML::style('css/style.css') }}
 
@@ -156,7 +156,8 @@
 
     {{ HTML::script('js/app.js') }}
 
-    {{ HTML::script('js/summernote.min.js') }}
+    {{ HTML::script('js/blueimp-gallery.min.js') }}
+    {{ HTML::script('js/jquery.blueimp-gallery.min.js') }}
 
     {{ HTML::script('js/select2.js') }}
 

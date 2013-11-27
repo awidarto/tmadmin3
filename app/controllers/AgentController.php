@@ -12,7 +12,7 @@ class AgentController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Document();
+        $this->model = new Agent();
         //$this->model = DB::collection('documents');
 
     }
@@ -27,15 +27,39 @@ class AgentController extends AdminController {
 
     public function getIndex()
     {
+        /*
+'activeCart' => '5260f68b8dfa19da49000000',
+'address_1' => 'jl cibaduyut lama komplek sauyunan mas 1 no 19',
+'address_2' => '',
+'agreetnc' => 'Yes',
+'bankname' => 'bca',
+'branch' => 'bandung',
+'city' => 'bandung',
+'country' => 'Indonesia',
+'createdDate' => new MongoDate(1382086083, 795000),
+'email' => 'emptyshalu@gmail.com',
+'firstname' => 'shalu',
+'fullname' => 'shalu hz',
+'lastUpdate' => new MongoDate(1382086083, 795000),
+'lastname' => 'shalu',
+'mobile' => '0818229096',
+'pass' => '$2a$08$9XwvZZVLsHSzu4MIX1ro3.X3cdhK0btglG7qqLGPgOA6/yYz5a51C',
+'role' => 'shopper',
+'salutation' => 'Ms',
+'saveinfo' => 'No',
+'shippingphone' => '02285447649',
+'shopperseq' => '0000000019',
+'zip' => '40235',
+        */
+
 
         $this->heads = array(
-            array('Title',array('search'=>true,'sort'=>true)),
-            array('Access',array('search'=>true,'sort'=>true)),
-            array('Sharing',array('search'=>true,'sort'=>true)),
-            array('Creator',array('search'=>true,'sort'=>false)),
-            array('Folder',array('search'=>true,'sort'=>true)),
-            array('Attachment',array('search'=>true,'sort'=>true)),
-            array('Tags',array('search'=>true,'sort'=>true)),
+            array('Salutation',array('search'=>true,'sort'=>false)),
+            array('First Name',array('search'=>true,'sort'=>true)),
+            array('Last Name',array('search'=>true,'sort'=>true)),
+            array('Email',array('search'=>true,'sort'=>true)),
+            array('Mobile',array('search'=>true,'sort'=>true)),
+            array('Address',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -50,13 +74,12 @@ class AgentController extends AdminController {
     {
 
         $this->fields = array(
-            array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('access',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docShare',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitShare')),
-            array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('docCategoryLabel',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docFilename',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docTag',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
+            array('salutation',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('firstname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('email',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
+            array('mobile',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('address_1',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );

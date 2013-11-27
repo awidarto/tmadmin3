@@ -3,29 +3,113 @@
 
 @section('content')
 
+
 <h3>{{$title}}</h3>
 
 {{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
 
+<?php
+/*
+propertyStockID
+state
+number
+address
+city
+zipCode
+type
+yearBuilt
+FMV
+listingPrice
+
+equity
+eqPercent
+
+bed
+bath
+basement
+garage
+pool
+houseSize
+lotSize
+typeOfConstruction
+
+uSDsqft
+
+monthlyRental
+section8
+leaseTerms
+leaseStartDate
+tax
+insurance
+HOA
+category
+propertyManager
+
+annualRental
+propertyManagementFee
+maintenanceVacancyAllowance
+onePctRule
+rentalYield
+capitalizationRate
+
+specialConditionRemarks
+*/
+?>
+
+
 <div class="row-fluid">
     <div class="span6">
 
-        {{ Former::text('brandName','Brand Name') }}
-        {{ Former::text('shopCategory','Shop Category') }}
-        {{ Former::text('tradeName','Trade Name') }}
-        {{ Former::select('countryOfOrigin')->options(Config::get('country.countries'))->label('Country of Origin') }}
-        {{ Former::text('modelNo','Model No.') }}
-        {{ Former::text('collectionName','Collection Name') }}
+        {{ Former::select('state')->options(Config::get('country.us_states'))->label('States') }}
+        {{ Former::text('number','Number') }}
+        {{ Former::text('address','Address') }}
+        {{ Former::text('city','City') }}
+        {{ Former::text('zipCode','ZIP') }}
+        {{ Former::select('type')->options(Config::get('ia.type'))->label('Type')->class('span1') }}
+        {{ Former::text('yearBuilt','Year Built') }}
+        {{ Former::text('FMV','Fair Market Value') }}
+        {{ Former::text('listingPrice','Listing Price') }}
 
-        {{ View::make('partials.editortoolbar')->render() }}
 
-        {{ Former::textarea('ecoFriendly','Eco-friendly') }}
-        {{ Former::text('designedBy','Designed by') }}
-        {{ Former::text('madeBy','Made by') }}
-        {{ Former::text('priceUSD','Price ($USD)') }}
-        {{ Former::text('visibleTags','Tags (visible)')->class('tag_keyword') }}
-        {{ Former::text('hiddenTags','Tags (hidden)')->class('tag_keyword') }}
+        {{ Former::text('bed','# of Bedroom') }}
+        {{ Former::text('bath','# of Bathroom') }}
+        {{ Former::text('garage','# of Garage') }}
 
+        {{ Former::select('basement')->options(Config::get('ia.boolean'))->label('Basement')->class('span1') }}
+        {{ Former::select('pool')->options(Config::get('ia.boolean'))->label('Pool')->class('span1') }}
+
+        {{ Former::text('houseSize','House Size (SqFt)') }}
+        {{ Former::text('lotSize','Lot Size (SqFt)') }}
+        {{ Former::text('typeOfConstruction','Type of Construction') }}
+
+
+    </div>
+    <div class="span6">
+
+        {{ Former::select('category')->options(Config::get('ia.category'))->label('Category') }}
+        {{ Former::text('monthlyRental','Monthly Rental') }}
+        {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span1') }}
+        {{ Former::text('leaseTerms','Lease Terms') }}
+        {{ Former::text('leaseStartDate','Lease Start Date')->class('span7 datepicker')
+            ->data_format('dd-mm-yyyy')
+            ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+
+
+
+        {{ Former::text('tax','Tax') }}
+        {{ Former::text('insurance','Insurance') }}
+        {{ Former::text('HOA','HOA') }}
+        {{ Former::text('propertyManager','Property Manager') }}
+
+
+        @include('partials.editortoolbar')
+        {{ Former::textarea('specialConditionRemarks','Special Condition Remarks') }}
+
+
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span4">
         <div class="control-group">
             <label class="control-label" for="userfile">Upload Images</label>
             <div class="controls">
@@ -55,12 +139,11 @@
 
                                 $filename = $allin['filename'];
                                 $thumbnail_url = $allin['thumbnail_url'];
+                                $file_id = $allin['file_id'];
 
                                 $thumb = '<li><img src="%s"><br /><input type="radio" name="defaultpic" value="%s" %s > Default<br />';
                                 $thumb .= '<span class="img-title">%s</span>';
-                                $thumb .= '<label for="colour">Colour</label><input type="text" name="colour[]" value="%s"  />';
-                                $thumb .= '<label for="material">Material & Finish</label><input type="text" name="material[]" value="%s"  />';
-                                $thumb .= '<label for="tags">Tags</label><input type="text" name="tag[]" value="%s"  /></li>';
+                                $thumb .= '</li>';
 
                                 for($t = 0; $t < count($filename);$t++){
                                     if($allin['defaultpic'] == $filename[$t]){
@@ -70,7 +153,7 @@
                                     }
 
                                     printf($thumb,$thumbnail_url[$t],
-                                        $filename[$t],
+                                        $file_id[$t],
                                         $isdef,
                                         $filename[$t],
                                         $allin['colour'][$t],$allin['material'][$t],$allin['tag'][$t]);
@@ -98,6 +181,7 @@
                                 $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $allin['thumbnail_url'][$u] . '">';
                                 $upl .= '<input type="hidden" name="filetype[]" value="' . $allin['filetype'][$u] . '">';
                                 $upl .= '<input type="hidden" name="fileurl[]" value="' . $allin['fileurl'][$u] . '">';
+                                $upl .= '<input type="hidden" name="file_id[]" value="' . $allin['file_id'][$u] . '">';
                             }
 
                             print $upl;
@@ -109,31 +193,10 @@
         </div>
 
     </div>
-    <div class="span6">
-        {{ Former::text('productName','Product Name') }}
-        {{ Former::textarea('productProperties','Properties') }}
 
-        {{ Former::select('mainCategory','Main Category')->options(Config::get('se.main_categories'))->id('mainCategory') }}
-        <div id="productApplication">
-            {{ Former::select('productApplication[]')->options(Config::get('se.applications'))->multiple(true)->label('Application') }}
-        </div>
-        <div id="productSystem">
-            {{ Former::select('productSystem[]')->options(Config::get('se.systems'))->name('productSystem')->multiple(true)->label('System') }}
-        </div>
-        <div id="productFunction">
-            {{ Former::select('productFunction[]')->options(Config::get('se.functions'))->name('productFunction')->multiple(true)->label('Function') }}
-        </div>
-
-
-        {{ Former::text('productCategory','Category') }}
-        {{ Former::textarea('availableColours','Avail. Colours') }}
-        {{ Former::textarea('availableMaterialFinishes','Avail. Materials & Finishes') }}
-        {{ Former::textarea('availableDimension','Avail. Dimensions (mm)') }}
-
-    </div>
 </div>
 
-<div class="row-fluid right">
+<div class="row-fluid pull-right">
     <div class="span12">
         {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
@@ -148,29 +211,6 @@
 
 $(document).ready(function() {
 
-    function setVisibleOptions(){
-        var mc = $('#mainCategory').val();
-
-        console.log(mc);
-
-        if( mc == 'Structure'){
-            $('#productFunction').hide();
-            $('#productSystem').show();
-            $('#productApplication').hide();
-        }else if( mc == 'Furniture'){
-            $('#productFunction').show();
-            $('#productSystem').hide();
-            $('#productApplication').hide();
-        }else{
-            $('#productFunction').hide();
-            $('#productSystem').hide();
-            $('#productApplication').show();
-        }
-
-    }
-
-    setVisibleOptions();
-
     $('select').select2({
       width : 'resolve'
     });
@@ -182,10 +222,10 @@ $(document).ready(function() {
         dataType: 'json',
         done: function (e, data) {
             $.each(data.result.files, function (index, file) {
-                var thumb = '<li><img src="' + file.thumbnail_url + '" /><br /><input type="radio" name="defaultpic" value="' + file.name + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
-                '<label for="colour">Colour</label><input type="text" name="colour[]" />' +
-                '<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
-                '<label for="tags">Tags</label><input type="text" name="tag[]" />' +
+                var thumb = '<li><img src="' + file.thumbnail_url + '" /><input type="radio" name="defaultpic" value="' + file.file_id + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
+                '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
+                //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
+                //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
                 '</li>';
                 $(thumb).appendTo('#files ul');
 
@@ -197,6 +237,7 @@ $(document).ready(function() {
                 upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
                 upl += '<input type="hidden" name="filetype[]" value="' + file.type + '">';
                 upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
+                upl += '<input type="hidden" name="file_id[]" value="' + file.file_id + '">';
 
                 $(upl).appendTo('#uploadedform');
             });
@@ -238,45 +279,17 @@ $(document).ready(function() {
       toolbar:      'wysihtml5-toolbar', // id of toolbar element
       parserRules:  wysihtml5ParserRules // defined in parser rules set
     });
-    */
 
     $('#name').keyup(function(){
         var title = $('#name').val();
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
     });
+    */
 
     //$('#color_input').colorPicker();
 
     // dynamic tables
-    $('#add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#variantTable'));
-        return false;
-    });
-
-    // custom field table
-    $('#custom_add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#customTable'));
-        return false;
-    });
-
-    $('#related_add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#relatedTable'));
-        return false;
-    });
-
-    $('#component_add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#componentTable'));
-        return false;
-    });
-
-    $('#mainCategory').change(function(){
-        setVisibleOptions();
-    });
 
 });
 

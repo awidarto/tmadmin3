@@ -5,7 +5,7 @@
 <div class="row-fluid">
 	<div class="span12 command-bar">
 
-        <h4>{{ $title }}</h4>
+        <h3>{{ $title }}</h3>
        	<a href="{{ URL::to($addurl) }}" class="btn">Add</a>
     <!--    <a href="#" id="pushmedia" class="btn btn-primary">Push Media Playlist</a> -->
 
@@ -154,63 +154,14 @@
    </div>
 </div>
 
-
-@yield('dialog')
-
-<div id="viewformModal" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-	<div class="modal-header">
-		<button type="button" id="removeviewform" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Form Submission</h3>
-
-	</div>
-	<div class="modal-body" id="loaddata">
-
-	</div>
-
-
-
-</div>
-
-<div id="editformModal" class="modal message hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-	<div class="modal-header">
-		<button type="button" id="removeviewform" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Edit Form</h3>
-
-	</div>
-	<div class="modal-body" id="loaddata">
-
-	</div>
-
-
-
-</div>
-
-<div id="deleteWarning" class="modal warning hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3 id="myModalLabel">Confirm Delete</h3>
-	</div>
-	<div class="modal-body">
-		<p id="delstatusindicator" >Are you sure you want to delete this item ?</p>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="confirmdelete">Yes</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-	</div>
-</div>
-
-<div id="infodata" class="modal warning hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	</div>
-	<div class="modal-body">
-		<p id="statusdata" ></p>
-	</div>
-	<div class="modal-footer">
-
-	</div>
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
 </div>
 
 <script type="text/javascript">
@@ -602,6 +553,26 @@
 
 
 				$('#editformModal').modal();
+
+		   	}
+
+			if ($(e.target).is('.thumbnail')) {
+				var _id = e.target.id;
+				var links = [];
+
+				var g = $('.g_' + _id);
+
+				g.each(function(){
+					links.push({
+						href:$(this).val(),
+						title:$(this).data('caption')
+					});
+				})
+				var options = {
+					carousel: false
+				};
+				blueimp.Gallery(links, options);
+				console.log(links);
 
 		   	}
 

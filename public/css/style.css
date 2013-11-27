@@ -5,3 +5,16 @@ span.tag{
     margin: 2px;
     font-size: 11px;
 }
+
+.thumbnail{
+    cursor: pointer;
+    min-width: 60px;
+}
+
+.table-condensed th, .table-condensed td {
+    padding: 4px 8px;
+}
+
+.expander{
+    cursor: pointer;
+}

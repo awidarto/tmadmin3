@@ -12,6 +12,7 @@
 */
 Route::controller('document', 'DocumentController');
 Route::controller('property', 'PropertyController');
+Route::controller('user', 'UserController');
 Route::controller('agent', 'AgentController');
 Route::controller('buyer', 'BuyerController');
 Route::controller('report', 'ReportController');
@@ -47,6 +48,10 @@ Route::get('hashme/{mypass}',function($mypass){
 
 Route::get('xtest',function(){
     Excel::load('WEBSITE_INVESTORS_ALLIANCE.xlsx')->calculate()->dump();
+});
+
+Route::get('xcat',function(){
+    print_r(Prefs::getCategory());
 });
 
 Route::get('media',function(){

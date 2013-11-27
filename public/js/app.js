@@ -52,6 +52,16 @@
 
     	var sharelist = {};
 
+        var dateinputs = $('.datepicker');
+
+        // work around for Former form lib for Laravel to create proper markup for date picker element
+        dateinputs.each(function(){
+            $(this).parent().addClass('datepicker');
+            $(this).removeClass('datepicker');
+        })
+
+        console.log(dateinputs);
+
 	    $('.timepicker').timepicker({
 	        minuteStep: 10,
 	        showSeconds: false,
@@ -71,7 +81,7 @@
 		});
 
 		$('.datepicker').datetimepicker({
-            format: 'dd-mm-yyyy',
+            format: 'dd-MM-yyyy',
 			maskInput: false,
 			pickTime: false
 		});

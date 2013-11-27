@@ -12,8 +12,9 @@ class CategoryController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Document();
+        $this->model = new Category();
         //$this->model = DB::collection('documents');
+        $this->title = $this->controller_name;
 
     }
 
@@ -30,12 +31,6 @@ class CategoryController extends AdminController {
 
         $this->heads = array(
             array('Title',array('search'=>true,'sort'=>true)),
-            array('Access',array('search'=>true,'sort'=>true)),
-            array('Sharing',array('search'=>true,'sort'=>true)),
-            array('Creator',array('search'=>true,'sort'=>false)),
-            array('Folder',array('search'=>true,'sort'=>true)),
-            array('Attachment',array('search'=>true,'sort'=>true)),
-            array('Tags',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -51,12 +46,6 @@ class CategoryController extends AdminController {
 
         $this->fields = array(
             array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('access',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docShare',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitShare')),
-            array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('docCategoryLabel',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docFilename',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docTag',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -68,9 +57,11 @@ class CategoryController extends AdminController {
     {
 
         $this->validator = array(
-            'brandName' => 'required',
-            'productName'=> 'required'
+            'title' => 'required',
+            'slug'=> 'required'
         );
+
+        $this->backlink = 'content/category';
 
         return parent::postAdd($data);
     }
@@ -78,9 +69,11 @@ class CategoryController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'brandName' => 'required',
-            'productName'=> 'required'
+            'title' => 'required',
+            'slug'=> 'required'
         );
+
+        $this->backlink = 'content/category';
 
         return parent::postEdit($id,$data);
     }
@@ -88,7 +81,7 @@ class CategoryController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('document/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('category/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

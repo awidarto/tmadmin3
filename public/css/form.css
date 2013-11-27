@@ -130,3 +130,16 @@ legend{
     padding: 10px;
     border:thin solid #ddd;
 }
+
+.files ul{
+    list-style: none;
+}
+
+.files ul li {
+    padding: 4px;
+}
+
+.files ul li img{
+    margin-right: 10px;
+    float: left;
+}

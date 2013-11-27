@@ -58,6 +58,7 @@ class AdminController extends Controller {
 		$this->beforeFilter('auth', array('on'=>'get', 'only'=>array('getIndex','getAdd','getEdit') ));
 
         $this->backlink = strtolower($this->controller_name);
+
 	}
 
 
@@ -140,6 +141,9 @@ class AdminController extends Controller {
 	{
 
 		$fields = $this->fields;
+
+        $count_all = 0;
+        $count_display_all = 0;
 
 		//print_r($fields);
 
@@ -313,6 +317,8 @@ class AdminController extends Controller {
         }else{
             $results = $this->model->skip( $pagestart )->take( $pagelength )->orderBy($sort_col, $sort_dir )->get();
 
+            $count_display_all = $this->model->count();
+
         }
 
         //print_r($results->toArray());
@@ -386,7 +392,7 @@ class AdminController extends Controller {
 							if(isset($field[1]['attr'])){
 								$attr = '';
 								foreach ($field[1]['attr'] as $key => $value) {
-									$attr .= '"'.$key.'"="'.$value.'" ';
+									$attr .= $key.'="'.$value.'" ';
 								}
 								$row[] = '<span '.$attr.' >'.$rowitem.'</span>';
 							}else{
@@ -413,7 +419,7 @@ class AdminController extends Controller {
 		$result = array(
 			'sEcho'=> Input::get('sEcho'),
 			'iTotalRecords'=>$count_all,
-			'iTotalDisplayRecords'=> $count_display_all,
+			'iTotalDisplayRecords'=> (is_null($count_display_all))?0:$count_display_all,
 			'aaData'=>$aadata,
 			'qrs'=>$q,
 			'sort'=>array($sort_col=>$sort_dir)

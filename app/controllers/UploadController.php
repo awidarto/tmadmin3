@@ -41,6 +41,7 @@ class UploadController extends Controller {
                     'url'=> URL::to('storage/media/'.$rstring.'/'.$filename),
                     'thumbnail_url'=> URL::to('storage/media/'.$rstring.'/th_'.$filename),
                     'temp_dir'=> $destinationPath,
+                    'file_id'=> $rstring,
                     'name'=> $filename,
                     'type'=> $filemime,
                     'size'=> $filesize,

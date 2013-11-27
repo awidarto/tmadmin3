@@ -238,8 +238,8 @@ $(document).ready(function() {
             );
 
             $.each(data.result.files, function (index, file) {
-                var thumb = '<li><img src="' + file.thumbnail_url + '" /><br /><input type="radio" name="defaultpic" value="' + file.name + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
-                '<label for="colour">Colour</label><input type="text" name="colour[]" />' +
+                var thumb = '<li><img src="' + file.thumbnail_url + '" /><input type="radio" name="defaultpic" value="' + file.name + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
+                '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
                 '<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
                 '<label for="tags">Tags</label><input type="text" name="tag[]" />' +
                 '</li>';

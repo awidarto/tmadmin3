@@ -12,7 +12,7 @@ class PropertyController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Document();
+        $this->model = new Property();
         //$this->model = DB::collection('documents');
 
     }
@@ -29,18 +29,25 @@ class PropertyController extends AdminController {
     {
 
         $this->heads = array(
-            array('Title',array('search'=>true,'sort'=>true)),
-            array('Access',array('search'=>true,'sort'=>true)),
-            array('Sharing',array('search'=>true,'sort'=>true)),
-            array('Creator',array('search'=>true,'sort'=>false)),
-            array('Folder',array('search'=>true,'sort'=>true)),
-            array('Attachment',array('search'=>true,'sort'=>true)),
-            array('Tags',array('search'=>true,'sort'=>true)),
+            array('Photos',array('search'=>false,'sort'=>false)),
+            array('Address',array('search'=>true,'sort'=>true)),
+            array('Number',array('search'=>true,'sort'=>true)),
+            array('City',array('search'=>true,'sort'=>true)),
+            array('ZIP',array('search'=>true,'sort'=>true)),
+            array('State',array('search'=>true,'sort'=>true)),
+            array('Bed',array('search'=>true,'sort'=>false)),
+            array('Bath',array('search'=>true,'sort'=>true)),
+            array('Pool',array('search'=>true,'sort'=>true)),
+            array('Garage',array('search'=>true,'sort'=>true)),
+            array('Basement',array('search'=>true,'sort'=>true)),
+            array('Category',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
+
+        $this->title = 'Property';
 
         return parent::getIndex();
 
@@ -50,13 +57,18 @@ class PropertyController extends AdminController {
     {
 
         $this->fields = array(
-            array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('access',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docShare',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitShare')),
-            array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('docCategoryLabel',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docFilename',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('docTag',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
+            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
+            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('zipCode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('bed',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('bath',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -68,8 +80,14 @@ class PropertyController extends AdminController {
     {
 
         $this->validator = array(
-            'brandName' => 'required',
-            'productName'=> 'required'
+            'number' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'zipCode' => 'required',
+            'type' => 'required',
+            'yearBuilt' => 'required',
+            'FMV' => 'required',
+            'listingPrice' => 'required'
         );
 
         return parent::postAdd($data);
@@ -78,8 +96,14 @@ class PropertyController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'brandName' => 'required',
-            'productName'=> 'required'
+            'number' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'zipCode' => 'required',
+            'type' => 'required',
+            'yearBuilt' => 'required',
+            'FMV' => 'required',
+            'listingPrice' => 'required'
         );
 
         return parent::postEdit($id,$data);
@@ -88,7 +112,7 @@ class PropertyController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('document/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('property/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;
@@ -124,10 +148,21 @@ class PropertyController extends AdminController {
 
     public function namePic($data)
     {
-        $name = HTML::link('products/view/'.$data['_id'],$data['productName']);
+        $name = HTML::link('property/view/'.$data['_id'],$data['address']);
+
+        $thumbnail_url = '';
+
         if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
-            $display = HTML::image($data['thumbnail_url'][0].'?'.time(), $data['filename'][0], array('id' => $data['_id']));
-            return $display.'<br />'.$name;
+            $glinks = '';
+            for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+                if($data['defaultpic'] == $data['file_id'][$i]){
+                    $thumbnail_url = $data['thumbnail_url'][$i];
+                }
+                $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$data['caption'][$i].'" value="'.$data['fileurl'][$i].'" >';
+            }
+
+            $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','id' => $data['_id'])).$glinks;
+            return $display;
         }else{
             return $name;
         }

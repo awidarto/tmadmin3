@@ -5,26 +5,16 @@
 
 <h3>{{$title}}</h3>
 
-{{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
+{{Former::open_for_files($submit,'POST',array('class'=>''))}}
 
 <div class="row-fluid">
     <div class="span6">
-
-        {{ Former::text('brandName','Brand Name') }}
-        {{ Former::text('shopCategory','Shop Category') }}
-        {{ Former::text('tradeName','Trade Name') }}
-        {{ Former::select('countryOfOrigin')->options(Config::get('country.countries'))->label('Country of Origin') }}
-        {{ Former::text('modelNo','Model No.') }}
-        {{ Former::text('collectionName','Collection Name') }}
-
-        {{ View::make('partials.editortoolbar')->render() }}
-
-        {{ Former::textarea('ecoFriendly','Eco-friendly') }}
-        {{ Former::text('designedBy','Designed by') }}
-        {{ Former::text('madeBy','Made by') }}
-        {{ Former::text('priceUSD','Price ($USD)') }}
-        {{ Former::text('visibleTags','Tags (visible)')->class('tag_keyword') }}
-        {{ Former::text('hiddenTags','Tags (hidden)')->class('tag_keyword') }}
+        {{ Former::text('title','Title') }}
+        {{ Former::text('slug','Permalink')->id('permalink') }}
+        @include('partials.editortoolbar')
+        {{ Former::textarea('description','Description') }}
+    </div>
+    <div class="span6">
 
         <div class="control-group">
             <label class="control-label" for="userfile">Upload Images</label>
@@ -109,70 +99,39 @@
         </div>
 
     </div>
-    <div class="span6">
-        {{ Former::text('productName','Product Name') }}
-        {{ Former::textarea('productProperties','Properties') }}
-
-        {{ Former::select('mainCategory','Main Category')->options(Config::get('se.main_categories'))->id('mainCategory') }}
-        <div id="productApplication">
-            {{ Former::select('productApplication[]')->options(Config::get('se.applications'))->multiple(true)->label('Application') }}
-        </div>
-        <div id="productSystem">
-            {{ Former::select('productSystem[]')->options(Config::get('se.systems'))->name('productSystem')->multiple(true)->label('System') }}
-        </div>
-        <div id="productFunction">
-            {{ Former::select('productFunction[]')->options(Config::get('se.functions'))->name('productFunction')->multiple(true)->label('Function') }}
-        </div>
-
-
-        {{ Former::text('productCategory','Category') }}
-        {{ Former::textarea('availableColours','Avail. Colours') }}
-        {{ Former::textarea('availableMaterialFinishes','Avail. Materials & Finishes') }}
-        {{ Former::textarea('availableDimension','Avail. Dimensions (mm)') }}
-
-    </div>
 </div>
 
-<div class="row-fluid right">
-    <div class="span12">
+<div class="row-fluid">
+    <div class="span12 pull-right">
         {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
+
 {{Former::close()}}
 
 {{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
 {{ HTML::script('js/parser_rules/advanced.js') }}
 
+<style type="text/css">
+#lyric{
+    min-height: 350px;
+    height: 400px;
+}
+
+</style>
+
 <script type="text/javascript">
 
 $(document).ready(function() {
-
-    function setVisibleOptions(){
-        var mc = $('#mainCategory').val();
-
-        console.log(mc);
-
-        if( mc == 'Structure'){
-            $('#productFunction').hide();
-            $('#productSystem').show();
-            $('#productApplication').hide();
-        }else if( mc == 'Furniture'){
-            $('#productFunction').show();
-            $('#productSystem').hide();
-            $('#productApplication').hide();
-        }else{
-            $('#productFunction').hide();
-            $('#productSystem').hide();
-            $('#productApplication').show();
-        }
-
-    }
-
-    setVisibleOptions();
-
+    /*
     $('select').select2({
       width : 'resolve'
+    });
+    */
+    var editor = new wysihtml5.Editor("description", { // id of textarea element
+      toolbar:      "wysihtml5-toolbar", // id of toolbar element
+      parserRules:  wysihtml5ParserRules // defined in parser rules set
     });
 
     var url = '{{ URL::to('upload') }}';
@@ -218,65 +177,14 @@ $(document).ready(function() {
     .prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-    $('select').select2({
-      width : 'resolve'
-    });
 
-
-    $('#field_role').change(function(){
-        //alert($('#field_role').val());
-        // load default permission here
-    });
-
-    /*
-
-    $('#ecoFriendly').summernote({
-        height: 300px
-    });
-
-    var editor = new wysihtml5.Editor('ecoFriendly', { // id of textarea element
-      toolbar:      'wysihtml5-toolbar', // id of toolbar element
-      parserRules:  wysihtml5ParserRules // defined in parser rules set
-    });
-    */
-
-    $('#name').keyup(function(){
-        var title = $('#name').val();
+    $('#title').keyup(function(){
+        var title = $('#title').val();
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
     });
 
     //$('#color_input').colorPicker();
-
-    // dynamic tables
-    $('#add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#variantTable'));
-        return false;
-    });
-
-    // custom field table
-    $('#custom_add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#customTable'));
-        return false;
-    });
-
-    $('#related_add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#relatedTable'));
-        return false;
-    });
-
-    $('#component_add_btn').click(function(){
-        //alert('click');
-        addTableRow($('#componentTable'));
-        return false;
-    });
-
-    $('#mainCategory').change(function(){
-        setVisibleOptions();
-    });
 
 });
 
