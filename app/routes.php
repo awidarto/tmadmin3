@@ -21,6 +21,9 @@ Route::controller('posts', 'PostsController');
 Route::controller('category', 'CategoryController');
 Route::controller('menu', 'MenuController');
 
+Route::controller('music', 'MusicController');
+
+
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 

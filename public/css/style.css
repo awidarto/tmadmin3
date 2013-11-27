@@ -18,3 +18,7 @@ span.tag{
 .expander{
     cursor: pointer;
 }
+
+.input-append .add-on, .input-prepend .add-on {
+    min-height: 28px;
+}

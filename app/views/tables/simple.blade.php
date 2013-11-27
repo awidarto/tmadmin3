@@ -154,7 +154,7 @@
    </div>
 </div>
 
-<div id="blueimp-gallery" class="blueimp-gallery">
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
     <div class="slides"></div>
     <h3 class="title"></h3>
     <a class="prev">‹</a>
@@ -187,7 +187,7 @@
 
 	    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
 
-	    @yield('row')
+	    @include($row)
 
 	    sOut += '</table>';
 
@@ -252,9 +252,12 @@
     	$('div.dataTables_length select').wrap('<div class="ingrid styled-select" />');
 
 
-		$('.dataTable tbody td .expander').on( 'click', function () {
+		$('.dataTable tbody tr td span.expander').on( 'click', function () {
+
+			console.log('expand !');
 
 		    var nTr = $(this).parents('tr')[0];
+
 		    if ( oTable.fnIsOpen(nTr) )
 		    {
 		        oTable.fnClose( nTr );

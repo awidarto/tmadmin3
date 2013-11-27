@@ -50,6 +50,12 @@
 
     	//base = 'http://localhost/pnu/public/';
 
+        $('textarea.editor').wysihtml5({
+            'html': true,
+            'image':false,
+            'color':false
+        });
+
     	var sharelist = {};
 
         var dateinputs = $('.datepicker');

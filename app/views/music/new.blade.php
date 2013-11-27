@@ -104,8 +104,7 @@
 
     </div>
     <div class="span6">
-        @include('partials.editortoolbar')
-        {{ Former::textarea('lyric','Lyric') }}
+        {{ Former::textarea('lyric','Lyric')->class('editor') }}
     </div>
 </div>
 
@@ -118,8 +117,6 @@
 
 {{Former::close()}}
 
-{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
-{{ HTML::script('js/parser_rules/advanced.js') }}
 
 <style type="text/css">
 #lyric{
@@ -137,10 +134,6 @@ $(document).ready(function() {
       width : 'resolve'
     });
     */
-    var editor = new wysihtml5.Editor("lyric", { // id of textarea element
-      toolbar:      "wysihtml5-toolbar", // id of toolbar element
-      parserRules:  wysihtml5ParserRules // defined in parser rules set
-    });
 
     var url = '{{ URL::to('upload') }}';
 

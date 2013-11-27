@@ -27,6 +27,8 @@
 
     {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
 
+    {{ HTML::style('css/bootstrap-wysihtml5-0.0.2.css') }}
+
     {{ HTML::style('css/blueimp-gallery.min.css') }}
 
     {{ HTML::style('css/style.css') }}
@@ -158,6 +160,10 @@
 
     {{ HTML::script('js/blueimp-gallery.min.js') }}
     {{ HTML::script('js/jquery.blueimp-gallery.min.js') }}
+
+    {{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
+
+    {{ HTML::script('js/bootstrap-wysihtml5-0.0.2.min.js') }}
 
     {{ HTML::script('js/select2.js') }}
 

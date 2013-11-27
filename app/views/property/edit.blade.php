@@ -43,7 +43,7 @@
         {{ Former::text('monthlyRental','Monthly Rental') }}
         {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span1') }}
         {{ Former::text('leaseTerms','Lease Terms') }}
-        {{ Former::text('leaseStartDate','Lease Start Date')->class('datepicker') }}
+        {{ Former::text('leaseStartDate','Lease Start Date')->class('span7 datepicker') }}
         {{ Former::text('tax','Tax') }}
         {{ Former::text('insurance','Insurance') }}
         {{ Former::text('HOA','HOA') }}

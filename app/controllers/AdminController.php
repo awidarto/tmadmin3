@@ -131,7 +131,7 @@ class AdminController extends Controller {
 			->with('ajaxdel',URL::to($this->delurl) )
 			->with('crumb',$this->crumb )
 			->with('heads',$heads )
-			->nest('row',$this->rowdetail );
+			->with('row',$this->rowdetail );
 
 
 	}

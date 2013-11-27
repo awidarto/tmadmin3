@@ -13,7 +13,6 @@
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
         {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('title','title'))->label('Category') }}
-        @include('partials.editortoolbar')
         {{ Former::textarea('body','Body') }}
     </div>
 
