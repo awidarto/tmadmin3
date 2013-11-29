@@ -23,10 +23,12 @@
 
     }
 
+    /*
     $('table').on('click','.del',function(){
         console.log($(this).closest('tr').html());
         $(this).closest('tr').remove();
     });
+    */
 
 	function string_to_slug(str) {
 		str = str.replace(/^\s+|\s+$/g, ''); // trim

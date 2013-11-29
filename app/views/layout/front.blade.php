@@ -78,8 +78,12 @@
                     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
                                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
 
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
     {{ HTML::script('js/jquery-1.9.1.js')}}
     {{ HTML::script('js/jquery-ui-1.9.2.custom.min.js')}}
+
+    {{ HTML::script('js/jquery.ui.addresspicker.js') }}
 
     <script type="text/javascript">
         var base = '{{ URL::to('/') }}';

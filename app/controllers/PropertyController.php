@@ -76,6 +76,40 @@ class PropertyController extends AdminController {
         return parent::postIndex();
     }
 
+    public function beforeSave($data)
+    {
+        $defaults = array();
+
+        for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+            if($data['defaultpic'] == $data['file_id'][$i]){
+                $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
+                $defaults['large_url'] = $data['large_url'][$i];
+                $defaults['medium_url'] = $data['medium_url'][$i];
+            }
+        }
+
+        $data['defaultpictures'] = $defaults;
+
+        return $data;
+    }
+
+    public function beforeUpdate($id,$data)
+    {
+        $defaults = array();
+
+        for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+            if($data['defaultpic'] == $data['file_id'][$i]){
+                $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
+                $defaults['large_url'] = $data['large_url'][$i];
+                $defaults['medium_url'] = $data['medium_url'][$i];
+            }
+        }
+
+        $data['defaultpictures'] = $defaults;
+
+        return $data;
+    }
+
     public function postAdd($data = null)
     {
 

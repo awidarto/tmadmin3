@@ -183,7 +183,7 @@
 	{
 	    var aData = oTable.fnGetData( nTr );
 
-	    console.log(aData);
+	    //console.log(aData);
 
 	    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
 
@@ -254,7 +254,7 @@
 
 		$('.dataTable tbody tr td span.expander').on( 'click', function () {
 
-			console.log('expand !');
+			//console.log('expand !');
 
 		    var nTr = $(this).parents('tr')[0];
 
@@ -273,7 +273,7 @@
 
 		$('thead input.filter').keyup( function () {
 			//console.log($('thead input').index(this));
-			console.log(this.id);
+			//console.log(this.id);
 			/* Filter on the column (the index) of this element */
 			//var search_index = $('thead input').index(this);
 			var search_index = this.id;
@@ -281,14 +281,14 @@
 		} );
 
 		$('thead input.dateinput').change( function () {
-			console.log($('thead input').index(this));
+			//console.log($('thead input').index(this));
 			var search_index = this.id;
 			oTable.fnFilter( this.value,  search_index  );
 		} );
 
 		$('thead input.datetimeinput').change( function () {
 			/* Filter on the column (the index) of this element */
-			console.log($('thead input').index(this));
+			//console.log($('thead input').index(this));
 			//var search_index = $('thead input').index(this);
 			var search_index = this.id;
 			oTable.fnFilter( this.value,  search_index  );
@@ -333,7 +333,7 @@
 			//var search_index = $('thead input').index(prev);
 			var search_index = this.id;
 
-			console.log(search_index);
+			//console.log(search_index);
 
 			oTable.fnFilter( this.value,  search_index  );
 		} );
@@ -423,7 +423,11 @@
 			if ($(e.target).is('.del')) {
 				var _id = e.target.id;
 				var answer = confirm("Are you sure you want to delete this item ?");
-				if (answer){
+
+				console.log(answer);
+
+				if (answer == true){
+
 					$.post('{{ URL::to($ajaxdel) }}',{'id':_id}, function(data) {
 						if(data.status == 'OK'){
 							//redraw table
@@ -432,6 +436,7 @@
 							alert("Item id : " + _id + " deleted");
 						}
 					},'json');
+
 				}else{
 					alert("Deletion cancelled");
 				}
@@ -455,71 +460,6 @@
 				$('#print_frame').attr('src',src);
 
 				$('#printBadge').modal();
-		   	}
-
-			if ($(e.target).is('.pay')) {
-				var _id = e.target.id;
-
-				current_pay_id = _id;
-
-				$('#updatePayment').modal();
-
-		   	}
-
-		   	if ($(e.target).is('.formstatus')) {
-				var _id = e.target.id;
-
-				current_pay_id = _id;
-
-				$('#updateFormStatus').modal();
-
-		   	}
-
-		   	if ($(e.target).is('.formstatusindiv')) {
-				var _id = e.target.id;
-
-				current_pay_id = _id;
-
-				$('#updateFormStatusindividual').modal();
-
-		   	}
-
-		   	if ($(e.target).is('.paygolf')) {
-				var _id = e.target.id;
-
-				current_pay_id = _id;
-
-				$('#updatePaymentGolf').modal();
-
-		   	}
-
-		   	if ($(e.target).is('.paygolfconvention')) {
-				var _id = e.target.id;
-
-				current_pay_id = _id;
-
-				$('#updatePaymentGolfConvention').modal();
-
-		   	}
-
-		   	if ($(e.target).is('.resendmail')) {
-				var _id = e.target.id;
-
-				current_pay_id = _id;
-				$('#errormessagemodal').text('');
-				$('#successmessagemodal').text('');
-				$('#updateResendmail').modal();
-
-		   	}
-
-		   	if ($(e.target).is('.sendexhibitregistmail')) {
-				var _id = e.target.id;
-
-				current_pay_id = _id;
-				$('#exhbitor_errormessagemodal').text('');
-				$('#exhbitor_successmessagemodal').text('');
-				$('#exhibitorResendmail').modal();
-
 		   	}
 
 

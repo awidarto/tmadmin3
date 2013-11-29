@@ -31,8 +31,17 @@ class UploadController extends Controller {
         $uploadSuccess = $file->move($destinationPath, $filename);
 
         $thumbnail = Image::make($destinationPath.'/'.$filename)
-            ->grab(100,100)
+            ->grab(100,74)
             ->save($destinationPath.'/th_'.$filename);
+
+        $medium = Image::make($destinationPath.'/'.$filename)
+            ->grab(270,200)
+            ->save($destinationPath.'/med_'.$filename);
+
+        $large = Image::make($destinationPath.'/'.$filename)
+            ->grab(870,420)
+            ->save($destinationPath.'/lrg_'.$filename);
+
 
         $fileitems = array();
 
@@ -40,6 +49,8 @@ class UploadController extends Controller {
             $fileitems[] = array(
                     'url'=> URL::to('storage/media/'.$rstring.'/'.$filename),
                     'thumbnail_url'=> URL::to('storage/media/'.$rstring.'/th_'.$filename),
+                    'large_url'=> URL::to('storage/media/'.$rstring.'/med_'.$filename),
+                    'medium_url'=> URL::to('storage/media/'.$rstring.'/lrg_'.$filename),
                     'temp_dir'=> $destinationPath,
                     'file_id'=> $rstring,
                     'name'=> $filename,

@@ -53,7 +53,7 @@
         @include('partials.editortoolbar')
         {{ Former::textarea('specialConditionRemarks','Special Condition Remarks') }}
 
-
+        {{ Former::text('mappicker','Set Location')->class('mappicker') }}
     </div>
 </div>
 <div class="row-fluid">
@@ -167,6 +167,8 @@
                                 $upl .= '<input type="hidden" name="filesize[]" value="' . $formdata['filesize'][$u]  . '">';
                                 $upl .= '<input type="hidden" name="temp_dir[]" value="' . $formdata['temp_dir'][$u]  . '">';
                                 $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $formdata['thumbnail_url'][$u] . '">';
+                                $upl .= '<input type="hidden" name="large_url[]" value="' . $formdata['large_url'][$u] . '">';
+                                $upl .= '<input type="hidden" name="medium_url[]" value="' . $formdata['medium_url'][$u] . '">';
                                 $upl .= '<input type="hidden" name="filetype[]" value="' . $formdata['filetype'][$u] . '">';
                                 $upl .= '<input type="hidden" name="fileurl[]" value="' . $formdata['fileurl'][$u] . '">';
                                 $upl .= '<input type="hidden" name="file_id[]" value="' . $formdata['file_id'][$u] . '">';
@@ -191,6 +193,8 @@
                                 $upl .= '<input type="hidden" name="filesize[]" value="' . $allin['filesize'][$u]  . '">';
                                 $upl .= '<input type="hidden" name="temp_dir[]" value="' . $allin['temp_dir'][$u]  . '">';
                                 $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $allin['thumbnail_url'][$u] . '">';
+                                $upl .= '<input type="hidden" name="large_url[]" value="' . $allin['large_url'][$u] . '">';
+                                $upl .= '<input type="hidden" name="medium_url[]" value="' . $allin['medium_url'][$u] . '">';
                                 $upl .= '<input type="hidden" name="filetype[]" value="' . $allin['filetype'][$u] . '">';
                                 $upl .= '<input type="hidden" name="fileurl[]" value="' . $allin['fileurl'][$u] . '">';
                                 $upl .= '<input type="hidden" name="file_id[]" value="' . $allin['file_id'][$u] . '">';
@@ -280,6 +284,8 @@ $(document).ready(function() {
                 upl += '<input type="hidden" name="filesize[]" value="' + file.size  + '">';
                 upl += '<input type="hidden" name="temp_dir[]" value="' + file.temp_dir  + '">';
                 upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
+                upl += '<input type="hidden" name="large_url[]" value="' + file.large_url + '">';
+                upl += '<input type="hidden" name="medium_url[]" value="' + file.medium_url + '">';
                 upl += '<input type="hidden" name="filetype[]" value="' + file.type + '">';
                 upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
                 upl += '<input type="hidden" name="file_id[]" value="' + file.file_id + '">';
