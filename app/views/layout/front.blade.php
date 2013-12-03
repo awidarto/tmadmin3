@@ -11,7 +11,6 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
     <!-- Bootplus -->
     {{ HTML::style('bootplus/css/bootplus.min.css') }}
     {{ HTML::style('bootplus/css/bootplus-responsive.min.css') }}
@@ -78,7 +77,6 @@
                     <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
                                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
 
-    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
     {{ HTML::script('js/jquery-1.9.1.js')}}
     {{ HTML::script('js/jquery-ui-1.9.2.custom.min.js')}}

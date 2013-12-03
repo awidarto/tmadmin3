@@ -13,6 +13,15 @@ return array(
             'MFH'=>'MFH',
             'DUPLEX'=>'Duplex',
             'TRIPLEX'=>'Triplex'
+        ),
+    'publishing'=>array(
+            'draft'=>'Draft',
+            'published'=>'Published'
+        ),
+    'search_publishing'=>array(
+            ''=>'All',
+            'draft'=>'Draft',
+            'published'=>'Published'
         )
 
 );

@@ -5,7 +5,7 @@
             <i class="icon-plus icon-white"></i>
             <span>{{ $title }}</span>
             <!-- The file input field used as target for the file upload widget -->
-            <input id="{{ $element_id }}" type="file" name="files[]" multiple>
+            <input id="{{ $element_id }}" type="file" name="files[]" {{ ($multi)?'multiple':''}}  >
         </span>
         <br />
         <br />
@@ -188,7 +188,7 @@
 
 $(document).ready(function(){
 
-    var url = '{{ URL::to('upload') }}';
+    var url = '{{ URL::to($url) }}';
 
     $('#{{ $element_id }}_files').click(function(e){
 

@@ -41,6 +41,7 @@ class PropertyController extends AdminController {
             array('Garage',array('search'=>true,'sort'=>true)),
             array('Basement',array('search'=>true,'sort'=>true)),
             array('Category',array('search'=>true,'sort'=>true)),
+            array('Publishing',array('search'=>true,'sort'=>true, 'select'=>Config::get('ia.search_publishing'))),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -69,6 +70,7 @@ class PropertyController extends AdminController {
             array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('publishStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -81,6 +83,14 @@ class PropertyController extends AdminController {
         $defaults = array();
 
         $files = array();
+
+        if($data['submit'] == 'Publish'){
+            $data['publishStatus'] = 'published';
+        }else{
+            $data['publishStatus'] = 'draft';
+        }
+
+        $data['publishDate'] = $data['lastUpdate'];
 
         if( isset($data['file_id']) && count($data['file_id'])){
 
@@ -136,6 +146,15 @@ class PropertyController extends AdminController {
         $defaults = array();
 
         $files = array();
+
+        if($data['submit'] == 'Publish'){
+            $data['publishStatus'] = 'published';
+        }else{
+            $data['publishStatus'] = 'draft';
+        }
+
+        $data['publishDate'] = $data['lastUpdate'];
+
 
         if( isset($data['file_id']) && count($data['file_id'])){
 

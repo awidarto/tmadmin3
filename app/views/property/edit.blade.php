@@ -128,7 +128,8 @@
 
 <div class="row-fluid pull-right">
     <div class="span4">
-        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save as Draft',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Publish',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
