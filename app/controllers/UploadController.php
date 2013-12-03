@@ -207,8 +207,9 @@ class UploadController extends Controller {
         return Response::JSON(array('files'=>$fileitems) );
     }
 
-    public function postDelete($file)
+    public function postDelete($file_id)
     {
+
 
     }
 

@@ -80,15 +80,32 @@ class PropertyController extends AdminController {
     {
         $defaults = array();
 
+        $files = array();
+
         for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
             if($data['defaultpic'] == $data['file_id'][$i]){
                 $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
                 $defaults['large_url'] = $data['large_url'][$i];
                 $defaults['medium_url'] = $data['medium_url'][$i];
             }
+
+            $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
+            $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
+            $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
+
+            $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
+            $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
+            $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
+            $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
+            $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
+            $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
+            $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
+            $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
+            $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
         }
 
         $data['defaultpictures'] = $defaults;
+        $data['files'] = $files;
 
         return $data;
     }
@@ -97,15 +114,35 @@ class PropertyController extends AdminController {
     {
         $defaults = array();
 
-        for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+        $files = array();
+
+        for($i = 0 ; $i < count($data['file_id']); $i++ ){
+
+
+            $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
+            $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
+            $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
+
+            $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
+            $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
+            $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
+            $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
+            $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
+            $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
+            $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
+            $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
+            $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
+
             if($data['defaultpic'] == $data['file_id'][$i]){
                 $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
                 $defaults['large_url'] = $data['large_url'][$i];
                 $defaults['medium_url'] = $data['medium_url'][$i];
             }
+
         }
 
         $data['defaultpictures'] = $defaults;
+        $data['files'] = $files;
 
         return $data;
     }
@@ -186,13 +223,14 @@ class PropertyController extends AdminController {
 
         $thumbnail_url = '';
 
-        if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
+        if(isset($data['files']) && count($data['files'])){
             $glinks = '';
-            for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
-                if($data['defaultpic'] == $data['file_id'][$i]){
-                    $thumbnail_url = $data['thumbnail_url'][$i];
-                }
-                $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$data['caption'][$i].'" value="'.$data['fileurl'][$i].'" >';
+
+            $gdata = $data['files'][$data['defaultpic']];
+
+            $thumbnail_url = $gdata['thumbnail_url'];
+            foreach($data['files'] as $g){
+                $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['fileurl'].'" >';
             }
 
             $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','id' => $data['_id'])).$glinks;

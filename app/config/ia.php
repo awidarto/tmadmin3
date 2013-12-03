@@ -10,6 +10,7 @@ return array(
         ),
     'type'=>array(
             'SFH'=>'SFH',
+            'MFH'=>'MFH',
             'DUPLEX'=>'Duplex',
             'TRIPLEX'=>'Triplex'
         )

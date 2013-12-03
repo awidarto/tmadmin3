@@ -143,3 +143,30 @@ legend{
     margin-right: 10px;
     float: left;
 }
+
+.number-field{
+    width: 35px;
+    float:left;
+}
+
+.lmargin{
+    margin-left: 10px;
+    padding-top: 8px;
+    padding-bottom:8px;
+}
+
+.lmargin label{
+    float: left;
+    display:inline-block;
+    margin-right: 5px;
+    padding-top: 5px;
+    vertical-align: baseline;
+}
+
+.files ul{
+    list-style: none;
+}
+
+span.file_del{
+    font-size: 16px;
+}
