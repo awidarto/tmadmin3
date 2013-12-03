@@ -82,7 +82,7 @@ class PropertyController extends AdminController {
 
         $files = array();
 
-        $data['defaultpic'] = ($data['defaultpic'])?$data['defaultpic']:$data['file_id'][0];
+        $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
 
         for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
 
@@ -119,7 +119,7 @@ class PropertyController extends AdminController {
 
         $files = array();
 
-        $data['defaultpic'] = ($data['defaultpic'])?$data['defaultpic']:$data['file_id'][0];
+        $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
 
 
         for($i = 0 ; $i < count($data['file_id']); $i++ ){
