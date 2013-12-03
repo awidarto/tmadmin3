@@ -82,7 +82,12 @@ class PropertyController extends AdminController {
 
         $files = array();
 
+        if( !isset($data['defaultpic'])){
+            $data['defaultpic'] = $data['file_id'][0];
+        }
+
         for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+
             if($data['defaultpic'] == $data['file_id'][$i]){
                 $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
                 $defaults['large_url'] = $data['large_url'][$i];
