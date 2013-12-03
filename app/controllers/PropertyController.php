@@ -109,6 +109,19 @@ class PropertyController extends AdminController {
                 $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
             }
         }else{
+            $data['thumbnail_url'] = array();
+            $data['large_url'] = array();
+            $data['medium_url'] = array();
+            $data['delete_type'] = array();
+            $data['delete_url'] = array();
+            $data['filename'] = array();
+            $data['filesize'] = array();
+            $data['temp_dir'] = array();
+            $data['filetype'] = array();
+            $data['fileurl'] = array();
+            $data['file_id'] = array();
+            $data['caption'] = array();
+
             $data['defaultpic'] = '';
         }
 
@@ -155,7 +168,21 @@ class PropertyController extends AdminController {
             }
 
         }else{
-            $data['defaultpic'];
+
+            $data['thumbnail_url'] = array();
+            $data['large_url'] = array();
+            $data['medium_url'] = array();
+            $data['delete_type'] = array();
+            $data['delete_url'] = array();
+            $data['filename'] = array();
+            $data['filesize'] = array();
+            $data['temp_dir'] = array();
+            $data['filetype'] = array();
+            $data['fileurl'] = array();
+            $data['file_id'] = array();
+            $data['caption'] = array();
+
+            $data['defaultpic'] = '';
         }
 
 
