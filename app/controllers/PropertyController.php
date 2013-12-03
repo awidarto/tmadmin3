@@ -82,29 +82,34 @@ class PropertyController extends AdminController {
 
         $files = array();
 
-        $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
+        if( isset($data['file_id']) && count($data['file_id'])){
 
-        for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+            $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
 
-            if($data['defaultpic'] == $data['file_id'][$i]){
-                $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
-                $defaults['large_url'] = $data['large_url'][$i];
-                $defaults['medium_url'] = $data['medium_url'][$i];
+            for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+
+                if($data['defaultpic'] == $data['file_id'][$i]){
+                    $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
+                    $defaults['large_url'] = $data['large_url'][$i];
+                    $defaults['medium_url'] = $data['medium_url'][$i];
+                }
+
+                $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
+                $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
+                $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
+
+                $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
+                $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
+                $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
+                $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
+                $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
+                $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
+                $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
+                $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
+                $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
             }
-
-            $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
-            $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
-            $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
-
-            $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
-            $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
-            $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
-            $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
-            $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
-            $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
-            $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
-            $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
-            $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
+        }else{
+            $data['defaultpic'] = '';
         }
 
         $data['defaultpictures'] = $defaults;
@@ -119,33 +124,40 @@ class PropertyController extends AdminController {
 
         $files = array();
 
-        $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
+        if( isset($data['file_id']) && count($data['file_id'])){
+
+            $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
 
 
-        for($i = 0 ; $i < count($data['file_id']); $i++ ){
+            for($i = 0 ; $i < count($data['file_id']); $i++ ){
 
 
-            $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
-            $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
-            $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
+                $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
+                $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
+                $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
 
-            $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
-            $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
-            $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
-            $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
-            $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
-            $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
-            $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
-            $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
-            $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
+                $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
+                $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
+                $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
+                $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
+                $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
+                $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
+                $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
+                $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
+                $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
 
-            if($data['defaultpic'] == $data['file_id'][$i]){
-                $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
-                $defaults['large_url'] = $data['large_url'][$i];
-                $defaults['medium_url'] = $data['medium_url'][$i];
+                if($data['defaultpic'] == $data['file_id'][$i]){
+                    $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
+                    $defaults['large_url'] = $data['large_url'][$i];
+                    $defaults['medium_url'] = $data['medium_url'][$i];
+                }
+
             }
 
+        }else{
+            $data['defaultpic'];
         }
+
 
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
