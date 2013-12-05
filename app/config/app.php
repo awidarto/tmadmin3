@@ -123,7 +123,8 @@ return array(
         'RobinMalfait\Formgenerator\FormgeneratorServiceProvider',
         'Way\Generators\GeneratorsServiceProvider',
         'Pieter\Yaml\YamlServiceProvider',
-        'Maatwebsite\Excel\ExcelServiceProvider'
+        'Maatwebsite\Excel\ExcelServiceProvider',
+        'AlexWhitman\ViewThemes\ViewThemesServiceProvider',
 	),
 
 	/*
@@ -195,7 +196,8 @@ return array(
         'Image'           => 'Intervention\Image\Facades\Image',
         'Formgenerator'   => 'RobinMalfait\Formgenerator\Facades\Formgenerator',
         'Yaml'            => 'Pieter\Yaml\Facades\Yaml',
-        'Excel' => 'Maatwebsite\Excel\Facades\Excel'
+        'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
+        'Theme'           => 'AlexWhitman\ViewThemes\ThemeFacade'
 
 	),
 

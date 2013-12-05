@@ -32,7 +32,24 @@ class Prefs {
         return $ret;
     }
 
-    public function catToArray(){
+    public function catToArray()
+    {
         return self::$category;
     }
+
+    public static function themeAssetsUrl()
+    {
+        return URL::to('/').'/'.Theme::getCurrentTheme();
+    }
+
+    public static function themeAssetsPath()
+    {
+        return 'themes/'.Theme::getCurrentTheme().'/assets/';
+    }
+
+    public static function getActiveTheme()
+    {
+        return Config::get('kickstart.default_theme');
+    }
+
 }

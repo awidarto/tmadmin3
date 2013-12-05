@@ -4,4 +4,5 @@ return array(
     'password_field'=>'pass',
     'user_collection'=>'users',
     'invalidchars'=>array('%','&','|',' ','"',':',';','\'','\\','?','#','(',')','/'),
+    'default_theme'=>'default'
     );
