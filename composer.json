@@ -15,7 +15,8 @@
         "robin-malfait/formgenerator": "dev-master",
         "way/generators": "1.0.*@dev",
         "pieter/yaml": "dev-master",
-        "maatwebsite/excel": "dev-master"
+        "maatwebsite/excel": "dev-master",
+        "alexwhitman/view-themes": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

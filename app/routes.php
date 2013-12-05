@@ -44,6 +44,27 @@ Route::get('content/menu', 'MenuController@getIndex');
 });
 */
 
+Route::get('inc/{entity}',function($entity){
+
+    $seq = new Sequence();
+    print_r($seq->getNewId($entity));
+
+});
+
+Route::get('last/{entity}',function($entity){
+
+    $seq = new Sequence();
+    print( $seq->getLastId($entity) );
+
+});
+
+Route::get('init/{entity}',function($entity){
+
+    $seq = new Sequence();
+    print_r( $seq->setInitialValue($entity));
+
+});
+
 Route::get('hashme/{mypass}',function($mypass){
 
     print Hash::make($mypass);
