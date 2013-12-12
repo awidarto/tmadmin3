@@ -81,6 +81,8 @@
 
         {{ Former::text('typeOfConstruction','Type of Construction')->class('span5') }}
 
+        {{ Former::textarea('description','Property Description')->class('span10 editor')->rows(8) }}
+
             <fieldset class="gllpLatlonPicker" >
 
                 <div class="gllpMap" style="margin-left:180px;" >Google Maps</div>
@@ -124,7 +126,6 @@
         <?php Former::framework('TwitterBootstrap');?>
 
         {{ Former::text('propertyManager','Property Manager') }}
-
 
         {{ Former::textarea('specialConditionRemarks','Special Condition Remarks')->class('span10')->rows(8) }}
 
