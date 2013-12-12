@@ -462,6 +462,8 @@ class AdminController extends Controller {
 
 		$controller_name = strtolower($this->controller_name);
 
+        $this->backlink = ($this->backlink == '')?$controller_name:$this->backlink;
+
 	    $validation = Validator::make($input = $data, $this->validator);
 
 	    if($validation->fails()){
@@ -540,6 +542,8 @@ class AdminController extends Controller {
 		$controller_name = strtolower($this->controller_name);
 		//print_r(Session::get('permission'));
 
+        $this->backlink = ($this->backlink == '')?$controller_name:$this->backlink;
+
 	    $validation = Validator::make($input = Input::all(), $this->validator);
 
 	    if($validation->fails()){
@@ -570,10 +574,10 @@ class AdminController extends Controller {
 
 				$obj = $this->afterUpdate($id,$data);
 				if($obj != false){
-			    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
+			    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
 				}
 			}else{
-		    	return Redirect::to($controller_name)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
+		    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
 			}
 
 	    }

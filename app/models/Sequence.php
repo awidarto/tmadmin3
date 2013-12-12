@@ -34,6 +34,9 @@ class Sequence extends Eloquent {
         if($this->find($entity)){
             return false;
         }else{
+
+            $initial = new MongoInt32($initial);
+
             return $this->insert(array('_id'=>$entity,'seq'=>$initial), array('upsert'=>1));
         }
     }

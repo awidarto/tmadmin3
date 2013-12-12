@@ -3,6 +3,7 @@
 class Prefs {
 
     public static $category;
+    public static $faqcategory;
 
     public function __construct()
     {
@@ -36,6 +37,37 @@ class Prefs {
     {
         return self::$category;
     }
+
+
+    public static function getFAQCategory(){
+        $c = Faqcat::get();
+
+        self::$faqcategory = $c;
+        return new self;
+    }
+
+    public function FAQcatToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'All');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$faqcategory as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function FAQcatToArray()
+    {
+        return self::$faqcategory;
+    }
+
+
 
     public static function themeAssetsUrl()
     {

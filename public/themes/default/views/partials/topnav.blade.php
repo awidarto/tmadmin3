@@ -25,6 +25,16 @@
         </li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                FAQ
+                <b class="caret"></b>
+              </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('faq') }}" {{ sa('faq') }} >FAQ Entries</a></li>
+                <li><a href="{{ URL::to('faqcat') }}" {{ sa('faqcat') }} >Category</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 Site Content
                 <b class="caret"></b>
               </a>

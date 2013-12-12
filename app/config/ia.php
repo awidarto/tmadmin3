@@ -22,6 +22,9 @@ return array(
             ''=>'All',
             'draft'=>'Draft',
             'published'=>'Published'
-        )
+        ),
+    'property_id_prefix'=>'IA',
+    'agent_id_prefix'=>'TA',
+    'buyer_id_prefix'=>'TB',
 
 );

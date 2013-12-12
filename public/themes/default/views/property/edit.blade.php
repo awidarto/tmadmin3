@@ -3,7 +3,7 @@
 
 @section('content')
 
-<h3>{{$title}}</h3>
+<h3>{{$title}} : {{ $formdata['propertyId'] }}</h3>
 
 {{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
 
@@ -12,8 +12,6 @@
 
 <div class="row-fluid">
     <div class="span6">
-
-        {{ Former::text('propertyId','Property ID')->class('span4') }}
 
         {{ Former::select('state')->options(Config::get('country.us_states'))->label('States') }}
         {{ Former::text('number','Number')->class('span3') }}
@@ -83,6 +81,19 @@
 
         {{ Former::text('typeOfConstruction','Type of Construction')->class('span5') }}
 
+            <fieldset class="gllpLatlonPicker" >
+
+                <div class="gllpMap" style="margin-left:180px;" >Google Maps</div>
+                <div class="form-search" style="margin-left:180px;margin-top:10px;margin-bottom:10px;">
+                    <input type="text" class="gllpSearchField input-xlarge search-query" placeholder="type address and click Search button">
+                    <button type="button" class="gllpSearchButton btn">Search</button>
+                </div>
+
+                {{ Former::text('latitude','Latitude')->class('gllpLatitude span6')}}
+                {{ Former::text('longitude','Longitude')->class('gllpLongitude span6')}}
+                {{ Former::text('zoom','Zoom')->class('gllpZoom span6')}}
+                {{--<input type="button" class="gllpUpdateButton" value="update map">--}}
+            </fieldset>
 
     </div>
     <div class="span6">
@@ -135,8 +146,10 @@
 </div>
 {{Former::close()}}
 
-{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
-{{ HTML::script('js/parser_rules/advanced.js') }}
+{{ HTML::style('css/jquery-gmaps-latlon-picker.css')}}
+
+{{ HTML::script('js/jquery-gmaps-latlon-picker.js')}}
+
 
 <script type="text/javascript">
 

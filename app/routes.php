@@ -21,6 +21,12 @@ Route::controller('posts', 'PostsController');
 Route::controller('category', 'CategoryController');
 Route::controller('menu', 'MenuController');
 
+Route::controller('faq', 'FaqController');
+Route::controller('faqcat', 'FaqcatController');
+
+
+Route::controller('inprop', 'InpropController');
+
 Route::controller('music', 'MusicController');
 
 
@@ -37,12 +43,31 @@ Route::get('content/posts', 'PostsController@getIndex');
 Route::get('content/category', 'CategoryController@getIndex');
 Route::get('content/menu', 'MenuController@getIndex');
 
+Route::get('regenerate',function(){
+    $property = new Property();
 
-/*Route::get('/', function()
-{
-	return View::make('hello');
+    $props = $property->get()->toArray();
+
+    $seq = new Sequence();
+
+    foreach($props as $p){
+
+        $_id = new MongoId($p['_id']);
+
+        $nseq = $seq->getNewId('property');
+
+        $sdata = array(
+            'sequence'=>$nseq,
+            'propertyId' => Config::get('ia.property_id_prefix').$nseq
+            );
+
+        if( $property->where('_id','=', $_id )->update( $sdata ) ){
+            print $p['_id'].'->'.$sdata['propertyId'].'<br />';
+        }
+
+    }
+
 });
-*/
 
 Route::get('inc/{entity}',function($entity){
 
@@ -58,10 +83,10 @@ Route::get('last/{entity}',function($entity){
 
 });
 
-Route::get('init/{entity}',function($entity){
+Route::get('init/{entity}/{initial}',function($entity,$initial){
 
     $seq = new Sequence();
-    print_r( $seq->setInitialValue($entity));
+    print_r( $seq->setInitialValue($entity,$initial));
 
 });
 

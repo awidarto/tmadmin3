@@ -1,6 +1,6 @@
 <?php
 
-class PropertyController extends AdminController {
+class TransactionController extends AdminController {
 
     public function __construct()
     {
@@ -12,7 +12,7 @@ class PropertyController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Property();
+        $this->model = new Transaction();
         //$this->model = DB::collection('documents');
 
     }
@@ -29,9 +29,10 @@ class PropertyController extends AdminController {
     {
 
         $this->heads = array(
-            array('Photos',array('search'=>false,'sort'=>false)),
+            array('Transaction ID',array('search'=>true,'sort'=>true)),
             array('Property ID',array('search'=>true,'sort'=>true)),
-            array('Number',array('search'=>true,'sort'=>true)),
+            array('Agent',array('search'=>true,'sort'=>true)),
+            array('Buyer',array('search'=>false,'sort'=>false)),
             array('Address',array('search'=>true,'sort'=>true)),
             array('City',array('search'=>true,'sort'=>true)),
             array('ZIP',array('search'=>true,'sort'=>true)),
@@ -49,7 +50,7 @@ class PropertyController extends AdminController {
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Property';
+        $this->title = 'Transaction';
 
         return parent::getIndex();
 
@@ -57,6 +58,33 @@ class PropertyController extends AdminController {
 
     public function postIndex()
     {
+
+/*
+'id' => '529d90d5ccae5b8003000000',
+  'agentId' => 'Agent ID',
+  'agentName' => 'Oddie Octaviadi',
+  'customerId' => 'tb1234',
+  'firstName' => 'Andi',
+  'lastName' => 'Karsono',
+  'company' => 'Kickstartlab',
+  'phone' => '021587897',
+  'email' => 'andy@sinaptix.com',
+  'Street_Address' => 'Komp DKI Joglo Blok D No 3 RT 01/04 Joglo Kembangan',
+  'City' => 'Jakarta',
+  'countryOfOrigin' => 'Indonesia',
+  'state' => '-',
+  'zipCode' => '11640',
+  'fundingMethod' => 'Cash',
+  'legalName' => 'Andi Karsono',
+  'entityType' => 'Personal',
+  'code1' => '1213',
+  'code2' => '3435',
+  'earnestMoneyType1' => 'Cash',
+  'earnestMoney1' => '10000',
+  'earnestMoneyType2' => 'Cash',
+  'earnestMoney2' => '15000',
+  '_token' => 'Tk680Pr6K0wnpaYiXXIyRMY88eUrcO8u5Z0euts0',
+*/
 
         $this->fields = array(
             array('number',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
