@@ -197,7 +197,8 @@ return array(
         'Formgenerator'   => 'RobinMalfait\Formgenerator\Facades\Formgenerator',
         'Yaml'            => 'Pieter\Yaml\Facades\Yaml',
         'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
-        'Theme'           => 'AlexWhitman\ViewThemes\ThemeFacade'
+        'Theme'           => 'AlexWhitman\ViewThemes\ThemeFacade',
+        'Carbon'          => 'Carbon\Carbon',
 
 	),
 
