@@ -1,6 +1,6 @@
 <?php
 
-class PropertyController extends AdminController {
+class EventController extends AdminController {
 
     public function __construct()
     {
@@ -12,7 +12,7 @@ class PropertyController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Property();
+        $this->model = new Events();
         //$this->model = DB::collection('documents');
 
     }
@@ -50,7 +50,7 @@ class PropertyController extends AdminController {
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Property';
+        $this->title = 'Event';
 
         return parent::getIndex();
 

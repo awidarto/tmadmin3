@@ -81,7 +81,6 @@
     {{ HTML::script('js/jquery-1.9.1.js')}}
     {{ HTML::script('js/jquery-ui-1.9.2.custom.min.js')}}
 
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
     {{-- HTML::script('js/jquery.ui.addresspicker.js') --}}
 

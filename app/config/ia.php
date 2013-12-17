@@ -15,13 +15,17 @@ return array(
             'TRIPLEX'=>'Triplex'
         ),
     'publishing'=>array(
-            'draft'=>'Draft',
-            'published'=>'Published'
+            'offline'=>'Offline',
+            'prelisted'=>'Prelisted',
+            'available'=>'Available for Sale',
+            'sold'=>'Sold'
         ),
     'search_publishing'=>array(
             ''=>'All',
-            'draft'=>'Draft',
-            'published'=>'Published'
+            'offline'=>'Offline',
+            'prelisted'=>'Prelisted',
+            'available'=>'Available for Sale',
+            'sold'=>'Sold'
         ),
     'property_id_prefix'=>'IA',
     'agent_id_prefix'=>'TA',

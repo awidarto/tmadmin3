@@ -28,6 +28,8 @@ Route::controller('faqcat', 'FaqcatController');
 Route::controller('inprop', 'InpropController');
 
 Route::controller('music', 'MusicController');
+Route::controller('video', 'VideoController');
+Route::controller('event', 'EventController');
 
 
 Route::controller('upload', 'UploadController');

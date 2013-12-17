@@ -10,125 +10,22 @@
 <div class="row-fluid">
     <div class="span6">
 
-        {{ Former::text('brandName','Brand Name') }}
-        {{ Former::text('shopCategory','Shop Category') }}
-        {{ Former::text('tradeName','Trade Name') }}
+        {{ Former::select('salutation')->options(Config::get('kickstart.salutation'))->label('Salutation')->class('span1') }}
+        {{ Former::text('firstname','First Name') }}
+        {{ Former::text('lastname','Last Name') }}
+        {{ Former::text('mobile','Mobile') }}
+
+        {{ Former::text('address_1','Address') }}
+        {{ Former::text('address_2','') }}
+        {{ Former::text('city','City') }}
+        {{ Former::select('state')->options(Config::get('country.us_states'))->label('State') }}
         {{ Former::select('countryOfOrigin')->options(Config::get('country.countries'))->label('Country of Origin') }}
-        {{ Former::text('modelNo','Model No.') }}
-        {{ Former::text('collectionName','Collection Name') }}
-
-        {{ View::make('partials.editortoolbar')->render() }}
-
-        {{ Former::textarea('ecoFriendly','Eco-friendly') }}
-        {{ Former::text('designedBy','Designed by') }}
-        {{ Former::text('madeBy','Made by') }}
-        {{ Former::text('priceUSD','Price ($USD)') }}
-        {{ Former::text('visibleTags','Tags (visible)')->class('tag_keyword') }}
-        {{ Former::text('hiddenTags','Tags (hidden)')->class('tag_keyword') }}
-
-        <div class="control-group">
-            <label class="control-label" for="userfile">Upload Images</label>
-            <div class="controls">
-                <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
-                    <span>Add files...</span>
-                    <!-- The file input field used as target for the file upload widget -->
-                    <input id="fileupload" type="file" name="files[]" multiple>
-                </span>
-                <br />
-                <br />
-                <div id="progress" class="progress progress-success progress-striped">
-                    <div class="bar"></div>
-                </div>
-                <br />
-                <div id="files" class="files">
-                    <ul>
-                        <?php
-                            $allin = Input::old();
-                            $showold = false;
-
-                            if( count($allin) > 0){
-                                $showold = true;
-                            }
-
-                            if($showold && isset( $allin['thumbnail_url'])){
-
-                                $filename = $allin['filename'];
-                                $thumbnail_url = $allin['thumbnail_url'];
-
-                                $thumb = '<li><img src="%s"><br /><input type="radio" name="defaultpic" value="%s" %s > Default<br />';
-                                $thumb .= '<span class="img-title">%s</span>';
-                                $thumb .= '<label for="colour">Colour</label><input type="text" name="colour[]" value="%s"  />';
-                                $thumb .= '<label for="material">Material & Finish</label><input type="text" name="material[]" value="%s"  />';
-                                $thumb .= '<label for="tags">Tags</label><input type="text" name="tag[]" value="%s"  /></li>';
-
-                                for($t = 0; $t < count($filename);$t++){
-                                    if($allin['defaultpic'] == $filename[$t]){
-                                        $isdef = 'checked="checked"';
-                                    }else{
-                                        $isdef = ' ';
-                                    }
-
-                                    printf($thumb,$thumbnail_url[$t],
-                                        $filename[$t],
-                                        $isdef,
-                                        $filename[$t],
-                                        $allin['colour'][$t],$allin['material'][$t],$allin['tag'][$t]);
-                                }
-
-                            }
-                        ?>
-                    </ul>
-                </div>
-                <div id="uploadedform">
-                    <?php
-
-                        if($showold && isset( $allin['filename'] )){
-
-                            $count = 0;
-                            $upcount = count($allin['filename']);
-
-                            $upl = '';
-                            for($u = 0; $u < $upcount; $u++){
-                                $upl .= '<input type="hidden" name="delete_type[]" value="' . $allin['delete_type'][$u] . '">';
-                                $upl .= '<input type="hidden" name="delete_url[]" value="' . $allin['delete_url'][$u] . '">';
-                                $upl .= '<input type="hidden" name="filename[]" value="' . $allin['filename'][$u]  . '">';
-                                $upl .= '<input type="hidden" name="filesize[]" value="' . $allin['filesize'][$u]  . '">';
-                                $upl .= '<input type="hidden" name="temp_dir[]" value="' . $allin['temp_dir'][$u]  . '">';
-                                $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $allin['thumbnail_url'][$u] . '">';
-                                $upl .= '<input type="hidden" name="filetype[]" value="' . $allin['filetype'][$u] . '">';
-                                $upl .= '<input type="hidden" name="fileurl[]" value="' . $allin['fileurl'][$u] . '">';
-                            }
-
-                            print $upl;
-                        }
-
-                    ?>
-                </div>
-            </div>
-        </div>
-
     </div>
     <div class="span6">
-        {{ Former::text('productName','Product Name') }}
-        {{ Former::textarea('productProperties','Properties') }}
+        {{ Former::text('email','Email') }}
 
-        {{ Former::select('mainCategory','Main Category')->options(Config::get('se.main_categories'))->id('mainCategory') }}
-        <div id="productApplication">
-            {{ Former::select('productApplication[]')->options(Config::get('se.applications'))->multiple(true)->label('Application') }}
-        </div>
-        <div id="productSystem">
-            {{ Former::select('productSystem[]')->options(Config::get('se.systems'))->name('productSystem')->multiple(true)->label('System') }}
-        </div>
-        <div id="productFunction">
-            {{ Former::select('productFunction[]')->options(Config::get('se.functions'))->name('productFunction')->multiple(true)->label('Function') }}
-        </div>
-
-
-        {{ Former::text('productCategory','Category') }}
-        {{ Former::textarea('availableColours','Avail. Colours') }}
-        {{ Former::textarea('availableMaterialFinishes','Avail. Materials & Finishes') }}
-        {{ Former::textarea('availableDimension','Avail. Dimensions (mm)') }}
+        {{ Former::password('pass','Password') }}
+        {{ Former::password('repass','Repeat Password') }}
 
     </div>
 </div>
@@ -141,38 +38,12 @@
 </div>
 {{Former::close()}}
 
-{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
-{{ HTML::script('js/parser_rules/advanced.js') }}
-
 <script type="text/javascript">
 
 $(document).ready(function() {
 
-    function setVisibleOptions(){
-        var mc = $('#mainCategory').val();
-
-        console.log(mc);
-
-        if( mc == 'Structure'){
-            $('#productFunction').hide();
-            $('#productSystem').show();
-            $('#productApplication').hide();
-        }else if( mc == 'Furniture'){
-            $('#productFunction').show();
-            $('#productSystem').hide();
-            $('#productApplication').hide();
-        }else{
-            $('#productFunction').hide();
-            $('#productSystem').hide();
-            $('#productApplication').show();
-        }
-
-    }
-
-    setVisibleOptions();
-
     $('select').select2({
-      width : 'resolve'
+      width : 'copy'
     });
 
     var url = '{{ URL::to('upload') }}';

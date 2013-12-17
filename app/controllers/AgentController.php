@@ -91,19 +91,56 @@ class AgentController extends AdminController {
     {
 
         $this->validator = array(
-            'brandName' => 'required',
-            'productName'=> 'required'
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email'=> 'required|unique:agents',
+            'pass'=>'required|same:repass'
         );
 
         return parent::postAdd($data);
     }
 
+    public function beforeSave($data)
+    {
+        unset($data['repass']);
+        $data['pass'] = Hash::make($data['pass']);
+        return $data;
+    }
+
+    public function beforeUpdate($id,$data)
+    {
+        //print_r($data);
+
+        if(isset($data['pass']) && $data['pass'] != ''){
+            unset($data['repass']);
+            $data['pass'] = Hash::make($data['pass']);
+
+        }else{
+            unset($data['pass']);
+            unset($data['repass']);
+        }
+
+        //print_r($data);
+
+        //exit();
+
+        return $data;
+    }
+
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'brandName' => 'required',
-            'productName'=> 'required'
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email'=> 'required'
         );
+
+        if($data['pass'] == ''){
+            unset($data['pass']);
+            unset($data['repass']);
+        }else{
+            $this->validator['pass'] = 'required|same:repass';
+        }
 
         return parent::postEdit($id,$data);
     }
@@ -111,7 +148,7 @@ class AgentController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('document/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('agent/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

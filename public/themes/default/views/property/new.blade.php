@@ -3,6 +3,7 @@
 
 @section('content')
 
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
 <h3>{{$title}}</h3>
 
@@ -14,7 +15,7 @@
         {{-- Former::text('propertyId','Property ID')->class('span4') --}}
 
         {{ Former::select('state')->options(Config::get('country.us_states'))->label('States') }}
-        {{ Former::text('number','Number')->class('span3') }}
+        {{ Former::text('number','Street Number')->class('span3')->maxlength(6) }}
         {{ Former::text('address','Address') }}
         {{ Former::text('city','City') }}
         {{ Former::text('zipCode','ZIP')->class('span2')->maxlength(5) }}
@@ -25,7 +26,7 @@
         <div class="row-fluid lmargin">
             <div class="span3"></div>
             <div class="span3">
-                {{ Former::select('type')->options(Config::get('ia.type'))->label('Type')->class('span1') }}
+                {{ Former::select('type')->options(Config::get('ia.type'))->label('Type')->class('span6') }}
             </div>
             <div class="span3">
                 {{ Former::text('yearBuilt','Year Built')->class('span6')->maxlength(4)  }}
@@ -58,10 +59,10 @@
         <div class="row-fluid lmargin">
             <div class="span3"></div>
             <div class="span3">
-                {{ Former::select('basement')->options(Config::get('ia.boolean'))->label('Basement')->class('span1') }}
+                {{ Former::select('basement')->options(Config::get('ia.boolean'))->label('Basement')->class('span6') }}
             </div>
             <div class="span3">
-                {{ Former::select('pool')->options(Config::get('ia.boolean'))->label('Pool')->class('span1') }}
+                {{ Former::select('pool')->options(Config::get('ia.boolean'))->label('Pool')->class('span6') }}
             </div>
         </div>
 
@@ -83,6 +84,8 @@
 
         {{ Former::textarea('description','Property Description')->class('span10 editor')->rows(8) }}
 
+        {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
             <fieldset class="gllpLatlonPicker" >
 
                 <div class="gllpMap" style="margin-left:180px;" >Google Maps</div>
@@ -91,9 +94,9 @@
                     <button type="button" class="gllpSearchButton btn">Search</button>
                 </div>
 
-                {{ Former::text('latitude','Latitude')->class('gllpLatitude span6')}}
-                {{ Former::text('longitude','Longitude')->class('gllpLongitude span6')}}
-                {{ Former::text('zoom','Zoom')->class('gllpZoom span6')}}
+                {{ Former::hidden('latitude')->class('gllpLatitude')}}
+                {{ Former::hidden('longitude')->class('gllpLongitude')}}
+                {{ Former::hidden('zoom')->class('gllpZoom')}}
                 {{--<input type="button" class="gllpUpdateButton" value="update map">--}}
             </fieldset>
 
@@ -101,9 +104,11 @@
     </div>
     <div class="span6">
 
+        {{ Former::select('propertyStatus')->options(Config::get('ia.publishing'))->label('Status') }}
+
         {{ Former::select('category')->options(Config::get('ia.category'))->label('Category') }}
         {{ Former::text('monthlyRental','Monthly Rental')->class('span3') }}
-        {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span1') }}
+        {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span3') }}
         {{ Former::text('leaseTerms','Lease Terms')->append('months')->class('span2')->maxlength(2) }}
         {{ Former::text('leaseStartDate','Lease Start Date')->class('span7 datepicker')
             ->data_format('dd-mm-yyyy')
@@ -141,8 +146,7 @@
 
 <div class="row-fluid pull-right">
     <div class="span4">
-        {{ Form::submit('Save as Draft',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
-        {{ Form::submit('Publish',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
@@ -157,7 +161,7 @@
 $(document).ready(function() {
 
     $('select').select2({
-      width : 'resolve'
+      width : 'copy'
     });
 
 });
