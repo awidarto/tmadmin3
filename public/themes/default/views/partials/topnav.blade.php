@@ -23,8 +23,8 @@
                 <b class="caret"></b>
               </a>
             <ul class="dropdown-menu">
-                <li><a href="{{ URL::to('report/siteaccess') }}" {{ sa('report/siteaccess') }} >Site Access</a></li>
-                <li><a href="{{ URL::to('report/activity') }}" {{ sa('report/activity') }} >Activity</a></li>
+                <li><a href="{{ URL::to('activity') }}" {{ sa('activity') }} >Activity Log</a></li>
+                <li><a href="{{ URL::to('siteaccess') }}" {{ sa('siteaccess') }} >Site Access</a></li>
             </ul>
         </li>
         <li class="dropdown">

@@ -24,6 +24,7 @@ Route::controller('menu', 'MenuController');
 Route::controller('faq', 'FaqController');
 Route::controller('faqcat', 'FaqcatController');
 
+Route::controller('activity', 'ActivityController');
 
 Route::controller('inprop', 'InpropController');
 

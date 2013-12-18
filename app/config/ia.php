@@ -27,6 +27,20 @@ return array(
             'available'=>'Available for Sale',
             'sold'=>'Sold'
         ),
+
+    'eventcat'=>array(
+            'Road Show'=>'Road Show',
+            'Trade Show'=>'Trade Show',
+            'Exhibition'=>'Exhibition',
+        ),
+    'search_eventcat'=>array(
+            ''=>'All',
+            'Road Show'=>'Road Show',
+            'Trade Show'=>'Trade Show',
+            'Exhibition'=>'Exhibition',
+        ),
+
+
     'property_id_prefix'=>'IA',
     'agent_id_prefix'=>'TA',
     'buyer_id_prefix'=>'TB',
