@@ -12,7 +12,8 @@ return array(
             'SFH'=>'SFH',
             'MFH'=>'MFH',
             'DUPLEX'=>'Duplex',
-            'TRIPLEX'=>'Triplex'
+            'TRIPLEX'=>'Triplex',
+            'LAND'=>'Land'
         ),
     'publishing'=>array(
             'offline'=>'Offline',

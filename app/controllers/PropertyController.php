@@ -105,6 +105,8 @@ class PropertyController extends AdminController {
             $data['soldDate'] = $data['lastUpdate'];
         }
 
+        $data['listingPrice'] = new MongoInt32($data['listingPrice']);
+
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
@@ -159,6 +161,8 @@ class PropertyController extends AdminController {
         $defaults = array();
 
         $files = array();
+
+        $data['listingPrice'] = new MongoInt32($data['listingPrice']);
 
         if($data['propertyStatus'] == 'available'){
             $data['publishDate'] = $data['lastUpdate'];

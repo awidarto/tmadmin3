@@ -72,6 +72,33 @@ Route::get('regenerate',function(){
 
 });
 
+Route::get('tonumber',function(){
+    $property = new Property();
+
+    $props = $property->get()->toArray();
+
+    $seq = new Sequence();
+
+    foreach($props as $p){
+
+        $_id = new MongoId($p['_id']);
+
+        $price = new MongoInt32( $p['listingPrice'] );
+        $fmv = new MongoInt32( $p['FMV'] );
+
+        $sdata = array(
+            'listingPrice'=>$price,
+            'FMV'=>$fmv
+            );
+
+        if( $property->where('_id','=', $_id )->update( $sdata ) ){
+            print $p['_id'].'->'.$sdata['listingPrice'].'<br />';
+        }
+
+    }
+
+});
+
 Route::get('inc/{entity}',function($entity){
 
     $seq = new Sequence();

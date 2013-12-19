@@ -33,8 +33,9 @@ class BuyerController extends AdminController {
             array('First Name',array('search'=>true,'sort'=>true)),
             array('Last Name',array('search'=>true,'sort'=>true)),
             array('Email',array('search'=>true,'sort'=>true)),
-            array('Mobile',array('search'=>true,'sort'=>true)),
+            array('Phone',array('search'=>true,'sort'=>true)),
             array('Address',array('search'=>true,'sort'=>true)),
+            array('Agent',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -53,8 +54,9 @@ class BuyerController extends AdminController {
             array('firstname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('lastname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('email',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('mobile',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('address_1',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('phone',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('agentName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
