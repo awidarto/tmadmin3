@@ -17,6 +17,10 @@ class UploadController extends Controller {
 
         //exit();
 
+        $large_wm = public_path().'/wm/wm_lrg.png';
+        $med_wm = public_path().'/wm/wm_med.png';
+        $sm_wm = public_path().'/wm/wm_sm.png';
+
         $rstring = str_random(15);
 
         $destinationPath = realpath('storage/media').'/'.$rstring;
@@ -32,14 +36,17 @@ class UploadController extends Controller {
 
         $thumbnail = Image::make($destinationPath.'/'.$filename)
             ->grab(100,74)
+            ->insert($sm_wm,0,0, 'bottom-right')
             ->save($destinationPath.'/th_'.$filename);
 
         $medium = Image::make($destinationPath.'/'.$filename)
             ->grab(270,200)
+            ->insert($med_wm,0,0, 'bottom-right')
             ->save($destinationPath.'/med_'.$filename);
 
         $large = Image::make($destinationPath.'/'.$filename)
             ->grab(870,420)
+            ->insert($large_wm,15,15, 'bottom-right')
             ->save($destinationPath.'/lrg_'.$filename);
 
 
