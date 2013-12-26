@@ -53,5 +53,9 @@ class Ks {
         return number_format((double) $in,2,'.',',');
     }
 
+    public static function roi($prop){
+        $roi = ((12*$prop['monthlyRental']) - $prop['tax'] - $prop['insurance'] - ( (12*$prop['monthlyRental']) / 10 )) / $prop['listingPrice'];
+        return number_format( $roi * 100, 1,'.',',');
+    }
 }
 

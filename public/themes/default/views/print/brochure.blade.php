@@ -6,8 +6,8 @@
     <style type="text/css">
 
         body{
-            font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-family: Helvetica, sans-serif;
+            font-size: 12px;
             margin:0px;
             padding: 0px;
         }
@@ -45,13 +45,12 @@
 
         h1,h2{
             font-weight: normal;
-            margin-top: 5px;
             padding: 0px;
         }
 
         h1{
             font-size: 22px;
-            line-height: 24px;
+            line-height: 22px;
         }
 
         h2{
@@ -146,8 +145,17 @@
             text-align: left;
         }
 
-        table th.item{
+        table.financial th.item{
             vertical-align: middle;
+            text-align: left;
+            min-width:150px;
+            padding-right: 8px;
+        }
+
+        .title-span{
+            display: block;
+            font-size: 24px;
+            font-family: Helvetica,sans-serif;
         }
 
     </style>
@@ -207,8 +215,8 @@
     <table id="overviewtable" style="width:100%;padding:0px;margin-top:10px;">
         <tr>
             <td style="background-color:orange;padding:8px;">
-                <h2>{{$prop['number'].' '.$prop['address']}}</h2>
-                <h1>{{$prop['city'].' '.$prop['state'].' '.$prop['zipCode']}}</h1>
+                <span class="title-span">{{$prop['number'].' '.$prop['address']}}</span>
+                <span class="title-span">{{$prop['city'].' '.$prop['state'].' '.$prop['zipCode']}}</span>
             </td>
             <td style="padding:0px;">
                 <table class="feature" style="margin:0px;" >
@@ -233,7 +241,32 @@
         </tr>
         <tr>
             <td style="font-size:12px;">
-                {{ $prop['description']}}
+                <table class="financial" style="margin:0px;" >
+                    <tbody>
+                        <tr>
+                            <th class="item">Type</th>
+                            <td>{{ $prop['type']}}</td>
+                        </tr>
+                        <tr>
+                            <th class="item">Year Built</th>
+                            <td>{{ $prop['yearBuilt']}}</td>
+                        </tr>
+                        <tr>
+                            <th class="item">Size</th>
+                            <td>{{ $prop['houseSize']}} Sq Ft</td>
+                        </tr>
+                        <tr>
+                            <th class="item">Category</th>
+                            <td>{{ ucwords( strtolower($prop['category'] ) ) }}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="item">Description</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2" >{{ $prop['description']}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </td>
             <td style="font-size:12px;">
                 <table class="financial" style="margin:0px;" >
@@ -244,11 +277,11 @@
                         </tr>
                         <tr>
                             <th class="item">ROI</th>
-                            <td>{{ $prop['bed']}}</td>
+                            <td>{{ Ks::roi($prop) }} %</td>
                         </tr>
                         <tr>
                             <th class="item">Monthly Rent</th>
-                            <td>{{ $prop['bed']}}</td>
+                            <td>{{ Ks::usd($prop['monthlyRental'])}}</td>
                         </tr>
                     </tbody>
                 </table>
