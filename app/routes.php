@@ -46,6 +46,8 @@ Route::get('content/posts', 'PostsController@getIndex');
 Route::get('content/category', 'CategoryController@getIndex');
 Route::get('content/menu', 'MenuController@getIndex');
 
+
+
 Route::get('regenerate',function(){
     $property = new Property();
 
@@ -97,6 +99,37 @@ Route::get('tonumber',function(){
 
     }
 
+});
+
+Route::get('pdf',function(){
+    $content = "
+    <page>
+        <h1>Exemple d'utilisation</h1>
+        <br>
+        Ceci est un <b>exemple d'utilisation</b>
+        de <a href='http://html2pdf.fr/'>HTML2PDF</a>.<br>
+    </page>";
+
+    $html2pdf = new HTML2PDF();
+    $html2pdf->WriteHTML($content);
+    $html2pdf->Output('exemple.pdf','D');
+});
+
+Route::get('brochure/dl/{id}',function($id){
+
+    $prop = Property::find($id)->toArray();
+
+    return View::make('print.brochure')->with('prop',$prop)->render();
+
+    $content = View::make('print.brochure')->with('prop',$prop)->render();
+
+    $html2pdf = new HTML2PDF();
+    $html2pdf->WriteHTML($content);
+    $html2pdf->Output('brochure-'.$prop['propertyId'].'.pdf','D');
+});
+
+Route::get('brochure',function(){
+    View::make('print.brochure');
 });
 
 Route::get('inc/{entity}',function($entity){

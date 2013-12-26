@@ -1,6 +1,6 @@
 <?php
 
-class HTML2PDF {
+class Html2pdf {
 
     public function __construct()
     {

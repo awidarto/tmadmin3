@@ -31,6 +31,7 @@ class PropertyController extends AdminController {
         $this->heads = array(
             array('Photos',array('search'=>false,'sort'=>false)),
             array('Property ID',array('search'=>true,'sort'=>true)),
+            array('Source ID',array('search'=>true,'sort'=>true)),
             array('Number',array('search'=>true,'sort'=>true)),
             array('Address',array('search'=>true,'sort'=>true)),
             array('City',array('search'=>true,'sort'=>true)),
@@ -38,12 +39,12 @@ class PropertyController extends AdminController {
             array('State',array('search'=>true,'sort'=>true)),
             array('Bed',array('search'=>true,'sort'=>false)),
             array('Bath',array('search'=>true,'sort'=>true)),
-            array('Pool',array('search'=>true,'sort'=>true)),
-            array('Garage',array('search'=>true,'sort'=>true)),
-            array('Basement',array('search'=>true,'sort'=>true)),
+            //array('Pool',array('search'=>true,'sort'=>true)),
+            //array('Garage',array('search'=>true,'sort'=>true)),
+            //array('Basement',array('search'=>true,'sort'=>true)),
             array('Category',array('search'=>true,'sort'=>true)),
             array('Tags',array('search'=>true,'sort'=>true)),
-            array('Publishing',array('search'=>true,'sort'=>true, 'select'=>Config::get('ia.search_publishing'))),
+            array('Status',array('search'=>true,'sort'=>true, 'select'=>Config::get('ia.search_publishing'))),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -62,6 +63,7 @@ class PropertyController extends AdminController {
         $this->fields = array(
             array('number',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
             array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('sourceID',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -69,12 +71,12 @@ class PropertyController extends AdminController {
             array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('bed',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('bath',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            //array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            //array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            //array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('publishStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('propertyStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -200,6 +202,23 @@ class PropertyController extends AdminController {
                     $defaults['medium_url'] = $data['medium_url'][$i];
                 }
 
+                if($data['brchead'] == $data['file_id'][$i]){
+                    $defaults['brchead'] = $data['large_url'][$i];
+                }
+
+                if($data['brc1'] == $data['file_id'][$i]){
+                    $defaults['brc1'] = $data['large_url'][$i];
+                }
+
+                if($data['brc2'] == $data['file_id'][$i]){
+                    $defaults['brc2'] = $data['large_url'][$i];
+                }
+
+                if($data['brc3'] == $data['file_id'][$i]){
+                    $defaults['brc3'] = $data['large_url'][$i];
+                }
+
+
             }
 
         }else{
@@ -218,6 +237,10 @@ class PropertyController extends AdminController {
             $data['caption'] = array();
 
             $data['defaultpic'] = '';
+            $data['brchead'] = '';
+            $data['brc1'] = '';
+            $data['brc2'] = '';
+            $data['brc3'] = '';
         }
 
 
@@ -262,10 +285,12 @@ class PropertyController extends AdminController {
 
     public function makeActions($data)
     {
-        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('property/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i> Delete</span>';
+        $edit = '<a href="'.URL::to('property/edit/'.$data['_id']).'"><i class="icon-edit"></i> Update</a>';
+        $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
+        $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
 
-        $actions = $edit.'<br />'.$delete;
+        $actions = $edit.'<br />'.$dl.'<br />'.$print.'<br />'.$delete;
         return $actions;
     }
 
@@ -310,10 +335,11 @@ class PropertyController extends AdminController {
 
             $thumbnail_url = $gdata['thumbnail_url'];
             foreach($data['files'] as $g){
+                $g['caption'] = ($g['caption'] == '')?$data['propertyId']:$data['propertyId'].' : '.$g['caption'];
                 $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['fileurl'].'" >';
             }
 
-            $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','id' => $data['_id'])).$glinks;
+            $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
             return $display;
         }else{
             return $name;

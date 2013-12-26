@@ -6,7 +6,7 @@
 	<div class="span12 command-bar">
 
         <h3>{{ $title }}</h3>
-       	<a href="{{ URL::to($addurl) }}" class="btn">Add</a>
+       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
     <!--    <a href="#" id="pushmedia" class="btn btn-primary">Push Media Playlist</a> -->
 
 	   @if (Session::has('notify_operationalform'))
@@ -95,7 +95,7 @@
 			    			@if(isset($in[1]['date']) && $in[1]['date'])
 				        		<td>
 									<div id="{{ $index }}" class="input-append datepickersearch">
-									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="Search {{$in[0]}}" ></input>
+									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
 									    <span class="add-on">
 											<i data-time-icon="icon-clock" data-date-icon="icon-calendar">
 											</i>
@@ -105,7 +105,7 @@
 			    			@elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
 				        		<td>
 									<div id="{{ $index }}" class="input-append datetimepickersearch">
-									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="Search {{$in[0]}}" ></input>
+									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
 									    <span class="add-on">
 											<i data-time-icon="icon-clock" data-date-icon="icon-calendar">
 											</i>
@@ -114,14 +114,14 @@
 				        		</td>
 			    			@elseif(isset($in[1]['select']) && is_array($in[1]['select']))
 			    				<td>
-			    					<input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+			    					<input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
 			    					<div class="styled-select">
 				    					{{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small','id'=>$index ))}}
 			    					</div>
 			    				</td>
 			    			@else
 				        		<td>
-				        			<input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="Search {{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+				        			<input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
 				        		</td>
 			    			@endif
 		    			@else

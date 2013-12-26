@@ -104,12 +104,13 @@ class AdminController extends Controller {
 		$select_all = Former::checkbox()->name('Select All')->check(false)->id('select_all');
 
 		// add selector and sequence columns
+        array_unshift($heads, array('Actions',array('sort'=>false,'class'=>'action')));
 		array_unshift($heads, array($select_all,array('sort'=>false)));
 		array_unshift($heads, array('#',array('sort'=>false)));
 
 		// add action column
 		array_push($heads,
-			array('Actions',array('search'=>false,'sort'=>false,'clear'=>true))
+			array('Actions',array('search'=>false,'sort'=>false,'clear'=>true,'class'=>'action'))
 		);
 
 		$disablesort = array();
@@ -149,6 +150,7 @@ class AdminController extends Controller {
 
 		//array_unshift($fields, array('select',array('kind'=>false)));
 		array_unshift($fields, array('seq',array('kind'=>false)));
+        array_unshift($fields, array('action',array('kind'=>false)));
 
 		$pagestart = Input::get('iDisplayStart');
 		$pagelength = Input::get('iDisplayLength');
@@ -290,9 +292,17 @@ class AdminController extends Controller {
 
 		$fidx = ($fidx == -1 )?0:$fidx;
 
-		$sort_col = $fields[$fidx][0];
+        if(Input::get('iSortCol_0') == 0){
+            $sort_col = 'lastUpdate';
 
-		$sort_dir = Input::get('sSortDir_0');
+            $sort_dir = 'desc';
+        }else{
+            $sort_col = $fields[$fidx][0];
+
+            $sort_dir = Input::get('sSortDir_0');
+
+        }
+
 
 		/*
 		if(count($q) > 0){
@@ -344,6 +354,7 @@ class AdminController extends Controller {
 			//$sel = Former::checkbox('sel_'.$doc['_id'])->check(false)->label(false)->id($doc['_id'])->class('selector')->__toString();
 			$sel = '<input type="checkbox" name="sel_'.$doc['_id'].'" id="'.$doc['_id'].'" value="'.$doc['_id'].'" class="selector" />';
 			$row[] = $sel;
+            $row[] = $actions;
 
 			foreach($fields as $field){
 				if($field[1]['kind'] != false && $field[1]['show'] == true){
@@ -371,7 +382,11 @@ class AdminController extends Controller {
                                     $rowitem = date('d-m-Y H:i:s',$doc[$field[0]]);
                                 }else{
                                     //$rowitem = $doc[$field[0]];
-                                    $rowitem = date('d-m-Y H:i:s',strtotime($doc[$field[0]]) );
+                                    if(is_array($doc[$field[0]])){
+                                        $rowitem = date('d-m-Y H:i:s', time() );
+                                    }else{
+                                        $rowitem = date('d-m-Y H:i:s',strtotime($doc[$field[0]]) );
+                                    }
                                 }
 							}elseif($field[1]['kind'] == 'date'){
                                 if($doc[$field[0]] instanceof MongoDate){
@@ -408,7 +423,8 @@ class AdminController extends Controller {
 				}
 			}
 
-			$row[] = $actions;
+            $row[] = $actions;
+
 			$row['extra'] = $extra;
 
 			$aadata[] = $row;

@@ -26,11 +26,11 @@
 
     {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
 
-    {{ HTML::style('css/bootstrap-wysihtml5-0.0.2.css') }}
 
     {{ HTML::style('css/blueimp-gallery.min.css') }}
 
-    {{ HTML::style('css/style.css') }}
+    {{-- HTML::style('css/style.css') --}}
+
 
     <!-- Le styles -->
 
@@ -58,12 +58,18 @@
     }
     </style>
 
-    {{ HTML::style('css/form.css') }}
-    {{ HTML::style('css/gridtable.css') }}
     {{ HTML::style('css/select2.css') }}
     {{ HTML::style('css/jquery.tagsinput.css') }}
 
     {{ HTML::style('css/jquery-fileupload/css/jquery.fileupload-ui.css') }}
+
+    {{ HTML::style('css/app2.css') }}
+
+    {{ HTML::style('css/form.css') }}
+
+    {{ HTML::style('css/gridtable.css') }}
+
+    {{ HTML::style('css/bootstrap-wysihtml5-0.0.2.css') }}
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -93,7 +99,7 @@
 
    <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">

@@ -34,9 +34,16 @@
                         //print_r($formdata['files']);
 
 
-                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span><br />';
+                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
                         $thumb .= '<span class="img-title">%s</span>';
                         $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
+
+                        $thumb .= 'Brochure<br />';
+                        $thumb .= '<input type="radio" name="brchead" value="%s" %s > Head &nbsp;';
+                        $thumb .= '<input type="radio" name="brc1" value="%s" %s > Pic 1 &nbsp;';
+                        $thumb .= '<input type="radio" name="brc2" value="%s" %s > Pic 2 &nbsp;';
+                        $thumb .= '<input type="radio" name="brc3" value="%s" %s > Pic 3 &nbsp;';
+
                         $thumb .= '<label for="caption">Caption</label><input type="text" name="caption[]" value="%s" />';
                         $thumb .= '</li>';
 
@@ -51,6 +58,7 @@
                                 }else{
                                     $isdef = ' ';
                                 }
+
                             }else{
                                 if($t == 0){
                                     $isdef = 'checked="checked"';
@@ -59,12 +67,38 @@
                                 }
                             }
 
+                            if(isset($formdata['brchead']) && $formdata['brchead'] == $k){
+                                $headdef = 'checked="checked"';
+                            }else{
+                                $headdef = ' ';
+                            }
+                            if(isset($formdata['brc1']) && $formdata['brc1'] == $k){
+                                $isdef1 = 'checked="checked"';
+                            }else{
+                                $isdef1 = ' ';
+                            }
+                            if(isset($formdata['brc2']) && $formdata['brc2'] == $k){
+                                $isdef2 = 'checked="checked"';
+                            }else{
+                                $isdef2 = ' ';
+                            }
+                            if(isset($formdata['brc3']) && $formdata['brc3'] == $k){
+                                $isdef3 = 'checked="checked"';
+                            }else{
+                                $isdef3 = ' ';
+                            }
+
+
                             printf($thumb,
                                 $v['thumbnail_url'],
                                 $v['file_id'],
                                 $v['filename'],
                                 $v['file_id'],
                                 $isdef,
+                                $v['file_id'], $headdef,
+                                $v['file_id'], $isdef1,
+                                $v['file_id'], $isdef2,
+                                $v['file_id'], $isdef3,
                                 $v['caption']
                                 );
 
@@ -80,9 +114,16 @@
                         $thumbnail_url = $allin['thumbnail_url'];
                         $file_id = $allin['file_id'];
 
-                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span><br />';
+                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
                         $thumb .= '<span class="img-title">%s</span>';
                         $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
+
+                        $thumb .= 'Brochure<br />';
+                        $thumb .= '<input type="radio" name="brchead" value="%s" %s > Head &nbsp;';
+                        $thumb .= '<input type="radio" name="brc1" value="%s" %s > Pic 1 &nbsp;';
+                        $thumb .= '<input type="radio" name="brc2" value="%s" %s > Pic 2 &nbsp;';
+                        $thumb .= '<input type="radio" name="brc3" value="%s" %s > Pic 3 &nbsp;';
+
                         $thumb .= '<label for="caption">Caption</label><input type="text" name="caption[]" value="%s" />';
                         $thumb .= '</li>';
 
@@ -93,6 +134,7 @@
                                 }else{
                                     $isdef = ' ';
                                 }
+
                             }else{
                                 if($t == 0){
                                     $isdef = 'checked="checked"';
@@ -100,12 +142,38 @@
                                     $isdef = ' ';
                                 }
                             }
+
+                            if( isset($allin['brchead']) && $allin['brchead'] == $allin['file_id'][$t]){
+                                $headdef = 'checked="checked"';
+                            }else{
+                                $headdef = ' ';
+                            }
+                            if( isset($allin['brc1']) && $allin['brc1'] == $allin['file_id'][$t]){
+                                $isdef1 = 'checked="checked"';
+                            }else{
+                                $isdef1 = ' ';
+                            }
+                            if( isset($allin['brc2']) && $allin['brc2'] == $allin['file_id'][$t]){
+                                $isdef2 = 'checked="checked"';
+                            }else{
+                                $isdef2 = ' ';
+                            }
+                            if( isset($allin['brc3']) && $allin['brc3'] == $allin['file_id'][$t]){
+                                $isdef3 = 'checked="checked"';
+                            }else{
+                                $isdef3 = ' ';
+                            }
+
                             printf($thumb,
                                 $thumbnail_url[$t],
                                 $file_id[$t],
                                 $filename[$t],
                                 $file_id[$t],
                                 $isdef,
+                                $file_id[$t], $headdef,
+                                $file_id[$t], $isdef1,
+                                $file_id[$t], $isdef2,
+                                $file_id[$t], $isdef3,
                                 $allin['caption'][$t]
                             );
 
@@ -190,7 +258,7 @@ $(document).ready(function(){
 
     var url = '{{ URL::to($url) }}';
 
-    $('#{{ $element_id }}_files').click(function(e){
+    $('#{{ $element_id }}_files').on('click',function(e){
 
         if ($(e.target).is('.file_del')) {
             var _id = e.target.id;
@@ -227,7 +295,15 @@ $(document).ready(function(){
             );
 
             $.each(data.result.files, function (index, file) {
-                var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" /><span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span><br /><input type="radio" name="defaultpic" value="' + file.file_id + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
+                var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
+                    '<span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span>'+
+                    '&nbsp;&nbsp;<span class="img-title">' + file.name + '</span><br />' +
+                    '<input type="radio" name="defaultpic" value="' + file.file_id + '"> Default<br />'+
+                    'Brochure <br />' +
+                    '<input type="radio" name="brchead" value="' + file.file_id + '"> Head &nbsp;'+
+                    '<input type="radio" name="brc1" value="' + file.file_id + '"> Pic 1 &nbsp;'+
+                    '<input type="radio" name="brc2" value="' + file.file_id + '"> Pic 2 &nbsp;'+
+                    '<input type="radio" name="brc3" value="' + file.file_id + '"> Pic 3 <br />'+
                 '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
                 //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
                 //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
