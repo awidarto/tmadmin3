@@ -119,13 +119,14 @@ Route::get('brochure/dl/{id}',function($id){
 
     $prop = Property::find($id)->toArray();
 
-    return View::make('print.brochure')->with('prop',$prop)->render();
+    //return View::make('print.brochure')->with('prop',$prop)->render();
 
     $content = View::make('print.brochure')->with('prop',$prop)->render();
 
-    $html2pdf = new HTML2PDF();
-    $html2pdf->WriteHTML($content);
-    $html2pdf->Output('brochure-'.$prop['propertyId'].'.pdf','D');
+    //return $content;
+
+    return PDF::loadView('print.brochure',array('prop'=>$prop))
+        ->stream('download.pdf');
 });
 
 Route::get('brochure',function(){

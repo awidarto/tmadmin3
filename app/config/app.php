@@ -125,6 +125,7 @@ return array(
         'Pieter\Yaml\YamlServiceProvider',
         'Maatwebsite\Excel\ExcelServiceProvider',
         'AlexWhitman\ViewThemes\ViewThemesServiceProvider',
+        'Barryvdh\DomPDF\ServiceProvider',
 	),
 
 	/*
@@ -199,7 +200,7 @@ return array(
         'Excel'           => 'Maatwebsite\Excel\Facades\Excel',
         'Theme'           => 'AlexWhitman\ViewThemes\ThemeFacade',
         'Carbon'          => 'Carbon\Carbon',
-
+        'PDF'             => 'Barryvdh\DomPDF\Facade',
 	),
 
 );

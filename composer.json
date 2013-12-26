@@ -16,7 +16,8 @@
         "way/generators": "1.0.*@dev",
         "pieter/yaml": "dev-master",
         "maatwebsite/excel": "dev-master",
-        "alexwhitman/view-themes": "dev-master"
+        "alexwhitman/view-themes": "dev-master",
+        "barryvdh/laravel-dompdf": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
