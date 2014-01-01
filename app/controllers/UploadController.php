@@ -49,6 +49,9 @@ class UploadController extends Controller {
             ->insert($large_wm,15,15, 'bottom-right')
             ->save($destinationPath.'/lrg_'.$filename);
 
+        $full = Image::make($destinationPath.'/'.$filename)
+            ->insert($large_wm,15,15, 'bottom-right')
+            ->save($destinationPath.'/'.$filename);
 
         $fileitems = array();
 
