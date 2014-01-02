@@ -223,6 +223,7 @@
 				"oLanguage": { "sSearch": "Search "},
 				"sPaginationType": "full_numbers",
 				"sDom": 'Tlrpit',
+				"iDisplayLength":50,
 
 				@if(isset($excludecol) && $excludecol != '')
 				"oColVis": {
