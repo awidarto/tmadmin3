@@ -20,14 +20,18 @@ body{
 
 .clearfix:after
 {
-content:".";
-display:none;
-height:0;
-clear:both;
-visibility:hidden;
+    content:".";
+    display:none;
+    height:0;
+    clear:both;
+    visibility:hidden;
 }
 .clearfix
 {display:inline-block;}
+
+.navbar .nav>li>a {
+    font-size: 11px;
+}
 
 #maincontent{
 	padding:20px;

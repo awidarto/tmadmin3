@@ -44,6 +44,11 @@
         padding: 60px;
     }
 
+    .navbar .nav>li>a {
+        font-size: 12px;
+        padding: 16px 0 10px 0;
+    }
+
     .navbar .nav>li>a.active{
         border-bottom: 2px solid rgb(66, 127, 237);
     }
