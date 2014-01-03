@@ -51,7 +51,7 @@ class UploadController extends Controller {
 
         $full = Image::make($destinationPath.'/'.$filename)
             ->insert($large_wm,15,15, 'bottom-right')
-            ->save($destinationPath.'/'.$filename);
+            ->save($destinationPath.'/full_'.$filename);
 
         $fileitems = array();
 
@@ -61,6 +61,7 @@ class UploadController extends Controller {
                     'thumbnail_url'=> URL::to('storage/media/'.$rstring.'/th_'.$filename),
                     'large_url'=> URL::to('storage/media/'.$rstring.'/lrg_'.$filename),
                     'medium_url'=> URL::to('storage/media/'.$rstring.'/med_'.$filename),
+                    'full_url'=> URL::to('storage/media/'.$rstring.'/full_'.$filename),
                     'temp_dir'=> $destinationPath,
                     'file_id'=> $rstring,
                     'name'=> $filename,

@@ -146,22 +146,38 @@
                             if( isset($allin['brchead']) && $allin['brchead'] == $allin['file_id'][$t]){
                                 $headdef = 'checked="checked"';
                             }else{
-                                $headdef = ' ';
+                                if($t == 0){
+                                    $headdef = 'checked="checked"';
+                                }else{
+                                    $headdef = ' ';
+                                }
                             }
                             if( isset($allin['brc1']) && $allin['brc1'] == $allin['file_id'][$t]){
                                 $isdef1 = 'checked="checked"';
                             }else{
-                                $isdef1 = ' ';
+                                if($t == 0){
+                                    $isdef1 = 'checked="checked"';
+                                }else{
+                                    $isdef1 = ' ';
+                                }
                             }
                             if( isset($allin['brc2']) && $allin['brc2'] == $allin['file_id'][$t]){
                                 $isdef2 = 'checked="checked"';
                             }else{
-                                $isdef2 = ' ';
+                                if($t == 0){
+                                    $isdef2 = 'checked="checked"';
+                                }else{
+                                    $isdef2 = ' ';
+                                }
                             }
                             if( isset($allin['brc3']) && $allin['brc3'] == $allin['file_id'][$t]){
                                 $isdef3 = 'checked="checked"';
                             }else{
-                                $isdef3 = ' ';
+                                if($t == 0){
+                                    $isdef3 = 'checked="checked"';
+                                }else{
+                                    $isdef3 = ' ';
+                                }
                             }
 
                             printf($thumb,
@@ -203,6 +219,7 @@
                         $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $formdata['thumbnail_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="large_url[]" value="' . $formdata['large_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="medium_url[]" value="' . $formdata['medium_url'][$u] . '">';
+                        $upl .= '<input type="hidden" name="full_url[]" value="' . $formdata['full_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="filetype[]" value="' . $formdata['filetype'][$u] . '">';
                         $upl .= '<input type="hidden" name="fileurl[]" value="' . $formdata['fileurl'][$u] . '">';
                         $upl .= '<input type="hidden" name="file_id[]" value="' . $formdata['file_id'][$u] . '">';
@@ -231,6 +248,7 @@
                         $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $allin['thumbnail_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="large_url[]" value="' . $allin['large_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="medium_url[]" value="' . $allin['medium_url'][$u] . '">';
+                        $upl .= '<input type="hidden" name="full_url[]" value="' . $allin['full_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="filetype[]" value="' . $allin['filetype'][$u] . '">';
                         $upl .= '<input type="hidden" name="fileurl[]" value="' . $allin['fileurl'][$u] . '">';
                         $upl .= '<input type="hidden" name="file_id[]" value="' . $allin['file_id'][$u] . '">';
@@ -318,6 +336,7 @@ $(document).ready(function(){
                 upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
                 upl += '<input type="hidden" name="large_url[]" value="' + file.large_url + '">';
                 upl += '<input type="hidden" name="medium_url[]" value="' + file.medium_url + '">';
+                upl += '<input type="hidden" name="full_url[]" value="' + file.full_url + '">';
                 upl += '<input type="hidden" name="filetype[]" value="' + file.type + '">';
                 upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
                 upl += '<input type="hidden" name="file_id[]" value="' + file.file_id + '"></li>';

@@ -119,11 +119,13 @@ class PropertyController extends AdminController {
                     $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
                     $defaults['large_url'] = $data['large_url'][$i];
                     $defaults['medium_url'] = $data['medium_url'][$i];
+                    $defaults['full_url'] = $data['full_url'][$i];
                 }
 
                 $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
                 $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
                 $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
+                $files[$data['file_id'][$i]]['full_url'] = $data['full_url'][$i];
 
                 $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
                 $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
@@ -139,6 +141,7 @@ class PropertyController extends AdminController {
             $data['thumbnail_url'] = array();
             $data['large_url'] = array();
             $data['medium_url'] = array();
+            $data['full_url'] = array();
             $data['delete_type'] = array();
             $data['delete_url'] = array();
             $data['filename'] = array();
@@ -185,6 +188,7 @@ class PropertyController extends AdminController {
                 $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
                 $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
                 $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
+                $files[$data['file_id'][$i]]['full_url'] = $data['full_url'][$i];
 
                 $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
                 $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
@@ -226,6 +230,7 @@ class PropertyController extends AdminController {
             $data['thumbnail_url'] = array();
             $data['large_url'] = array();
             $data['medium_url'] = array();
+            $data['full_url'] = array();
             $data['delete_type'] = array();
             $data['delete_url'] = array();
             $data['filename'] = array();
@@ -248,6 +253,15 @@ class PropertyController extends AdminController {
         $data['files'] = $files;
 
         return $data;
+    }
+
+    public function beforeUpdateForm($population)
+    {
+        if( !isset($population['full_url']))
+        {
+            $population['full_url'] = $population['large_url'];
+        }
+        return $population;
     }
 
     public function postAdd($data = null)
@@ -336,7 +350,8 @@ class PropertyController extends AdminController {
             $thumbnail_url = $gdata['thumbnail_url'];
             foreach($data['files'] as $g){
                 $g['caption'] = ($g['caption'] == '')?$data['propertyId']:$data['propertyId'].' : '.$g['caption'];
-                $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['fileurl'].'" >';
+                $g['full_url'] = isset($g['full_url'])?$g['full_url']:$g['fileurl'];
+                $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['full_url'].'" >';
             }
 
             $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
