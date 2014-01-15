@@ -73,7 +73,7 @@ class ActivityController extends AdminController {
     {
 
         $this->fields = array(
-            array('timestamp',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('timestamp',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('class',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('method',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('actor',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),

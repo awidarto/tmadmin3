@@ -95,6 +95,33 @@ class BuyerController extends AdminController {
         return parent::postEdit($id,$data);
     }
 
+    public function beforeSave($data)
+    {
+        unset($data['repass']);
+        $data['pass'] = Hash::make($data['pass']);
+        return $data;
+    }
+
+    public function beforeUpdate($id,$data)
+    {
+        //print_r($data);
+
+        if(isset($data['pass']) && $data['pass'] != ''){
+            unset($data['repass']);
+            $data['pass'] = Hash::make($data['pass']);
+
+        }else{
+            unset($data['pass']);
+            unset($data['repass']);
+        }
+
+        //print_r($data);
+
+        //exit();
+
+        return $data;
+    }
+
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
