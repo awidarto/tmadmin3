@@ -99,6 +99,7 @@
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
+        {{--
         <div class="control-group">
             <label for="locationPicker">Select Location</label>
             <div class="controls">
@@ -118,6 +119,7 @@
             </div>
 
         </div>
+        --}}
 
 
         {{ Form::submit('Save',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;

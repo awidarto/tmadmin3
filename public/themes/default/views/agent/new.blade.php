@@ -18,8 +18,19 @@
         {{ Former::text('address_1','Address') }}
         {{ Former::text('address_2','') }}
         {{ Former::text('city','City') }}
-        {{ Former::select('state')->options(Config::get('country.us_states'))->label('State') }}
-        {{ Former::select('countryOfOrigin')->options(Config::get('country.countries'))->label('Country of Origin') }}
+        {{ Former::text('zipCode','ZIP / Postal Code')->id('zip')->class('span2')->maxlength(5) }}
+
+        <div class="us" style="display:none;">
+            {{ Former::select('state')->class('us')->options(Config::get('country.us_states'))->label('State')->style('display:none;')->id('us_states') }}
+        </div>
+        <div class="au" style="display:none;">
+            {{ Former::select('state')->class('au')->options(Config::get('country.aus_states'))->label('State')->style('display:none;')->id('au_states') }}
+        </div>
+        <div class="outside">
+            {{ Former::text('state','State / Province')->class('outside span6')->id('other_state') }}
+        </div>
+
+        {{ Former::select('countryOfOrigin')->id('country')->options(Config::get('country.countries'))->label('Country of Origin') }}
     </div>
     <div class="span6">
         {{ Former::text('email','Email') }}
@@ -42,8 +53,33 @@
 
 $(document).ready(function() {
 
+
     $('select').select2({
       width : 'copy'
+    });
+
+    $('#country').on('change',function(){
+        var country = $('#country').val();
+
+        if(country == 'Australia'){
+            $('.au').show();
+            $('.us').hide();
+            $('.outside').hide();
+            $('select').select2({
+              width : 'resolve'
+            });
+        }else if(country == 'United States of America'){
+            $('.au').hide();
+            $('.us').show();
+            $('.outside').hide();
+            $('select').select2({
+              width : 'resolve'
+            });
+        }else{
+            $('.au').hide();
+            $('.us').hide();
+            $('.outside').show();
+        }
     });
 
     var url = '{{ URL::to('upload') }}';

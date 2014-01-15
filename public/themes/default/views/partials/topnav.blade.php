@@ -14,7 +14,6 @@
         <li><a href="{{ URL::to('buyer') }}" {{ sa('buyer') }} >Buyers</a></li>
 
         <li><a href="{{ URL::to('event') }}" {{ sa('event') }} >Events</a></li>
-        <li><a href="{{ URL::to('video') }}" {{ sa('video') }} >Promo Videos</a></li>
 
         <li><a href="{{ URL::to('user') }}" {{ sa('user') }} >Admins</a></li>
         <li class="dropdown">
@@ -47,6 +46,7 @@
                 <li><a href="{{ URL::to('content/posts') }}" {{ sa('content/posts') }} >Posts</a></li>
                 <li><a href="{{ URL::to('content/category') }}" {{ sa('content/category') }} >Category</a></li>
                 <li><a href="{{ URL::to('content/menu') }}" {{ sa('content/menu') }} >Menu</a></li>
+                <li><a href="{{ URL::to('video') }}" {{ sa('video') }} >Promo Videos</a></li>
             </ul>
         </li>
     @endif
