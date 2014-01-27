@@ -29,8 +29,8 @@ class PagesController extends AdminController {
     public function getIndex()
     {
 
-        $section = Prefs::getSection()->sectionToSelection('title','title');
-        $categories = Prefs::getCategory()->catToSelection('title','title');
+        $section = Prefs::getSection()->sectionToSelection('slug','title');
+        $categories = Prefs::getCategory()->catToSelection('slug','title');
 
         $this->heads = array(
             array('Title',array('search'=>true,'sort'=>true)),
