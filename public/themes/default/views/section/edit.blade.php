@@ -5,19 +5,18 @@
 
 <h3>{{$title}}</h3>
 
-{{Former::open_for_files($submit,'POST',array('class'=>''))}}
+{{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
 
+{{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row-fluid">
     <div class="span6">
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
-        {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('title','title'))->label('Section') }}
-        {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('title','title'))->label('Category') }}
-        {{ Former::textarea('body','Body')->class('editor')->name('body') }}
+        @include('partials.editortoolbar')
+        {{ Former::textarea('description','Description') }}
     </div>
-    <div class="span6">
 
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
+    <div class="span6">
 
         <div class="control-group">
             <label class="control-label" for="userfile">Upload Images</label>
@@ -105,7 +104,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12 pull-right">
+    <div class="span12">
         {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
@@ -113,36 +112,42 @@
 
 {{Former::close()}}
 
-{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
-{{ HTML::script('js/parser_rules/advanced.js') }}
-
 <style type="text/css">
 #lyric{
     min-height: 350px;
     height: 400px;
 }
-
 </style>
 
+{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
+{{ HTML::script('js/parser_rules/advanced.js') }}
+
 <script type="text/javascript">
+
 
 $(document).ready(function() {
     /*
     $('select').select2({
       width : 'resolve'
     });
-    var editor = new wysihtml5.Editor("body", { // id of textarea element
+    */
+    var editor = new wysihtml5.Editor("description", { // id of textarea element
       toolbar:      "wysihtml5-toolbar", // id of toolbar element
       parserRules:  wysihtml5ParserRules // defined in parser rules set
     });
-    */
 
     var url = '{{ URL::to('upload') }}';
+    var murl = '{{ URL::to('upload/music') }}';
 
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
         done: function (e, data) {
+            $('#progress .bar').css(
+                'width',
+                '0%'
+            );
+
             $.each(data.result.files, function (index, file) {
                 var thumb = '<li><img src="' + file.thumbnail_url + '" /><br /><input type="radio" name="defaultpic" value="' + file.name + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
                 '<label for="colour">Colour</label><input type="text" name="colour[]" />' +
@@ -161,6 +166,7 @@ $(document).ready(function() {
                 upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
 
                 $(upl).appendTo('#uploadedform');
+
             });
         },
         progressall: function (e, data) {
@@ -169,17 +175,10 @@ $(document).ready(function() {
                 'width',
                 progress + '%'
             );
-
-            /*
-            if(progress == 100){
-                $('#progress .bar').css('width','0%');
-            }
-            */
         }
     })
     .prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
 
     $('#title').keyup(function(){
         var title = $('#title').val();
@@ -187,7 +186,6 @@ $(document).ready(function() {
         $('#permalink').val(slug);
     });
 
-    //$('#color_input').colorPicker();
 
 });
 

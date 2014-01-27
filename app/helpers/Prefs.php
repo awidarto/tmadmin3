@@ -3,6 +3,7 @@
 class Prefs {
 
     public static $category;
+    public static $section;
     public static $faqcategory;
 
     public function __construct()
@@ -16,6 +17,29 @@ class Prefs {
         self::$category = $c;
         return new self;
     }
+
+    public static function getSection(){
+        $s = Section::get();
+
+        self::$section = $s;
+        return new self;
+    }
+
+    public function sectionToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'All');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$section as $s) {
+            $ret[$s->{$value}] = $s->{$label};
+        }
+
+        return $ret;
+    }
+
 
     public function catToSelection($value, $label, $all = true)
     {
@@ -31,6 +55,11 @@ class Prefs {
 
 
         return $ret;
+    }
+
+    public function sectionToArray()
+    {
+        return self::$section;
     }
 
     public function catToArray()

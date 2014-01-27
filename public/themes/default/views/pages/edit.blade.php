@@ -12,6 +12,7 @@
     <div class="span6">
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
+        {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('title','title'))->label('Section') }}
         {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('title','title'))->label('Category') }}
         {{ Former::textarea('body','Body')->class('editor')->name('body') }}
     </div>

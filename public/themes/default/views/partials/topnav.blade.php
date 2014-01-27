@@ -44,6 +44,7 @@
             <ul class="dropdown-menu">
                 <li><a href="{{ URL::to('content/pages') }}" {{ sa('content/pages') }} >Pages</a></li>
                 <li><a href="{{ URL::to('content/posts') }}" {{ sa('content/posts') }} >Posts</a></li>
+                <li><a href="{{ URL::to('content/section') }}" {{ sa('content/section') }} >Section</a></li>
                 <li><a href="{{ URL::to('content/category') }}" {{ sa('content/category') }} >Category</a></li>
                 <li><a href="{{ URL::to('content/menu') }}" {{ sa('content/menu') }} >Menu</a></li>
                 <li><a href="{{ URL::to('video') }}" {{ sa('video') }} >Promo Videos</a></li>

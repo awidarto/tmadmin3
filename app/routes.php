@@ -19,6 +19,7 @@ Route::controller('report', 'ReportController');
 Route::controller('pages', 'PagesController');
 Route::controller('posts', 'PostsController');
 Route::controller('category', 'CategoryController');
+Route::controller('section', 'SectionController');
 Route::controller('menu', 'MenuController');
 
 Route::controller('faq', 'FaqController');
@@ -46,6 +47,7 @@ Route::get('/', 'PropertyController@getIndex');
 Route::get('content/pages', 'PagesController@getIndex');
 Route::get('content/posts', 'PostsController@getIndex');
 Route::get('content/category', 'CategoryController@getIndex');
+Route::get('content/section', 'SectionController@getIndex');
 Route::get('content/menu', 'MenuController@getIndex');
 
 

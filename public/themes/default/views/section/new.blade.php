@@ -11,13 +11,10 @@
     <div class="span6">
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
-        {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('title','title'))->label('Section') }}
-        {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('title','title'))->label('Category') }}
-        {{ Former::textarea('body','Body')->class('editor')->name('body') }}
+        @include('partials.editortoolbar')
+        {{ Former::textarea('description','Description') }}
     </div>
     <div class="span6">
-
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
         <div class="control-group">
             <label class="control-label" for="userfile">Upload Images</label>
@@ -131,11 +128,11 @@ $(document).ready(function() {
     $('select').select2({
       width : 'resolve'
     });
-    var editor = new wysihtml5.Editor("body", { // id of textarea element
+    */
+    var editor = new wysihtml5.Editor("description", { // id of textarea element
       toolbar:      "wysihtml5-toolbar", // id of toolbar element
       parserRules:  wysihtml5ParserRules // defined in parser rules set
     });
-    */
 
     var url = '{{ URL::to('upload') }}';
 

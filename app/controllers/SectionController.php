@@ -1,6 +1,6 @@
 <?php
 
-class PagesController extends AdminController {
+class SectionController extends AdminController {
 
     public function __construct()
     {
@@ -12,7 +12,7 @@ class PagesController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Page();
+        $this->model = new Section();
         //$this->model = DB::collection('documents');
         $this->title = $this->controller_name;
 
@@ -29,15 +29,8 @@ class PagesController extends AdminController {
     public function getIndex()
     {
 
-        $section = Prefs::getSection()->sectionToSelection('title','title');
-        $categories = Prefs::getCategory()->catToSelection('title','title');
-
         $this->heads = array(
             array('Title',array('search'=>true,'sort'=>true)),
-            array('Creator',array('search'=>true,'sort'=>false)),
-            array('Section',array('search'=>true,'select'=>$section,'sort'=>true)),
-            array('Category',array('search'=>true,'select'=>$categories,'sort'=>true)),
-            array('Tags',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -53,10 +46,6 @@ class PagesController extends AdminController {
 
         $this->fields = array(
             array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -72,7 +61,7 @@ class PagesController extends AdminController {
             'slug'=> 'required'
         );
 
-        $this->backlink = 'content/pages';
+        $this->backlink = 'content/section';
 
         return parent::postAdd($data);
     }
@@ -84,30 +73,23 @@ class PagesController extends AdminController {
             'slug'=> 'required'
         );
 
-        $this->backlink = 'content/pages';
+        $this->backlink = 'content/section';
 
         return parent::postEdit($id,$data);
-    }
-
-    public function beforeSave($data)
-    {
-        $data['creatorName'] = Auth::user()->fullname;
-
-        return $data;
     }
 
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('pages/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('section/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;
     }
 
     public function splitTag($data){
-        $tags = explode(',',$data['tags']);
-        if(is_array($tags) && count($tags) > 0 && $data['tags'] != ''){
+        $tags = explode(',',$data['docTag']);
+        if(is_array($tags) && count($tags) > 0 && $data['docTag'] != ''){
             $ts = array();
             foreach($tags as $t){
                 $ts[] = '<span class="tag">'.$t.'</span>';
