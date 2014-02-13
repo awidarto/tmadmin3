@@ -1,8 +1,6 @@
 <?php
 
-class PagesController extends AdminController {
-
-    public $categories, $sections;
+class OutletController extends AdminController {
 
     public function __construct()
     {
@@ -14,12 +12,8 @@ class PagesController extends AdminController {
         $this->crumb->append('Home','left',true);
         $this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Page();
+        $this->model = new Outlet();
         //$this->model = DB::collection('documents');
-        $this->title = $this->controller_name;
-
-        $this->categories = Prefs::getCategory()->catToSelection('slug','title');
-        $this->sections = Prefs::getSection()->sectionToSelection('slug','title');
 
     }
 
@@ -34,20 +28,19 @@ class PagesController extends AdminController {
     public function getIndex()
     {
 
-        $section = Prefs::getSection()->sectionToSelection('slug','title');
-        $categories = Prefs::getCategory()->catToSelection('slug','title');
-
         $this->heads = array(
-            array('Title',array('search'=>true,'sort'=>true)),
-            array('Creator',array('search'=>true,'sort'=>false)),
-            array('Section',array('search'=>true,'select'=>$section,'sort'=>true)),
-            array('Category',array('search'=>true,'select'=>$categories,'sort'=>true)),
+            array('Name',array('search'=>false,'sort'=>false)),
+            array('Venue',array('search'=>true,'sort'=>true)),
+            array('Address',array('search'=>true,'sort'=>true)),
+            array('Category',array('search'=>true,'sort'=>true)),
             array('Tags',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
+
+        $this->title = 'Outlet';
 
         return parent::getIndex();
 
@@ -57,11 +50,11 @@ class PagesController extends AdminController {
     {
 
         $this->fields = array(
-            array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('section',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'sectionlabel','show'=>true)),
-            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'catlabel','show'=>true)),
-            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
+            array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('venue',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -69,15 +62,26 @@ class PagesController extends AdminController {
         return parent::postIndex();
     }
 
+    public function beforeSave($data)
+    {
+
+        return $data;
+    }
+
+    public function beforeUpdate($id,$data)
+    {
+
+        return $data;
+    }
+
     public function postAdd($data = null)
     {
 
         $this->validator = array(
-            'title' => 'required',
-            'slug'=> 'required'
+            'name' => 'required',
+            'venue' => 'required',
+            'address' => 'required',
         );
-
-        $this->backlink = 'content/pages';
 
         return parent::postAdd($data);
     }
@@ -85,42 +89,26 @@ class PagesController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'title' => 'required',
-            'slug'=> 'required'
+            'name' => 'required',
+            'venue' => 'required',
+            'address' => 'required',
         );
 
-        $this->backlink = 'content/pages';
-
         return parent::postEdit($id,$data);
-    }
-
-    public function beforeSave($data)
-    {
-        $data['creatorName'] = Auth::user()->fullname;
-
-        return $data;
     }
 
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('pages/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('event/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;
     }
 
-    public function catlabel($data){
-        return $this->categories[$data['category']];
-    }
-
-    public function sectionlabel($data){
-        return $this->sections[$data['section']];
-    }
-
     public function splitTag($data){
-        $tags = explode(',',$data['tags']);
-        if(is_array($tags) && count($tags) > 0 && $data['tags'] != ''){
+        $tags = explode(',',$data['docTag']);
+        if(is_array($tags) && count($tags) > 0 && $data['docTag'] != ''){
             $ts = array();
             foreach($tags as $t){
                 $ts[] = '<span class="tag">'.$t.'</span>';
@@ -148,10 +136,22 @@ class PagesController extends AdminController {
 
     public function namePic($data)
     {
-        $name = HTML::link('products/view/'.$data['_id'],$data['productName']);
-        if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
-            $display = HTML::image($data['thumbnail_url'][0].'?'.time(), $data['filename'][0], array('id' => $data['_id']));
-            return $display.'<br />'.$name;
+        $name = HTML::link('property/view/'.$data['_id'],$data['address']);
+
+        $thumbnail_url = '';
+
+        if(isset($data['files']) && count($data['files'])){
+            $glinks = '';
+
+            $gdata = $data['files'][$data['defaultpic']];
+
+            $thumbnail_url = $gdata['thumbnail_url'];
+            foreach($data['files'] as $g){
+                $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['fileurl'].'" >';
+            }
+
+            $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','id' => $data['_id'])).$glinks;
+            return $display;
         }else{
             return $name;
         }

@@ -12,6 +12,9 @@
 */
 Route::controller('document', 'DocumentController');
 Route::controller('property', 'PropertyController');
+Route::controller('products', 'ProductsController');
+Route::controller('productcategory', 'ProductcategoryController');
+Route::controller('outlet', 'OutletController');
 Route::controller('user', 'UserController');
 Route::controller('agent', 'AgentController');
 Route::controller('buyer', 'BuyerController');

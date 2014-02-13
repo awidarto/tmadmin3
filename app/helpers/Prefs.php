@@ -5,6 +5,8 @@ class Prefs {
     public static $category;
     public static $section;
     public static $faqcategory;
+    public static $productcategory;
+    public static $outlet;
 
     public function __construct()
     {
@@ -96,6 +98,63 @@ class Prefs {
         return self::$faqcategory;
     }
 
+
+    public static function getProductCategory(){
+        $c = Productcategory::get();
+
+        self::$productcategory = $c;
+        return new self;
+    }
+
+    public function ProductCatToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'Select Category');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$productcategory as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function ProductCatToArray()
+    {
+        return self::$productcategory;
+    }
+
+
+    public static function getOutlet(){
+        $c = Outlet::get();
+
+        self::$outlet = $c;
+        return new self;
+    }
+
+    public function OutletToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'Select Outlet');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$outlet as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function OutletToArray()
+    {
+        return self::$outlet;
+    }
 
 
     public static function themeAssetsUrl()
