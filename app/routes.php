@@ -14,6 +14,7 @@ Route::controller('document', 'DocumentController');
 Route::controller('property', 'PropertyController');
 Route::controller('products', 'ProductsController');
 Route::controller('productcategory', 'ProductcategoryController');
+Route::controller('transaction', 'TransactionController');
 Route::controller('outlet', 'OutletController');
 Route::controller('user', 'UserController');
 Route::controller('agent', 'AgentController');
@@ -172,6 +173,18 @@ Route::get('xtest',function(){
 
 Route::get('xcat',function(){
     print_r(Prefs::getCategory());
+});
+
+Route::get('barcode/dl/{txt}',function($txt){
+    $barcode = new Barcode();
+    $barcode->make($txt,'code128',60, 'horizontal' ,true);
+    return $barcode->render('jpg',$txt,true);
+});
+
+Route::get('barcode/{txt}',function($txt){
+    $barcode = new Barcode();
+    $barcode->make($txt,'code128',60, 'horizontal' ,true);
+    return $barcode->render('jpg',$txt);
 });
 
 Route::get('media',function(){

@@ -16,24 +16,40 @@
         {{ Former::text('location','Location') }}
 
 
-        {{ Former::text('fromDate','From')->class('span7 datepicker')
-            ->data_format('dd-mm-yyyy')
-            ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+        {{ Former::text('fromDate','From')->class('span7 eventdate')
+            ->id('fromDate')
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
 
-        {{ Former::text('toDate','Until')->class('span7 datepicker')
-            ->data_format('dd-mm-yyyy')
-            ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+        {{ Former::text('toDate','Until')->class('span7 eventdate')
+            ->id('toDate')
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
+
+
+
 
 
         {{ Former::select('category')->options(Config::get('ia.eventcat'))->label('Category') }}
-        {{ Former::textarea('description','Description')->class('editor') }}
+        {{ Former::textarea('description','Description') }}
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
     </div>
     <div class="span6">
         @for($i = 1;$i < 6;$i++)
-            {{ Former::text('code'.$i,'Code '.$i)->class('span3')->maxlength('6') }}
-            {{ Former::text('val'.$i,'Value '.$i)->class('span3')->maxlength('6') }}
+            <div class="row form-horizontal">
+                <div class="span4">
+                    {{ Former::text('code_'.$i,'Code '.$i)->class('span12')->maxlength('6') }}
+                </div>
+                <div class="span4">
+                    {{ Former::text('val_'.$i,'Value '.$i)->class('span12')->maxlength('6') }}
+                </div>
+            </div>
         @endfor
+        {{ Former::text('expires','Expires')->class('span7 datepicker')
+            ->id('expires')
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
     </div>
 </div>
 
@@ -60,6 +76,10 @@ $(document).ready(function() {
         $('#permalink').val(slug);
     });
 
+    $('.eventdate').on('apply',function(ev,picker){
+        console.log(moment( picker.endDate ,'MM/DD/YYYY'));
+        $('#expires').val( picker.endDate.add('weeks',2).format('MM/DD/YYYY') );
+    });
 
 });
 

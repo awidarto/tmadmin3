@@ -2,36 +2,65 @@
 
 @section('content')
 
+<style type="text/css">
+.act{
+	cursor: pointer;
+}
+
+.pending{
+	padding: 4px;
+	background-color: yellow;
+}
+
+.canceled{
+	padding: 4px;
+	background-color: red;
+	color:white;
+}
+
+.sold{
+	padding: 4px;
+	background-color: green;
+	color:white;
+}
+
+th{
+	border-right:thin solid #eee;
+	border-top: thin solid #eee;
+}
+
+th:first-child{
+	border-left:thin solid #eee;
+}
+
+</style>
 <div class="row-fluid">
 	<div class="span12 command-bar">
-
         <h3>{{ $title }}</h3>
-       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
-    <!--    <a href="#" id="pushmedia" class="btn btn-primary">Push Media Playlist</a> -->
-
-	   @if (Session::has('notify_operationalform'))
-	        <div class="alert alert-error">
-	             {{Session::get('notify_operationalform')}}
-	        </div>
-	    @endif
 	 </div>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function(){
+<div class="row-fluid">
+	<div class="span6 command-bar">
 
-        $('#pushmedia').click(function(){
-
-            $.get('{{ URL::to('ajax/push') }}',function(data){
-                console.log(data);
-            })
-
-            alert('playlist pushed');
-            return false;
-        });
-
-    });
-</script>
+        @if(isset($can_add) && $can_add == true)
+	       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
+	       	<a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
+       	@endif
+	       	<a class="btn" id="download-xls">Download Excel</a>
+	       	<a class="btn" id="download-csv">Download CSV</a>
+	 </div>
+	 <div class="span6 command-bar">
+	 	@if(Auth::user()->role == 'admin' || Auth::user()->role == 'root')
+	        @if(isset($can_clear_att) && $can_clear_att == true)
+		       	<a class="btn pull-right" id="clear-attendance" >Clear Attendance</a>
+	       	@endif
+	        @if(isset($can_clear_log) && $can_clear_log == true)
+		       	<a class="btn pull-right" id="clear-log" >Clear Log</a>
+	       	@endif
+	 	@endif
+	 </div>
+</div>
 
 <div class="row-fluid">
    <div class="span12">
@@ -94,6 +123,11 @@
 			    		@if(isset($in[1]['search']) && $in[1]['search'] == true)
 			    			@if(isset($in[1]['date']) && $in[1]['date'])
 				        		<td>
+									<div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+									    <input class="span8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+									    <span class="add-on"><i class="icon-th"></i></span>
+									</div>
+									{{--
 									<div id="{{ $index }}" class="input-append datepickersearch">
 									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
 									    <span class="add-on">
@@ -101,9 +135,17 @@
 											</i>
 									    </span>
 									</div>
+
+									--}}
+
 				        		</td>
 			    			@elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
 				        		<td>
+									<div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+									    <input class="span8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+									    <span class="add-on"><i class="icon-th"></i></span>
+									</div>
+									{{--
 									<div id="{{ $index }}" class="input-append datetimepickersearch">
 									    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
 									    <span class="add-on">
@@ -111,6 +153,7 @@
 											</i>
 									    </span>
 									</div>
+									--}}
 				        		</td>
 			    			@elseif(isset($in[1]['select']) && is_array($in[1]['select']))
 			    				<td>
@@ -152,6 +195,54 @@
       </table>
 
    </div>
+</div>
+
+<div id="print-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Print Barcode Tag</h3>
+	</div>
+		<div class="modal-body">
+
+		</div>
+	<div class="modal-footer">
+	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	<button class="btn btn-primary" id="prop-save-chg">Save changes</button>
+	</div>
+</div>
+
+
+<div id="prop-chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Change Property Status</h3>
+  </div>
+  <div class="modal-body">
+  	<h4 id="prop-trx-order"></h4>
+  	{{ Former::hidden('prop_id')->id('prop-trx-chg') }}
+  	{{ Former::select('status', 'Status')->options(Config::get('ia.publishing'))->id('prop-stat-chg')}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="prop-save-chg">Save changes</button>
+  </div>
+</div>
+
+
+<div id="chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Change Transaction Status</h3>
+  </div>
+  <div class="modal-body">
+  	<h4 id="trx-order"></h4>
+  	{{ Former::hidden('trx_id')->id('trx-chg') }}
+  	{{ Former::select('status', 'Status')->options(Config::get('ia.trx_status'))->id('stat-chg')}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="save-chg">Save changes</button>
+  </div>
 </div>
 
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
@@ -211,6 +302,34 @@
 		    oSettings.oApi._fnDraw(oSettings);
 		};
 
+		$.fn.dataTableExt.oApi.fnFilterClear  = function ( oSettings )
+		{
+		    /* Remove global filter */
+		    oSettings.oPreviousSearch.sSearch = "";
+
+		    /* Remove the text of the global filter in the input boxes */
+		    if ( typeof oSettings.aanFeatures.f != 'undefined' )
+		    {
+		        var n = oSettings.aanFeatures.f;
+		        for ( var i=0, iLen=n.length ; i<iLen ; i++ )
+		        {
+		            $('input', n[i]).val( '' );
+		        }
+		    }
+
+		    /* Remove the search text for the column filters - NOTE - if you have input boxes for these
+		     * filters, these will need to be reset
+		     */
+		    for ( var i=0, iLen=oSettings.aoPreSearchCols.length ; i<iLen ; i++ )
+		    {
+		        oSettings.aoPreSearchCols[i].sSearch = "";
+		    }
+
+		    /* Redraw */
+		    oSettings.oApi._fnReDraw( oSettings );
+		};
+
+
 		$('.activity-list').tooltip();
 
 		asInitVals = new Array();
@@ -247,6 +366,7 @@
 		                "success": fnCallback
 		            } );
 		        }
+
 			}
         );
 
@@ -281,44 +401,34 @@
 			oTable.fnFilter( this.value, search_index );
 		} );
 
-		$('thead input.dateinput').change( function () {
-			//console.log($('thead input').index(this));
-			var search_index = this.id;
-			oTable.fnFilter( this.value,  search_index  );
-		} );
 
-		$('thead input.datetimeinput').change( function () {
-			/* Filter on the column (the index) of this element */
-			//console.log($('thead input').index(this));
-			//var search_index = $('thead input').index(this);
-			var search_index = this.id;
-			oTable.fnFilter( this.value,  search_index  );
-		} );
 
 		eldatetime = $('.datetimepickersearch').datetimepicker({
-			maskInput: false,
+			minView:2,
+			maxView:2
 		});
 
 		eldate = $('.datepickersearch').datetimepicker({
-			maskInput: false,
-			pickTime: false
+			minView:2,
+			maxView:2
 		});
 
-
 		eldate.on('changeDate', function(e) {
-			if(e.localDate != null){
-				var dateval = e.localDate.toString();
+
+			if(e.date.valueOf() != null){
+				var dateval = e.date.valueOf();
 			}else{
 				var dateval = '';
 			}
-			var search_index = e.target.id;
+			var search_index = e.currentTarget.id;
 
 			oTable.fnFilter( dateval, search_index );
 		});
 
 		eldatetime.on('changeDate', function(e) {
-			if(e.localDate != null){
-				var dateval = e.localDate.toString();
+
+			if(e.date.valueOf() != null){
+				var dateval = e.date.valueOf();
 			}else{
 				var dateval = '';
 			}
@@ -340,11 +450,82 @@
 		} );
 
 		$('#clearsearch').click(function(){
-			$('thead input').val('');
-			$('input.dateinput').change();
-			$('input.datetimeinput').change();
+
+			console.log($('thead td input').val());
+			$('thead td input').val('');
+
+			console.log($('thead td input').val());
+
+			console.log('reloading table');
+			//oTable.fnClearTable(1);
+			/*
+			$('thead td input').each(function(){
+				console.log(this.id);
+				var index = this.id;
+				oTable.fnFilter('',index);
+			});
+			oTable.fnFilter('',1);
+
+			oTable.fnFilter('');
+			*/
+			oTable.fnFilterClear();
 			oTable.fnDraw();
 		});
+
+		$('#download-xls').on('click',function(){
+			var flt = $('thead td input, thead td select');
+			var dlfilter = [];
+
+			flt.each(function(){
+				if($(this).hasClass('datetimeinput') || $(this).hasClass('dateinput')){
+					console.log(this.parentNode);
+					dlfilter[parseInt(this.parentNode.id)] = this.value ;
+				}else{
+					dlfilter[parseInt(this.id)] = this.value ;
+				}
+			});
+			console.log(dlfilter);
+
+			var sort = oTable.fnSettings().aaSorting;
+			console.log(sort);
+			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
+				if(data.status == 'OK'){
+
+					window.location.href = data.urlxls;
+
+				}
+			},'json');
+
+			return false;
+		});
+
+		$('#download-csv').on('click',function(){
+			var flt = $('thead td input, thead td select');
+			var dlfilter = [];
+
+			flt.each(function(){
+				if($(this).hasClass('datetimeinput') || $(this).hasClass('dateinput')){
+					console.log(this.parentNode);
+					dlfilter[parseInt(this.parentNode.id)] = this.value ;
+				}else{
+					dlfilter[parseInt(this.id)] = this.value ;
+				}
+			});
+			console.log(dlfilter);
+
+			var sort = oTable.fnSettings().aaSorting;
+			console.log(sort);
+			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
+				if(data.status == 'OK'){
+
+					window.location.href = data.urlcsv;
+
+				}
+			},'json');
+
+			return false;
+		});
+
 		/*
 		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in
 		 * the footer
@@ -533,8 +714,124 @@
 
 		   	}
 
+			if ($(e.target).is('.chg')) {
+				var _id = e.target.id;
+				var _rel = $(e.target).attr('rel');
+				var _status = $(e.target).data('status');
+
+				$('#chg-modal').modal();
+
+				$('#trx-chg').val(_id);
+				$('#stat-chg').val(_status);
+
+				$('#trx-order').html('Order # : ' + _rel);
+
+		   	}
+
+			if ($(e.target).is('.propchg')) {
+				var _id = e.target.id;
+				var _rel = $(e.target).attr('rel');
+				var _status = $(e.target).data('status');
+
+				console.log(_status);
+
+				$('#prop-chg-modal').modal();
+				$('#prop-trx-chg').val(_id);
+				$('#prop-stat-chg').val(_status);
+				$('#prop-trx-order').html('Property ID : ' + _rel);
+
+		   	}
+
 		});
 
+		$('#clear-attendance').on('click',function(){
+
+			var answer = confirm("Are you sure you want to delete this item ?");
+
+			if (answer == true){
+
+	            $.post('{{ URL::to('ajax/clearattendance')}}',
+		            {
+		                trx_id:$('#trx-chg').val(),
+		                status:$('#stat-chg').val()
+		            },
+		            function(data){
+		            	if(data.result == 'OK'){
+		            		alert('Attendance data cleared, ready to start the event.');
+		            		oTable.fnDraw();
+		            	}
+		            },
+	            'json');
+
+			}else{
+				alert("Clear data cancelled");
+			}
+
+
+		});
+
+		$('#clear-log').on('click',function(){
+
+				var answer = confirm("Are you sure you want to delete this item ?");
+
+				if (answer == true){
+
+		            $.post('{{ URL::to('ajax/clearlog')}}',
+			            {
+			            },
+			            function(data){
+			            	if(data.result == 'OK'){
+			            		alert('Attendance Log data cleared, ready to start the event.')
+			            	}
+			            },
+		            'json');
+
+				}else{
+					alert("Clear data cancelled");
+				}
+
+		});
+
+		$('#save-chg').on('click',function(){
+            $.post('{{ URL::to('ajax/changestatus')}}',
+            {
+                trx_id:$('#trx-chg').val(),
+                status:$('#stat-chg').val()
+            },
+            function(data){
+				$('#chg-modal').modal('hide');
+            },
+            'json');
+		});
+
+		$('#chg-modal').on('hidden', function () {
+			oTable.fnDraw();
+		})
+
+
+		$('#prop-save-chg').on('click',function(){
+            $.post('{{ URL::to('ajax/propchangestatus')}}',
+            {
+                trx_id:$('#prop-trx-chg').val(),
+                status:$('#prop-stat-chg').val()
+            },
+            function(data){
+				$('#prop-chg-modal').modal('hide');
+            },
+            'json');
+		});
+
+		$('#prop-chg-modal').on('hidden', function () {
+			oTable.fnDraw();
+		});
+
+		function dateFormat(indate) {
+	        var yyyy = indate.getFullYear().toString();
+	        var mm = (indate.getMonth()+1).toString(); // getMonth() is zero-based
+	        var dd  = indate.getDate().toString();
+
+	        return (dd[1]?dd:"0"+dd[0]) + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + yyyy;
+   		}
 
 
     });

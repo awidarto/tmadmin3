@@ -29,22 +29,21 @@ class ProductsController extends AdminController {
     {
 
         $this->heads = array(
-            array('Photos',array('search'=>false,'sort'=>false)),
-            array('Products ID',array('search'=>true,'sort'=>true)),
-            array('Source ID',array('search'=>true,'sort'=>true)),
-            array('Number',array('search'=>true,'sort'=>true)),
-            array('Address',array('search'=>true,'sort'=>true)),
-            array('City',array('search'=>true,'sort'=>true)),
-            array('ZIP',array('search'=>true,'sort'=>true)),
-            array('State',array('search'=>true,'sort'=>true)),
-            array('Bed',array('search'=>true,'sort'=>false)),
-            array('Bath',array('search'=>true,'sort'=>true)),
-            //array('Pool',array('search'=>true,'sort'=>true)),
-            //array('Garage',array('search'=>true,'sort'=>true)),
-            //array('Basement',array('search'=>true,'sort'=>true)),
-            array('Category',array('search'=>true,'sort'=>true)),
+            //array('Photos',array('search'=>false,'sort'=>false)),
+            array('SKU',array('search'=>true,'sort'=>true)),
+            array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
+            array('Description',array('search'=>true,'sort'=>true)),
+            array('Series',array('search'=>true,'sort'=>true)),
+            array('Item Group',array('search'=>true,'sort'=>true)),
+            array('Category',array('search'=>true,'sort'=>true,'select'=>$this->extractCategory() )),
+            array('Length / Panjang',array('search'=>true,'sort'=>true)),
+            array('Width / Lebar',array('search'=>true,'sort'=>true)),
+            array('Height / Tinggi',array('search'=>true,'sort'=>false)),
+            array('Diameter',array('search'=>true,'sort'=>false)),
+            array('Size Description',array('search'=>true,'sort'=>true)),
+            array('Color',array('search'=>true,'sort'=>true)),
+            array('Material',array('search'=>true,'sort'=>true)),
             array('Tags',array('search'=>true,'sort'=>true)),
-            array('Status',array('search'=>true,'sort'=>true, 'select'=>Config::get('ia.search_publishing'))),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -61,22 +60,21 @@ class ProductsController extends AdminController {
     {
 
         $this->fields = array(
-            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
-            array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('sourceID',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('zipCode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('bed',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('bath',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            //array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            //array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            //array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
+            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('itemGroup',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('L',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('W',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('H',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('D',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('sizeDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('propertyStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -89,25 +87,6 @@ class ProductsController extends AdminController {
         $defaults = array();
 
         $files = array();
-
-        // set new sequential ID
-        $sequence = new Sequence();
-
-        $seq = $sequence->getNewId('property');
-
-        $data['sequence'] = $seq;
-
-        $data['propertyId'] = Config::get('ia.property_id_prefix').$seq;
-
-        if($data['propertyStatus'] == 'available'){
-            $data['publishDate'] = $data['lastUpdate'];
-        }
-
-        if($data['propertyStatus'] == 'sold'){
-            $data['soldDate'] = $data['lastUpdate'];
-        }
-
-        $data['listingPrice'] = new MongoInt32($data['listingPrice']);
 
         if( isset($data['file_id']) && count($data['file_id'])){
 
@@ -166,16 +145,6 @@ class ProductsController extends AdminController {
         $defaults = array();
 
         $files = array();
-
-        $data['listingPrice'] = new MongoInt32($data['listingPrice']);
-
-        if($data['propertyStatus'] == 'available'){
-            $data['publishDate'] = $data['lastUpdate'];
-        }
-
-        if($data['propertyStatus'] == 'sold'){
-            $data['soldDate'] = $data['lastUpdate'];
-        }
 
         if( isset($data['file_id']) && count($data['file_id'])){
 
@@ -284,28 +253,114 @@ class ProductsController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'number' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'zipCode' => 'required',
-            'type' => 'required',
-            'yearBuilt' => 'required',
-            'FMV' => 'required',
-            'listingPrice' => 'required'
+            'SKU' => 'required',
+            'category' => 'required',
+            'itemDescription' => 'required',
         );
 
         return parent::postEdit($id,$data);
     }
 
+    public function postDlxl()
+    {
+
+        $this->heads = null;
+
+        $this->fields = array(
+                array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+                array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+                array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('itemGroup',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('L',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('W',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('H',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('D',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))
+        );
+
+        return parent::postDlxl();
+    }
+
+    public function getImport(){
+
+        $this->importkey = 'SKU';
+
+        return parent::getImport();
+    }
+
+    public function postUploadimport()
+    {
+        $this->importkey = 'SKU';
+
+        return parent::postUploadimport();
+    }
+
+    public function beforeImportCommit($data)
+    {
+        $defaults = array();
+
+        $files = array();
+
+        // set new sequential ID
+
+
+        $data['priceRegular'] = new MongoInt32($data['priceRegular']);
+
+        $data['thumbnail_url'] = array();
+        $data['large_url'] = array();
+        $data['medium_url'] = array();
+        $data['full_url'] = array();
+        $data['delete_type'] = array();
+        $data['delete_url'] = array();
+        $data['filename'] = array();
+        $data['filesize'] = array();
+        $data['temp_dir'] = array();
+        $data['filetype'] = array();
+        $data['fileurl'] = array();
+        $data['file_id'] = array();
+        $data['caption'] = array();
+
+        $data['defaultpic'] = '';
+        $data['brchead'] = '';
+        $data['brc1'] = '';
+        $data['brc2'] = '';
+        $data['brc3'] = '';
+
+
+        $data['defaultpictures'] = array();
+        $data['files'] = array();
+
+        return $data;
+    }
+
+
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i> Delete</span>';
-        $edit = '<a href="'.URL::to('property/edit/'.$data['_id']).'"><i class="icon-edit"></i> Update</a>';
+        $edit = '<a href="'.URL::to('products/edit/'.$data['_id']).'"><i class="icon-edit"></i> Update</a>';
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
 
-        $actions = $edit.'<br />'.$dl.'<br />'.$print.'<br />'.$delete;
+        $actions = $edit.'<br />'.$delete;
         return $actions;
+    }
+
+    public function extractCategory()
+    {
+        $category = Product::distinct('category')->get()->toArray();
+        $cats = array(''=>'All');
+
+        //print_r($category);
+        foreach($category as $cat){
+            $cats[$cat[0]] = $cat[0];
+        }
+
+        return $cats;
     }
 
     public function splitTag($data){
@@ -360,6 +415,15 @@ class ProductsController extends AdminController {
             return $name;
         }
     }
+
+    public function dispBar($data)
+
+    {
+        $display = HTML::image(URL::to('barcode/'.$data['SKU']), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
+        $display = '<a href="'.URL::to('barcode/dl/'.$data['SKU']).'">'.$display.'</a>';
+        return $display.'<br />'.$data['SKU'];
+    }
+
 
     public function pics($data)
     {

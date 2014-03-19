@@ -2,209 +2,117 @@
 
 
 @section('content')
-<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 
-<h3>{{$title}} : {{ $formdata['propertyId'] }}</h3>
+<h3>{{$title}}</h3>
 
-{{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
+{{Former::open_for_files($submit,'POST',array('class'=>'custom'))}}
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
-
-
 <div class="row-fluid">
-    <div class="span12">
-        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
-<div class="row-fluid">
-
     <div class="span6">
 
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('number','Street Number')->class('span12')->maxlength(6) }}
-            </div>
-            <div class="span8">
-                {{ Former::text('address','Address')->class('span12') }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('city','City')->class('span12') }}
-            </div>
-            <div class="span4">
-                {{ Former::select('state')->options(Config::get('country.us_states'))->label('States') }}
-            </div>
-            <div class="span4">
-                {{ Former::text('zipCode','ZIP')->class('span12')->maxlength(5) }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::select('type')->options(Config::get('ia.type'))->label('Type') }}
-            </div>
-            <div class="span6">
-                {{ Former::text('yearBuilt','Year Built')->class('span8')->maxlength(4)  }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('FMV','FMV')->class('span12') }}
-            </div>
-            <div class="span5">
-                {{ Former::text('listingPrice','Listing Price')->class('span8') }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('bed','# of Bedroom')->class('span8') }}
-            </div>
-            <div class="span4">
-                {{ Former::text('bath','# of Bathroom')->class('span8') }}
-            </div>
-            <div class="span4">
-                {{ Former::text('garage','# of Garage')->class('span8') }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::select('basement')->options(Config::get('ia.boolean'))->label('Basement')->class('span12') }}
-            </div>
-            <div class="span4">
-                {{ Former::select('pool')->options(Config::get('ia.boolean'))->label('Pool')->class('span12') }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('houseSize','House Size (SqFt)')->class('span12') }}
-            </div>
-            <div class="span6">
-                {{ Former::text('lotSize','Lot Size (SqFt)')->class('span6') }}
-            </div>
-        </div>
-
-        {{ Former::text('typeOfConstruction','Type of Construction')->class('span5') }}
-
-        {{ Former::text('parcelNumber','Parcel Number')->class('span5') }}
-
-        {{ Former::textarea('description','Property Description')->class('span10 editor')->rows(8) }}
-
+        {{ Former::text('SKU','SKU') }}
+        {{ Former::text('category','Category') }}
+        {{ Former::text('itemDescription','Description') }}
+        {{ Former::text('itemGroup','Item Group') }}
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
-        {{--
-        <div class="control-group">
-            <label for="locationPicker">Select Location</label>
-            <div class="controls">
-                <fieldset class="gllpLatlonPicker" id="locationPicker" >
-                    <div class="gllpMap">Google Maps</div>
-                    <div class="form-search" style="margin-top:10px;margin-bottom:10px;">
-                        <input type="text" class="gllpSearchField input-xlarge search-query" placeholder="type address and click Search button">
-                        <button type="button" class="gllpSearchButton btn">Search</button>
-                    </div>
-
-                    {{ Former::hidden('latitude')->class('gllpLatitude')}}
-                    {{ Former::hidden('longitude')->class('gllpLongitude')}}
-                    {{ Former::hidden('zoom')->class('gllpZoom')}}
-
-                    {{--<input type="button" class="gllpUpdateButton" value="update map">--}}
-                </fieldset>
-            </div>
-
-        </div>
-        --}}
-
-
-        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-
     </div>
     <div class="span6">
-
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::select('propertyStatus')->options(Config::get('ia.publishing'))->label('Status') }}
-            </div>
-            <div class="span5">
-                {{ Former::select('category')->options(Config::get('ia.category'))->label('Category') }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('monthlyRental','Monthly Rental')->class('span12') }}
-            </div>
-            <div class="span5">
-                {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span7') }}
-            </div>
-        </div>
-
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('leaseTerms','Lease Terms')->append('months')->class('span6')->maxlength(2) }}
-            </div>
-            <div class="span5">
-                {{ Former::text('leaseStartDate','Lease Start Date')->class('span12 datepicker')
-                    ->data_format('dd-mm-yyyy')
-                    ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
-            </div>
-        </div>
-
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('HOA','HOA')->class('span12') }}
-            </div>
-            <div class="span4">
-                {{ Former::text('tax','Tax')->class('span12') }}
-            </div>
-            <div class="span4">
-                {{ Former::text('insurance','Insurance')->class('span12') }}
-            </div>
-        </div>
-
-        {{ Former::text('propertyManager','Property Manager') }}
-
-        {{ Former::textarea('specialConditionRemarks','Special Condition Remarks')->class('span10')->rows(8) }}
-
         <?php
             $fupload = new Fupload();
-
-            $ref = ($formdata['sourceID'] == '')?'':'<br />Src. Ref. :'.$formdata['sourceID'];
         ?>
 
-        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images'.$ref)->make($formdata) }}
+        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make($formdata) }}
 
     </div>
 </div>
 
-<div class="row-fluid pull-right">
-    <div class="span4">
+<div class="row-fluid right">
+    <div class="span12">
+        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
 {{Former::close()}}
 
-{{ HTML::style('css/jquery-gmaps-latlon-picker.css')}}
-
-{{ HTML::script('js/jquery-gmaps-latlon-picker.js')}}
-
+{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
+{{ HTML::script('js/parser_rules/advanced.js') }}
 
 <script type="text/javascript">
 
 
 $(document).ready(function() {
 
+    function setVisibleOptions(){
+        var mc = $('#mainCategory').val();
+
+        console.log(mc);
+
+        if( mc == 'Structure'){
+            $('#productFunction').hide();
+            $('#productSystem').show();
+            $('#productApplication').hide();
+        }else if( mc == 'Furniture'){
+            $('#productFunction').show();
+            $('#productSystem').hide();
+            $('#productApplication').hide();
+        }else{
+            $('#productFunction').hide();
+            $('#productSystem').hide();
+            $('#productApplication').show();
+        }
+
+    }
+
+    setVisibleOptions();
+
     $('select').select2({
-      width : 'copy'
+      width : 'resolve'
     });
+
+    var url = '{{ URL::to('upload') }}';
+
+    $('#fileupload').fileupload({
+        url: url,
+        dataType: 'json',
+        done: function (e, data) {
+            $('#progress .bar').css(
+                'width',
+                '0%'
+            );
+
+            $.each(data.result.files, function (index, file) {
+                var thumb = '<li><img src="' + file.thumbnail_url + '" /><input type="radio" name="defaultpic" value="' + file.name + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
+                '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
+                '<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
+                '<label for="tags">Tags</label><input type="text" name="tag[]" />' +
+                '</li>';
+                $(thumb).appendTo('#files ul');
+
+                var upl = '<input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';
+                upl += '<input type="hidden" name="delete_url[]" value="' + file.delete_url + '">';
+                upl += '<input type="hidden" name="filename[]" value="' + file.name  + '">';
+                upl += '<input type="hidden" name="filesize[]" value="' + file.size  + '">';
+                upl += '<input type="hidden" name="temp_dir[]" value="' + file.temp_dir  + '">';
+                upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
+                upl += '<input type="hidden" name="filetype[]" value="' + file.type + '">';
+                upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
+
+                $(upl).appendTo('#uploadedform');
+
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .bar').css(
+                'width',
+                progress + '%'
+            );
+        }
+    })
+    .prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
 
     $('#field_role').change(function(){
         //alert($('#field_role').val());
@@ -224,6 +132,37 @@ $(document).ready(function() {
         $('#permalink').val(slug);
     });
 
+    //$('#color_input').colorPicker();
+
+    // dynamic tables
+    $('#add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#variantTable'));
+        return false;
+    });
+
+    // custom field table
+    $('#custom_add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#customTable'));
+        return false;
+    });
+
+    $('#related_add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#relatedTable'));
+        return false;
+    });
+
+    $('#component_add_btn').click(function(){
+        //alert('click');
+        addTableRow($('#componentTable'));
+        return false;
+    });
+
+    $('#mainCategory').change(function(){
+        setVisibleOptions();
+    });
 
 });
 

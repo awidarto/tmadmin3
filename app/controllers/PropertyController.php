@@ -53,6 +53,8 @@ class PropertyController extends AdminController {
 
         $this->title = 'Property';
 
+        $this->can_add = true;
+
         return parent::getIndex();
 
     }
@@ -112,6 +114,10 @@ class PropertyController extends AdminController {
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
+            $data['brchead'] = (isset($data['brchead']))?$data['brchead']:$data['file_id'][0];
+            $data['brc1'] = (isset($data['brc1']))?$data['brc1']:$data['file_id'][0];
+            $data['brc2'] = (isset($data['brc2']))?$data['brc2']:$data['file_id'][0];
+            $data['brc3'] = (isset($data['brc3']))?$data['brc3']:$data['file_id'][0];
 
             for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
 
@@ -153,6 +159,10 @@ class PropertyController extends AdminController {
             $data['caption'] = array();
 
             $data['defaultpic'] = '';
+            $data['brchead'] = '';
+            $data['brc1'] = '';
+            $data['brc2'] = '';
+            $data['brc3'] = '';
         }
 
         $data['defaultpictures'] = $defaults;
@@ -180,6 +190,10 @@ class PropertyController extends AdminController {
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
+            $data['brchead'] = (isset($data['brchead']))?$data['brchead']:$data['file_id'][0];
+            $data['brc1'] = (isset($data['brc1']))?$data['brc1']:$data['file_id'][0];
+            $data['brc2'] = (isset($data['brc2']))?$data['brc2']:$data['file_id'][0];
+            $data['brc3'] = (isset($data['brc3']))?$data['brc3']:$data['file_id'][0];
 
 
             for($i = 0 ; $i < count($data['file_id']); $i++ ){
@@ -261,6 +275,11 @@ class PropertyController extends AdminController {
         {
             $population['full_url'] = $population['large_url'];
         }
+        if( !isset($population['sourceID']))
+        {
+            $population['sourceID'] = 'none';
+        }
+
         return $population;
     }
 
@@ -268,14 +287,32 @@ class PropertyController extends AdminController {
     {
 
         $this->validator = array(
-            'number' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'zipCode' => 'required',
-            'type' => 'required',
-            'yearBuilt' => 'required',
-            'FMV' => 'required',
-            'listingPrice' => 'required'
+            'FMV' =>'required',
+            'HOA' =>'required',
+            'address' =>'required',
+            'bath' =>'required',
+            'bed' =>'required',
+            'category' =>'required',
+            'city' =>'required',
+            'description' =>'required',
+            'houseSize' =>'required',
+            'insurance' =>'required',
+            'leaseStartDate' =>'required',
+            'leaseTerms' =>'required',
+            'listingPrice' =>'required',
+            'lotSize' =>'required',
+            'monthlyRental' =>'required',
+            'number' =>'required',
+            'propertyManager' =>'required',
+            'propertyStatus' =>'required',
+            //'publishStatus' =>'required',
+            'section8' =>'required',
+            'state' =>'required',
+            'tax' =>'required',
+            'type' =>'required',
+            'yearBuilt' =>'required',
+            'zipCode' =>'required'
+
         );
 
         return parent::postAdd($data);
@@ -284,27 +321,177 @@ class PropertyController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'number' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'zipCode' => 'required',
-            'type' => 'required',
-            'yearBuilt' => 'required',
-            'FMV' => 'required',
-            'listingPrice' => 'required'
+            'FMV' =>'required',
+            'HOA' =>'required',
+            'address' =>'required',
+            'bath' =>'required',
+            'bed' =>'required',
+            'category' =>'required',
+            'city' =>'required',
+            'description' =>'required',
+            'houseSize' =>'required',
+            'insurance' =>'required',
+            'leaseStartDate' =>'required',
+            'leaseTerms' =>'required',
+            'listingPrice' =>'required',
+            'lotSize' =>'required',
+            'monthlyRental' =>'required',
+            'number' =>'required',
+            'propertyManager' =>'required',
+            'propertyStatus' =>'required',
+            //'publishStatus' =>'required',
+            'section8' =>'required',
+            'state' =>'required',
+            'tax' =>'required',
+            'type' =>'required',
+            'yearBuilt' =>'required',
+            'zipCode' =>'required'
         );
 
         return parent::postEdit($id,$data);
     }
 
+
+    public function postDlxl()
+    {
+
+        $this->heads = null;
+
+        $this->fields = array(
+                array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('sourceID',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('zipCode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('bed',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('bath',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('propertyStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('houseSize',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('lotSize',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('listingPrice',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('FMV',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('monthlyRental',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('leaseStartDate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
+                array('leaseTerms',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('annualRental',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('dpsqft',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('equity',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('HOA',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('OPR',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('ROI',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('ROIstar',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('RentalYield',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('insurance',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('maintenanceAllowance',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('parcelNumber',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('propManagement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('propertyManager',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('publishDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('publishStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('reservedAt',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('reservedBy',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('section8',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('sequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('specialConditionRemarks',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('tax',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('type',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('typeOfConstruction',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('vacancyAllowance',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('yearBuilt',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+                array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))
+        );
+
+        return parent::postDlxl();
+    }
+
+    public function getImport(){
+
+        $this->importkey = 'sourceID';
+
+        return parent::getImport();
+    }
+
+    public function postUploadimport()
+    {
+        $this->importkey = 'sourceID';
+
+        return parent::postUploadimport();
+    }
+
+    public function beforeImportCommit($data)
+    {
+        $defaults = array();
+
+        $files = array();
+
+        if($data['propertyId'] == ''){
+            $sequence = new Sequence();
+
+            $seq = $sequence->getNewId('property');
+
+            $data['sequence'] = $seq;
+
+            $data['propertyId'] = Config::get('ia.property_id_prefix').$seq;
+
+        }
+        // set new sequential ID
+
+        if($data['propertyStatus'] == 'available'){
+            $data['publishDate'] = $data['lastUpdate'];
+        }
+
+        if($data['propertyStatus'] == 'sold'){
+            $data['soldDate'] = $data['lastUpdate'];
+        }
+
+        $data['listingPrice'] = new MongoInt32($data['listingPrice']);
+
+        $data['thumbnail_url'] = array();
+        $data['large_url'] = array();
+        $data['medium_url'] = array();
+        $data['full_url'] = array();
+        $data['delete_type'] = array();
+        $data['delete_url'] = array();
+        $data['filename'] = array();
+        $data['filesize'] = array();
+        $data['temp_dir'] = array();
+        $data['filetype'] = array();
+        $data['fileurl'] = array();
+        $data['file_id'] = array();
+        $data['caption'] = array();
+
+        $data['defaultpic'] = '';
+        $data['brchead'] = '';
+        $data['brc1'] = '';
+        $data['brc2'] = '';
+        $data['brc3'] = '';
+
+
+        $data['defaultpictures'] = array();
+        $data['files'] = array();
+
+        return $data;
+    }
+
+
     public function makeActions($data)
     {
+        $change = '<span class="propchg act" data-status="'.$data['propertyStatus'].'" rel="'.$data['propertyId'].'" id="'.$data['_id'].'" ><i class="icon-edit"></i> Change Status</span>';
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i> Delete</span>';
         $edit = '<a href="'.URL::to('property/edit/'.$data['_id']).'"><i class="icon-edit"></i> Update</a>';
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
 
-        $actions = $edit.'<br />'.$dl.'<br />'.$print.'<br />'.$delete;
+        $actions = $change.'<br />'.$edit.'<br />'.$dl.'<br />'.$delete;
         return $actions;
     }
 
@@ -342,7 +529,7 @@ class PropertyController extends AdminController {
 
         $thumbnail_url = '';
 
-        if(isset($data['files']) && count($data['files'])){
+        if(isset($data['files']) && count($data['files']) && isset($data['defaultpic']) && $data['defaultpic'] != '' ){
             $glinks = '';
 
             $gdata = $data['files'][$data['defaultpic']];
