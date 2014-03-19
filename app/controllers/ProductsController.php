@@ -32,6 +32,7 @@ class ProductsController extends AdminController {
             //array('Photos',array('search'=>false,'sort'=>false)),
             array('SKU',array('search'=>true,'sort'=>true)),
             array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
+            array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Description',array('search'=>true,'sort'=>true)),
             array('Series',array('search'=>true,'sort'=>true)),
             array('Item Group',array('search'=>true,'sort'=>true)),
@@ -63,6 +64,7 @@ class ProductsController extends AdminController {
             //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('itemGroup',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -412,7 +414,7 @@ class ProductsController extends AdminController {
             $display = HTML::image($thumbnail_url.'?'.time(), $thumbnail_url, array('class'=>'thumbnail img-polaroid','style'=>'cursor:pointer;','id' => $data['_id'])).$glinks;
             return $display;
         }else{
-            return $name;
+            return $data['SKU'];
         }
     }
 
