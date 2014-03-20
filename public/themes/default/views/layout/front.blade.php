@@ -124,9 +124,9 @@
                         <a href="{{ URL::to('logout')}}" ><i class="icon-logout"></i>&nbsp;Logout</a>
                     </p>
                 @else
-                    <form class="navbar-form pull-right">
-                        <input class="span2" type="text" placeholder="Email">
-                        <input class="span2" type="password" placeholder="Password">
+                    <form method="POST" action="{{ URL::to('login')}}" class="navbar-form pull-right">
+                        <input name="email" class="span2" type="text" placeholder="Email">
+                        <input name="password" class="span2" type="password" placeholder="Password">
                         <button type="submit" class="btn btn-primary">Sign in</button>
                     </form>
                 @endif

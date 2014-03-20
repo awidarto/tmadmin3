@@ -43,6 +43,113 @@ class AjaxController extends BaseController {
 
     }
 
+    public function postScan()
+    {
+        $in = Input::get();
+
+        $attid = trim( strtoupper($in['txtin']));
+
+        //$guest = Attendee::find($attid);
+
+        $guest = Attendee::where('hcode','=',$attid)->first();
+
+        $attendee = false;
+
+        $tabstat = false;
+
+        if($guest){
+            $attendee = $guest->toArray();
+            if( isset($guest->scanned) && $guest->scanned >= 1){
+                //$guest->attending = $guest->attending + 1;
+                $guest->scanned = $guest->scanned + 1;
+                $guest->save();
+
+                if(date('Y-m-d',time()) == '2014-03-14' || Config::get('seater.is_gala') == true ){
+                    $instat = '<h1>Welcome back to Gala Dinner</h1>';
+                }else{
+                    $instat = '<h1>Welcome back to</h1>';
+                }
+
+                $instat .= '<h1>'.Config::get('seater.event_name').' !</h1>';
+
+                $statcount = Attendee::where('tableNumber','=',$guest->tableNumber)
+                    ->where('seatNumber','=',$guest->seatNumber)
+                    ->where('attending','=',1)
+                    ->count();
+                $res = 'NOK';
+            }else{
+
+                $guest->attending = 1;
+                $guest->scanned = 1;
+                $guest->save();
+                if(date('Y-m-d',time()) == '2014-03-14' || Config::get('seater.is_gala') == true ){
+                    $instat = '<h1>Welcome, to Gala Dinner</h1>';
+                }else{
+                    $instat = '<h1>Welcome, to</h1>';
+                }
+                $instat .= '<h1>'.Config::get('seater.event_name').' !</h1>';
+
+                $statcount = Attendee::where('tableNumber','=',$guest->tableNumber)
+                    ->where('seatNumber','=',$guest->seatNumber)
+                    ->where('attending','=',1)
+                    ->count();
+
+                $res = 'OK';
+            }
+
+            $logdata = $attendee;
+
+            $logdata['guest_id'] = $logdata['_id'];
+            unset($logdata['_id']);
+            $attlog = new Attendancelog();
+
+            foreach($logdata as $k=>$v){
+                $attlog->{$k} = $v;
+            }
+
+            $attlog->createdDate = new MongoDate();
+            $attlog->lastUpdate = new MongoDate();
+
+            $attlog->save();
+
+        }else{
+            $instat = 'Unregistered guest code.';
+            $res = 'NOK';
+        }
+
+
+        $attending = Attendee::where('attending','=',1)->get()->toArray();
+
+        $ts = array();
+
+        foreach ($attending as $att) {
+            $tidx = $att['type'].'-'.$att['tableNumber'];
+            if(isset($ts[$tidx])){
+                $ts[$tidx] = $ts[$tidx] + 1;
+            }else{
+                $ts[$tidx] = 1;
+            }
+        }
+
+        $tabstat = $ts;
+        /*
+        $tabstat = array();
+        foreach($ts as $key=>$value){
+            $tabstat[] = array('id'=>$key,'val'=>$value);
+        }
+        */
+
+        $result = array(
+            'attendee'=>$attendee,
+            'tabstat'=>$tabstat,
+            'html'=>$instat,
+            'result'=>$res
+        );
+
+        return Response::json($result);
+    }
+
+
     public function getPlaylist(){
         $mc = LMongo::collection('playlist');
 

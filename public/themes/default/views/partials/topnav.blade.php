@@ -9,6 +9,16 @@
 ?>
 <ul class="nav">
     @if(Auth::check())
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Scan
+                <b class="caret"></b>
+              </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('scanner/stockinput') }}" {{ sa('scanner/stockinput') }} >Stock Input</a></li>
+                <li><a href="{{ URL::to('scanner/stockcheck') }}" {{ sa('scanner/stockcheck') }} >Stock Check</a></li>
+            </ul>
+        </li>
 
         <li><a href="{{ URL::to('products') }}" {{ sa('products') }} >Products</a></li>
         <li><a href="{{ URL::to('outlet') }}" {{ sa('outlet') }} >Outlets</a></li>
