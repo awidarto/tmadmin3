@@ -93,6 +93,10 @@ class ProductsController extends AdminController {
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
+            $data['brchead'] = (isset($data['brchead']))?$data['brchead']:$data['file_id'][0];
+            $data['brc1'] = (isset($data['brc1']))?$data['brc1']:$data['file_id'][0];
+            $data['brc2'] = (isset($data['brc2']))?$data['brc2']:$data['file_id'][0];
+            $data['brc3'] = (isset($data['brc3']))?$data['brc3']:$data['file_id'][0];
 
             for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
 
@@ -151,6 +155,10 @@ class ProductsController extends AdminController {
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
+            $data['brchead'] = (isset($data['brchead']))?$data['brchead']:$data['file_id'][0];
+            $data['brc1'] = (isset($data['brc1']))?$data['brc1']:$data['file_id'][0];
+            $data['brc2'] = (isset($data['brc2']))?$data['brc2']:$data['file_id'][0];
+            $data['brc3'] = (isset($data['brc3']))?$data['brc3']:$data['file_id'][0];
 
 
             for($i = 0 ; $i < count($data['file_id']); $i++ ){
@@ -175,6 +183,7 @@ class ProductsController extends AdminController {
                     $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
                     $defaults['large_url'] = $data['large_url'][$i];
                     $defaults['medium_url'] = $data['medium_url'][$i];
+                    $defaults['full_url'] = $data['full_url'][$i];
                 }
 
                 if($data['brchead'] == $data['file_id'][$i]){
