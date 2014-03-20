@@ -13,6 +13,7 @@
             <div class="bar"></div>
         </div>
         <br />
+        <span id="loading-pictures" style="display:none;" ><img src="{{URL::to('/') }}/images/loading.gif" />loading existing pictures...</span>
         <div id="{{ $element_id }}_files" class="files">
             <ul style="margin-left:0px">
                 <?php

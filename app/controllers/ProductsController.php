@@ -356,8 +356,9 @@ class ProductsController extends AdminController {
         $edit = '<a href="'.URL::to('products/edit/'.$data['_id']).'"><i class="icon-edit"></i> Update</a>';
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
+        $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Upload Picture</span>';
 
-        $actions = $edit.'<br />'.$delete;
+        $actions = $edit.'<br />'.$upload.'<br />'.$delete;
         return $actions;
     }
 
