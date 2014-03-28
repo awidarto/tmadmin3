@@ -12,8 +12,13 @@
 
     <!-- Le styles -->
     <!-- Bootplus -->
+    {{--
+    {{ HTML::style('bootflat/css/bootflat.min.css') }}
+    --}}
     {{ HTML::style('bootplus/css/bootplus.min.css') }}
+
     {{ HTML::style('bootplus/css/bootplus-responsive.min.css') }}
+
     {{ HTML::style('bootplus/css/font-awesome.min.css') }}
 
     {{ HTML::style('css/dataTables.bootstrap.css') }}
