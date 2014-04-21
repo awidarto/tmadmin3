@@ -327,7 +327,7 @@ $(document).ready(function(){
                 //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
                 //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
                 '</li>';
-                $(thumb).appendTo('#{{ $element_id }}_files ul');
+                $(thumb).prependTo('#{{ $element_id }}_files ul');
 
                 var upl = '<li id="fdel_' + file.file_id +'" ><input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';
                 upl += '<input type="hidden" name="delete_url[]" value="' + file.delete_url + '">';
@@ -342,7 +342,7 @@ $(document).ready(function(){
                 upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
                 upl += '<input type="hidden" name="file_id[]" value="' + file.file_id + '"></li>';
 
-                $(upl).appendTo('#{{ $element_id }}_uploadedform ul');
+                $(upl).prependTo('#{{ $element_id }}_uploadedform ul');
 
             });
         },

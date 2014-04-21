@@ -18,7 +18,7 @@
         {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
         {{ Former::text('priceRegular','Regular Price')->class('span4') }}
         {{ Former::text('material','Material') }}
-        {{ Former::text('colour','Colour')->class('span4') }}
+        {{ Former::text('colour','Colour')->class('pick-a-color span4') }}
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
@@ -97,7 +97,9 @@ $(document).ready(function() {
       width : 'resolve'
     });
 
-    $('.pick-a-color').pickAColor();
+    $('.pick-a-color').pickAColor({
+        showHexInput:false
+    });
 
     var url = '{{ URL::to('upload') }}';
 
