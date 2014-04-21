@@ -249,6 +249,7 @@ class ProductsController extends AdminController {
 
         $this->validator = array(
             'SKU' => 'required',
+            'category' => 'required',
             'itemDescription' => 'required',
             'priceRegular' => 'required',
         );
@@ -262,6 +263,7 @@ class ProductsController extends AdminController {
             'SKU' => 'required',
             'category' => 'required',
             'itemDescription' => 'required',
+            'priceRegular' => 'required',
         );
 
         return parent::postEdit($id,$data);
