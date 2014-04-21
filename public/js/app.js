@@ -70,13 +70,13 @@
 
         console.log(dateinputs);
 
+        /*
 	    $('.timepicker').timepicker({
 	        minuteStep: 10,
 	        showSeconds: false,
 	        showMeridian: false
 	    });
 
-	    /*
 		//$('.date').datetimepicker({
 		$('.date').datepicker({
 			dateFormat: "dd-mm-yy"

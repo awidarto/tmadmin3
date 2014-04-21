@@ -55,6 +55,9 @@ return array(
 			'queue'   => 'your-queue-name',
 		),
 
+        'failed' => array(
+            'database' => 'mysql', 'table' => 'failed_jobs',
+        ),
 	),
 
 );

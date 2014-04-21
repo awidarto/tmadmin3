@@ -9,8 +9,8 @@ class ProductsController extends AdminController {
         $this->controller_name = str_replace('Controller', '', get_class());
 
         //$this->crumb = new Breadcrumb();
-        $this->crumb->append('Home','left',true);
-        $this->crumb->append(strtolower($this->controller_name));
+        //$this->crumb->append('Home','left',true);
+        //$this->crumb->append(strtolower($this->controller_name));
 
         $this->model = new Product();
         //$this->model = DB::collection('documents');
@@ -248,14 +248,9 @@ class ProductsController extends AdminController {
     {
 
         $this->validator = array(
-            'number' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'zipCode' => 'required',
-            'type' => 'required',
-            'yearBuilt' => 'required',
-            'FMV' => 'required',
-            'listingPrice' => 'required'
+            'SKU' => 'required',
+            'itemDescription' => 'required',
+            'priceRegular' => 'required',
         );
 
         return parent::postAdd($data);

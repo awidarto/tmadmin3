@@ -63,8 +63,6 @@ class AdminController extends Controller {
 
 		Former::framework($this->form_framework);
 
-        $this->crumb = new \Noherczeg\Breadcrumb\Breadcrumb(URL::to('/'));
-
 		$this->beforeFilter('auth', array('on'=>'get', 'only'=>array('getIndex','getAdd','getEdit') ));
 
         $this->backlink = strtolower($this->controller_name);
@@ -155,7 +153,6 @@ class AdminController extends Controller {
             ->with('can_add', $this->can_add )
 			->with('heads',$heads )
 			->with('row',$this->rowdetail );
-
 
 	}
 
@@ -1239,7 +1236,7 @@ class AdminController extends Controller {
 		\Laravel\CLI\Command::run(array('notify'));
 	}
 
-    public function missingMethod($param)
+    public function missingMethod($param = array())
     {
         //print_r($param);
     }

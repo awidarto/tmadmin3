@@ -31,6 +31,8 @@
 
     {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
 
+    {{ HTML::style('css/pickacolor/pick-a-color-1.1.8.min.css') }}
+
     {{ HTML::style('css/daterangepicker-bs2.css') }}
 
     {{ HTML::style('css/blueimp-gallery.min.css') }}
@@ -199,6 +201,9 @@
     {{ HTML::script('js/jquery-fileupload/jquery.iframe-transport.js') }}
 
     {{ HTML::script('js/jquery-fileupload/jquery.fileupload.js') }}
+
+    {{ HTML::script('js/tinycolor-0.9.15.min.js')}}
+    {{ HTML::script('js/pickacolor/pick-a-color-1.1.8.min.js') }}
 
     {{ HTML::script('js/jquery-fileupload/jquery.fileupload-process.js') }}
     {{ HTML::script('js/jquery-fileupload/jquery.fileupload-image.js') }}

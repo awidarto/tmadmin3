@@ -13,9 +13,34 @@
 
         {{ Former::text('SKU','SKU') }}
         {{ Former::text('category','Category') }}
+        {{ Former::text('series','Series') }}
         {{ Former::text('itemDescription','Description') }}
-        {{ Former::text('itemGroup','Item Group') }}
+        {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
+        {{ Former::text('priceRegular','Regular Price')->class('span4') }}
+        {{ Former::text('material','Material') }}
+        {{ Former::text('colour','Colour')->class('span4') }}
+
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
+        <div class="row-fluid form-vertical">
+            <div class="span4">
+                {{ Former::text('W','Width')->class('span12')}}
+            </div>
+            <div class="span4">
+                {{ Former::text('H','Height')->class('span12') }}
+            </div>
+            <div class="span4">
+                {{ Former::text('L','Length')->class('span12') }}
+            </div>
+        </div>
+        <div class="row-fluid form-vertical">
+            <div class="span4">
+                {{ Former::text('D','Diameter')->class('span12')}}
+            </div>
+            <div class="span4">
+                {{ Former::text('sizeDescription','Dimension Description') }}
+            </div>
+        </div>
 
     </div>
     <div class="span6">
@@ -44,6 +69,7 @@
 
 $(document).ready(function() {
 
+
     function setVisibleOptions(){
         var mc = $('#mainCategory').val();
 
@@ -70,6 +96,8 @@ $(document).ready(function() {
     $('select').select2({
       width : 'resolve'
     });
+
+    $('.pick-a-color').pickAColor();
 
     var url = '{{ URL::to('upload') }}';
 

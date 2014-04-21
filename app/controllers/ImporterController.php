@@ -17,8 +17,6 @@ class ImporterController extends BaseController {
 
         Former::framework($this->form_framework);
 
-        $this->crumb = new \Noherczeg\Breadcrumb\Breadcrumb(URL::to('/'));
-
         //$this->beforeFilter('auth', array('on'=>'get', 'only'=>array('getIndex','getAdd','getEdit') ));
 
         $this->backlink = strtolower($this->controller_name);
@@ -95,7 +93,7 @@ class ImporterController extends BaseController {
         return Response::json(array('status'=>'OK'));
     }
 
-    public function missingMethod($param)
+    public function missingMethod($param = array())
     {
         //print_r($param);
     }
