@@ -51,18 +51,19 @@ th:first-child{
 	       	<a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
 	       	<a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
        	@endif
+
+        @if(isset($is_report) && $is_report == true)
+        	{{ $report_action }}
+       	@endif
+
+
 	       	<a class="btn" id="download-xls">Download Excel</a>
 	       	<a class="btn" id="download-csv">Download CSV</a>
 	 </div>
 	 <div class="span6 command-bar">
-	 	@if(Auth::user()->role == 'admin' || Auth::user()->role == 'root')
-	        @if(isset($can_clear_att) && $can_clear_att == true)
-		       	<a class="btn pull-right" id="clear-attendance" >Clear Attendance</a>
-	       	@endif
-	        @if(isset($can_clear_log) && $can_clear_log == true)
-		       	<a class="btn pull-right" id="clear-log" >Clear Log</a>
-	       	@endif
-	 	@endif
+        @if(isset($is_additional_action) && $is_additional_action == true)
+        	{{ $additional_action }}
+       	@endif
 	 </div>
 </div>
 

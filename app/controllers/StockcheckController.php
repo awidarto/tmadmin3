@@ -1,6 +1,6 @@
 <?php
 
-class InventoryController extends AdminController {
+class StockcheckController extends AdminController {
 
     public function __construct()
     {
@@ -12,7 +12,7 @@ class InventoryController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Stockunit();
+        $this->model = new Stockunitlog();
         //$this->model = DB::collection('documents');
 
     }
@@ -43,7 +43,12 @@ class InventoryController extends AdminController {
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Stock Unit';
+
+        $this->is_additional_action = true;
+
+        $this->additional_action = View::make('stockcheck.scanbox')->render();
+
+        $this->title = 'Stock Check Log';
 
         return parent::getIndex();
 
@@ -55,7 +60,7 @@ class InventoryController extends AdminController {
         $this->fields = array(
             //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('_id',array('kind'=>'text','query'=>'like','pos'=>'after','callback'=>'shortunit','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('unitId',array('kind'=>'text','query'=>'like','pos'=>'after','callback'=>'shortunit','attr'=>array('class'=>'expander'),'show'=>true)),
             array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
             array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('outletName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true )),

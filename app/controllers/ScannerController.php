@@ -30,6 +30,11 @@ class ScannerController extends AdminController {
 
     public function getStockcheck(){
         $this->title = 'Stock Unit Check';
+        return View::make('scan.stockcheck')->with('title',$this->title);
+    }
+
+    public function getCashier(){
+        $this->title = 'Cashier';
         return View::make('scan.barcode')->with('title',$this->title);
     }
 

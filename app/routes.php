@@ -42,13 +42,15 @@ Route::controller('event', 'EventController');
 
 Route::controller('scanner', 'ScannerController');
 
+Route::controller('stockcheck', 'StockcheckController');
+
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 
 Route::controller('home', 'HomeController');
 
 //Route::get('/', 'ProductsController@getIndex');
-Route::get('/', 'ScannerController@getIndex');
+Route::get('/', 'ScanController@getIndex');
 
 
 Route::get('content/pages', 'PagesController@getIndex');

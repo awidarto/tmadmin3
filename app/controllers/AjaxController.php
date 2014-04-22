@@ -149,6 +149,91 @@ class AjaxController extends BaseController {
         return Response::json($result);
     }
 
+    public function postScancheck()
+    {
+        $in = Input::get();
+
+        $code = $in['txtin'];
+        $outlet_id = $in['outlet_id'];
+
+        $res = 'OK';
+
+
+        if(strripos($code, '|')){
+            $code = explode('|', $code);
+            $SKU = $code[0];
+            $unit_id = $code[1];
+
+            $u = Stockunit::where('outletId','=', $outlet_id)
+                    ->where('SKU','=', $SKU)
+                    ->where('_id', 'like', '%'.$unit_id )
+                    ->first();
+
+            if($u){
+
+                $u = $u->toArray();
+
+                $u['scancheckDate'] = new MongoDate();
+                $u['createdDate'] = new MongoDate();
+                $u['lastUpdate'] = new MongoDate();
+
+                $unit_id = $u['_id'];
+
+                unset($u['_id']);
+
+                $u['unitId'] = $unit_id;
+
+                Stockunitlog::insert($u);
+
+                $res = 'OK';
+                $msg = 'Unit scanned in : SKU '.$u['SKU'].' - '.$unit_id.' successfuly checked in';;
+
+            }else{
+                $res = 'NOK';
+                $msg = 'Unit scanned in : SKU '.$SKU.' - '.$unit_id.' failed to check';
+            }
+
+        }else{
+            $SKU = trim($code);
+
+            $u = Stockunit::where('outletId','=',$outlet_id)
+                    ->where('SKU','=',$SKU)
+                    ->first();
+
+            if($u){
+
+                $u = $u->toArray();
+
+                $u['scancheckDate'] = new MongoDate();
+                $u['createdDate'] = new MongoDate();
+                $u['lastUpdate'] = new MongoDate();
+
+                $unit_id = $u['_id'];
+
+                unset($u['_id']);
+
+                $u['unitId'] = $unit_id;
+
+                Stockunitlog::insert($u);
+
+                $res = 'OK';
+                $msg = 'Unit scanned in : SKU '.$u['SKU'].' - '.$unit_id.' successfuly checked in';;
+            }else{
+                $res = 'NOK';
+                $msg = 'Unit scanned in : SKU '.$SKU.' failed to check';
+            }
+
+        }
+
+
+        $result = array(
+            'result'=>$res,
+            'msg'=>$msg
+        );
+
+        return Response::json($result);
+    }
+
     public function postProductinfo(){
         $pid = Input::get('product_id');
 

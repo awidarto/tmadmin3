@@ -54,6 +54,14 @@ class AdminController extends Controller {
 
     public $can_add = true;
 
+    public $is_report = false;
+
+    public $report_action = '';
+
+    public $is_additional_action = false;
+
+    public $additional_action = '';
+
 
 	public function __construct(){
 
@@ -151,6 +159,10 @@ class AdminController extends Controller {
             ->with('ajaxdlxl',URL::to($this->dlxl) )
 			->with('crumb',$this->crumb )
             ->with('can_add', $this->can_add )
+            ->with('is_report',$this->is_report)
+            ->with('report_action',$this->report_action)
+            ->with('is_additional_action',$this->is_additional_action)
+            ->with('additional_action',$this->additional_action)
 			->with('heads',$heads )
 			->with('row',$this->rowdetail );
 
