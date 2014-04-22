@@ -21,6 +21,7 @@
         </li>
 
         <li><a href="{{ URL::to('products') }}" {{ sa('products') }} >Products</a></li>
+        <li><a href="{{ URL::to('inventory') }}" {{ sa('inventory') }} >Inventory</a></li>
         <li><a href="{{ URL::to('outlet') }}" {{ sa('outlet') }} >Outlets</a></li>
 
         <li><a href="{{ URL::to('transaction') }}" {{ sa('transaction') }} >Transactions</a></li>

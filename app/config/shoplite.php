@@ -1,7 +1,23 @@
 <?php
 
 return array(
-
+    'inventory_status'=>array(
+            'available',
+            'reserved',
+            'hold',
+            'sold',
+            'deleted',
+            'archived'
+        ),
+    'inventory_status_select'=>array(
+            ''=>'All',
+            'available'=>'Available',
+            'reserved'=>'Reserved',
+            'hold'=>'Hold',
+            'sold'=>'Sold',
+            'deleted'=>'Deleted',
+            'archived'=>'Archived'
+        ),
 	'currency'=>array(
 			'IDR'=>'IDR',
 			'USD'=>'USD',

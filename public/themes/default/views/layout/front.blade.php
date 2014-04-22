@@ -37,6 +37,8 @@
 
     {{ HTML::style('css/blueimp-gallery.min.css') }}
 
+    {{ HTML::style('css/bootstrap-select.css')}}
+
     {{-- HTML::style('css/style.css') --}}
 
 
@@ -190,7 +192,7 @@
 
     {{ HTML::script('js/bootstrap-wysihtml5-0.0.2.min.js') }}
 
-    {{ HTML::script('js/select2.js') }}
+    {{ HTML::script('js/bootstrap-select/bootstrap-select.js') }}
 
     {{ HTML::script('js/jquery-fileupload/vendor/jquery.ui.widget.js') }}
 

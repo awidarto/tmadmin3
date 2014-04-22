@@ -659,5 +659,11 @@ class AjaxController extends BaseController {
 
     }
 
+    public function fromCamelCase($camelCaseString) {
+            $re = '/(?<=[a-z])(?=[A-Z])/x';
+            $a = preg_split($re, $camelCaseString);
+            return join($a, " " );
+    }
+
 }
 

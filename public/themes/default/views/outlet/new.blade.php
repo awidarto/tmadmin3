@@ -36,9 +36,6 @@
 
 $(document).ready(function() {
 
-    $('select').select2({
-      width : 'resolve'
-    });
 
     $('#name').keyup(function(){
         var title = $('#name').val();

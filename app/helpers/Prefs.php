@@ -157,6 +157,24 @@ class Prefs {
     }
 
 
+    public static function ExtractProductCategory($selection = true)
+    {
+        $category = Product::distinct('category')->get()->toArray();
+        if($selection){
+            $cats = array(''=>'All');
+        }else{
+            $cats = array();
+        }
+
+        //print_r($category);
+        foreach($category as $cat){
+            $cats[$cat[0]] = $cat[0];
+        }
+
+        return $cats;
+    }
+
+
     public static function themeAssetsUrl()
     {
         return URL::to('/').'/'.Theme::getCurrentTheme();

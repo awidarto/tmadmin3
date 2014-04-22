@@ -10,7 +10,7 @@
 {{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row-fluid">
     <div class="span6">
-        {{ Former::text('title','Event Title') }}
+        {{ Former::text('name','Outlet Name') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
         {{ Former::text('venue','Venue') }}
         {{ Former::text('address','Address') }}
@@ -37,9 +37,6 @@
 
 
 $(document).ready(function() {
-    $('select').select2({
-      width : 'resolve'
-    });
 
     $('#name').keyup(function(){
         var title = $('#name').val();

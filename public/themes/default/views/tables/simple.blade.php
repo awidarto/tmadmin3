@@ -801,6 +801,11 @@ th:first-child{
 					            	var isbrc2 = (brc2 == file.file_id)?'checked':'';
 					            	var isbrc3 = (brc3 == file.file_id)?'checked':'';
 
+					            	{{ View::make('fupload.jsajdetail') }}
+
+					            	{{--
+
+
 					                var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
 					                    '<span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span>'+
 					                    '&nbsp;&nbsp;<span class="img-title">' + file.filename + '</span><br />' +
@@ -814,6 +819,10 @@ th:first-child{
 					                //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
 					                //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
 					                '</li>';
+
+				            		--}}
+
+
 					                $(thumb).appendTo('#pictureupload_files ul');
 
 					                var upl = '<li id="fdel_' + file.file_id +'" ><input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';

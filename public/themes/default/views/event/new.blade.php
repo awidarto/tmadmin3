@@ -58,9 +58,6 @@
 
 $(document).ready(function() {
 
-    $('select').select2({
-      width : 'resolve'
-    });
 
     $('#title').keyup(function(){
         var title = $('#title').val();

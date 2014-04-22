@@ -14,6 +14,9 @@
         </div>
         <br />
         <span id="loading-pictures" style="display:none;" ><img src="{{URL::to('/') }}/images/loading.gif" />loading existing pictures...</span>
+
+
+
         <div id="{{ $element_id }}_files" class="files">
             <ul style="margin-left:0px">
                 <?php
@@ -31,22 +34,9 @@
 
                     if( !is_null($formdata) && isset($formdata['files']) && $showold == false ){
 
+                        /* external detail template */
 
-                        //print_r($formdata['files']);
-
-
-                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
-                        $thumb .= '<span class="img-title">%s</span>';
-                        $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
-
-                        $thumb .= 'Brochure<br />';
-                        $thumb .= '<input type="radio" name="brchead" value="%s" %s > Head &nbsp;';
-                        $thumb .= '<input type="radio" name="brc1" value="%s" %s > Pic 1 &nbsp;';
-                        $thumb .= '<input type="radio" name="brc2" value="%s" %s > Pic 2 &nbsp;';
-                        $thumb .= '<input type="radio" name="brc3" value="%s" %s > Pic 3 &nbsp;';
-
-                        $thumb .= '<label for="caption">Caption</label><input type="text" name="caption[]" value="%s" />';
-                        $thumb .= '</li>';
+                        $thumb = View::make('fupload.detail')->render();
 
                         // display previously saved data
                         //for($t = 0; $t < count($filename);$t++){
@@ -91,9 +81,10 @@
 
 
                             printf($thumb,
-                                $v['thumbnail_url'],
                                 $v['file_id'],
+                                $v['thumbnail_url'],
                                 $v['filename'],
+                                $v['file_id'],
                                 $v['file_id'],
                                 $isdef,
                                 $v['file_id'], $headdef,
@@ -114,12 +105,12 @@
                         $filename = $allin['filename'];
                         $thumbnail_url = $allin['thumbnail_url'];
                         $file_id = $allin['file_id'];
-
+                        /*
                         $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
                         $thumb .= '<span class="img-title">%s</span>';
                         $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
 
-                        $thumb .= 'Brochure<br />';
+                        $thumb .= 'Gallery<br />';
                         $thumb .= '<input type="radio" name="brchead" value="%s" %s > Head &nbsp;';
                         $thumb .= '<input type="radio" name="brc1" value="%s" %s > Pic 1 &nbsp;';
                         $thumb .= '<input type="radio" name="brc2" value="%s" %s > Pic 2 &nbsp;';
@@ -127,6 +118,10 @@
 
                         $thumb .= '<label for="caption">Caption</label><input type="text" name="caption[]" value="%s" />';
                         $thumb .= '</li>';
+                        */
+
+                        $thumb = View::make('fupload.detail')->render();
+
 
                         for($t = 0; $t < count($filename);$t++){
                             if(isset($allin['defaultpic'])){
@@ -182,9 +177,10 @@
                             }
 
                             printf($thumb,
-                                $thumbnail_url[$t],
                                 $file_id[$t],
+                                $thumbnail_url[$t],
                                 $filename[$t],
+                                $file_id[$t],
                                 $file_id[$t],
                                 $isdef,
                                 $file_id[$t], $headdef,
@@ -286,7 +282,8 @@ $(document).ready(function(){
             console.log($(e.target).parent());
 
             if (answer == true){
-                $(e.target).parent().remove();
+                $('#par_' + _id).remove();
+                //$(e.target).parent().remove();
                 $('#fdel_'+e.target.id).remove();
                 /*
                 $.post('',{'id':_id}, function(data) {
@@ -314,19 +311,9 @@ $(document).ready(function(){
             );
 
             $.each(data.result.files, function (index, file) {
-                var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
-                    '<span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span>'+
-                    '&nbsp;&nbsp;<span class="img-title">' + file.name + '</span><br />' +
-                    '<input type="radio" name="defaultpic" value="' + file.file_id + '"> Default<br />'+
-                    'Brochure <br />' +
-                    '<input type="radio" name="brchead" value="' + file.file_id + '"> Head &nbsp;'+
-                    '<input type="radio" name="brc1" value="' + file.file_id + '"> Pic 1 &nbsp;'+
-                    '<input type="radio" name="brc2" value="' + file.file_id + '"> Pic 2 &nbsp;'+
-                    '<input type="radio" name="brc3" value="' + file.file_id + '"> Pic 3 <br />'+
-                '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
-                //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
-                //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
-                '</li>';
+
+                {{ View::make('fupload.jsdetail') }}
+
                 $(thumb).prependTo('#{{ $element_id }}_files ul');
 
                 var upl = '<li id="fdel_' + file.file_id +'" ><input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';

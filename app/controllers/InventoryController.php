@@ -1,6 +1,6 @@
 <?php
 
-class ProductsController extends AdminController {
+class InventoryController extends AdminController {
 
     public function __construct()
     {
@@ -12,7 +12,7 @@ class ProductsController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Product();
+        $this->model = new Stockunit();
         //$this->model = DB::collection('documents');
 
     }
@@ -31,19 +31,11 @@ class ProductsController extends AdminController {
         $this->heads = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
             array('SKU',array('search'=>true,'sort'=>true)),
+            array('Unit Id',array('search'=>true,'sort'=>true)),
             array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
             array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
-            array('Description',array('search'=>true,'sort'=>true)),
-            array('Series',array('search'=>true,'sort'=>true)),
-            array('Item Group',array('search'=>true,'sort'=>true)),
-            array('Category',array('search'=>true,'sort'=>true,'select'=>Prefs::ExtractProductCategory() )),
-            array('Length / Panjang',array('search'=>true,'sort'=>true)),
-            array('Width / Lebar',array('search'=>true,'sort'=>true)),
-            array('Height / Tinggi',array('search'=>true,'sort'=>false)),
-            array('Diameter',array('search'=>true,'sort'=>false)),
-            array('Size Description',array('search'=>true,'sort'=>true)),
-            array('Color',array('search'=>true,'sort'=>true)),
-            array('Material',array('search'=>true,'sort'=>true)),
+            array('Outlet',array('search'=>true,'sort'=>true, 'select'=>Prefs::getOutlet()->OutletToSelection('name','name') )),
+            array('Status',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.inventory_status_select') )),
             array('Tags',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
@@ -63,19 +55,11 @@ class ProductsController extends AdminController {
         $this->fields = array(
             //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('_id',array('kind'=>'text','query'=>'like','pos'=>'after','callback'=>'shortunit','attr'=>array('class'=>'expander'),'show'=>true)),
             array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
             array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('itemGroup',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('L',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('W',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('H',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('D',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('sizeDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('outletName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true )),
+            array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
@@ -141,7 +125,7 @@ class ProductsController extends AdminController {
         }
 
         $data['defaultpictures'] = $defaults;
-        $data['files'] = $files;
+        $data['productDetail']['files'] = $files;
 
         return $data;
     }
@@ -149,6 +133,15 @@ class ProductsController extends AdminController {
     public function beforeUpdate($id,$data)
     {
         $defaults = array();
+
+        $unitdata = array_merge(array('id'=>$id),$data);
+
+        $this->updateStock($unitdata);
+
+        unset($data['outlets']);
+        unset($data['outletNames']);
+        unset($data['addQty']);
+        unset($data['adjustQty']);
 
         $files = array();
 
@@ -231,15 +224,6 @@ class ProductsController extends AdminController {
 
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
-
-        $unitdata = array_merge(array('id'=>$id),$data);
-
-        $this->updateStock($unitdata);
-
-        unset($data['outlets']);
-        unset($data['outletNames']);
-        unset($data['addQty']);
-        unset($data['adjustQty']);
 
         return $data;
     }
@@ -396,6 +380,7 @@ class ProductsController extends AdminController {
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Upload Picture</span>';
 
         $actions = $edit.'<br />'.$upload.'<br />'.$delete;
+        $actions = '';
         return $actions;
     }
 
@@ -446,13 +431,19 @@ class ProductsController extends AdminController {
 
         $thumbnail_url = '';
 
-        if(isset($data['files']) && count($data['files'])){
+        //$data = $data->toArray();
+
+        //print_r($data);
+
+        //exit();
+
+        if(isset($data['productDetail']['files']) && count($data['productDetail']['files'])){
             $glinks = '';
 
-            $gdata = $data['files'][$data['defaultpic']];
+            $gdata = $data['productDetail']['files'][$data['productDetail']['defaultpic']];
 
             $thumbnail_url = $gdata['thumbnail_url'];
-            foreach($data['files'] as $g){
+            foreach($data['productDetail']['files'] as $g){
                 $g['caption'] = ($g['caption'] == '')?$data['propertyId']:$data['propertyId'].' : '.$g['caption'];
                 $g['full_url'] = isset($g['full_url'])?$g['full_url']:$g['fileurl'];
                 $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['full_url'].'" >';
@@ -468,15 +459,19 @@ class ProductsController extends AdminController {
     public function dispBar($data)
 
     {
-        $display = HTML::image(URL::to('barcode/'.$data['SKU']), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
-        $display = '<a href="'.URL::to('barcode/dl/'.$data['SKU']).'">'.$display.'</a>';
+        $code = $data['SKU'].'|'.substr($data['_id'], -5 );
+        $display = HTML::image(URL::to('barcode/'.$code), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
+        $display = '<a href="'.URL::to('barcode/dl/'.$code).'">'.$display.'</a>';
         return $display.'<br />'.$data['SKU'];
     }
 
+    public function shortunit($data){
+        return substr($data['_id'], -5);
+    }
 
     public function pics($data)
     {
-        $name = HTML::link('products/view/'.$data['_id'],$data['productName']);
+        $name = HTML::link('products/view/'.$data['_id'],$data['productDetail']['productName']);
         if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
             $display = HTML::image($data['thumbnail_url'][0].'?'.time(), $data['filename'][0], array('style'=>'min-width:100px;','id' => $data['_id']));
             return $display.'<br /><span class="img-more" id="'.$data['_id'].'">more images</span>';
