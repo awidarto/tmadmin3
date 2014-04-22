@@ -50,7 +50,7 @@ Route::controller('ajax', 'AjaxController');
 Route::controller('home', 'HomeController');
 
 //Route::get('/', 'ProductsController@getIndex');
-Route::get('/', 'ScanController@getIndex');
+Route::get('/', 'StockcheckController@getIndex');
 
 
 Route::get('content/pages', 'PagesController@getIndex');
