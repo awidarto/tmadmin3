@@ -186,7 +186,7 @@ class AjaxController extends BaseController {
                 Stockunitlog::insert($u);
 
                 $res = 'OK';
-                $msg = 'Unit scanned in : SKU '.$u['SKU'].' - '.$unit_id.' successfuly checked in';;
+                $msg = 'Unit scanned in : SKU '.$u['SKU'].' - '.$unit_id.' successfuly checked in';
 
             }else{
                 $res = 'NOK';
