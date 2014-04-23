@@ -234,6 +234,66 @@ class AjaxController extends BaseController {
         return Response::json($result);
     }
 
+    public function postUpdateinventory(){
+        $in = Input::get();
+
+        //$id = $in['upinv_id'];
+
+        //$unitdata = array_merge(array('id'=>$id),$in);
+
+        //$this->updateStock($unitdata);
+        $in['id'] = new MongoId($in['id']);
+
+        Commerce::updateStock($in);
+
+        return Response::json(array('result'=>'OK:UPDATED' ));
+    }
+
+    public function postInventoryinfo(){
+        $pid = Input::get('product_id');
+
+        $p = Product::find($pid);
+
+        foreach( Prefs::getOutlet()->OutletToArray() as $o){
+
+            $av = Stockunit::where('outletId', $o->_id )
+                    ->where('productId', new MongoId($pid) )
+                    ->where('status','available')
+                    ->count();
+
+            $hd = Stockunit::where('outletId', $o->_id)
+                    ->where('productId',new MongoId($pid))
+                    ->where('status','hold')
+                    ->count();
+
+            $rsv = Stockunit::where('outletId', $o->_id)
+                    ->where('productId',new MongoId($pid))
+                    ->where('status','reserved')
+                    ->count();
+
+            $sld = Stockunit::where('outletId', $o->_id)
+                    ->where('productId',new MongoId($pid))
+                    ->where('status','sold')
+                    ->count();
+
+            $avail['stocks'][$o->_id]['available'] = $av;
+            $avail['stocks'][$o->_id]['hold'] = $hd;
+            $avail['stocks'][$o->_id]['reserved'] = $rsv;
+            $avail['stocks'][$o->_id]['sold'] = $sld;
+        }
+
+        $html = View::make('partials.stockform')->with('formdata', $avail)->render();
+
+        if($p){
+            return Response::json(array('result'=>'OK:FOUND', 'html'=>$html ));
+        }else{
+            return Response::json(array('result'=>'ERR:NOTFOUND'));
+        }
+
+
+    }
+
+
     public function postProductinfo(){
         $pid = Input::get('product_id');
 
@@ -244,9 +304,8 @@ class AjaxController extends BaseController {
         }else{
             return Response::json(array('result'=>'ERR:NOTFOUND'));
         }
-
-
     }
+
 
     public function postProductpicture(){
         $data = Input::get();

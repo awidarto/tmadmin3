@@ -234,7 +234,9 @@ class ProductsController extends AdminController {
 
         $unitdata = array_merge(array('id'=>$id),$data);
 
-        $this->updateStock($unitdata);
+        //$this->updateStock($unitdata);
+
+        Commerce::updateStock($unitdata);
 
         unset($data['outlets']);
         unset($data['outletNames']);
@@ -394,8 +396,9 @@ class ProductsController extends AdminController {
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Upload Picture</span>';
+        $inv = '<span class="upinv" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Update Inventory</span>';
 
-        $actions = $edit.'<br />'.$upload.'<br />'.$delete;
+        $actions = $edit.'<br />'.$upload.'<br />'.$inv.'<br />'.$delete;
         return $actions;
     }
 

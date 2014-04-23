@@ -33,7 +33,7 @@ th:first-child{
 	border-left:thin solid #eee;
 }
 
-.del,.upload{
+.del,.upload,.upinv{
 	cursor:pointer;
 }
 
@@ -271,6 +271,29 @@ th:first-child{
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     <button class="btn btn-primary" id="do-upload">Save changes</button>
+  </div>
+</div>
+
+<div id="upinv-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Update Inventory</span></h3>
+  </div>
+  <div class="modal-body" >
+	  	<h4 id="upinv-title-id"></h4>
+
+	  	{{ Former::open()->id('upinv-form') }}
+		{{ Former::hidden('id')->id('upinv-id') }}
+		{{ Former::hidden('SKU')->id('upinv-sku') }}
+	        <span id="inv-loading-pictures" style="display:none;" ><img src="{{URL::to('/') }}/images/loading.gif" />loading existing pictures...</span>
+		<div id="upinv-container">
+
+		</div>
+        {{ Former::close() }}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary" id="do-upinv">Save changes</button>
   </div>
 </div>
 
@@ -655,6 +678,32 @@ th:first-child{
 
 		});
 
+		$('#upinv-modal').on('hidden',function(){
+			$('#upinv-id').val('');
+			$('#upinv-sku').val('');
+			$('#upinv-container').html('');
+		});
+
+		$('#do-upinv').on('click',function(){
+			var form = $('#upinv-form');
+			console.log(form.serialize());
+
+			$.post(
+				'{{ URL::to('ajax/updateinventory')}}',
+					form.serialize(),
+					function(data){
+						if(data.result == 'OK:UPDATED'){
+							$('#upinv-modal').modal('hide');
+							oTable.fnDraw();
+						}else if( data.result == 'ERR:UPDATEFAILED' ){
+							alert('Update failed');
+						}
+					},
+					'json'
+				);
+
+		});
+
 		$('table.dataTable').click(function(e){
 
 			if ($(e.target).is('.del')) {
@@ -856,6 +905,35 @@ th:first-child{
 				$('#upload-id').val(_id);
 
 				$('#upload-title-id').html('SKU : ' + _rel);
+
+		   	}
+
+			if ($(e.target).is('.upinv')) {
+				var _id = e.target.id;
+				var _rel = $(e.target).attr('rel');
+				var _status = $(e.target).data('status');
+
+				$('#inv-loading-pictures').show();
+
+				$('#upinv-id').val(_id);
+				$('#upinv-sku').val(_rel);
+
+				$.post('{{ URL::to('ajax/inventoryinfo') }}', { product_id: _id },
+					function(data){
+
+						$('#inv-loading-pictures').hide();
+
+						if(data.result == 'OK:FOUND'){
+							$('#upinv-container').html(data.html);
+						}
+
+					},'json');
+
+				$('#upinv-modal').modal();
+
+				$('#upinv-id').val(_id);
+
+				$('#upinv-title-id').html('SKU : ' + _rel);
 
 		   	}
 
