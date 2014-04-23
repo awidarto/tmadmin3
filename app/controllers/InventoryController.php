@@ -459,14 +459,15 @@ class InventoryController extends AdminController {
     public function dispBar($data)
 
     {
-        $code = $data['SKU'].'|'.substr($data['_id'], -5 );
+        $code = $data['SKU'].'|'.substr($data['_id'], -10 );
+        $code = urlencode($code);
         $display = HTML::image(URL::to('barcode/'.$code), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
         $display = '<a href="'.URL::to('barcode/dl/'.$code).'">'.$display.'</a>';
         return $display.'<br />'.$data['SKU'];
     }
 
     public function shortunit($data){
-        return substr($data['_id'], -5);
+        return substr($data['_id'], -10);
     }
 
     public function pics($data)

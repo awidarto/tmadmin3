@@ -32,7 +32,7 @@ class Commerce{
 
             if($addQty[$i] > 0){
                 for($a = 0; $a < $addQty[$i]; $a++){
-                    $su['_id'] = str_random(40);
+                    $su['_id'] = str_random(8);
                     Stockunit::insert($su);
                 }
             }
