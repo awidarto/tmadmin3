@@ -31,6 +31,7 @@ class CategoryController extends AdminController {
 
         $this->heads = array(
             array('Title',array('search'=>true,'sort'=>true)),
+            array('Section',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -46,6 +47,7 @@ class CategoryController extends AdminController {
 
         $this->fields = array(
             array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );

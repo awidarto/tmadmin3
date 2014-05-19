@@ -14,7 +14,9 @@
         "intervention/validation": "dev-master",
         "maatwebsite/excel": "dev-master",
         "alexwhitman/view-themes": "dev-master",
-        "barryvdh/laravel-dompdf": "dev-master"
+        "mj/breadcrumb": "dev-master",
+        "knplabs/knp-snappy": "*",
+        "barryvdh/laravel-snappy": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

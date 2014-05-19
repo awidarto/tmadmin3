@@ -156,6 +156,30 @@ class Prefs {
         return self::$outlet;
     }
 
+    public static function GetBatchId($SKU, $year, $month){
+
+        $seq = DB::collection('batchnumbers')->raw();
+
+        $new_id = $seq->findAndModify(
+                array(
+                    'SKU'=>$SKU,
+                    'year'=>$year,
+                    'month'=>$month
+                    ),
+                array('$inc'=>array('sequence'=>1)),
+                null,
+                array(
+                    'new' => true,
+                    'upsert'=>true
+                )
+            );
+
+
+        $batchid = $year.$month.str_pad($new_id['sequence'], 4, '0', STR_PAD_LEFT);
+
+        return $batchid;
+
+    }
 
     public static function ExtractProductCategory($selection = true)
     {

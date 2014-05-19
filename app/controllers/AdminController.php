@@ -62,14 +62,27 @@ class AdminController extends Controller {
 
     public $additional_action = '';
 
+    public $additional_filter = '';
+
+    public $js_additional_param = '';
+
+    public $additional_query = false;
+
+    public $def_order_by = 'lastUpdate';
+
+    public $def_order_dir = 'desc';
+
+    public $place_action = 'both'; // first, both
+
+    public $table_view = 'tables.simple';
 
 	public function __construct(){
 
 		date_default_timezone_set('Asia/Jakarta');
 
-        Theme::setCurrentTheme('default');
-
 		Former::framework($this->form_framework);
+
+        //$this->crumb = new \Noherczeg\Breadcrumb\Breadcrumb(URL::to('/'));
 
 		$this->beforeFilter('auth', array('on'=>'get', 'only'=>array('getIndex','getAdd','getEdit') ));
 
@@ -124,14 +137,18 @@ class AdminController extends Controller {
 		$select_all = Former::checkbox()->name('Select All')->check(false)->id('select_all');
 
 		// add selector and sequence columns
-        array_unshift($heads, array('Actions',array('sort'=>false,'class'=>'action')));
+        if($this->place_action == 'both' || $this->place_action == 'first'){
+            array_unshift($heads, array('Actions',array('sort'=>false,'class'=>'action')));
+        }
 		array_unshift($heads, array($select_all,array('sort'=>false)));
 		array_unshift($heads, array('#',array('sort'=>false)));
 
 		// add action column
-		array_push($heads,
-			array('Actions',array('search'=>false,'sort'=>false,'clear'=>true,'class'=>'action'))
-		);
+        if($this->place_action == 'both'){
+            array_push($heads,
+                array('Actions',array('search'=>false,'sort'=>false,'clear'=>true,'class'=>'action'))
+            );
+        }
 
 		$disablesort = array();
 
@@ -148,7 +165,7 @@ class AdminController extends Controller {
         $this->dlxl = (is_null($this->dlxl))? strtolower($this->controller_name).'/dlxl': $this->dlxl;
 
 
-		return View::make('tables.simple')
+		return View::make($this->table_view)
 			->with('title',$this->title )
 			->with('newbutton', $this->newbutton )
 			->with('disablesort',$disablesort )
@@ -163,8 +180,11 @@ class AdminController extends Controller {
             ->with('report_action',$this->report_action)
             ->with('is_additional_action',$this->is_additional_action)
             ->with('additional_action',$this->additional_action)
+            ->with('additional_filter',$this->additional_filter)
+            ->with('js_additional_param', $this->js_additional_param)
 			->with('heads',$heads )
 			->with('row',$this->rowdetail );
+
 
 	}
 
@@ -181,7 +201,9 @@ class AdminController extends Controller {
 
 		//array_unshift($fields, array('select',array('kind'=>false)));
 		array_unshift($fields, array('seq',array('kind'=>false)));
-        array_unshift($fields, array('action',array('kind'=>false)));
+        if($this->place_action == 'both' || $this->place_action == 'first'){
+            array_unshift($fields, array('action',array('kind'=>false)));
+        }
 
 		$pagestart = Input::get('iDisplayStart');
 		$pagelength = Input::get('iDisplayLength');
@@ -325,6 +347,10 @@ class AdminController extends Controller {
 
 		}
 
+        if($this->additional_query){
+            $q = array_merge( $q, $this->additional_query );
+        }
+
 		//print_r($q);
 
 
@@ -335,9 +361,9 @@ class AdminController extends Controller {
 		$fidx = ($fidx == -1 )?0:$fidx;
 
         if(Input::get('iSortCol_0') == 0){
-            $sort_col = 'lastUpdate';
+            $sort_col = $this->def_order_by;
 
-            $sort_dir = 'desc';
+            $sort_dir = $this->def_order_dir;
         }else{
             $sort_col = $fields[$fidx][0];
 
@@ -387,6 +413,7 @@ class AdminController extends Controller {
 
 			//$select = Former::checkbox('sel_'.$doc['_id'])->check(false)->id($doc['_id'])->class('selector');
             $actionMaker = $this->makeActions;
+
 			$actions = $this->$actionMaker($doc);
 
 			$row = array();
@@ -396,7 +423,11 @@ class AdminController extends Controller {
 			//$sel = Former::checkbox('sel_'.$doc['_id'])->check(false)->label(false)->id($doc['_id'])->class('selector')->__toString();
 			$sel = '<input type="checkbox" name="sel_'.$doc['_id'].'" id="'.$doc['_id'].'" value="'.$doc['_id'].'" class="selector" />';
 			$row[] = $sel;
-            $row[] = $actions;
+
+            if($this->place_action == 'both' || $this->place_action == 'first'){
+                $row[] = $actions;
+            }
+
 
 			foreach($fields as $field){
 				if($field[1]['kind'] != false && $field[1]['show'] == true){
@@ -465,7 +496,9 @@ class AdminController extends Controller {
 				}
 			}
 
-            $row[] = $actions;
+            if($this->place_action == 'both'){
+                $row[] = $actions;
+            }
 
 			$row['extra'] = $extra;
 
@@ -753,7 +786,7 @@ class AdminController extends Controller {
     public function postDlxl()
     {
 
-        $fields = $this->fields;
+        $fields = $this->fields; // fields set must align with search column index
 
         if(is_null($this->heads)){
             $titles = array();
@@ -775,6 +808,8 @@ class AdminController extends Controller {
         $infilters = Input::get('filter');
         $insorting = Input::get('sort');
 
+        //print_r($infilters);
+        //print_r($fields);
 
         $defsort = 1;
         $defdir = -1;
@@ -966,6 +1001,8 @@ class AdminController extends Controller {
 
         }
 
+        $lastQuery = $q;
+
         //print_r($results->toArray());
 
         $aadata = array();
@@ -1090,7 +1127,8 @@ class AdminController extends Controller {
             'status'=>'OK',
             'filename'=>$fname,
             'urlxls'=>URL::to(strtolower($this->controller_name).'/dl/'.$fname.'.xls'),
-            'urlcsv'=>URL::to(strtolower($this->controller_name).'/csv/'.$fname.'.csv')
+            'urlcsv'=>URL::to(strtolower($this->controller_name).'/csv/'.$fname.'.csv'),
+            'q'=>$lastQuery
         );
 
         print json_encode($result);
@@ -1160,17 +1198,6 @@ class AdminController extends Controller {
 
             $imp = Excel::load($xlsfile)->toArray();
 
-            print $headindex;
-
-            print $firstdata;
-
-
-            $imp = array_shift($imp);
-
-            print_r($imp);
-
-            //exit();
-
             $headrow = $imp[$headindex - 1];
 
             $firstdata = $firstdata - 1;
@@ -1178,7 +1205,6 @@ class AdminController extends Controller {
             $imported = array();
 
             //print_r($headrow);
-
 
             for($i = $firstdata; $i < count($imp);$i++){
 

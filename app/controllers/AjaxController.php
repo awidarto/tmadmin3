@@ -43,111 +43,102 @@ class AjaxController extends BaseController {
 
     }
 
+
     public function postScan()
     {
         $in = Input::get();
 
-        $attid = trim( strtoupper($in['txtin']));
+        $code = $in['txtin'];
+        $outlet_id = $in['outlet_id'];
+        $use_outlet = $in['search_outlet'];
+        $action = strtolower( $in['action'] );
 
-        //$guest = Attendee::find($attid);
+        $res = 'OK';
 
-        $guest = Attendee::where('hcode','=',$attid)->first();
 
-        $attendee = false;
 
-        $tabstat = false;
-
-        if($guest){
-            $attendee = $guest->toArray();
-            if( isset($guest->scanned) && $guest->scanned >= 1){
-                //$guest->attending = $guest->attending + 1;
-                $guest->scanned = $guest->scanned + 1;
-                $guest->save();
-
-                if(date('Y-m-d',time()) == '2014-03-14' || Config::get('seater.is_gala') == true ){
-                    $instat = '<h1>Welcome back to Gala Dinner</h1>';
-                }else{
-                    $instat = '<h1>Welcome back to</h1>';
-                }
-
-                $instat .= '<h1>'.Config::get('seater.event_name').' !</h1>';
-
-                $statcount = Attendee::where('tableNumber','=',$guest->tableNumber)
-                    ->where('seatNumber','=',$guest->seatNumber)
-                    ->where('attending','=',1)
-                    ->count();
-                $res = 'NOK';
-            }else{
-
-                $guest->attending = 1;
-                $guest->scanned = 1;
-                $guest->save();
-                if(date('Y-m-d',time()) == '2014-03-14' || Config::get('seater.is_gala') == true ){
-                    $instat = '<h1>Welcome, to Gala Dinner</h1>';
-                }else{
-                    $instat = '<h1>Welcome, to</h1>';
-                }
-                $instat .= '<h1>'.Config::get('seater.event_name').' !</h1>';
-
-                $statcount = Attendee::where('tableNumber','=',$guest->tableNumber)
-                    ->where('seatNumber','=',$guest->seatNumber)
-                    ->where('attending','=',1)
-                    ->count();
-
-                $res = 'OK';
-            }
-
-            $logdata = $attendee;
-
-            $logdata['guest_id'] = $logdata['_id'];
-            unset($logdata['_id']);
-            $attlog = new Attendancelog();
-
-            foreach($logdata as $k=>$v){
-                $attlog->{$k} = $v;
-            }
-
-            $attlog->createdDate = new MongoDate();
-            $attlog->lastUpdate = new MongoDate();
-
-            $attlog->save();
-
+        if(strripos($code, '|')){
+            $code = explode('|', $code);
+            $SKU = $code[0];
+            $unit_id = $code[1];
         }else{
-            $instat = 'Unregistered guest code.';
-            $res = 'NOK';
+            $SKU = trim($code);
+            $unit_id = null;
         }
 
+        switch($action){
+            case 'sell':
+                break;
+            case 'deliver':
+                break;
+            case 'check':
+                    if(is_null($unit_id)){
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: NOT FOUND';
+                        break;
+                    }
 
-        $attending = Attendee::where('attending','=',1)->get()->toArray();
+                    if($use_outlet == 1){
+                        $u = Stockunit::where('outletId','=', $outlet_id)
+                            ->where('SKU','=', $SKU)
+                            ->where('_id', 'like', '%'.$unit_id )
+                            ->first();
+                    }else{
+                        $u = Stockunit::where('SKU','=', $SKU)
+                            ->where('_id', 'like', '%'.$unit_id )
+                            ->first();
+                    }
 
-        $ts = array();
+                    if($u){
 
-        foreach ($attending as $att) {
-            $tidx = $att['type'].'-'.$att['tableNumber'];
-            if(isset($ts[$tidx])){
-                $ts[$tidx] = $ts[$tidx] + 1;
-            }else{
-                $ts[$tidx] = 1;
-            }
+                        $ul = $u->toArray();
+
+                        $ul['scancheckDate'] = new MongoDate();
+                        $ul['createdDate'] = new MongoDate();
+                        $ul['lastUpdate'] = new MongoDate();
+                        $ul['action'] = $action;
+
+                        $unit_id = $ul['_id'];
+
+                        unset($ul['_id']);
+
+                        $ul['unitId'] = $unit_id;
+
+                        Stockunitlog::insert($ul);
+
+                        $history = array(
+                            'datetime'=>new MongoDate(),
+                            'action'=>$action,
+                            'price'=>$ul['productDetail']['priceRegular'],
+                            'status'=>$ul['status'],
+                            'outletName'=>$ul['outletName']
+                        );
+
+                        $u->push('history', $history);
+
+                        $res = 'OK';
+                        $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
+
+                    }else{
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
+                    }
+
+                break;
+            case 'return':
+                break;
+            default:
+                break;
         }
-
-        $tabstat = $ts;
-        /*
-        $tabstat = array();
-        foreach($ts as $key=>$value){
-            $tabstat[] = array('id'=>$key,'val'=>$value);
-        }
-        */
 
         $result = array(
-            'attendee'=>$attendee,
-            'tabstat'=>$tabstat,
-            'html'=>$instat,
-            'result'=>$res
+            'result'=>$res,
+            'msg'=>$msg
         );
 
         return Response::json($result);
     }
+
 
     public function postScancheck()
     {
@@ -155,6 +146,7 @@ class AjaxController extends BaseController {
 
         $code = $in['txtin'];
         $outlet_id = $in['outlet_id'];
+        $use_outlet = $in['search_outlet'];
 
         $res = 'OK';
 
@@ -164,63 +156,97 @@ class AjaxController extends BaseController {
             $SKU = $code[0];
             $unit_id = $code[1];
 
-            $u = Stockunit::where('outletId','=', $outlet_id)
-                    ->where('SKU','=', $SKU)
-                    ->where('_id', 'like', '%'.$unit_id )
-                    ->first();
+                if($use_outlet == 1){
+                    $u = Stockunit::where('outletId','=', $outlet_id)
+                        ->where('SKU','=', $SKU)
+                        ->where('_id', 'like', '%'.$unit_id )
+                        ->first();
+                }else{
+                    $u = Stockunit::where('SKU','=', $SKU)
+                        ->where('_id', 'like', '%'.$unit_id )
+                        ->first();
+                }
 
             if($u){
 
-                $u = $u->toArray();
+                $ul = $u->toArray();
 
-                $u['scancheckDate'] = new MongoDate();
-                $u['createdDate'] = new MongoDate();
-                $u['lastUpdate'] = new MongoDate();
+                $ul['scancheckDate'] = new MongoDate();
+                $ul['createdDate'] = new MongoDate();
+                $ul['lastUpdate'] = new MongoDate();
 
-                $unit_id = $u['_id'];
+                $unit_id = $ul['_id'];
 
-                unset($u['_id']);
+                unset($ul['_id']);
 
-                $u['unitId'] = $unit_id;
+                $ul['unitId'] = $unit_id;
 
-                Stockunitlog::insert($u);
+                Stockunitlog::insert($ul);
+
+                $history = array(
+                    'datetime'=>new MongoDate(),
+                    'action'=>'scan',
+                    'price'=>$ul['productDetail']['priceRegular'],
+                    'status'=>$ul['status'],
+                    'outletName'=>$ul['outletName']
+                );
+
+                $u->push('history', $history);
 
                 $res = 'OK';
-                $msg = 'Unit scanned in : SKU '.$u['SKU'].' - '.$unit_id.' successfuly checked in';
+                $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
 
             }else{
                 $res = 'NOK';
-                $msg = 'Unit scanned in : SKU '.$SKU.' - '.$unit_id.' failed to check';
+                $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
             }
 
         }else{
             $SKU = trim($code);
 
-            $u = Stockunit::where('outletId','=',$outlet_id)
+            if($use_outlet){
+                $u = Stockunit::where('outletId','=',$outlet_id)
                     ->where('SKU','=',$SKU)
                     ->first();
+            }else{
+                $u = Stockunit::where('SKU','=',$SKU)
+                    ->first();
+            }
+
 
             if($u){
 
-                $u = $u->toArray();
 
-                $u['scancheckDate'] = new MongoDate();
-                $u['createdDate'] = new MongoDate();
-                $u['lastUpdate'] = new MongoDate();
+                $ul = $u->toArray();
 
-                $unit_id = $u['_id'];
+                $ul['scancheckDate'] = new MongoDate();
+                $ul['createdDate'] = new MongoDate();
+                $ul['lastUpdate'] = new MongoDate();
 
-                unset($u['_id']);
+                $unit_id = $ul['_id'];
 
-                $u['unitId'] = $unit_id;
+                unset($ul['_id']);
 
-                Stockunitlog::insert($u);
+                $ul['unitId'] = $unit_id;
+
+                Stockunitlog::insert($ul);
+
+                $history = array(
+                    'datetime'=>new MongoDate(),
+                    'action'=>'scan',
+                    'price'=>$ul['productDetail']['priceRegular'],
+                    'status'=>$ul['status'],
+                    'outletName'=>$ul['outletName']
+                    );
+
+                $u->push('history', $history);
 
                 $res = 'OK';
-                $msg = 'Unit scanned in : SKU '.$u['SKU'].' - '.$unit_id.' successfuly checked in';;
+                $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
+
             }else{
                 $res = 'NOK';
-                $msg = 'Unit scanned in : SKU '.$SKU.' failed to check';
+                $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
             }
 
         }

@@ -33,7 +33,7 @@ th:first-child{
 	border-left:thin solid #eee;
 }
 
-.del,.upload,.upinv{
+.del,.upload,.upinv,.outlet{
 	cursor:pointer;
 }
 

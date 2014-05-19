@@ -378,9 +378,10 @@ class InventoryController extends AdminController {
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Upload Picture</span>';
+        $outlet = '<span class="outlet" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Move Outlet</span>';
 
         $actions = $edit.'<br />'.$upload.'<br />'.$delete;
-        $actions = '';
+        $actions = $outlet;
         return $actions;
     }
 

@@ -115,7 +115,7 @@ return array(
         'Intervention\Helper\StringServiceProvider',
         'Maatwebsite\Excel\ExcelServiceProvider',
         'AlexWhitman\ViewThemes\ViewThemesServiceProvider',
-        'Barryvdh\DomPDF\ServiceProvider',
+        'Barryvdh\Snappy\ServiceProvider',
 	),
 
 	/*

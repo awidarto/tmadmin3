@@ -10,9 +10,19 @@
 <ul class="nav">
     @if(Auth::check())
 
-        <li><a href="{{ URL::to('stockcheck') }}" {{ sa('stockcheck') }} >Stock Check</a></li>
+        <li><a href="{{ URL::to('dashboard') }}" {{ sa('dashboard') }} >Dashboard</a></li>
 
-        <li><a href="{{ URL::to('products') }}" {{ sa('products') }} >Products</a></li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Products
+                <b class="caret"></b>
+              </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('products') }}" {{ sa('products') }} >Catalog</a></li>
+                <li><a href="{{ URL::to('productcategory') }}" {{ sa('productcategory') }} >Category</a></li>
+            </ul>
+        </li>
+
         <li><a href="{{ URL::to('inventory') }}" {{ sa('inventory') }} >Inventory</a></li>
         <li><a href="{{ URL::to('outlet') }}" {{ sa('outlet') }} >Outlets</a></li>
 
@@ -38,6 +48,7 @@
             <ul class="dropdown-menu">
                 <li><a href="{{ URL::to('content/pages') }}" {{ sa('content/pages') }} >Pages</a></li>
                 <li><a href="{{ URL::to('content/posts') }}" {{ sa('content/posts') }} >Posts</a></li>
+                <li><a href="{{ URL::to('section') }}" {{ sa('section') }} >Section</a></li>
                 <li><a href="{{ URL::to('content/category') }}" {{ sa('content/category') }} >Category</a></li>
                 <li><a href="{{ URL::to('content/menu') }}" {{ sa('content/menu') }} >Menu</a></li>
             </ul>

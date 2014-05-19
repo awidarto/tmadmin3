@@ -16,6 +16,13 @@ class Commerce{
         unset($data['addQty']);
         unset($data['adjustQty']);
 
+        $productDetail = Product::find($data['id'])->toArray();
+
+        // year and month used fro batchnumber
+        $year = date('Y', time());
+        $month = date('m',time());
+
+
         for( $i = 0; $i < count($outlets); $i++)
         {
 
@@ -24,7 +31,7 @@ class Commerce{
                     'outletName'=>$outletNames[$i],
                     'productId'=>$data['id'],
                     'SKU'=>$data['SKU'],
-                    'productDetail'=>$data,
+                    'productDetail'=>$productDetail,
                     'status'=>$positive,
                     'createdDate'=>new MongoDate(),
                     'lastUpdate'=>new MongoDate()
@@ -33,6 +40,22 @@ class Commerce{
             if($addQty[$i] > 0){
                 for($a = 0; $a < $addQty[$i]; $a++){
                     $su['_id'] = str_random(8);
+
+
+                    $batchnumber = Prefs::GetBatchId($data['SKU'], $year, $month);
+
+                    $su['_id'] = $data['SKU'].'|'.$batchnumber;
+
+                    $history = array(
+                        'datetime'=>new MongoDate(),
+                        'action'=>'init',
+                        'price'=>$productDetail['priceRegular'],
+                        'status'=>$su['status'],
+                        'outletName'=>$su['outletName']
+                    );
+
+                    $su['history'] = array($history);
+
                     Stockunit::insert($su);
                 }
             }
@@ -50,6 +73,16 @@ class Commerce{
                     $d->status = $negative;
                     $d->lastUpdate = new MongoDate();
                     $d->save();
+
+                    $history = array(
+                        'datetime'=>new MongoDate(),
+                        'action'=>'delete',
+                        'price'=>$d->priceRegular,
+                        'status'=>$d->status,
+                        'outletName'=>$d->outletName
+                    );
+
+                    $d->push('history', $history);
                 }
             }
 

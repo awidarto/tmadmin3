@@ -9,8 +9,8 @@ class ProductcategoryController extends AdminController {
         $this->controller_name = str_replace('Controller', '', get_class());
 
         //$this->crumb = new Breadcrumb();
-        $this->crumb->append('Home','left',true);
-        $this->crumb->append(strtolower($this->controller_name));
+        //$this->crumb->append('Home','left',true);
+        //$this->crumb->append(strtolower($this->controller_name));
 
         $this->model = new Productcategory();
         //$this->model = DB::collection('documents');
@@ -83,7 +83,7 @@ class ProductcategoryController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('category/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('productcategory/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

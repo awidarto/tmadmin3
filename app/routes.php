@@ -43,6 +43,7 @@ Route::controller('event', 'EventController');
 Route::controller('scanner', 'ScannerController');
 
 Route::controller('stockcheck', 'StockcheckController');
+Route::controller('dashboard', 'DashboardController');
 
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
@@ -50,7 +51,7 @@ Route::controller('ajax', 'AjaxController');
 Route::controller('home', 'HomeController');
 
 //Route::get('/', 'ProductsController@getIndex');
-Route::get('/', 'StockcheckController@getIndex');
+Route::get('/', 'DashboardController@getIndex');
 
 
 Route::get('content/pages', 'PagesController@getIndex');
@@ -114,6 +115,71 @@ Route::get('tonumber',function(){
 
 });
 
+Route::get('regeneratepic',function(){
+
+    set_time_limit(0);
+
+    $property = new Property();
+
+    $props = $property->get();
+
+    $seq = new Sequence();
+
+    foreach($props as $p){
+
+        $large_wm = public_path().'/wm/wm_lrg.png';
+        $med_wm = public_path().'/wm/wm_med.png';
+        $sm_wm = public_path().'/wm/wm_sm.png';
+
+        $files = $p->files;
+
+        foreach($files as $folder=>$files){
+
+            $dir = public_path().'/storage/media/'.$folder;
+
+            if (is_dir($dir) && file_exists($dir)) {
+                if ($dh = opendir($dir)) {
+                    while (($file = readdir($dh)) !== false) {
+                        if($file != '.' && $file != '..'){
+                            if(!preg_match('/^lrg_|med_|th_|full_/', $file)){
+                                echo $dir.'/'.$file."\n";
+
+                                $destinationPath = $dir;
+                                $filename = $file;
+
+                                $thumbnail = Image::make($destinationPath.'/'.$filename)
+                                    ->grab(120,120)
+                                    //->insert($sm_wm,0,0, 'bottom-right')
+                                    ->save($destinationPath.'/th_'.$filename);
+
+                                $medium = Image::make($destinationPath.'/'.$filename)
+                                    ->grab(320,240)
+                                    //->insert($med_wm,0,0, 'bottom-right')
+                                    ->save($destinationPath.'/med_'.$filename);
+
+                                $large = Image::make($destinationPath.'/'.$filename)
+                                    ->grab(800,600)
+                                    //->insert($large_wm,15,15, 'bottom-right')
+                                    ->save($destinationPath.'/lrg_'.$filename);
+
+                                $full = Image::make($destinationPath.'/'.$filename)
+                                    //->insert($large_wm,15,15, 'bottom-right')
+                                    ->save($destinationPath.'/full_'.$filename);
+
+                            }
+                        }
+                    }
+                    closedir($dh);
+                }
+            }
+        }
+
+
+    }
+
+});
+
+
 Route::get('pdf',function(){
     $content = "
     <page>
@@ -127,6 +193,7 @@ Route::get('pdf',function(){
     $html2pdf->WriteHTML($content);
     $html2pdf->Output('exemple.pdf','D');
 });
+
 
 Route::get('brochure/dl/{id}',function($id){
 

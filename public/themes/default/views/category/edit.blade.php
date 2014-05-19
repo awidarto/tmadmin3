@@ -12,6 +12,7 @@
     <div class="span6">
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
+        {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('slug','title',false))->label('Section') }}
         @include('partials.editortoolbar')
         {{ Former::textarea('description','Description') }}
     </div>

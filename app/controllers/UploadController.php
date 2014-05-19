@@ -35,7 +35,8 @@ class UploadController extends Controller {
         $uploadSuccess = $file->move($destinationPath, $filename);
 
         $thumbnail = Image::make($destinationPath.'/'.$filename)
-            ->grab(100,74)
+            ->resize(120,null,true)
+            ->grab(120,120)
             //->insert($sm_wm,0,0, 'bottom-right')
             ->save($destinationPath.'/th_'.$filename);
 
