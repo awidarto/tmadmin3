@@ -15,7 +15,6 @@ class Prefs {
 
     public static function getCategory(){
         $c = Category::get();
-
         self::$category = $c;
         return new self;
     }

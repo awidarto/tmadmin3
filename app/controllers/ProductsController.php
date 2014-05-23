@@ -53,6 +53,10 @@ class ProductsController extends AdminController {
 
         $this->title = 'Products';
 
+        $this->additional_filter = View::make('products.addfilter')->render();
+
+        $this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
+
         return parent::getIndex();
 
     }
@@ -80,6 +84,12 @@ class ProductsController extends AdminController {
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
+
+        $categoryFilter = Input::get('categoryFilter');
+
+        if($categoryFilter != ''){
+            $this->additional_query = array('category'=>$categoryFilter);
+        }
 
         return parent::postIndex();
     }

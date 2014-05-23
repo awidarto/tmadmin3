@@ -33,7 +33,7 @@ class DashboardController extends AdminController {
             array('SKU',array('search'=>true,'sort'=>true)),
             array('Unit Id',array('search'=>true,'sort'=>true)),
             array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
-            array('Outlet',array('search'=>true,'sort'=>true, 'select'=>Prefs::getOutlet()->OutletToSelection('name','name') )),
+            array('Last Outlet',array('search'=>true,'sort'=>true, 'select'=>Prefs::getOutlet()->OutletToSelection('name','name') )),
             array('Status',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.inventory_status_select') )),
             array('Mutation',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>''))),
             array('Mutated',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
@@ -471,7 +471,7 @@ class DashboardController extends AdminController {
     public function dispBar($data)
 
     {
-        $code = $data['SKU'].'|'.substr($data['_id'], -5 );
+        $code = $data['unitId'];
         $display = HTML::image(URL::to('barcode/'.$code), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
         $display = '<a href="'.URL::to('barcode/dl/'.$code).'">'.$display.'</a>';
         return $display.'<br />'.$data['SKU'];

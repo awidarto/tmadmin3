@@ -52,18 +52,20 @@ th:first-child{
 	       	<a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
        	@endif
 
+       	<a class="btn" id="download-xls">Download Excel</a>
+       	<a class="btn" id="download-csv">Download CSV</a>
+
         @if(isset($is_report) && $is_report == true)
         	{{ $report_action }}
        	@endif
-
-
-	       	<a class="btn" id="download-xls">Download Excel</a>
-	       	<a class="btn" id="download-csv">Download CSV</a>
-	 </div>
-	 <div class="span6 command-bar">
         @if(isset($is_additional_action) && $is_additional_action == true)
         	{{ $additional_action }}
        	@endif
+
+	 </div>
+	 <div class="span6 command-bar">
+    	{{ $additional_filter }}
+
 	 </div>
 </div>
 
@@ -297,6 +299,7 @@ th:first-child{
   </div>
 </div>
 
+{{ $modal_sets }}
 
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
     <div class="slides"></div>
@@ -411,6 +414,7 @@ th:first-child{
 				    { "bSortable": false, "aTargets": [ {{ $disablesort }} ] }
 				 ],
 			    "fnServerData": function ( sSource, aoData, fnCallback ) {
+			    	{{ $js_additional_param }}
 		            $.ajax( {
 		                "dataType": 'json',
 		                "type": "POST",
@@ -727,6 +731,8 @@ th:first-child{
 					alert("Deletion cancelled");
 				}
 		   	}
+
+		   	{{ $js_table_event }}
 
 			if ($(e.target).is('.pbadge')) {
 				var _id = e.target.id;

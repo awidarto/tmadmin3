@@ -53,9 +53,12 @@ class AjaxController extends BaseController {
         $use_outlet = $in['search_outlet'];
         $action = strtolower( $in['action'] );
 
+        $outlets = Prefs::getOutlet()->OutletToSelection('_id', 'name', false);
+
+        $outlet_name = $outlets[$outlet_id];
+
         $res = 'OK';
-
-
+        $msg = '';
 
         if(strripos($code, '|')){
             $code = explode('|', $code);
@@ -68,8 +71,59 @@ class AjaxController extends BaseController {
 
         switch($action){
             case 'sell':
-                break;
-            case 'deliver':
+                if(is_null($unit_id)){
+                    $res = 'NOK';
+                    $msg = 'SKU: '.$SKU.' <br />Unit ID: NOT FOUND';
+                    break;
+                }
+                $u = Stockunit::where('SKU','=', $SKU)
+                    ->where('_id', 'like', '%'.$unit_id )
+                    ->first();
+
+                if($u){
+
+                    $ul = $u->toArray();
+
+                    $ul['scancheckDate'] = new MongoDate();
+                    $ul['createdDate'] = new MongoDate();
+                    $ul['lastUpdate'] = new MongoDate();
+                    $ul['action'] = $action;
+                    $ul['status'] = 'sold';
+                    $ul['deliverTo'] = $outlet_name;
+                    $ul['deliverToId'] = $outlet_id;
+                    $ul['returnTo'] = $outlet_name;
+                    $ul['returnToId'] = $outlet_id;
+
+                    $unit_id = $ul['_id'];
+
+                    unset($ul['_id']);
+
+                    $ul['unitId'] = $unit_id;
+
+                    Stockunitlog::insert($ul);
+
+                    $history = array(
+                        'datetime'=>new MongoDate(),
+                        'action'=>$action,
+                        'price'=>$ul['productDetail']['priceRegular'],
+                        'status'=>$ul['status'],
+                        'outletName'=>$ul['outletName']
+                    );
+
+                    //change status to sold
+                    $u->status = 'sold';
+                    $u->push('history', $history);
+
+                    $u->save();
+
+                    $res = 'OK';
+                    $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
+
+                }else{
+                    $res = 'NOK';
+                    $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
+                }
+
                 break;
             case 'check':
                     if(is_null($unit_id)){
@@ -78,16 +132,9 @@ class AjaxController extends BaseController {
                         break;
                     }
 
-                    if($use_outlet == 1){
-                        $u = Stockunit::where('outletId','=', $outlet_id)
-                            ->where('SKU','=', $SKU)
-                            ->where('_id', 'like', '%'.$unit_id )
-                            ->first();
-                    }else{
-                        $u = Stockunit::where('SKU','=', $SKU)
-                            ->where('_id', 'like', '%'.$unit_id )
-                            ->first();
-                    }
+                    $u = Stockunit::where('SKU','=', $SKU)
+                        ->where('_id', 'like', '%'.$unit_id )
+                        ->first();
 
                     if($u){
 
@@ -97,6 +144,10 @@ class AjaxController extends BaseController {
                         $ul['createdDate'] = new MongoDate();
                         $ul['lastUpdate'] = new MongoDate();
                         $ul['action'] = $action;
+                        $ul['deliverTo'] = $outlet_name;
+                        $ul['deliverToId'] = $outlet_id;
+                        $ul['returnTo'] = $outlet_name;
+                        $ul['returnToId'] = $outlet_id;
 
                         $unit_id = $ul['_id'];
 
@@ -116,6 +167,66 @@ class AjaxController extends BaseController {
 
                         $u->push('history', $history);
 
+                        $u->save();
+
+                        $res = 'OK';
+                        $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
+
+                    }else{
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
+                    }
+
+                break;
+            case 'deliver':
+                    if(is_null($unit_id)){
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: NOT FOUND';
+                        break;
+                    }
+
+                    $u = Stockunit::where('SKU','=', $SKU)
+                        ->where('_id', 'like', '%'.$unit_id )
+                        ->first();
+
+                    if($u){
+
+                        $ul = $u->toArray();
+
+                        $ul['scancheckDate'] = new MongoDate();
+                        $ul['createdDate'] = new MongoDate();
+                        $ul['lastUpdate'] = new MongoDate();
+                        $ul['action'] = $action;
+                        $ul['deliverTo'] = $outlet_name;
+                        $ul['deliverToId'] = $outlet_id;
+                        $ul['returnTo'] = $outlet_name;
+                        $ul['returnToId'] = $outlet_id;
+
+                        $unit_id = $ul['_id'];
+
+                        unset($ul['_id']);
+
+                        $ul['unitId'] = $unit_id;
+
+                        Stockunitlog::insert($ul);
+
+                        $history = array(
+                            'datetime'=>new MongoDate(),
+                            'action'=>$action,
+                            'price'=>$ul['productDetail']['priceRegular'],
+                            'status'=>$ul['status'],
+                            'outletName'=>$ul['outletName'],
+                            'deliverTo'=>$outlet_name,
+                            'deliverToId'=>$outlet_id
+                        );
+
+                        $u->push('history', $history);
+
+                        $u->outletId = $outlet_id;
+                        $u->outletName = $outlet_name;
+
+                        $u->save();
+
                         $res = 'OK';
                         $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
 
@@ -126,6 +237,62 @@ class AjaxController extends BaseController {
 
                 break;
             case 'return':
+                    if(is_null($unit_id)){
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: NOT FOUND';
+                        break;
+                    }
+
+                    $u = Stockunit::where('SKU','=', $SKU)
+                        ->where('_id', 'like', '%'.$unit_id )
+                        ->first();
+
+                    if($u){
+
+                        $ul = $u->toArray();
+
+                        $ul['scancheckDate'] = new MongoDate();
+                        $ul['createdDate'] = new MongoDate();
+                        $ul['lastUpdate'] = new MongoDate();
+                        $ul['action'] = $action;
+                        $ul['deliverTo'] = $outlet_name;
+                        $ul['deliverToId'] = $outlet_id;
+                        $ul['returnTo'] = $outlet_name;
+                        $ul['returnToId'] = $outlet_id;
+
+                        $unit_id = $ul['_id'];
+
+                        unset($ul['_id']);
+
+                        $ul['unitId'] = $unit_id;
+
+                        Stockunitlog::insert($ul);
+
+                        $history = array(
+                            'datetime'=>new MongoDate(),
+                            'action'=>$action,
+                            'price'=>$ul['productDetail']['priceRegular'],
+                            'status'=>$ul['status'],
+                            'outletName'=>$ul['outletName'],
+                            'returnTo'=>$outlet_name,
+                            'returnToId'=>$outlet_id
+                        );
+
+                        $u->push('history', $history);
+
+                        $u->outletId = $outlet_id;
+                        $u->outletName = $outlet_name;
+
+                        $u->save();
+
+                        $res = 'OK';
+                        $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
+
+                    }else{
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
+                    }
+
                 break;
             default:
                 break;
@@ -451,6 +618,48 @@ class AjaxController extends BaseController {
         }
 
     }
+
+    public function postAssigncat(){
+        $in = Input::get();
+
+        $category = $in['category'];
+
+        $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
+
+        $product_ids = $in['product_ids'];
+
+        foreach($product_ids as $p){
+            $prop = Product::find($p);
+            $prop->category = $cats[$category];
+            $prop->categoryLink = $category;
+            $prop->save();
+        }
+
+        return Response::json(array('result'=>'OK'));
+
+    }
+
+    public function postUnassign(){
+        $in = Input::get();
+
+        $user_id = $in['user_id'];
+
+        $prop_ids = $in['prop_ids'];
+
+        foreach($prop_ids as $p){
+            $prop = Property::find($p);
+
+            if($prop){
+                $prop->pull('assigned_user',$user_id);
+                $prop->save();
+            }
+
+        }
+
+        return Response::json(array('result'=>'OK'));
+
+    }
+
 
     public function getPlaylist(){
         $mc = LMongo::collection('playlist');

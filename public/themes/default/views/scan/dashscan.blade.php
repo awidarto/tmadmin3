@@ -1,13 +1,16 @@
 <div id="btn-func" class="btn-group" data-toggle="buttons-radio">
-  <button type="button" class="btn btn-large active">Check</button>
-  <button type="button" class="btn btn-large">Sell</button>
-  <button type="button" class="btn btn-large">Deliver</button>
-  <button type="button" class="btn btn-large">Return</button>
+  <button type="button" class="action-select btn btn-large active">Check</button>
+  <button type="button" class="action-select btn btn-large">Sell</button>
+  <button type="button" class="action-select btn btn-large">Deliver</button>
+  <button type="button" class="action-select btn btn-large">Return</button>
 </div>
 
 <div class="form-horizontal">
-    {{ Former::select('outlet')->options(Prefs::getOutlet()->OutletToSelection('id','name') )->id('scanoutlet') }} &nbsp;<span>select one of existing outlet before scanning</span><br />
-    {{ Former::checkbox('')->id('outlet-active')->text('Only search in selected outlet') }}<br />
+    <div id="outlet-box">
+        {{ Former::select('outlet')->options(Prefs::getOutlet()->OutletToSelection('id','name') )->id('scanoutlet') }} &nbsp;<span>select one of existing outlet before scanning</span><br />
+        {{ Former::checkbox('')->id('outlet-active')->text('Only search in selected outlet') }}<br />
+    </div>
+
     {{ Former::text('barcode','')->id('barcode')->class('span9 scan-in')->autocomplete('off')->placeholder('Put cursor in this box before scanning') }}
 
     <div id="scanResult">
@@ -42,6 +45,29 @@
 $(document).ready(function() {
 
     $('#barcode').focus();
+
+    $('button.action-select').on('click',function(){
+        var action = $(this).html();
+        console.log(action);
+        if(action == 'Sell'){
+            $('#outlet-box').hide();
+        }
+
+        if(action == 'Check'){
+            $('#outlet-box').show();
+        }
+
+        if(action == 'Deliver'){
+            $('#outlet-box').show();
+            $('[for="scanoutlet"]').html('Deliver To');
+        }
+
+        if(action == 'Return'){
+            $('#outlet-box').show();
+            $('[for="scanoutlet"]').html('Return To');
+        }
+
+    });
 
     $('#barcode').on('keyup',function(ev){
         if(ev.keyCode == '13'){
