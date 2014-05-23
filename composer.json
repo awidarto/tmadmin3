@@ -8,7 +8,7 @@
         "jenssegers/mongodb": "*",
         "nitmedia/wkhtml2pdf": "dev-master",
         "anahkiasen/former": "dev-master",
-        "intervention/image": "dev-master",
+        "intervention/image": "2.0.0",
         "intervention/imagecache": "dev-master",
         "intervention/helper": "dev-master",
         "intervention/validation": "dev-master",
