@@ -156,8 +156,8 @@ class ProductsController extends AdminController {
         $data['files'] = $files;
 
         $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
-        $data['category'] = $cats[$data['category']];
         $data['categoryLink'] = $data['category'];
+        $data['category'] = $cats[$data['category']];
 
         return $data;
     }
@@ -246,8 +246,8 @@ class ProductsController extends AdminController {
 
 
         $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
-        $data['category'] = $cats[$data['category']];
         $data['categoryLink'] = $data['category'];
+        $data['category'] = $cats[$data['category']];
 
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
