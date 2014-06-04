@@ -11,6 +11,7 @@
 |
 */
 Route::controller('inventory', 'InventoryController');
+Route::controller('pos', 'PosController');
 Route::controller('document', 'DocumentController');
 Route::controller('property', 'PropertyController');
 Route::controller('products', 'ProductsController');
@@ -29,6 +30,19 @@ Route::controller('menu', 'MenuController');
 
 Route::controller('faq', 'FaqController');
 Route::controller('faqcat', 'FaqcatController');
+
+Route::controller('picture','PictureController');
+
+Route::controller('enquiry', 'EnquiryController');
+
+Route::controller('order', 'OrderController');
+
+Route::controller('newsletter', 'NewsletterController');
+Route::controller('campaign', 'CampaignController');
+Route::controller('contactgroup', 'ContactgroupController');
+
+Route::controller('brochure', 'BrochureController');
+Route::controller('option', 'OptionController');
 
 Route::controller('glossary', 'GlossaryController');
 
@@ -194,7 +208,7 @@ Route::get('pdf',function(){
     $html2pdf->Output('exemple.pdf','D');
 });
 
-
+/*
 Route::get('brochure/dl/{id}',function($id){
 
     $prop = Property::find($id)->toArray();
@@ -212,6 +226,7 @@ Route::get('brochure/dl/{id}',function($id){
 Route::get('brochure',function(){
     View::make('print.brochure');
 });
+*/
 
 Route::get('inc/{entity}',function($entity){
 
