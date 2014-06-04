@@ -155,6 +155,10 @@ class ProductsController extends AdminController {
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
 
+        $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
+        $data['category'] = $cats[$data['category']];
+        $data['categoryLink'] = $category;
+
         return $data;
     }
 
@@ -238,6 +242,16 @@ class ProductsController extends AdminController {
             $data['brc1'] = '';
             $data['brc2'] = '';
             $data['brc3'] = '';
+        }
+
+
+        $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
+        $data['category'] = $cats[$data['category']];
+        $data['categoryLink'] = $category;
+
+        foreach($product_ids as $p){
+            $prop = Product::find($p);
+            $prop->save();
         }
 
 
