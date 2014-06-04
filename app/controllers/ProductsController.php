@@ -157,7 +157,7 @@ class ProductsController extends AdminController {
 
         $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
         $data['category'] = $cats[$data['category']];
-        $data['categoryLink'] = $category;
+        $data['categoryLink'] = $data['category'];
 
         return $data;
     }
@@ -247,7 +247,7 @@ class ProductsController extends AdminController {
 
         $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
         $data['category'] = $cats[$data['category']];
-        $data['categoryLink'] = $category;
+        $data['categoryLink'] = $data['category'];
 
         foreach($product_ids as $p){
             $prop = Product::find($p);
