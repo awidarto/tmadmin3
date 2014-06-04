@@ -60,17 +60,17 @@ class PosController extends AdminController {
     {
 
         $this->fields = array(
-            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('unitId',array('kind'=>'text','query'=>'like','callback'=>'shortunit','pos'=>'after','attr'=>array('class'=>'expander'),'show'=>true)),
             array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
             array('outletName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true )),
-            array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('action',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('quantity',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('unitTotal',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
         );
 
         $this->place_action = 'none';
 
-        $this->def_order_by = 'scancheckDate';
+        $this->def_order_by = 'SKU';
 
         $this->def_order_dir = 'desc';
 
@@ -295,6 +295,24 @@ class PosController extends AdminController {
 
         $counter = 1 + $pagestart;
 
+        //grouping
+        $artemp = array();
+        $arkeys = array();
+
+        foreach($results as $doc){
+            if(in_array($doc['SKU'],$arkeys)){
+                $doc['quantity'] = $doc['quantity'] + 1;
+                $doc['unitTotal'] = $doc['unitTotal'] + $doc;
+            }else{
+                $doc['quantity'] = 1;
+                $doc['unitTotal'] = $doc['unitTotal'] + $doc['productDetail']['priceRegular'];
+                $artemp[] = $doc;
+            }
+        }
+
+        $results = $artemp;
+
+
         foreach ($results as $doc) {
 
             $extra = $doc;
@@ -377,6 +395,7 @@ class PosController extends AdminController {
 
                         }
 
+                        $row['extra'] = $extra;
 
                     }else{
                         $row[] = '';
@@ -388,7 +407,6 @@ class PosController extends AdminController {
                 $row[] = $actions;
             }
 
-            $row['extra'] = $extra;
 
             $aadata[] = $row;
 
@@ -407,6 +425,161 @@ class PosController extends AdminController {
         );
 
         return Response::json($result);
+    }
+
+    public function postScan()
+    {
+        $in = Input::get();
+
+        $code = $in['txtin'];
+        $outlet_id = $in['outlet_id'];
+        $use_outlet = $in['search_outlet'];
+        $action = strtolower( $in['action'] );
+        $session = $in['session'];
+
+        $outlets = Prefs::getOutlet()->OutletToSelection('_id', 'name', false);
+
+        $outlet_name = $outlets[$outlet_id];
+
+        $res = 'OK';
+        $msg = '';
+
+        if(strripos($code, '|') >= 0){
+            $code = explode('|', $code);
+            $SKU = $code[0];
+            $unit_id = $code[1];
+        }else{
+            $SKU = trim($code);
+            $unit_id = null;
+        }
+
+        switch($action){
+            case 'add':
+                if(is_null($unit_id)){
+                    $res = 'NOK';
+                    $msg = 'SKU: '.$SKU.' <br />Unit ID: NOT FOUND';
+                    break;
+                }
+                $u = Stockunit::where('SKU','=', $SKU)
+                    ->where('_id', 'like', '%'.$unit_id )
+                    ->where('status','available')
+                    ->first();
+
+                if($u){
+
+                    $ul = $u->toArray();
+
+                    $ul['scancheckDate'] = new MongoDate();
+                    $ul['createdDate'] = new MongoDate();
+                    $ul['lastUpdate'] = new MongoDate();
+                    $ul['action'] = $action;
+                    $ul['status'] = 'reserved';
+                    $ul['deliverTo'] = $outlet_name;
+                    $ul['deliverToId'] = $outlet_id;
+                    $ul['returnTo'] = $outlet_name;
+                    $ul['returnToId'] = $outlet_id;
+
+                    $ul['sessionId'] = $session;
+
+                    $unit_id = $ul['_id'];
+
+                    unset($ul['_id']);
+
+                    $ul['unitId'] = $unit_id;
+
+                    Transaction::insert($ul);
+
+                    $history = array(
+                        'datetime'=>new MongoDate(),
+                        'action'=>$action,
+                        'price'=>$ul['productDetail']['priceRegular'],
+                        'status'=>$ul['status'],
+                        'outletName'=>$ul['outletName']
+                    );
+
+                    //change status to sold
+                    $u->status = 'reserved';
+                    $u->push('history', $history);
+
+                    $u->save();
+
+                    $res = 'OK';
+                    $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
+
+                }else{
+                    $res = 'NOK';
+                    $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
+                }
+
+                break;
+            case 'remove':
+                    if(is_null($unit_id)){
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: NOT FOUND';
+                        break;
+                    }
+
+                    $u = Stockunit::where('SKU','=', $SKU)
+                        ->where('_id', 'like', '%'.$unit_id )
+                        ->first();
+
+                    if($u){
+
+                        $ul = $u->toArray();
+
+                        $ul['scancheckDate'] = new MongoDate();
+                        $ul['createdDate'] = new MongoDate();
+                        $ul['lastUpdate'] = new MongoDate();
+                        $ul['action'] = $action;
+                        $ul['deliverTo'] = $outlet_name;
+                        $ul['deliverToId'] = $outlet_id;
+                        $ul['returnTo'] = $outlet_name;
+                        $ul['returnToId'] = $outlet_id;
+
+                        $unit_id = $ul['_id'];
+
+                        unset($ul['_id']);
+
+                        $ul['unitId'] = $unit_id;
+
+                        Stockunitlog::insert($ul);
+
+                        $history = array(
+                            'datetime'=>new MongoDate(),
+                            'action'=>$action,
+                            'price'=>$ul['productDetail']['priceRegular'],
+                            'status'=>$ul['status'],
+                            'outletName'=>$ul['outletName']
+                        );
+
+                        $u->push('history', $history);
+
+                        $u->save();
+
+                        $res = 'OK';
+                        $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
+
+                    }else{
+                        $res = 'NOK';
+                        $msg = 'SKU: '.$SKU.' <br />Unit ID: '.$unit_id.' <br />NOT FOUND in this outlet';
+                    }
+
+                break;
+            default:
+                break;
+        }
+
+        $result = array(
+            'result'=>$res,
+            'msg'=>$msg
+        );
+
+        return Response::json($result);
+    }
+
+    public function unitPrice($data)
+    {
+        return Ks::idr($data['productDetail']['priceRegular']);
     }
 
     public function beforeSave($data)

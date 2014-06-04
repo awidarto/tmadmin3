@@ -2,8 +2,8 @@
   <button type="button" id="new-session" class="action-select btn btn-large active">New</button>
 </div>
 
-<div id="btn-func" class="btn-group" data-toggle="buttons-radio">
-  <button type="button" class="session-select btn btn-large active" id="45GGVBN" >1</button>
+<div id="session-list" class="btn-group" data-toggle="buttons-radio">
+
 </div>
 
 <div class="form-horizontal">
@@ -16,9 +16,13 @@
     <div id="scanResult">
 
     </div>
+    <div>
+        <h1 id="total" ></h1>
+    </div>
 </div>
 
 <style type="text/css">
+    #session-list button,
     #btn-func button{
         font-size: 24px;
         font-weight: bold;
@@ -28,6 +32,15 @@
 
     #btn-func button.active{
         background-color: #211;
+        color: #eee;
+    }
+
+    #session-list button{
+        min-width: 50px;
+    }
+
+    #session-list button.active{
+        background-color: maroon;
         color: #eee;
     }
 
@@ -71,7 +84,7 @@ $(document).ready(function() {
 
     $('#barcode').on('keyup',function(ev){
         if(ev.keyCode == '13'){
-            onScanResult();
+            onScanResult('add');
         }
         //$('#barcode').val($('#barcode').val() + event.keyCode);
     });
@@ -83,13 +96,24 @@ $(document).ready(function() {
 
     $('#new-session').on('click',function(){
 
+        var session_list = $('#session-list button');
+        var newsession = makesession();
+        var label = session_list.length + 1;
+
+        console.log(session_list);
+
+        var newitem = $('<button>').html(label).attr('class','session-select btn btn-large active').data('session',newsession).attr('id',newsession);
+
+        $('#session-list button').removeClass('active');
+        $('#session-list').append(newitem);
+
     });
 
-    function onScanResult(){
+    function onScanResult(action){
         var txtin = $('#barcode').val();
         var outlet_id = $('#scanoutlet').val();
         var session = $('.session-select.active').attr('id');
-        var action = $('#btn-func button.active').html();
+        var action = action;
 
         console.log(session);
 
@@ -103,11 +127,12 @@ $(document).ready(function() {
 
             var search_outlet = ($('#outlet-active').is(':checked'))?1:0;
 
-            $.post('{{ URL::to('ajax/scan') }}',
+            $.post('{{ URL::to('pos/scan') }}',
                 {
                     'txtin':txtin,
                     'outlet_id': outlet_id,
                     'search_outlet': search_outlet,
+                    'session':session,
                     'action':action
                 },
                 function(data){
@@ -125,6 +150,16 @@ $(document).ready(function() {
 
     function clearList(){
         $('#barcode').val('').focus();
+    }
+
+    function makesession(){
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ ){
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
     }
 
 });
