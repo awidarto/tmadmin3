@@ -249,12 +249,6 @@ class ProductsController extends AdminController {
         $data['category'] = $cats[$data['category']];
         $data['categoryLink'] = $data['category'];
 
-        foreach($product_ids as $p){
-            $prop = Product::find($p);
-            $prop->save();
-        }
-
-
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
 
