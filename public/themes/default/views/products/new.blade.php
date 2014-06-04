@@ -11,7 +11,7 @@
     <div class="span6">
 
         {{ Former::text('SKU','SKU') }}
-        {{ Former::select('category','Category')->options(Prefs::ExtractProductCategory()) }}
+        {{ Former::select('categoryLink','Category')->options(Prefs::ExtractProductCategory()) }}
         {{ Former::text('series','Series') }}
         {{ Former::text('itemDescription','Description') }}
         {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
