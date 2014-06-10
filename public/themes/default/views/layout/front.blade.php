@@ -142,8 +142,8 @@
                 @if(Auth::check())
                     <p class="navbar-text pull-right">
                         Hello {{ Auth::user()->fullname }}&nbsp;&nbsp;
-                        <a href="#" ><i class="icon-cog"></i>&nbsp;Settings</a>
-                        <a href="{{ URL::to('logout')}}" ><i class="icon-logout"></i>&nbsp;Logout</a>
+                        <a class="btn btn-primary" href="#" ><i class="icon-cog"></i>&nbsp;Settings</a>
+                        <a class="btn btn-info" href="{{ URL::to('logout')}}" style="color:white;background-color:maroon;" ><i class="icon-signout"></i>&nbsp;Logout</a>
                     </p>
                 @else
                     <form method="POST" action="{{ URL::to('login')}}" class="navbar-form pull-right">
