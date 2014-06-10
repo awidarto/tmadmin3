@@ -12,16 +12,6 @@
 
     <!-- Le styles -->
     <!-- Bootplus -->
-    {{--
-    {{ HTML::style('bootflat/css/bootflat.min.css') }}
-
-    {{ HTML::style('bootplus/css/bootplus.min.css') }}
-
-    {{ HTML::style('bootplus/css/bootplus-responsive.min.css') }}
-
-    --}}
-    {{ HTML::style('css/typography.css') }}
-
     {{ HTML::style('bootstrap232/css/bootstrap.css') }}
 
     {{ HTML::style('bootstrap232/css/bootstrap-responsive.css') }}
@@ -65,7 +55,6 @@
         padding: 60px;
     }
 
-    {{--
     .navbar .nav>li>a {
         font-size: 12px;
         padding: 16px 0 10px 0;
@@ -74,7 +63,6 @@
     .navbar .nav>li>a.active{
         border-bottom: 2px solid rgb(66, 127, 237);
     }
-    --}}
 
     @media (max-width: 980px) {
     /* Enable use of floated navbar text */

@@ -10,9 +10,17 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+    {{ HTML::style('css/typography.css') }}
 
-    {{ HTML::style('bootplus/css/bootplus.min.css') }}
+    {{ HTML::style('bootstrap232/css/bootstrap.css') }}
+
+    {{ HTML::style('bootstrap232/css/bootstrap-responsive.css') }}
+
+    {{ HTML::style('aflat/css/aflat.css') }}
+
+    {{ HTML::style('aflat/css/aflat-responsive.css') }}
+
+    {{ HTML::style('bootplus/css/font-awesome.min.css') }}
 
     <style type="text/css">
     body {

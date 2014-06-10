@@ -1,10 +1,15 @@
 <div id="btn-func" class="btn-group" data-toggle="buttons-radio">
-  <button type="button" id="new-session" class="action-select btn btn-large active">New</button>
+  <button type="button" id="new-session" class="action-select btn btn-large btn-primary active">New</button>
 </div>
 
 <div id="session-list" class="btn-group" data-toggle="buttons-radio">
+    <?php $cnt = 0 ;?>
+    @foreach($additional_page_data['open_sessions'] as $sess)
+        <button type="button" id="{{ $sess }}" class="session-select {{ ($cnt == 0)?'active':'' }} btn btn-large">{{ $cnt++ }}</button>
+    @endforeach
 
 </div>
+    {{ Former::hidden('current_session')->id('current_session')}}
 
 <div class="form-horizontal">
     <div id="outlet-box">
@@ -31,8 +36,10 @@
     }
 
     #btn-func button.active{
+        /*
         background-color: #211;
         color: #eee;
+        */
     }
 
     #session-list button{
@@ -40,8 +47,10 @@
     }
 
     #session-list button.active{
+        /*
         background-color: maroon;
         color: #eee;
+        */
     }
 
     input.scan-in{
@@ -58,6 +67,8 @@
 $(document).ready(function() {
 
     $('#barcode').focus();
+
+    populateSession($('#scanoutlet').val());
 
     $('button.action-select').on('click',function(){
         var action = $(this).html();
@@ -82,6 +93,13 @@ $(document).ready(function() {
 
     });
 
+    $('#session-list').on('click',function(e){
+        var session = e.target.id;
+        console.log(session);
+        $('#current_session').val(session);
+        oTable.fnDraw();
+    });
+
     $('#barcode').on('keyup',function(ev){
         if(ev.keyCode == '13'){
             onScanResult('add');
@@ -92,6 +110,11 @@ $(document).ready(function() {
     $('#barcode').on('focus',function(ev){
         $('#barcode').val('');
         //$('#barcode').val($('#barcode').val() + event.keyCode);
+    });
+
+    $('#scanoutlet').on('change',function(){
+        var id = $(this).val();
+        populateSession(id);
     });
 
     $('#new-session').on('click',function(){
@@ -106,13 +129,39 @@ $(document).ready(function() {
 
         $('#session-list button').removeClass('active');
         $('#session-list').append(newitem);
+        $('#current_session').val(newsession);
 
     });
+
+    function populateSession(outlet){
+        $.post('{{ URL::to('pos/opensession') }}',
+            {
+                'outlet_id': outlet,
+            },
+            function(data){
+                $('#session-list').html('');
+                $('#current_session').val('');
+                var label = 0;
+                $.each(data.opensession, function( index, value ) {
+                    var newitem = $('<button>').html(label + 1).attr('class','session-select btn btn-large active').data('session',value).attr('id',value);
+                    if(label > 0){
+                        newitem.removeClass('active');
+                    }else{
+                        $('#current_session').val(value);
+                    }
+                    label++;
+                    $('#session-list').append(newitem);
+                });
+                oTable.fnDraw();
+            },'json'
+        );
+
+    }
 
     function onScanResult(action){
         var txtin = $('#barcode').val();
         var outlet_id = $('#scanoutlet').val();
-        var session = $('.session-select.active').attr('id');
+        var session = $('#current_session').val();
         var action = action;
 
         console.log(session);
@@ -140,6 +189,7 @@ $(document).ready(function() {
                         oTable.fnDraw();
                     }
                     $('#scanResult').html(data.msg);
+                    $('#total').html(data.total_price);
                     $('#barcode').val('');
                     $('#barcode').focus();
                 },'json'

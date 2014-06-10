@@ -26,27 +26,32 @@ textarea{
 	padding: 4px 4px;
     width: 100%;
 }
-
 .styled-select{
+    margin-top: 2px;
+/*
 	display: block;
 	border: 1px solid #cccccc;
 	padding: 0px;
 	height:24px;
 	margin-top: 10px;
 	background: url(../images/dk_arrows.png) no-repeat 95% 50% #fff;
+*/
 }
 
 .styled-select select{
+    height: 26px;
+    /*
 	margin:0px;
 	margin-left: 2px;
 	background: transparent;
 	font-size: 11px;
 	line-height: 1em;
-	height: 24px;
-	border: 0;
+    border: 0;
 	border-radius: 0;
 	-webkit-appearance: none;
+    */
 }
+
 
 .ingrid {
 	margin-top: 0px;
@@ -75,11 +80,20 @@ textarea{
 
 #searchinput input[type="text"]{
 	font-size: 11px;
-	margin-bottom: 10px;
-	margin-top: 10px;
-	min-height: 26px;
-	height:24px;
+	/*margin-bottom: 10px;*/
+	margin-top: 4px;
+	min-height: 16px;
+	height:16px;
 	border: 1px solid #cccccc;
+}
+
+#searchinput input[type="text"].dateinput{
+    font-size: 11px;
+    /*margin-bottom: 10px;*/
+    margin-top: 4px;
+    min-height: 27px;
+    height:16px;
+    border: 1px solid #cccccc;
 }
 
 #searchinput{
@@ -101,7 +115,18 @@ thead #searchinput td{
 }
 
 thead .add-on{
-	margin-top: 10px;
+	margin-top: 4px;
+}
+
+.input-append .add-on, .input-prepend .add-on{
+    height: 17px;
+    min-height: 16px;
+    min-width: 10px;
+    line-height: 15px;
+}
+
+.command-bar .btn{
+    margin-bottom: 10px;
 }
 
 #clearsearch{

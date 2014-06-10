@@ -30,15 +30,27 @@ class PosController extends AdminController {
 
         $this->heads = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
-            array('SKU',array('search'=>true,'sort'=>true)),
-            array('Unit Id',array('search'=>true,'sort'=>true)),
-            array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
-            array('Quantity',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>''))),
-            array('Unit Price',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>''))),
-            array('Total',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
+            array('Item',array('search'=>false,'sort'=>false)),
+            array('Unit Id',array('search'=>false,'sort'=>false)),
+            array('Quantity',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Unit Price',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Total',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>'')))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
+
+        $open_session = Transaction::where('status','reserved')
+                ->where('outletId','')
+                ->distinct('sessionId')->get();
+
+        $open_sessions = array();
+        foreach ($open_session as $op) {
+            $open_sessions[] = $op[0];
+        }
+
+        $add_data = array('open_sessions'=>$open_sessions);
+
+        $this->additional_page_data = $add_data;
 
         $this->can_add = false;
 
@@ -46,7 +58,9 @@ class PosController extends AdminController {
 
         $this->is_additional_action = true;
 
-        $this->additional_action = View::make('scan.poscan')->render();
+        $this->additional_action = View::make('scan.poscan')->with('additional_page_data',$this->additional_page_data)->render();
+
+        $this->js_additional_param = "aoData.push( { 'name':'session', 'value': $('#current_session').val() } );";
 
         $this->title = 'Point of Sales';
 
@@ -60,12 +74,11 @@ class PosController extends AdminController {
     {
 
         $this->fields = array(
-            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('unitId',array('kind'=>'text','query'=>'like','callback'=>'shortunit','pos'=>'after','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('outletName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true )),
+            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'itemDesc')),
+            array('unitId',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
             array('quantity',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('unitTotal',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('unitPrice',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true, 'callback'=>'toIdr' )),
+            array('unitTotal',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true, 'callback'=>'toIdr')),
         );
 
         $this->place_action = 'none';
@@ -73,6 +86,12 @@ class PosController extends AdminController {
         $this->def_order_by = 'SKU';
 
         $this->def_order_dir = 'desc';
+
+        $session = Input::get('session');
+
+        $session = (is_null($session) || !isset($session))?'':$session;
+
+        $this->additional_query = array('sessionId'=>$session);
 
         return parent::postIndex();
     }
@@ -297,26 +316,34 @@ class PosController extends AdminController {
 
         //grouping
         $artemp = array();
-        $arkeys = array();
 
         foreach($results as $doc){
-            if(in_array($doc['SKU'],$arkeys)){
-                $doc['quantity'] = $doc['quantity'] + 1;
-                $doc['unitTotal'] = $doc['unitTotal'] + $doc;
+            if(in_array($doc->SKU, array_keys($artemp) )){
+                $tdoc = $artemp[$doc->SKU];
+                $tdoc->quantity = $tdoc->quantity + $doc->quantity;
+                $tdoc->unitTotal = $tdoc->unitTotal + $doc->unitTotal;
+                $tdoc->unitId = $tdoc->unitId.'<br />'.$this->shortunit( array('unitId'=>$doc->unitId) );
+                $artemp[$doc->SKU] = $tdoc;
             }else{
-                $doc['quantity'] = 1;
-                $doc['unitTotal'] = $doc['unitTotal'] + $doc['productDetail']['priceRegular'];
-                $artemp[] = $doc;
+                $doc->quantity = 1;
+                $doc->unitTotal = $doc->productDetail['priceRegular'];
+                $doc->unitId = $this->shortunit( array('unitId'=>$doc->unitId) );
+                $artemp[$doc->SKU] = $doc;
             }
         }
 
-        $results = $artemp;
+        $results = array_values( $artemp );
 
+        $count_all = count($results);
+        $count_display_all = count($results);
+
+        //print_r($results);
+        $total_price = 0;
 
         foreach ($results as $doc) {
 
             $extra = $doc;
-
+            $total_price = $total_price + $doc['unitTotal'];
             //$select = Former::checkbox('sel_'.$doc['_id'])->check(false)->id($doc['_id'])->class('selector');
             $actionMaker = $this->makeActions;
 
@@ -413,6 +440,8 @@ class PosController extends AdminController {
             $counter++;
         }
 
+        $aadata[] = array('','','','','','<h1 style="text-align:right;">IDR</h1>','<h1>'.Ks::idr($total_price).'</h1>');
+
         $sEcho = (int) Input::get('sEcho');
 
         $result = array(
@@ -474,12 +503,16 @@ class PosController extends AdminController {
                     $ul['lastUpdate'] = new MongoDate();
                     $ul['action'] = $action;
                     $ul['status'] = 'reserved';
+                    $ul['quantity'] = 1;
+                    $ul['unitPrice'] = $ul['productDetail']['priceRegular'];
+                    $ul['unitTotal'] = $ul['productDetail']['priceRegular'];
                     $ul['deliverTo'] = $outlet_name;
                     $ul['deliverToId'] = $outlet_id;
                     $ul['returnTo'] = $outlet_name;
                     $ul['returnToId'] = $outlet_id;
 
                     $ul['sessionId'] = $session;
+                    $ul['sessionStatus'] = 'open';
 
                     $unit_id = $ul['_id'];
 
@@ -491,7 +524,7 @@ class PosController extends AdminController {
 
                     $history = array(
                         'datetime'=>new MongoDate(),
-                        'action'=>$action,
+                        'action'=>'pos',
                         'price'=>$ul['productDetail']['priceRegular'],
                         'status'=>$ul['status'],
                         'outletName'=>$ul['outletName']
@@ -504,6 +537,7 @@ class PosController extends AdminController {
                     $u->save();
 
                     $res = 'OK';
+
                     $msg = 'SKU: '.$ul['SKU'].' <br />Unit ID: '.$unit_id.' <br />Outlet: '.$ul['outletName'];
 
                 }else{
@@ -569,12 +603,43 @@ class PosController extends AdminController {
                 break;
         }
 
+        $total_price = Transaction::where('sessionId',$session)
+                        ->sum('unitPrice');
+
         $result = array(
+            'total_price'=>$total_price,
             'result'=>$res,
             'msg'=>$msg
         );
 
         return Response::json($result);
+    }
+
+    public function postOpensession()
+    {
+        $outlet = Input::get('outlet_id');
+
+        $open_session = Transaction::where('outletId',$outlet)
+                            ->where('sessionStatus','open')
+                            ->distinct('sessionId')->get()->toArray();
+
+        $open_sessions = array();
+        foreach ($open_session as $op) {
+            $open_sessions[] = $op[0];
+        }
+
+        $result = array(
+            'opensession'=>$open_sessions,
+            'result'=>'OK'
+        );
+
+        return Response::json($result);
+
+    }
+
+    public function itemDesc($data)
+    {
+        return $data['SKU'].'<br />'.$data['productDetail']['itemDescription'];
     }
 
     public function unitPrice($data)
@@ -982,6 +1047,11 @@ class PosController extends AdminController {
 
     public function shortunit($data){
         return substr($data['unitId'], -10);
+    }
+
+    public function toIdr($data, $field)
+    {
+        return '<h5 style="text-align:right;">IDR '. Ks::idr( $data[$field] ) .'</h5>' ;
     }
 
     public function pics($data)

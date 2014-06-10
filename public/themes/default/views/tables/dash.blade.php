@@ -395,7 +395,7 @@ th:first-child{
                 "sAjaxSource": "{{$ajaxsource}}",
                 "oLanguage": { "sSearch": "Search "},
                 "sPaginationType": "full_numbers",
-                "sDom": 'Tlrpit',
+                "sDom": 'Tlpirt',
                 "iDisplayLength":50,
 
                 @if(isset($excludecol) && $excludecol != '')

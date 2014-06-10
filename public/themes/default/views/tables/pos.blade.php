@@ -181,7 +181,14 @@ th:first-child{
          </tbody>
 
       </table>
-
+      <div class="row-fluid">
+        <div class="span6">
+            {{ Former::button('Cancel')->class('btn btn-danger btn-block btn-large') }}
+        </div>
+        <div class="span6">
+            {{ Former::button('Pay')->class('btn btn-primary btn-block btn-large') }}
+        </div>
+      </div>
    </div>
    <div class="span6">
 
@@ -395,7 +402,7 @@ th:first-child{
                 "sAjaxSource": "{{$ajaxsource}}",
                 "oLanguage": { "sSearch": "Search "},
                 "sPaginationType": "full_numbers",
-                "sDom": 'Tlrpit',
+                "sDom": 'Tlpirt',
                 "iDisplayLength":50,
 
                 @if(isset($excludecol) && $excludecol != '')
@@ -412,6 +419,7 @@ th:first-child{
                     { "bSortable": false, "aTargets": [ {{ $disablesort }} ] }
                  ],
                 "fnServerData": function ( sSource, aoData, fnCallback ) {
+                    {{ $js_additional_param }}
                     $.ajax( {
                         "dataType": 'json',
                         "type": "POST",

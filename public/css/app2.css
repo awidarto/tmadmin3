@@ -64,7 +64,7 @@ blockquote p {
     font-size: 18px;
     font-weight: 200;
     color: #000;
-    text-shadow: 0 1px 0 #ce4213;
+    /*text-shadow: 0 1px 0 #ce4213;*/
 }
 
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
@@ -75,7 +75,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 }
 
 select{
-    height: 24px;
+    height: 26px;
 }
 
 option{
@@ -136,11 +136,6 @@ a.btn {
     min-width: 60px;
 }
 
-div.dataTables_length label {
-    margin-top: 20px;
-    line-height: 24px;
-}
-
 .label, .badge {
     display: inline-block;
     padding: 4px 8px;
@@ -193,13 +188,6 @@ div.dataTables_length label {
 
 .form-horizontal .controls {
     margin-left: 130px;
-}
-
-.input-append .add-on, .input-prepend .add-on{
-    height: 24px;
-    min-height: 24px;
-    min-width: 10px;
-    line-height: 25px;
 }
 
 .row-fluid [class*="span"]{
