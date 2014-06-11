@@ -65,7 +65,7 @@ Route::controller('ajax', 'AjaxController');
 Route::controller('home', 'HomeController');
 
 //Route::get('/', 'ProductsController@getIndex');
-Route::get('/', 'DashboardController@getIndex');
+Route::get('/', 'PosController@getIndex');
 
 
 Route::get('content/pages', 'PagesController@getIndex');

@@ -333,8 +333,8 @@ class ProductsController extends AdminController {
         $this->heads = null;
 
         $this->fields = array(
-                array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-                array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+                array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('itemGroup',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),

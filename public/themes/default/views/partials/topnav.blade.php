@@ -10,8 +10,8 @@
 <ul class="nav">
     @if(Auth::check())
 
-        <li><a href="{{ URL::to('dashboard') }}" {{ sa('dashboard') }} >Dashboard</a></li>
         <li><a href="{{ URL::to('pos') }}" {{ sa('pos') }} >POS</a></li>
+        <li><a href="{{ URL::to('dashboard') }}" {{ sa('dashboard') }} >Stock Check</a></li>
 
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">

@@ -183,10 +183,10 @@ th:first-child{
       </table>
       <div class="row-fluid">
         <div class="span6">
-            {{ Former::button('Cancel')->class('btn btn-danger btn-block btn-large') }}
+            {{ Former::button('Cancel')->id('btn-cancel')->class('btn btn-danger btn-block btn-large') }}
         </div>
         <div class="span6">
-            {{ Former::button('Pay')->class('btn btn-primary btn-block btn-large') }}
+            {{ Former::button('Pay')->id('btn-pay')->class('btn btn-primary btn-block btn-large') }}
         </div>
       </div>
    </div>
@@ -222,6 +222,22 @@ th:first-child{
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" id="prop-save-chg">Save changes</button>
     </div>
+</div>
+
+<div id="pay-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Pay</h3>
+  </div>
+  <div class="modal-body">
+    <h4 id="prop-trx-order"></h4>
+    {{ Former::hidden('prop_id')->id('prop-trx-chg') }}
+    {{ Former::select('status', 'Status')->options(Config::get('ia.publishing'))->id('prop-stat-chg')}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-large" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary btn-large" id="prop-save-chg">OK</button>
+  </div>
 </div>
 
 
@@ -711,6 +727,10 @@ th:first-child{
                     'json'
                 );
 
+        });
+
+        $('#btn-pay').on('click',function(){
+            $('#pay-modal').modal();
         });
 
         $('table.dataTable').click(function(e){

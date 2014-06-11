@@ -1893,10 +1893,10 @@ select:focus, select:active{
   -moz-animation-name: fadeInDown;
   -o-animation-name: fadeInDown;
   animation-name: fadeInDown;
-  -webkit-animation-duration: 1s;
-     -moz-animation-duration: 1s;
-       -o-animation-duration: 1s;
-          animation-duration: 1s;
+  -webkit-animation-duration: 0.1s;
+     -moz-animation-duration: 0.1s;
+       -o-animation-duration: 0.1s;
+          animation-duration: 0.1s;
   -webkit-animation-fill-mode: both;
      -moz-animation-fill-mode: both;
        -o-animation-fill-mode: both;
@@ -1908,10 +1908,10 @@ select:focus, select:active{
   -moz-animation-name: fadeInUp;
   -o-animation-name: fadeInUp;
   animation-name: fadeInUp;
-  -webkit-animation-duration: 1s;
-     -moz-animation-duration: 1s;
-       -o-animation-duration: 1s;
-          animation-duration: 1s;
+  -webkit-animation-duration: 0.1s;
+     -moz-animation-duration: 0.1s;
+       -o-animation-duration: 0.1s;
+          animation-duration: 0.1s;
   -webkit-animation-fill-mode: both;
      -moz-animation-fill-mode: both;
        -o-animation-fill-mode: both;
@@ -1921,21 +1921,21 @@ select:focus, select:active{
 .navbar .nav li.dropdown > .dropdown-toggle .caret {
   border-top-color: #eeeeee;
   border-bottom-color: #eeeeee;
-  transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
-  -webkit-transition: color 0.2s ease-in-out;
-  -moz-transition: color 0.2s ease-in-out;
-  -ms-transition: color 0.2s ease-in-out;
+  transition: color 0.1s ease-in-out;
+  -o-transition: color 0.1s ease-in-out;
+  -webkit-transition: color 0.1s ease-in-out;
+  -moz-transition: color 0.1s ease-in-out;
+  -ms-transition: color 0.1s ease-in-out;
 }
 
 .navbar .nav li.dropdown:hover > .dropdown-toggle .caret {
   border-top-color: #eeeeee;
   border-bottom-color: #eeeeee;
-  transition: color 0.2s ease-in-out;
-  -o-transition: color 0.2s ease-in-out;
-  -webkit-transition: color 0.2s ease-in-out;
-  -moz-transition: color 0.2s ease-in-out;
-  -ms-transition: color 0.2s ease-in-out;
+  transition: color 0.1s ease-in-out;
+  -o-transition: color 0.1s ease-in-out;
+  -webkit-transition: color 0.1s ease-in-out;
+  -moz-transition: color 0.1s ease-in-out;
+  -ms-transition: color 0.1s ease-in-out;
 }
 
 .navbar .nav li.dropdown.open > .dropdown-toggle .caret,
@@ -2005,10 +2005,10 @@ select:focus, select:active{
   -moz-animation-name: fadeInUp;
   -o-animation-name: fadeInUp;
   animation-name: fadeInUp;
-  -webkit-animation-duration: 1s;
-     -moz-animation-duration: 1s;
-       -o-animation-duration: 1s;
-          animation-duration: 1s;
+  -webkit-animation-duration: 0.1s;
+     -moz-animation-duration: 0.1s;
+       -o-animation-duration: 0.1s;
+          animation-duration: 0.1s;
   -webkit-animation-fill-mode: both;
      -moz-animation-fill-mode: both;
        -o-animation-fill-mode: both;

@@ -16,8 +16,11 @@
         {{ Former::select('outlet')->options(Prefs::getOutlet()->OutletToSelection('id','name',false) )->id('scanoutlet') }} &nbsp;<span>select one of existing outlet before scanning</span><br /><br />
     </div>
 
-    {{ Former::text('barcode','')->id('barcode')->class('span9 scan-in')->autocomplete('off')->placeholder('Put cursor in this box before scanning') }}
-
+    {{ Former::text('barcode','')->id('barcode')->class('span8 scan-in')->autocomplete('off')->placeholder('Put cursor in this box before scanning') }}
+    <div id="scan-mode" class="btn-group" data-toggle="buttons-radio">
+      <button type="button" id="mode-reduce" class="mode-select btn btn-large btn-info"><i class="icon-minus"></i></button>
+      <button type="button" id="mode-add" class="mode-select btn btn-large btn-info active"><i class="icon-plus"></i></button>
+    </div>
     <div id="scanResult">
 
     </div>
@@ -28,11 +31,27 @@
 
 <style type="text/css">
     #session-list button,
-    #btn-func button{
+    #btn-func button,
+    #scan-mode button{
         font-size: 24px;
         font-weight: bold;
         min-width: 150px;
         margin-bottom: 30px;
+    }
+
+    #scan-mode button{
+        min-width: 60px;
+        min-height: 30px;
+        background-color: #ccc;
+        height: 55px;
+    }
+
+    #scan-mode{
+        padding-top: 30px;
+    }
+
+    #scan-mode button.active{
+        background-color: #298099;
     }
 
     #btn-func button.active{

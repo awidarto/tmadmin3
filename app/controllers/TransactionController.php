@@ -29,23 +29,11 @@ class TransactionController extends AdminController {
     {
 
         $this->heads = array(
-            array('Transaction ID',array('search'=>true,'sort'=>true)),
-            array('Property ID',array('search'=>true,'sort'=>true)),
-            array('Agent',array('search'=>true,'sort'=>true)),
-            array('Buyer',array('search'=>false,'sort'=>false)),
-            array('Address',array('search'=>true,'sort'=>true)),
-            array('City',array('search'=>true,'sort'=>true)),
-            array('ZIP',array('search'=>true,'sort'=>true)),
-            array('State',array('search'=>true,'sort'=>true)),
-            array('Bed',array('search'=>true,'sort'=>false)),
-            array('Bath',array('search'=>true,'sort'=>true)),
-            array('Pool',array('search'=>true,'sort'=>true)),
-            array('Garage',array('search'=>true,'sort'=>true)),
-            array('Basement',array('search'=>true,'sort'=>true)),
-            array('Category',array('search'=>true,'sort'=>true)),
-            array('Publishing',array('search'=>true,'sort'=>true, 'select'=>Config::get('ia.search_publishing'))),
-            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Item',array('search'=>false,'sort'=>false)),
+            array('Unit Id',array('search'=>false,'sort'=>false)),
+            array('Quantity',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Unit Price',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Total',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>'')))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
@@ -56,54 +44,48 @@ class TransactionController extends AdminController {
 
     }
 
+    public function shortunit($data){
+        return substr($data['unitId'], -10);
+    }
+
+    public function toIdr($data, $field)
+    {
+        return '<h5 style="text-align:right;">IDR '. Ks::idr( $data[$field] ) .'</h5>' ;
+    }
+
+    public function itemDesc($data)
+    {
+        return $data['SKU'].'<br />'.$data['productDetail']['itemDescription'];
+    }
+
+    public function unitPrice($data)
+    {
+        return Ks::idr($data['productDetail']['priceRegular']);
+    }
+
+
     public function postIndex()
     {
 
-/*
-'id' => '529d90d5ccae5b8003000000',
-  'agentId' => 'Agent ID',
-  'agentName' => 'Oddie Octaviadi',
-  'customerId' => 'tb1234',
-  'firstName' => 'Andi',
-  'lastName' => 'Karsono',
-  'company' => 'Kickstartlab',
-  'phone' => '021587897',
-  'email' => 'andy@sinaptix.com',
-  'Street_Address' => 'Komp DKI Joglo Blok D No 3 RT 01/04 Joglo Kembangan',
-  'City' => 'Jakarta',
-  'countryOfOrigin' => 'Indonesia',
-  'state' => '-',
-  'zipCode' => '11640',
-  'fundingMethod' => 'Cash',
-  'legalName' => 'Andi Karsono',
-  'entityType' => 'Personal',
-  'code1' => '1213',
-  'code2' => '3435',
-  'earnestMoneyType1' => 'Cash',
-  'earnestMoney1' => '10000',
-  'earnestMoneyType2' => 'Cash',
-  'earnestMoney2' => '15000',
-  '_token' => 'Tk680Pr6K0wnpaYiXXIyRMY88eUrcO8u5Z0euts0',
-*/
-
         $this->fields = array(
-            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
-            array('propertyId',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('number',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('city',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('zipCode',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('state',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('bed',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('bath',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('pool',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('garage',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('basement',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('publishStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'itemDesc')),
+            array('unitId',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
+            array('quantity',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('unitPrice',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true, 'callback'=>'toIdr' )),
+            array('unitTotal',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true, 'callback'=>'toIdr')),
         );
+
+        $this->place_action = 'none';
+
+        $this->def_order_by = 'SKU';
+
+        $this->def_order_dir = 'desc';
+
+        $session = Input::get('session');
+
+        $session = (is_null($session) || !isset($session))?'':$session;
+
+        $this->additional_query = array('distinct'=>'sessionId');
 
         return parent::postIndex();
     }

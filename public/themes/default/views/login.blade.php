@@ -10,6 +10,7 @@
 @endif
 
 {{ Form::open(array('url' => 'login','class'=>'form-signin')) }}
+        <h1>{{ Config::get('site.name')}}</h1>
         <h2 class="form-signin-heading">Please sign in</h2>
             @if (Session::get('loginError'))
                 <div class="alert alert-danger">{{ Session::get('loginError') }}</div>
@@ -28,11 +29,13 @@
             {{ Form:: label('password', 'Password') }}
             {{ Form::password('password') }}
         </p>
-
-        <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-
+        <p>
+            <label class="checkbox">
+              <input type="checkbox" id="checks" value="remember-me" checked="checked">
+              Remember me
+              <span class="check" for="checks"></span>
+            </label>
+        </p>
 
     <p>{{ Form::submit('Submit!',array('class'=>'btn btn-primary')) }}</p>
 {{ Form::close() }}
