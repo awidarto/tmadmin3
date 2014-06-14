@@ -345,7 +345,7 @@
 
                 </ul>
 
-                {{ Former::button('Apply & Save')->class('btn primary')->id('save') }}&nbsp;&nbsp;
+                {{ Former::button('Apply & Save')->class('btn btn-primary')->id('save') }}&nbsp;&nbsp;
                 {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
             </div>

@@ -13,7 +13,7 @@
 
 <div class="row-fluid">
     <div class="span12">
-        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
@@ -122,7 +122,7 @@
         --}}
 
 
-        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
     </div>

@@ -21,7 +21,7 @@
 
 <div class="row">
     <div class="span12 offset2">
-        {{ Form::submit('Save',array('class'=>'btn primary'))}}
+        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}
     </div>
 </div>
 

@@ -112,7 +112,7 @@
         --}}
 
 
-        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('name'=>'submit','class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
     </div>

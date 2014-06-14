@@ -29,7 +29,7 @@
 
 <div class="row-fluid">
     <div class="span12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>

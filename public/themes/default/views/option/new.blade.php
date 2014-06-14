@@ -22,7 +22,7 @@
         {{ $fupload->id('filesupload')->title('Select File')->label('Upload File')->make() }}
 
 
-        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
     </div>
