@@ -74,7 +74,7 @@ $(document).ready(function() {
 
 
     $('.wlocautocomplete').autocomplete({
-        source: base + 'ajax/email'
+        source: base + 'homeslide/location'
     });
 
 });
