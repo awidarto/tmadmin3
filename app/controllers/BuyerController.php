@@ -15,6 +15,8 @@ class BuyerController extends AdminController {
         $this->model = new Buyer();
         //$this->model = DB::collection('documents');
 
+        $this->title = 'Contacts';
+
     }
 
     public function getTest()

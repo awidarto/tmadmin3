@@ -202,3 +202,9 @@ legend{
 span.file_del{
     font-size: 16px;
 }
+
+label input[type="radio"],
+input[type="radio"] {
+    visibility: visible;
+    margin-right: 5px;
+}

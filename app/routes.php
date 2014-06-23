@@ -63,6 +63,7 @@ Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 
 Route::controller('home', 'HomeController');
+Route::controller('homeslide', 'HomeslideController');
 
 //Route::get('/', 'ProductsController@getIndex');
 Route::get('/', 'PosController@getIndex');
@@ -133,18 +134,15 @@ Route::get('regeneratepic',function(){
 
     set_time_limit(0);
 
-    $property = new Property();
+    $product = new Product();
 
-    $props = $property->get();
+    $props = $product->get();
 
     $seq = new Sequence();
 
+    $sizes = Config::get('picture.sizes');
+
     foreach($props as $p){
-
-        $large_wm = public_path().'/wm/wm_lrg.png';
-        $med_wm = public_path().'/wm/wm_med.png';
-        $sm_wm = public_path().'/wm/wm_sm.png';
-
         $files = $p->files;
 
         foreach($files as $folder=>$files){
@@ -162,22 +160,19 @@ Route::get('regeneratepic',function(){
                                 $filename = $file;
 
                                 $thumbnail = Image::make($destinationPath.'/'.$filename)
-                                    ->grab(120,120)
-                                    //->insert($sm_wm,0,0, 'bottom-right')
+                                    ->fit( $sizes['thumbnail']['width'] ,$sizes['thumbnail']['height'])
                                     ->save($destinationPath.'/th_'.$filename);
 
                                 $medium = Image::make($destinationPath.'/'.$filename)
-                                    ->grab(320,240)
-                                    //->insert($med_wm,0,0, 'bottom-right')
+                                    ->fit( $sizes['medium']['width'] ,$sizes['medium']['height'])
                                     ->save($destinationPath.'/med_'.$filename);
 
                                 $large = Image::make($destinationPath.'/'.$filename)
-                                    ->grab(800,600)
-                                    //->insert($large_wm,15,15, 'bottom-right')
+                                    ->fit( $sizes['large']['width'] ,$sizes['large']['height'])
                                     ->save($destinationPath.'/lrg_'.$filename);
 
                                 $full = Image::make($destinationPath.'/'.$filename)
-                                    //->insert($large_wm,15,15, 'bottom-right')
+                                    ->fit( $sizes['full']['width'] ,$sizes['full']['height'])
                                     ->save($destinationPath.'/full_'.$filename);
 
                             }
@@ -192,7 +187,6 @@ Route::get('regeneratepic',function(){
     }
 
 });
-
 
 Route::get('pdf',function(){
     $content = "

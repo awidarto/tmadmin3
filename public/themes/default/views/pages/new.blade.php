@@ -15,6 +15,7 @@
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
+        {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('title','title'))->label('Section') }}
         {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('title','title'))->label('Category') }}
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 

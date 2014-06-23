@@ -1,6 +1,6 @@
 <?php
 
-class PagesController extends AdminController {
+class HomeslideController extends AdminController {
 
     public function __construct()
     {
@@ -12,37 +12,23 @@ class PagesController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Page();
-        //$this->model = DB::collection('documents');
-        $this->title = $this->controller_name;
+        $this->title = 'Home Slide Show';
 
-    }
+        $this->model = new Homeslider();
 
-    public function getTest()
-    {
-        $raw = $this->model->where('docFormat','like','picture')->get();
-
-        print $raw->toJSON();
     }
 
 
     public function getIndex()
     {
 
-        $categories = Prefs::getCategory()->catToSelection('title','title');
-        $section = Prefs::getSection()->sectionToSelection('title','title');
-
         $this->heads = array(
-            array('Title',array('search'=>true,'sort'=>true)),
-            array('Creator',array('search'=>true,'sort'=>false)),
-            array('Section',array('search'=>true,'select'=>$section,'sort'=>true)),
-            array('Category',array('search'=>true,'select'=>$categories,'sort'=>true)),
-            array('Tags',array('search'=>true,'sort'=>true)),
-            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Sequence / Priority',array('search'=>true,'sort'=>true)),
+            array('Image',array('search'=>true,'sort'=>true)),
+            array('Youtube URL',array('search'=>true,'sort'=>true)),
+            array('Status',array('search'=>true,'sort'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
-
-        //print $this->model->where('docFormat','picture')->get()->toJSON();
 
         return parent::getIndex();
 
@@ -52,13 +38,11 @@ class PagesController extends AdminController {
     {
 
         $this->fields = array(
-            array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
-            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('sequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('sequence',array('kind'=>'text','callback'=>'namePic','query'=>'like','pos'=>'both','show'=>true)),
+            array('youtubeUrl',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('publishing',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
         );
 
         return parent::postIndex();
@@ -68,11 +52,7 @@ class PagesController extends AdminController {
     {
 
         $this->validator = array(
-            'title' => 'required',
-            'slug'=> 'required'
         );
-
-        $this->backlink = 'content/pages';
 
         return parent::postAdd($data);
     }
@@ -80,17 +60,12 @@ class PagesController extends AdminController {
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'title' => 'required',
-            'slug'=> 'required'
         );
-
-        $this->backlink = 'content/pages';
 
         return parent::postEdit($id,$data);
     }
 
-    public function beforeSave($data)
-    {
+    public function beforeSave($data){
 
         $defaults = array();
 
@@ -144,23 +119,19 @@ class PagesController extends AdminController {
             $data['caption'] = array();
 
             $data['defaultpic'] = '';
+            $data['brchead'] = '';
+            $data['brc1'] = '';
+            $data['brc2'] = '';
+            $data['brc3'] = '';
         }
 
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
 
-
-        $data['creatorName'] = Auth::user()->fullname;
-
-        $data['tagArray'] = $this->tagToArray($data['tags']);
-
-        $this->saveTags($data['tagArray']);
-
         return $data;
     }
 
-    public function beforeUpdate($id,$data)
-    {
+    public function beforeUpdate($id,$data){
         $defaults = array();
 
         $files = array();
@@ -244,21 +215,42 @@ class PagesController extends AdminController {
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
 
-        $data['tagArray'] = $this->tagToArray($data['tags']);
-
-        $this->saveTags($data['tagArray']);
-
         return $data;
     }
-
 
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('pages/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('homeslide/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;
+    }
+
+    public function namePic($data)
+    {
+        $name = HTML::link('products/view/'.$data['_id'],$data['productName']);
+        if($data['slidetype'] == 'videoonly' || $data['slidetype'] == 'videocontent'){
+            return $data['videoTitle'];
+        }
+
+        if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
+            $display = HTML::image($data['thumbnail_url'][0].'?'.time(), $data['filename'][0], array('id' => $data['_id']));
+            return $display;
+        }else{
+            return $name;
+        }
+    }
+
+    public function pics($data)
+    {
+        $name = HTML::link('products/view/'.$data['_id'],$data['productName']);
+        if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
+            $display = HTML::image($data['thumbnail_url'][0].'?'.time(), $data['filename'][0], array('style'=>'min-width:100px;','id' => $data['_id']));
+            return $data['songTitle'].'<br />'.$display;
+        }else{
+            return $name;
+        }
     }
 
     public function splitTag($data){
@@ -271,13 +263,13 @@ class PagesController extends AdminController {
 
             return implode('', $ts);
         }else{
-            return $data['docTag'];
+            return $data['tags'];
         }
     }
 
-    public function splitShare($data){
-        $tags = explode(',',$data['docShare']);
-        if(is_array($tags) && count($tags) > 0 && $data['docShare'] != ''){
+    public function splitGenre($data){
+        $tags = explode(',',$data['genre']);
+        if(is_array($tags) && count($tags) > 0 && $data['genre'] != ''){
             $ts = array();
             foreach($tags as $t){
                 $ts[] = '<span class="tag">'.$t.'</span>';
@@ -285,29 +277,7 @@ class PagesController extends AdminController {
 
             return implode('', $ts);
         }else{
-            return $data['docShare'];
-        }
-    }
-
-    public function namePic($data)
-    {
-        $name = HTML::link('products/view/'.$data['_id'],$data['productName']);
-        if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
-            $display = HTML::image($data['thumbnail_url'][0].'?'.time(), $data['filename'][0], array('id' => $data['_id']));
-            return $display.'<br />'.$name;
-        }else{
-            return $name;
-        }
-    }
-
-    public function pics($data)
-    {
-        $name = HTML::link('products/view/'.$data['_id'],$data['productName']);
-        if(isset($data['thumbnail_url']) && count($data['thumbnail_url'])){
-            $display = HTML::image($data['thumbnail_url'][0].'?'.time(), $data['filename'][0], array('style'=>'min-width:100px;','id' => $data['_id']));
-            return $display.'<br /><span class="img-more" id="'.$data['_id'].'">more images</span>';
-        }else{
-            return $name;
+            return $data['genre'];
         }
     }
 

@@ -241,12 +241,13 @@ class ProductsController extends AdminController {
             $data['brc3'] = '';
         }
 
+        $data['defaultpictures'] = $defaults;
+        $data['files'] = $files;
+
 
         $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
         $data['category'] = $cats[$data['categoryLink']];
 
-        $data['defaultpictures'] = $defaults;
-        $data['files'] = $files;
 
         $unitdata = array_merge(array('id'=>$id),$data);
 

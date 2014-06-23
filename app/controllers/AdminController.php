@@ -540,13 +540,15 @@ class AdminController extends Controller {
 
 		$form = $this->form;
 
+        $this->title = ($this->title == '')?Str::singular($this->controller_name):Str::singular($this->title);
+
 		return View::make($controller_name.'.'.$this->form_add)
 					->with('back',$controller_name)
                     ->with('auxdata',$data)
 					->with('form',$form)
 					->with('submit',$controller_name.'/add')
 					->with('crumb',$this->crumb)
-					->with('title','New '.Str::singular($this->controller_name));
+					->with('title','New '.$this->title);
 
 	}
 
@@ -627,14 +629,15 @@ class AdminController extends Controller {
 
 		Former::populate($population);
 
+        $this->title = ($this->title == '')?Str::singular($this->controller_name):Str::singular($this->title);
+
 		//$this->crumb->add(strtolower($this->controller_name).'/edit/'.$id,$id,false);
 
 		return View::make(strtolower($this->controller_name).'.'.$this->form_edit)
 					->with('back',$controller_name)
 					->with('formdata',$population)
 					->with('submit',strtolower($this->controller_name).'/edit/'.$id)
-					->with('title','Edit '.Str::singular($this->controller_name));
-
+					->with('title','Edit '.$this->title);
 	}
 
 
@@ -1357,6 +1360,19 @@ class AdminController extends Controller {
 
     }
 
+    public function tagToArray($tagstring)
+    {
+        return explode(',',$tagstring);
+    }
+
+    public function saveTags($tags)
+    {
+        foreach($tags as $tag){
+            Tag::insert(array('tag'=>$tag));
+        }
+
+        return true;
+    }
 
 
 	public function get_action_sample(){

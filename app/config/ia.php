@@ -64,6 +64,21 @@ return array(
             'Exhibition'=>'Exhibition',
             'Buying Summit'=>'Buying Summit',
         ),
+    'slidetype'=>array(
+            'imageonly'=>'Image Only',
+            'videoonly'=>'Video Only',
+            'contentonly'=>'Content Only',
+            'imagecontent'=>'Image and Content',
+            'videocontent'=>'Video and Content'
+        ),
+    'search_slidetype'=>array(
+            ''=>'All',
+            'imageonly'=>'Image Only',
+            'videoonly'=>'Video Only',
+            'contentonly'=>'Content Only',
+            'imagecontent'=>'Image and Content',
+            'videocontent'=>'Video and Content'
+        ),
 
 
     'property_id_prefix'=>'IA',

@@ -767,10 +767,9 @@ class AjaxController extends BaseController {
     {
         $q = Input::get('term');
 
-        $tag = LMongo::collection('products');
         $qtag = new MongoRegex('/'.$q.'/i');
 
-        $res = $tag->where('tag',$qtag)->get();
+        $res = Tag::where('tag',$qtag)->get();
 
         $result = array();
 
