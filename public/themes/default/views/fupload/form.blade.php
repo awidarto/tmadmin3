@@ -213,10 +213,22 @@
                         $upl .= '<input type="hidden" name="filename[]" value="' . $formdata['filename'][$u]  . '">';
                         $upl .= '<input type="hidden" name="filesize[]" value="' . $formdata['filesize'][$u]  . '">';
                         $upl .= '<input type="hidden" name="temp_dir[]" value="' . $formdata['temp_dir'][$u]  . '">';
+
+                        foreach(Config::get('picture.sizes') as $k=>$s ){
+                            if(isset($formdata[$k.'_url'][$u])){
+                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="'. $formdata[$k.'_url'][$u].'">';
+
+                            }else{
+                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="">';
+                            }
+
+                        }
+                        /*
                         $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $formdata['thumbnail_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="large_url[]" value="' . $formdata['large_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="medium_url[]" value="' . $formdata['medium_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="full_url[]" value="' . $formdata['full_url'][$u] . '">';
+                        */
                         $upl .= '<input type="hidden" name="filetype[]" value="' . $formdata['filetype'][$u] . '">';
                         $upl .= '<input type="hidden" name="fileurl[]" value="' . $formdata['fileurl'][$u] . '">';
                         $upl .= '<input type="hidden" name="file_id[]" value="' . $formdata['file_id'][$u] . '">';
@@ -242,10 +254,23 @@
                         $upl .= '<input type="hidden" name="filename[]" value="' . $allin['filename'][$u]  . '">';
                         $upl .= '<input type="hidden" name="filesize[]" value="' . $allin['filesize'][$u]  . '">';
                         $upl .= '<input type="hidden" name="temp_dir[]" value="' . $allin['temp_dir'][$u]  . '">';
+
+                        foreach(Config::get('picture.sizes') as $k=>$s ){
+                            if(isset($allin[$k.'_url'][$u])){
+                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="'. $allin[$k.'_url'][$u].'">';
+
+                            }else{
+                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="">';
+
+                            }
+
+                        }
+                        /*
                         $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $allin['thumbnail_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="large_url[]" value="' . $allin['large_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="medium_url[]" value="' . $allin['medium_url'][$u] . '">';
                         $upl .= '<input type="hidden" name="full_url[]" value="' . $allin['full_url'][$u] . '">';
+                        */
                         $upl .= '<input type="hidden" name="filetype[]" value="' . $allin['filetype'][$u] . '">';
                         $upl .= '<input type="hidden" name="fileurl[]" value="' . $allin['fileurl'][$u] . '">';
                         $upl .= '<input type="hidden" name="file_id[]" value="' . $allin['file_id'][$u] . '">';
@@ -321,10 +346,20 @@ $(document).ready(function(){
                 upl += '<input type="hidden" name="filename[]" value="' + file.name  + '">';
                 upl += '<input type="hidden" name="filesize[]" value="' + file.size  + '">';
                 upl += '<input type="hidden" name="temp_dir[]" value="' + file.temp_dir  + '">';
+
+                @foreach(Config::get('picture.sizes') as $k=>$s )
+                    upl += '<input type="hidden" name="{{ $k }}_url[]" value="' + file.{{ $k }}_url + '">';
+                @endforeach
+
+                {{--
+
                 upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
                 upl += '<input type="hidden" name="large_url[]" value="' + file.large_url + '">';
                 upl += '<input type="hidden" name="medium_url[]" value="' + file.medium_url + '">';
                 upl += '<input type="hidden" name="full_url[]" value="' + file.full_url + '">';
+
+                --}}
+
                 upl += '<input type="hidden" name="filetype[]" value="' + file.type + '">';
                 upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
                 upl += '<input type="hidden" name="file_id[]" value="' + file.file_id + '"></li>';

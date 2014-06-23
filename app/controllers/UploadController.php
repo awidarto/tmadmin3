@@ -36,6 +36,94 @@ class UploadController extends Controller {
 
         $ps = Config::get('picture.sizes');
 
+        $urls = array();
+
+        foreach($ps as $k=>$v){
+            $thumbnail = Image::make($destinationPath.'/'.$filename)
+                ->fit($v['width'],$v['height'])
+                //->insert($sm_wm,0,0, 'bottom-right')
+                ->save($destinationPath.'/'.$v['prefix'].$filename);
+
+            $urls[$k.'_url'] = URL::to('storage/media/'.$rstring.'/'.$v['prefix'].$filename);
+        }
+
+        /*
+        $thumbnail = Image::make($destinationPath.'/'.$filename)
+            ->fit($ps['thumbnail']['width'],$ps['thumbnail']['height'])
+            //->insert($sm_wm,0,0, 'bottom-right')
+            ->save($destinationPath.'/th_'.$filename);
+
+        $medium = Image::make($destinationPath.'/'.$filename)
+            ->fit($ps['medium']['width'],$ps['medium']['height'])
+            //->insert($med_wm,0,0, 'bottom-right')
+            ->save($destinationPath.'/med_'.$filename);
+
+        $large = Image::make($destinationPath.'/'.$filename)
+            ->fit($ps['large']['width'],$ps['large']['height'])
+            //->insert($large_wm, 'bottom-right',15,15)
+            ->save($destinationPath.'/lrg_'.$filename);
+
+        $full = Image::make($destinationPath.'/'.$filename)
+            //->insert($large_wm, 'bottom-right',15,15)
+            ->save($destinationPath.'/full_'.$filename);
+        */
+
+        $fileitems = array();
+
+        if($uploadSuccess){
+            $f = array(
+                    'url'=> URL::to('storage/media/'.$rstring.'/'.$filename),
+                    /*
+                    'thumbnail_url'=> URL::to('storage/media/'.$rstring.'/th_'.$filename),
+                    'large_url'=> URL::to('storage/media/'.$rstring.'/lrg_'.$filename),
+                    'medium_url'=> URL::to('storage/media/'.$rstring.'/med_'.$filename),
+                    'full_url'=> URL::to('storage/media/'.$rstring.'/full_'.$filename),
+                    */
+                    'temp_dir'=> $destinationPath,
+                    'file_id'=> $rstring,
+                    'name'=> $filename,
+                    'type'=> $filemime,
+                    'size'=> $filesize,
+                    'delete_url'=> URL::to('storage/media/'.$rstring.'/'.$filename),
+                    'delete_type'=> 'DELETE'
+                );
+
+            $fileitems[] = array_merge($f, $urls);
+
+        }
+
+        return Response::JSON(array('files'=>$fileitems) );
+    }
+
+    public function postSlide()
+    {
+        $files = Input::file('files');
+
+        $file = $files[0];
+
+        //print_r($file);
+
+        //exit();
+
+        $large_wm = public_path().'/wm/wm_lrg.png';
+        $med_wm = public_path().'/wm/wm_med.png';
+        $sm_wm = public_path().'/wm/wm_sm.png';
+
+        $rstring = str_random(15);
+
+        $destinationPath = realpath('storage/media').'/'.$rstring;
+
+        $filename = $file->getClientOriginalName();
+        $filemime = $file->getMimeType();
+        $filesize = $file->getSize();
+        $extension =$file->getClientOriginalExtension(); //if you need extension of the file
+
+        $filename = str_replace(Config::get('kickstart.invalidchars'), '-', $filename);
+
+        $uploadSuccess = $file->move($destinationPath, $filename);
+
+        $ps = Config::get('picture.sizes');
+
         $thumbnail = Image::make($destinationPath.'/'.$filename)
             ->fit($ps['thumbnail']['width'],$ps['thumbnail']['height'])
             //->insert($sm_wm,0,0, 'bottom-right')

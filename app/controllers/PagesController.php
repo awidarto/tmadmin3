@@ -54,8 +54,8 @@ class PagesController extends AdminController {
         $this->fields = array(
             array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('section',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('section',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'titleCase','show'=>true)),
+            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'titleCase','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
@@ -96,6 +96,8 @@ class PagesController extends AdminController {
 
         $files = array();
 
+        $sizes = Config::get('picture.sizes');
+
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
@@ -107,16 +109,34 @@ class PagesController extends AdminController {
             for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
 
                 if($data['defaultpic'] == $data['file_id'][$i]){
+                    foreach($sizes as $k=>$s){
+                        if(isset($data[$k.'_url'][$i])){
+                            $defaults[$k.'_url'] = $data[$k.'_url'][$i];
+                        }else{
+                            $defaults[$k.'_url'] = '';
+                        }
+                    }
+                    /*
                     $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
                     $defaults['large_url'] = $data['large_url'][$i];
                     $defaults['medium_url'] = $data['medium_url'][$i];
                     $defaults['full_url'] = $data['full_url'][$i];
+                    */
                 }
 
-                $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
+                foreach($sizes as $k=>$s){
+                    if(isset($data[$k.'_url'][$i])){
+                        $files[$data['file_id'][$i]][$k.'_url'] = $data[$k.'_url'][$i];
+                    }else{
+                        $files[$data['file_id'][$i]][$k.'_url'] = '';
+                    }
+                }
+
+                /*
                 $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
                 $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
                 $files[$data['file_id'][$i]]['full_url'] = $data['full_url'][$i];
+                */
 
                 $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
                 $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
@@ -129,10 +149,15 @@ class PagesController extends AdminController {
                 $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
             }
         }else{
+            foreach($sizes as $k=>$s){
+                $data[$k.'_url'] = array();
+            }
+            /*
             $data['thumbnail_url'] = array();
             $data['large_url'] = array();
             $data['medium_url'] = array();
             $data['full_url'] = array();
+            */
             $data['delete_type'] = array();
             $data['delete_url'] = array();
             $data['filename'] = array();
@@ -165,6 +190,8 @@ class PagesController extends AdminController {
 
         $files = array();
 
+        $sizes = Config::get('picture.sizes');
+
         if( isset($data['file_id']) && count($data['file_id'])){
 
             $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
@@ -177,10 +204,19 @@ class PagesController extends AdminController {
             for($i = 0 ; $i < count($data['file_id']); $i++ ){
 
 
+                foreach($sizes as $k=>$s){
+                    if(isset($data[$k.'_url'][$i])){
+                        $files[$data['file_id'][$i]][$k.'_url'] = $data[$k.'_url'][$i];
+                    }else{
+                        $files[$data['file_id'][$i]][$k.'_url'] = '';
+                    }
+                }
+                /*
                 $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
                 $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
                 $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
                 $files[$data['file_id'][$i]]['full_url'] = $data['full_url'][$i];
+                */
 
                 $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
                 $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
@@ -193,10 +229,13 @@ class PagesController extends AdminController {
                 $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
 
                 if($data['defaultpic'] == $data['file_id'][$i]){
-                    $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
-                    $defaults['large_url'] = $data['large_url'][$i];
-                    $defaults['medium_url'] = $data['medium_url'][$i];
-                    $defaults['full_url'] = $data['full_url'][$i];
+                    foreach($sizes as $k=>$s){
+                        if(isset($data[$k.'_url'][$i])){
+                            $defaults[$k.'_url'] = $data[$k.'_url'][$i];
+                        }else{
+                            $defaults[$k.'_url'] = '';
+                        }
+                    }
                 }
 
                 if($data['brchead'] == $data['file_id'][$i]){
@@ -220,10 +259,10 @@ class PagesController extends AdminController {
 
         }else{
 
-            $data['thumbnail_url'] = array();
-            $data['large_url'] = array();
-            $data['medium_url'] = array();
-            $data['full_url'] = array();
+            foreach($sizes as $k=>$s){
+                $data[$k.'_url'] = array();
+            }
+
             $data['delete_type'] = array();
             $data['delete_url'] = array();
             $data['filename'] = array();
@@ -287,6 +326,11 @@ class PagesController extends AdminController {
         }else{
             return $data['docShare'];
         }
+    }
+
+    public function titleCase($data,$field)
+    {
+        return ucfirst($data[$field]);
     }
 
     public function namePic($data)

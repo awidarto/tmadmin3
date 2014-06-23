@@ -130,58 +130,89 @@ Route::get('tonumber',function(){
 
 });
 
-Route::get('regeneratepic',function(){
+Route::get('regeneratepic/{obj?}',function($obj = null){
 
     set_time_limit(0);
 
-    $product = new Product();
+    if(is_null($obj)){
+        $product = new Product();
+    }else{
+        switch($obj){
+            case 'product' :
+                        $product = new Product();
+                        break;
+            case 'page' :
+                        $product = new Page();
+                        break;
+            case 'post' :
+                        $product = new Posts();
+                        break;
+            default :
+                        $product = new Product();
+                        break;
+        }
+    }
 
     $props = $product->get();
 
-    $seq = new Sequence();
+    //$seq = new Sequence();
 
     $sizes = Config::get('picture.sizes');
 
     foreach($props as $p){
-        $files = $p->files;
 
-        foreach($files as $folder=>$files){
+        if(isset($p->files)){
+            $files = $p->files;
 
-            $dir = public_path().'/storage/media/'.$folder;
+            foreach($files as $folder=>$files){
 
-            if (is_dir($dir) && file_exists($dir)) {
-                if ($dh = opendir($dir)) {
-                    while (($file = readdir($dh)) !== false) {
-                        if($file != '.' && $file != '..'){
-                            if(!preg_match('/^lrg_|med_|th_|full_/', $file)){
-                                echo $dir.'/'.$file."\n";
+                $dir = public_path().'/storage/media/'.$folder;
 
-                                $destinationPath = $dir;
-                                $filename = $file;
+                if (is_dir($dir) && file_exists($dir)) {
+                    if ($dh = opendir($dir)) {
+                        while (($file = readdir($dh)) !== false) {
+                            if($file != '.' && $file != '..'){
+                                if(!preg_match('/^lrg_|med_|th_|full_/', $file)){
+                                    echo $dir.'/'.$file."\n";
 
-                                $thumbnail = Image::make($destinationPath.'/'.$filename)
-                                    ->fit( $sizes['thumbnail']['width'] ,$sizes['thumbnail']['height'])
-                                    ->save($destinationPath.'/th_'.$filename);
+                                    $destinationPath = $dir;
+                                    $filename = $file;
 
-                                $medium = Image::make($destinationPath.'/'.$filename)
-                                    ->fit( $sizes['medium']['width'] ,$sizes['medium']['height'])
-                                    ->save($destinationPath.'/med_'.$filename);
+                                    $urls = array();
 
-                                $large = Image::make($destinationPath.'/'.$filename)
-                                    ->fit( $sizes['large']['width'] ,$sizes['large']['height'])
-                                    ->save($destinationPath.'/lrg_'.$filename);
+                                    foreach($sizes as $k=>$v){
+                                        $thumbnail = Image::make($destinationPath.'/'.$filename)
+                                            ->fit($v['width'],$v['height'])
+                                            //->insert($sm_wm,0,0, 'bottom-right')
+                                            ->save($destinationPath.'/'.$v['prefix'].$filename);
+                                    }
+                                    /*
+                                    $thumbnail = Image::make($destinationPath.'/'.$filename)
+                                        ->fit( $sizes['thumbnail']['width'] ,$sizes['thumbnail']['height'])
+                                        ->save($destinationPath.'/th_'.$filename);
 
-                                $full = Image::make($destinationPath.'/'.$filename)
-                                    ->fit( $sizes['full']['width'] ,$sizes['full']['height'])
-                                    ->save($destinationPath.'/full_'.$filename);
+                                    $medium = Image::make($destinationPath.'/'.$filename)
+                                        ->fit( $sizes['medium']['width'] ,$sizes['medium']['height'])
+                                        ->save($destinationPath.'/med_'.$filename);
 
+                                    $large = Image::make($destinationPath.'/'.$filename)
+                                        ->fit( $sizes['large']['width'] ,$sizes['large']['height'])
+                                        ->save($destinationPath.'/lrg_'.$filename);
+
+                                    $full = Image::make($destinationPath.'/'.$filename)
+                                        ->fit( $sizes['full']['width'] ,$sizes['full']['height'])
+                                        ->save($destinationPath.'/full_'.$filename);
+                                    */
+                                }
                             }
                         }
+                        closedir($dh);
                     }
-                    closedir($dh);
                 }
             }
+
         }
+
 
 
     }

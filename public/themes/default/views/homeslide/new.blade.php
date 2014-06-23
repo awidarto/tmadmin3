@@ -9,6 +9,10 @@
 
 <div class="row-fluid">
     <div class="span6">
+        {{ Former::text('widgetLocation','Widget Location')->class('wlocautocomplete')->help('Group slides in the same location / position in page') }}
+
+        {{ Former::text('linkTo','Link to')->help('Link to URL on click event ( local controller or absolute URL )') }}
+
         {{ Former::select('slidetype')->options( Config::get('ia.slidetype') )->label('Type')->required() }}
         {{ Former::text('sequence','Sequence')->class('span2')->value(1)->help('ascending display sequence') }}
         {{ Former::select('publishing')->options(array('unpublished'=>'Unpublished','published'=>'Published'))->label('Status') }}
@@ -66,6 +70,11 @@ $(document).ready(function() {
             'theme':'twilight',
             'mode':'php'
         }
+    });
+
+
+    $('.wlocautocomplete').autocomplete({
+        source: base + 'ajax/email'
     });
 
 });
