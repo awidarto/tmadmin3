@@ -769,12 +769,14 @@ class AjaxController extends BaseController {
 
         $qtag = new MongoRegex('/'.$q.'/i');
 
-        $res = Tag::where('tag',$qtag)->get();
+        $res = Tag::where('tag',$qtag)->distinct('tag')->get();
+
+        //print_r($res->toArray());
 
         $result = array();
 
         foreach($res as $r){
-            $result[] = array('id'=>$r['tag'],'label'=>$r['tag'],'value'=>$r['tag']);
+            $result[] = array('id'=>$r[0],'label'=>$r[0],'value'=>$r[0]);
         }
 
         return Response::json($result);

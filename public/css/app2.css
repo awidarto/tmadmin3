@@ -194,3 +194,10 @@ a.btn {
 .row-fluid [class*="span"]{
     min-height: 26px;
 }
+
+.tag{
+    padding: 2px 4px;
+    margin: 2px;
+    background-color: #CCC;
+    display:inline-block;
+}

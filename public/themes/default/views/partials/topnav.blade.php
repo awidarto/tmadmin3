@@ -35,6 +35,7 @@
                 <b class="caret"></b>
               </a>
             <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('event') }}" {{ sa('event') }} >Events</a></li>
                 <li><a href="{{ URL::to('buyer') }}" {{ sa('buyer') }} >Contact List</a></li>
                 <li><a href="{{ URL::to('contactgroup') }}" {{ sa('contactgroup') }} >Contact Groups</a></li>
                 <li><a href="{{ URL::to('enquiry') }}" {{ sa('enquiry') }} >Enquiries</a></li>
@@ -66,6 +67,7 @@
                 <li><a href="{{ URL::to('content/section') }}" {{ sa('content/section') }} >Section</a></li>
                 <li><a href="{{ URL::to('content/category') }}" {{ sa('content/category') }} >Category</a></li>
                 <li><a href="{{ URL::to('content/menu') }}" {{ sa('content/menu') }} >Menu</a></li>
+                <li><a href="{{ URL::to('showcase') }}" {{ sa('showcase') }} >Showcases</a></li>
                 <li><a href="{{ URL::to('homeslide') }}" {{ sa('homeslide') }} >Home Slide Show</a></li>
                 <li><a href="{{ URL::to('faq') }}" {{ sa('faq') }} >FAQ Entries</a></li>
                 <li><a href="{{ URL::to('faqcat') }}" {{ sa('faqcat') }} >FAQ Category</a></li>

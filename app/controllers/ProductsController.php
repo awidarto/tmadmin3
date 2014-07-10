@@ -80,7 +80,7 @@ class ProductsController extends AdminController {
             array('sizeDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -433,8 +433,8 @@ class ProductsController extends AdminController {
     }
 
     public function splitTag($data){
-        $tags = explode(',',$data['docTag']);
-        if(is_array($tags) && count($tags) > 0 && $data['docTag'] != ''){
+        $tags = explode(',',$data['tags']);
+        if(is_array($tags) && count($tags) > 0 && $data['tags'] != ''){
             $ts = array();
             foreach($tags as $t){
                 $ts[] = '<span class="tag">'.$t.'</span>';
@@ -442,7 +442,7 @@ class ProductsController extends AdminController {
 
             return implode('', $ts);
         }else{
-            return $data['docTag'];
+            return $data['tags'];
         }
     }
 

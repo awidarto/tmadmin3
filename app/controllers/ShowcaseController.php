@@ -1,6 +1,6 @@
 <?php
 
-class PagesController extends AdminController {
+class ShowcaseController extends AdminController {
 
     public function __construct()
     {
@@ -12,8 +12,9 @@ class PagesController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Page();
+        $this->model = new Showcase();
         //$this->model = DB::collection('documents');
+
         $this->title = $this->controller_name;
 
     }
@@ -34,6 +35,7 @@ class PagesController extends AdminController {
 
         $this->heads = array(
             array('Title',array('search'=>true,'sort'=>true)),
+            array('Permalink',array('search'=>true,'sort'=>true)),
             array('Creator',array('search'=>true,'sort'=>false)),
             array('Section',array('search'=>true,'select'=>$section,'sort'=>true)),
             array('Category',array('search'=>true,'select'=>$categories,'sort'=>true)),
@@ -53,6 +55,7 @@ class PagesController extends AdminController {
 
         $this->fields = array(
             array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('slug',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('creatorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
             array('section',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'titleCase','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'titleCase','show'=>true)),
@@ -72,8 +75,6 @@ class PagesController extends AdminController {
             'slug'=> 'required'
         );
 
-        $this->backlink = 'content/pages';
-
         return parent::postAdd($data);
     }
 
@@ -83,8 +84,6 @@ class PagesController extends AdminController {
             'title' => 'required',
             'slug'=> 'required'
         );
-
-        $this->backlink = 'content/pages';
 
         return parent::postEdit($id,$data);
     }
@@ -294,7 +293,7 @@ class PagesController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('pages/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('showcase/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;
@@ -310,7 +309,7 @@ class PagesController extends AdminController {
 
             return implode('', $ts);
         }else{
-            return $data['tags'];
+            return $data['docTag'];
         }
     }
 

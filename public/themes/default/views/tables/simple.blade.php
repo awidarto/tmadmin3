@@ -319,8 +319,6 @@ th:first-child{
 	var current_del_id = 0;
 	var current_print_id = 0;
 
-
-
 	function toggle_visibility(id) {
 		$('#' + id).toggle();
 	}

@@ -14,11 +14,11 @@
         {{ Former::text('venue','Venue') }}
         {{ Former::text('location','Location') }}
 
-        {{ Former::text('fromDate','From')->class('span7 eventdate')
+        {{ Former::text('fromDate','From')->class('span7 dateinput')
             ->id('fromDate')
             ->append('<i class="icon-th"></i>') }}
 
-        {{ Former::text('toDate','Until')->class('span7 eventdate')
+        {{ Former::text('toDate','Until')->class('span7 dateinput')
             ->id('toDate')
             ->append('<i class="icon-th"></i>') }}
 
@@ -39,7 +39,7 @@
                 </div>
             </div>
         @endfor
-        {{ Former::text('expires','Expires')->class('span7 datepicker')
+        {{ Former::text('expires','Expires')->class('span7 dateinput')
             //->data_format('dd-mm-yyyy')
             ->append('<i class="icon-th"></i>') }}
    </div>

@@ -52,17 +52,15 @@ return array(
         ),
 
     'eventcat'=>array(
-            'Seminar'=>'Seminar',
-            'Lunch Gathering'=>'Lunch Gathering',
-            'Exhibition'=>'Exhibition',
-            'Buying Summit'=>'Buying Summit',
+            'Garage Sale'=>'Garage Sale',
+            'Bazaar'=>'Bazaar',
+            'Discount Period'=>'Discount Period',
         ),
     'search_eventcat'=>array(
             ''=>'All',
-            'Seminar'=>'Seminar',
-            'Lunch Gathering'=>'Lunch Gathering',
-            'Exhibition'=>'Exhibition',
-            'Buying Summit'=>'Buying Summit',
+            'Garage Sale'=>'Garage Sale',
+            'Bazaar'=>'Bazaar',
+            'Discount Period'=>'Discount Period',
         ),
     'slidetype'=>array(
             'imageonly'=>'Image Only',

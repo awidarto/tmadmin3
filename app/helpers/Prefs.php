@@ -155,6 +155,14 @@ class Prefs {
         return self::$outlet;
     }
 
+    public static function yearSelection(){
+        $ya = array();
+        for( $i = 1970; $i < 2050; $i++ ){
+            $ya[$i] = $i;
+        }
+        return $ya;
+    }
+
     public static function GetBatchId($SKU, $year, $month){
 
         $seq = DB::collection('batchnumbers')->raw();

@@ -18,6 +18,7 @@
         {{ Former::text('itemDescription','Description') }}
         {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
         {{ Former::text('priceRegular','Regular Price')->class('span4') }}
+        {{ Former::text('priceDiscount','Discount Price')->class('span4') }}
         {{ Former::text('material','Material') }}
         {{ Former::text('colour','Colour')->class('span4') }}
         {{--

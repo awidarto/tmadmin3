@@ -22,11 +22,14 @@ Route::controller('user', 'UserController');
 Route::controller('agent', 'AgentController');
 Route::controller('buyer', 'BuyerController');
 Route::controller('report', 'ReportController');
+Route::controller('showcase', 'ShowcaseController');
 Route::controller('pages', 'PagesController');
 Route::controller('posts', 'PostsController');
 Route::controller('category', 'CategoryController');
 Route::controller('section', 'SectionController');
 Route::controller('menu', 'MenuController');
+
+Route::controller('event', 'EventController');
 
 Route::controller('faq', 'FaqController');
 Route::controller('faqcat', 'FaqcatController');
