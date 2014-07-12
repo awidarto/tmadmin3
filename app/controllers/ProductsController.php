@@ -491,7 +491,7 @@ class ProductsController extends AdminController {
 
     {
         $display = HTML::image(URL::to('barcode/'.urlencode($data['SKU'])), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
-        $display = '<a href="'.URL::to('barcode/dl/'.$data['SKU']).'">'.$display.'</a>';
+        $display = '<a href="'.URL::to('barcode/dl/'.urlencode($data['SKU'])).'">'.$display.'</a>';
         return $display.'<br />'.$data['SKU'];
     }
 
