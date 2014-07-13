@@ -26,16 +26,19 @@
             //->data_format('dd-mm-yyyy')
             ->append('<i class="icon-th"></i>') }}
 
-
-
-
-
         {{ Former::select('category')->options(Config::get('ia.eventcat'))->label('Category') }}
         {{ Former::textarea('description','Description') }}
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
     </div>
     <div class="span6">
+        <?php
+            $fupload = new Fupload();
+        ?>
+
+        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make($formdata) }}
+
+
         @for($i = 1;$i < 6;$i++)
             <div class="row form-horizontal">
                 <div class="span4">

@@ -28,6 +28,12 @@
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
     </div>
     <div class="span6">
+        <?php
+            $fupload = new Fupload();
+        ?>
+
+        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make() }}
+
         @for($i = 1;$i < 6;$i++)
             <div class="row form-horizontal">
                 <div class="span4">
