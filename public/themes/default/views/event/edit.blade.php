@@ -55,7 +55,7 @@
 
 <div class="row-fluid">
     <div class="span12">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
@@ -66,9 +66,6 @@
 
 
 $(document).ready(function() {
-    $('select').select2({
-      width : 'resolve'
-    });
 
     $('#title').keyup(function(){
         var title = $('#title').val();

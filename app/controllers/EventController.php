@@ -55,8 +55,8 @@ class EventController extends AdminController {
             array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('venue',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('location',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('fromDate',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('toDate',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('fromDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('toDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
@@ -68,13 +68,16 @@ class EventController extends AdminController {
 
     public function beforeSave($data)
     {
-
+        $data['fromDate'] = new MongoDate( strtotime($data['fromDate']) );
+        $data['toDate'] = new MongoDate( strtotime($data['toDate']) );
         return $data;
     }
 
     public function beforeUpdate($id,$data)
     {
 
+        $data['fromDate'] = new MongoDate( strtotime($data['fromDate']) );
+        $data['toDate'] = new MongoDate( strtotime($data['toDate']) );
         return $data;
     }
 

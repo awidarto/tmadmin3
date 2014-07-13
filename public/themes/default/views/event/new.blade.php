@@ -14,11 +14,11 @@
         {{ Former::text('venue','Venue') }}
         {{ Former::text('location','Location') }}
 
-        {{ Former::text('fromDate','From')->class('span7 dateinput')
+        {{ Former::text('fromDate','From')->class('span7 eventdate')
             ->id('fromDate')
             ->append('<i class="icon-th"></i>') }}
 
-        {{ Former::text('toDate','Until')->class('span7 dateinput')
+        {{ Former::text('toDate','Until')->class('span7 eventdate')
             ->id('toDate')
             ->append('<i class="icon-th"></i>') }}
 
@@ -39,7 +39,7 @@
                 </div>
             </div>
         @endfor
-        {{ Former::text('expires','Expires')->class('span7 dateinput')
+        {{ Former::text('expires','Expires')->class('span7 datepicker')
             //->data_format('dd-mm-yyyy')
             ->append('<i class="icon-th"></i>') }}
    </div>
@@ -47,7 +47,7 @@
 
 <div class="row-fluid">
     <div class="span12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
@@ -57,7 +57,6 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-
 
     $('#title').keyup(function(){
         var title = $('#title').val();
