@@ -90,10 +90,14 @@ class RegeneratePic extends Command {
                                         $urls = array();
 
                                         foreach($sizes as $k=>$v){
+                                            echo $destinationPath.'/'.$v['prefix'].$filename."\n";
+                                            unlink($destinationPath.'/'.$v['prefix'].$filename);
                                             $thumbnail = Image::make($destinationPath.'/'.$filename)
                                                 ->fit($v['width'],$v['height'])
                                                 //->insert($sm_wm,0,0, 'bottom-right')
                                                 ->save($destinationPath.'/'.$v['prefix'].$filename);
+                                                //print_r($thumbnail);
+
                                         }
                                         /*
                                         $thumbnail = Image::make($destinationPath.'/'.$filename)
