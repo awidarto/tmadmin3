@@ -70,6 +70,8 @@ class RegeneratePic extends Command {
 
         foreach($props as $p){
 
+            echo $p->_id."\n";
+
             if(isset($p->files)){
                 $files = $p->files;
 
