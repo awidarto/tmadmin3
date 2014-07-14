@@ -96,7 +96,11 @@ class RegeneratePic extends Command {
 
                                         foreach($sizes as $k=>$v){
                                             echo $destinationPath.'/'.$v['prefix'].$filename."\n";
-                                            unlink($destinationPath.'/'.$v['prefix'].$filename);
+                                            if( file_exists($destinationPath.'/'.$v['prefix'].$filename) ){
+                                                unlink($destinationPath.'/'.$v['prefix'].$filename);
+                                            }else{
+                                                echo "file does not exist\n";
+                                            }
                                             $thumbnail = Image::make($destinationPath.'/'.$filename)
                                                 ->fit($v['width'],$v['height'])
                                                 //->insert($sm_wm,0,0, 'bottom-right')
