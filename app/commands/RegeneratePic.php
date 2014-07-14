@@ -68,8 +68,11 @@ class RegeneratePic extends Command {
 
         $sizes = Config::get('picture.sizes');
 
-        foreach($props as $p){
+        $cnt = 1;
 
+        foreach($props as $p){
+            echo $cnt."\n";
+            $cnt++;
             echo $p->_id."\n";
 
             if(isset($p->files)){
