@@ -62,7 +62,7 @@ class RegeneratePic extends Command {
             }
         }
 
-        $props = $product->get();
+        $props = $product->orderBy('_id','desc')->get();
 
         //$seq = new Sequence();
 
