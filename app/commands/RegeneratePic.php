@@ -81,7 +81,7 @@ class RegeneratePic extends Command {
                         if ($dh = opendir($dir)) {
                             while (($file = readdir($dh)) !== false) {
                                 if($file != '.' && $file != '..'){
-                                    if(!preg_match('/^lrg_|med_|th_|full_/', $file)){
+                                    if(!preg_match('/^lrg_|med_|th_|full_|blob/', $file)){
                                         echo $dir.'/'.$file."\n";
 
                                         $destinationPath = $dir;
