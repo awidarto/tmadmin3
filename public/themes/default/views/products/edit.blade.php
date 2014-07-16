@@ -12,6 +12,7 @@
     <div class="span6">
 
         {{ Former::text('SKU','SKU') }}
+        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
         {{-- Former::select('category','Category')->options(Prefs::ExtractProductCategory()) --}}
         {{ Former::select('categoryLink','Category')->options(Prefs::getProductCategory()->productCatToSelection('slug', 'title' )) }}
         {{ Former::text('series','Series') }}
