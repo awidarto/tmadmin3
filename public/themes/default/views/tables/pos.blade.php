@@ -57,16 +57,33 @@ th:first-child{
 
 
 .modal.large {
-    width: 80%; /* respsonsive width */
-    margin-left:-40%; /* width/2) */
+    width: 60%; /* respsonsive width */
+    margin-left:-30%; /* width/2) */
 }
 
 .modal.large .modal-body{
     max-height: 600px;
     min-height: 300px;
-    height: 450px;
+    height: 300px;
 }
 
+div.payform input[type="text"]{
+    text-align: right;
+    line-height: 22px;
+    font-size: 20px;
+    min-height: 28px;
+}
+
+div.payform label{
+    line-height: 22px;
+    font-size: 14px;
+}
+
+div.payform h3{
+    padding-bottom: 8px;
+    margin-bottom: 0px;
+    font-size: 16px;
+}
 
 </style>
 <div class="row-fluid">
@@ -257,19 +274,18 @@ th:first-child{
     </div>
 </div>
 
-<div id="pay-modal" class="modal hide fade large" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="pay-modal" class="modal hide fade large" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Pay</h3>
+    <h3 id="myModalLabel">Payment</h3>
   </div>
   <div class="modal-body">
-
-
+    @include('pos.pay')
   </div>
   <div class="modal-footer">
-    <button class="btn btn-large" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary btn-large" id="print-trans" >Print</button>
-    <button class="btn btn-danger btn-large" id="finalize-trans">Finalize</button>
+    <button class="btn btn-medium" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary btn-medium" id="print-trans" >Print</button>
+    <button class="btn btn-danger btn-medium" id="finalize-trans">Finalize</button>
   </div>
 </div>
 
@@ -678,7 +694,38 @@ th:first-child{
         });
 
         $('#btn-pay').on('click',function(){
+            var current_trx = $('#current_session').val();
+
+            var total_price = $('#total_price_value').val();
+
+            $('#payable-amount').val(total_price);
+
+            $('#payable-total').html(total_price);
+
+            $('#cash-amount').val('');
+            $('#cash-change').val('');
+
             $('#pay-modal').modal();
+        });
+
+        function collectPayData(){
+            return {
+                cc_amount: $('#cc-amount').val(),
+                cc_number: $('#cc-number').val(),
+                cc_expiry: $('#cc-expiry').val(),
+                dc_amount: $('#dc-amount').val(),
+                dc_number: $('#dc-number').val(),
+                cash_amount: $('#cash-amount').val(),
+                payable_amount: $('#payable-amount').val(),
+                subtotal_price_value: $('#subtotal_price_value').val(),
+                total_tax_value: $('#total_tax_value').val(),
+                total_price_value: $('#total_price_value').val()
+            }
+        }
+
+        $('#print-trans').on('click',function(){
+            var receiptObj = collectPayData();
+            console.log(receiptObj);
         });
 
         $('table.dataTable').click(function(e){
