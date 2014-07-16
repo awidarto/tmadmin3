@@ -33,9 +33,40 @@ th:first-child{
     border-left:thin solid #eee;
 }
 
-.del,.upload,.upinv,.outlet{
+.del_unit, .del,.upload,.upinv,.outlet{
     cursor:pointer;
+    padding: 2px;
+    font-size: 14px;
+    padding-left: 6px;
 }
+
+.table td{
+    line-height: 24px;
+}
+
+.modal.medium {
+    width: 80%; /* respsonsive width */
+    margin-left:-40%; /* width/2) */
+}
+
+.modal.medium .modal-body{
+    max-height: 600px;
+    min-height: 300px;
+    height: 400px;
+}
+
+
+.modal.large {
+    width: 80%; /* respsonsive width */
+    margin-left:-40%; /* width/2) */
+}
+
+.modal.large .modal-body{
+    max-height: 600px;
+    min-height: 300px;
+    height: 450px;
+}
+
 
 </style>
 <div class="row-fluid">
@@ -210,13 +241,15 @@ th:first-child{
    </div>
 </div>
 
-<div id="print-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="print-modal" class="modal hide fade medium" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Print Barcode Tag</h3>
+        <h3 id="myModalLabel">Print Receipt</h3>
     </div>
         <div class="modal-body">
+            <iframe id="print-window" src="" style="width:100%;height:100%;overflow:auto;">
 
+            </iframe>
         </div>
     <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -224,113 +257,22 @@ th:first-child{
     </div>
 </div>
 
-<div id="pay-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="pay-modal" class="modal hide fade large" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Pay</h3>
   </div>
   <div class="modal-body">
-    <h4 id="prop-trx-order"></h4>
-    {{ Former::hidden('prop_id')->id('prop-trx-chg') }}
-    {{ Former::select('status', 'Status')->options(Config::get('ia.publishing'))->id('prop-stat-chg')}}
+
+
   </div>
   <div class="modal-footer">
     <button class="btn btn-large" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary btn-large" id="prop-save-chg">OK</button>
+    <button class="btn btn-primary btn-large" id="print-trans" >Print</button>
+    <button class="btn btn-danger btn-large" id="finalize-trans">Finalize</button>
   </div>
 </div>
 
-
-<div id="prop-chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Change Property Status</h3>
-  </div>
-  <div class="modal-body">
-    <h4 id="prop-trx-order"></h4>
-    {{ Former::hidden('prop_id')->id('prop-trx-chg') }}
-    {{ Former::select('status', 'Status')->options(Config::get('ia.publishing'))->id('prop-stat-chg')}}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" id="prop-save-chg">Save changes</button>
-  </div>
-</div>
-
-
-<div id="chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Change Transaction Status</h3>
-  </div>
-  <div class="modal-body">
-    <h4 id="trx-order"></h4>
-    {{ Former::hidden('trx_id')->id('trx-chg') }}
-    {{ Former::select('status', 'Status')->options(Config::get('ia.trx_status'))->id('stat-chg')}}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" id="save-chg">Save changes</button>
-  </div>
-</div>
-
-<div id="upload-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Upload Pictures</span></h3>
-  </div>
-  <div class="modal-body" >
-        <h4 id="upload-title-id"></h4>
-        {{ Former::open()->id('upload-form') }}
-        {{ Former::hidden('upload_id')->id('upload-id') }}
-
-        <?php
-            $fupload = new Fupload();
-        ?>
-
-        {{ $fupload->id('pictureupload')->title('Select Images')->label('Upload Images')->make() }}
-
-        {{ Former::close() }}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button class="btn btn-primary" id="do-upload">Save changes</button>
-  </div>
-</div>
-
-<div id="upinv-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Update Inventory</span></h3>
-  </div>
-  <div class="modal-body" >
-        <h4 id="upinv-title-id"></h4>
-
-        {{ Former::open()->id('upinv-form') }}
-        {{ Former::hidden('id')->id('upinv-id') }}
-        {{ Former::hidden('SKU')->id('upinv-sku') }}
-            <span id="inv-loading-pictures" style="display:none;" ><img src="{{URL::to('/') }}/images/loading.gif" />loading existing pictures...</span>
-        <div id="upinv-container">
-
-        </div>
-        {{ Former::close() }}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button class="btn btn-primary" id="do-upinv">Save changes</button>
-  </div>
-</div>
-
-
-<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
-    <div class="slides"></div>
-    <h3 class="title"></h3>
-    <a class="prev">‹</a>
-    <a class="next">›</a>
-    <a class="close">×</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
-</div>
 
 <script type="text/javascript">
 
@@ -635,6 +577,12 @@ th:first-child{
 
         */
 
+        $('#print-trans').on('click',function(){
+            var current_trx = $('#current_session').val();
+            $('#print-window').attr('src','{{ URL::to('pos/print') }}/' + current_trx );
+            $('#print-modal').modal('show');
+        });
+
         $('#select_all').click(function(){
             if($('#select_all').is(':checked')){
                 $('.selector').attr('checked', true);
@@ -672,7 +620,7 @@ th:first-child{
 
         $('#printstart').click(function(){
 
-            var pframe = document.getElementById('print_frame');
+            var pframe = document.getElementById('print-window');
             var pframeWindow = pframe.contentWindow;
             pframeWindow.print();
 

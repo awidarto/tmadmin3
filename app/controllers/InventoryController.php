@@ -45,6 +45,12 @@ class InventoryController extends AdminController {
 
         $this->title = 'Stock Unit';
 
+        $this->additional_filter = View::make('inventory.addfilter')->render();
+
+        $this->js_additional_param = "aoData.push( { 'name':'outletNameFilter', 'value': $('#outlet-filter').val() } );";
+
+        $this->place_action ='none';
+
         return parent::getIndex();
 
     }
@@ -65,7 +71,26 @@ class InventoryController extends AdminController {
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
 
+        $outletFilter = Input::get('outletNameFilter');
+
+        if($outletFilter != ''){
+            $this->additional_query = array('outletName'=>$outletFilter);
+        }
+
+        $this->place_action ='none';
+
         return parent::postIndex();
+    }
+
+    public function getPrintlabel($sessionname, $columns, $resolution, $gap)
+    {
+        session_start();
+        $session = $_SESSION[$sessionname];
+        return View::make('inventory.printlabel')
+            ->with('columns',$columns)
+            ->with('resolution',$resolution)
+            ->with('gap',$gap)
+            ->with('sess', $session);
     }
 
     public function beforeSave($data)
@@ -377,11 +402,12 @@ class InventoryController extends AdminController {
         $edit = '<a href="'.URL::to('products/edit/'.$data['_id']).'"><i class="icon-edit"></i> Update</a>';
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="icon-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="icon-print"></i> Print</a>';
-        $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Upload Picture</span>';
-        $outlet = '<span class="outlet" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Move Outlet</span>';
+        $upload = '<span class="upload action" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-upload"></i> Upload Picture</span>';
+        $outlet = '<span class="outlet action" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="icon-external-link"></i> Move Outlet</span>';
+        $printcode = '<span class="printcode action" id="'.$data['_id'].'" ><i class="icon-print"></i> Print Code</span>';
 
         $actions = $edit.'<br />'.$upload.'<br />'.$delete;
-        $actions = $outlet;
+        $actions = $printcode.'<br />'.$outlet;
         return $actions;
     }
 

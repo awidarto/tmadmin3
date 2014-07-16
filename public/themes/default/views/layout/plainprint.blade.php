@@ -12,14 +12,6 @@
 
     <!-- Le styles -->
     <!-- Bootplus -->
-    {{--
-    {{ HTML::style('bootflat/css/bootflat.min.css') }}
-
-    {{ HTML::style('bootplus/css/bootplus.min.css') }}
-
-    {{ HTML::style('bootplus/css/bootplus-responsive.min.css') }}
-
-    --}}
     {{ HTML::style('css/typography.css') }}
 
     {{ HTML::style('bootstrap232/css/bootstrap.css') }}
@@ -36,19 +28,6 @@
 
     {{ HTML::style('css/bootstrap-timepicker.css') }}
 
-    {{ HTML::style('css/bootstrap-modal.css') }}
-
-    {{ HTML::style('css/sm-datepicker/bootstrap-datetimepicker.min.css') }}
-
-    {{ HTML::style('css/flick/jquery-ui-1.9.2.custom.min.css') }}
-
-    {{ HTML::style('css/pickacolor/pick-a-color-1.1.8.min.css') }}
-
-    {{ HTML::style('css/daterangepicker-bs2.css') }}
-
-    {{ HTML::style('css/blueimp-gallery.min.css') }}
-
-    {{ HTML::style('css/bootstrap-select.css')}}
 
     {{-- HTML::style('css/style.css') --}}
 
@@ -130,31 +109,7 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
           <a class="brand" href="{{ URL::to('/') }}">{{ Config::get('site.name') }}</a>
-          <div class="nav-collapse collapse">
-
-
-                @if(Auth::check())
-                    <p class="navbar-text pull-right">
-                        Hello {{ Auth::user()->fullname }}&nbsp;&nbsp;
-                        <a class="btn btn-primary" href="#" ><i class="icon-cog"></i>&nbsp;Settings</a>
-                        <a class="btn btn-info" href="{{ URL::to('logout')}}" style="color:white;background-color:maroon;" ><i class="icon-signout"></i>&nbsp;Logout</a>
-                    </p>
-                @else
-                    <form method="POST" action="{{ URL::to('login')}}" class="navbar-form pull-right">
-                        <input name="email" class="span2" type="text" placeholder="Email">
-                        <input name="password" class="span2" type="password" placeholder="Password">
-                        <button type="submit" class="btn btn-primary">Sign in</button>
-                    </form>
-                @endif
-            @include('partials.topnav')
-
-          </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
@@ -179,53 +134,6 @@
     <!-- Placed at the end of the document so the pages load faster -->
 
     {{ HTML::script('bootplus/js/bootstrap.min.js')}}
-    {{ HTML::script('js/bootstrap-modalmanager.js') }}
-    {{ HTML::script('js/bootstrap-modal.js') }}
-
-    {{ HTML::script('js/jquery.removeWhitespace.min.js')}}
-    {{ HTML::script('js/jquery.collagePlus.min.js')}}
-    {{ HTML::script('js/jquery.collageCaption.js')}}
-    {{ HTML::script('js/jquery-datatables/jquery.datatables.min.js')}}
-    {{ HTML::script('js/jquery-datatables/datatables.bootstrap.js')}}
-
-    {{ HTML::script('js/jquery.tagsinput.js') }}
-
-    {{-- HTML::script('js/bootstrap-timepicker.js') --}}
-    {{ HTML::script('js/sm-datepicker/bootstrap-datetimepicker.min.js') }}
-
-    {{ HTML::script('js/moment.min.js') }}
-    {{ HTML::script('js/daterangepicker.js') }}
-
-    {{ HTML::script('js/app.js') }}
-
-    {{ HTML::script('js/blueimp-gallery.min.js') }}
-    {{ HTML::script('js/jquery.blueimp-gallery.min.js') }}
-
-    {{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
-
-    {{ HTML::script('js/bootstrap-wysihtml5-0.0.2.min.js') }}
-
-    {{ HTML::script('js/bootstrap-select/bootstrap-select.js') }}
-
-    {{ HTML::script('js/jquery-fileupload/vendor/jquery.ui.widget.js') }}
-
-    {{ HTML::script('js/js-load-image/load-image.min.js') }}
-
-    {{ HTML::script('js/js-canvas-to-blob/canvas-to-blob.min.js') }}
-
-    {{ HTML::script('js/jquery-fileupload/jquery.iframe-transport.js') }}
-
-    {{ HTML::script('js/jquery-fileupload/jquery.fileupload.js') }}
-
-    {{ HTML::script('js/tinycolor-0.9.15.min.js')}}
-    {{ HTML::script('js/pickacolor/pick-a-color-1.1.8.min.js') }}
-
-    {{ HTML::script('js/jquery-fileupload/jquery.fileupload-process.js') }}
-    {{ HTML::script('js/jquery-fileupload/jquery.fileupload-image.js') }}
-    {{ HTML::script('js/jquery-fileupload/jquery.fileupload-audio.js') }}
-    {{ HTML::script('js/jquery-fileupload/jquery.fileupload-video.js') }}
-    {{ HTML::script('js/jquery-fileupload/jquery.fileupload-validate.js') }}
-
 
    </body>
 </html>

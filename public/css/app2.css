@@ -201,3 +201,11 @@ a.btn {
     background-color: #CCC;
     display:inline-block;
 }
+
+b.fa{
+    font-size: 16px;
+}
+
+.action{
+    cursor: pointer;
+}

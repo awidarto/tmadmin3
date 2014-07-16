@@ -621,3 +621,10 @@ thead#searchinput tr td input.search_init{
 	right: 0;
 }
 
+b.fa{
+    font-size: 16px;
+}
+
+.action{
+    cursor: pointer;
+}

@@ -32,7 +32,7 @@ class PosController extends AdminController {
             //array('Photos',array('search'=>false,'sort'=>false)),
             array('Item',array('search'=>false,'sort'=>false)),
             array('Unit Id',array('search'=>false,'sort'=>false)),
-            array('Quantity',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Qty',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
             array('Unit Price',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
             array('Total',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>'')))
         );
@@ -322,12 +322,12 @@ class PosController extends AdminController {
                 $tdoc = $artemp[$doc->SKU];
                 $tdoc->quantity = $tdoc->quantity + $doc->quantity;
                 $tdoc->unitTotal = $tdoc->unitTotal + $doc->unitTotal;
-                $tdoc->unitId = $tdoc->unitId.'<br />'.$this->shortunit( array('unitId'=>$doc->unitId) );
+                $tdoc->unitId = $tdoc->unitId.'<br />'.$this->shortunit( array('unitId'=>$doc->unitId) ).'<i class="fa fa-times-circle del_unit" id="'.$doc->unitId.'" ></i>';
                 $artemp[$doc->SKU] = $tdoc;
             }else{
                 $doc->quantity = 1;
                 $doc->unitTotal = $doc->productDetail['priceRegular'];
-                $doc->unitId = $this->shortunit( array('unitId'=>$doc->unitId) );
+                $doc->unitId = $this->shortunit( array('unitId'=>$doc->unitId) ).' <i class="fa fa-times-circle del_unit" id="'.$doc->unitId.'" ></i>';
                 $artemp[$doc->SKU] = $doc;
             }
         }
@@ -454,6 +454,12 @@ class PosController extends AdminController {
         );
 
         return Response::json($result);
+    }
+
+    public function getPrint($session_id)
+    {
+        $trx = Transaction::where('sessionId',$session_id)->get()->toArray();
+        return View::make('pos.print')->with('trx', $trx);
     }
 
     public function postScan()

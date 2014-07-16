@@ -566,6 +566,18 @@ class AjaxController extends BaseController {
         }
     }
 
+    public function postSessionsave($sessionname = null)
+    {
+        if(is_null($sessionname)){
+            $sessionname = 'pr_'.time();
+        }
+        $in = Input::get('data_array');
+
+        session_start();
+        $_SESSION[$sessionname] = $in;
+        return Response::json(array('result'=>'OK', 'sessionname'=>$sessionname));
+    }
+
 
     public function postProductpicture(){
         $data = Input::get();
@@ -699,6 +711,28 @@ class AjaxController extends BaseController {
             $prop = Product::find($p);
             $prop->category = $cats[$category];
             $prop->categoryLink = $category;
+            $prop->save();
+        }
+
+        return Response::json(array('result'=>'OK'));
+
+    }
+
+    public function postAssignoutlet(){
+        $in = Input::get();
+
+        $category = $in['outlet'];
+
+        $cats = Prefs::getOutlet()->OutletToSelection('name','_id',false);
+
+        //print_r($cats);
+
+        $product_ids = $in['product_ids'];
+
+        foreach($product_ids as $p){
+            $prop = Stockunit::find($p);
+            $prop->outletId = $cats[$category];
+            $prop->outletName = $category;
             $prop->save();
         }
 
