@@ -700,7 +700,7 @@ div.payform h3{
 
             $('#payable-amount').val(total_price);
 
-            $('#payable-total').html(total_price);
+            $('#payable-total').html(accounting.formatMoney( total_price ) );
 
             $('#cash-amount').val('');
             $('#cash-change').val('');

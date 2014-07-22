@@ -71,7 +71,7 @@
                 change = 0;
             }
 
-            $('#cash-total').html(notNan(paid_cash));
+            $('#cash-total').html( notNan(paid_cash) );
             $('#cash-change').val(notNan(change));
         }
 

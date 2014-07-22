@@ -196,6 +196,8 @@
     {{ HTML::script('js/moment.min.js') }}
     {{ HTML::script('js/daterangepicker.js') }}
 
+    {{ HTML::script('js/accounting.min.js')}}
+
     {{ HTML::script('js/app.js') }}
 
     {{ HTML::script('js/blueimp-gallery.min.js') }}
