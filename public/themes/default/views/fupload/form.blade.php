@@ -84,7 +84,7 @@
                             printf($thumb,
                                 $v['file_id'],
                                 $v['thumbnail_url'],
-                                $v['full_url'],
+                                $v['fileurl'],
                                 $v['filename'],
                                 $v['file_id'],
                                 $v['file_id'],
@@ -106,7 +106,7 @@
 
                         $filename = $allin['filename'];
                         $thumbnail_url = $allin['thumbnail_url'];
-                        $full_url = $allin['full_url'];
+                        $full_url = $allin['fileurl'];
                         $file_id = $allin['file_id'];
                         /*
                         $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
