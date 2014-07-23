@@ -4,6 +4,7 @@
 }}&nbsp;&nbsp;
 <a class="btn" id="refresh_filter">Refresh</a>
 <a class="btn" id="assign-product">Assign Product to Category</a>
+<a class="btn" id="assign-status">Set Status</a>
 
 <div id="assign-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
@@ -20,6 +21,22 @@
   </div>
 </div>
 
+<div id="status-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalStatus" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalStatus">Assign Selected to</span></h3>
+  </div>
+  <div class="modal-body" >
+        <h4 id="upload-title-id"></h4>
+        {{ Former::select('status', 'Status')->options(array('active'=>'Active','inactive'=>'Inactive'))->id('assigned-status')}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary" id="do-status">Assign</button>
+  </div>
+</div>
+
+
 <script type="text/javascript">
     $(document).ready(function(){
         $('#refresh_filter').on('click',function(){
@@ -32,6 +49,11 @@
 
         $('#assign-product').on('click',function(e){
             $('#assign-modal').modal();
+            e.preventDefault();
+        });
+
+        $('#assign-status').on('click',function(e){
+            $('#status-modal').modal();
             e.preventDefault();
         });
 
@@ -62,6 +84,35 @@
             }
 
         });
+
+        $('#do-status').on('click',function(){
+            var props = $('.selector:checked');
+            var ids = [];
+            $.each(props, function(index){
+                ids.push( $(this).val() );
+            });
+
+            console.log(ids);
+
+            if(ids.length > 0){
+                $.post('{{ URL::to('ajax/assignstatus')}}',
+                    {
+                        status : $('#assigned-status').val(),
+                        product_ids : ids
+                    },
+                    function(data){
+                        $('#status-modal').modal('hide');
+                        oTable.fnDraw();
+                    }
+                    ,'json');
+
+            }else{
+                alert('No product selected.');
+                $('#status-modal').modal('hide');
+            }
+
+        });
+
 
         $('#unassign-prop').on('click',function(){
             var props = $('.selector:checked');

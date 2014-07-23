@@ -698,6 +698,23 @@ class AjaxController extends BaseController {
 
     }
 
+    public function postAssignstatus(){
+        $in = Input::get();
+
+        $status = $in['status'];
+
+        $product_ids = $in['product_ids'];
+
+        foreach($product_ids as $p){
+            $prop = Product::find($p);
+            $prop->status = $status;
+            $prop->save();
+        }
+
+        return Response::json(array('result'=>'OK'));
+
+    }
+
     public function postAssigncat(){
         $in = Input::get();
 
