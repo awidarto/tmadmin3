@@ -16,6 +16,10 @@
         {{ Former::text('address','Address') }}
         {{ Former::text('phone','Phone') }}
 
+        <h6>Geo Point ( for Google Map Marker )</h6>
+        {{ Former::text('latitude','Latitude') }}
+        {{ Former::text('longitude','Longitude') }}
+
     </div>
     <div class="span6">
         {{ Former::select('category')->options(Config::get('tm.outlet_category'))->label('Outlet Category') }}
