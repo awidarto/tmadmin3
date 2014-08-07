@@ -566,6 +566,31 @@ class AjaxController extends BaseController {
         }
     }
 
+    public function postPrintdefault()
+    {
+        $in = Input::get();
+
+        $_id = Auth::user()->id;
+
+        $def = Printdefault::where('ownerId',$_id)->first();
+
+        if($def){
+
+        }else{
+            $def = new Printdefault();
+            $def['ownerId'] = Auth::user()->id;
+        }
+
+        foreach($in as $k=>$v){
+            $def[$k] = $v;
+        }
+
+        $def->save();
+
+        return Response::json(array('result'=>'OK'));
+
+    }
+
     public function postSessionsave($sessionname = null)
     {
         if(is_null($sessionname)){
@@ -573,8 +598,9 @@ class AjaxController extends BaseController {
         }
         $in = Input::get('data_array');
 
-        session_start();
-        $_SESSION[$sessionname] = $in;
+        $in['_id'] = $sessionname;
+
+        Printsession::insert($in);
         return Response::json(array('result'=>'OK', 'sessionname'=>$sessionname));
     }
 
@@ -838,16 +864,28 @@ class AjaxController extends BaseController {
     {
         $q = Input::get('term');
 
-        $user = new Product();
-        $qemail = new MongoRegex('/'.$q.'/i');
+        $mreg = new MongoRegex('/'.$q.'/i');
 
-        $res = $user->find(array('$or'=>array(array('name'=>$qemail),array('description'=>$qemail)) ));
+        $res = Product::where('SKU', 'regex', $mreg)
+                    ->orWhere('itemDescription', 'regex', $mreg)
+                    ->orWhere('series', 'regex', $mreg)
+                    ->get()->toArray();
+
+                    //print_r($res);
 
         $result = array();
 
         foreach($res as $r){
-            $display = HTML::image(URL::base().'/storage/products/'.$r['_id'].'/sm_pic0'.$r['defaultpic'].'.jpg?'.time(), 'sm_pic01.jpg', array('id' => $r['_id']));
-            $result[] = array('id'=>$r['_id']->__toString(),'value'=>$r['name'],'link'=>$r['permalink'],'pic'=>$display,'description'=>$r['description'],'label'=>$r['name']);
+            //print_r($r);
+
+            if(isset($r['defaultpictures']['thumbnail_url'])){
+                $display = HTML::image( $r['defaultpictures']['thumbnail_url'].'?'.time(),'thumb', array('id' => $r['_id']));
+            }else{
+                $display = HTML::image( URL::to('images/no-thumb.jpg').'?'.time(),'thumb', array('id' => $r['_id']));
+            }
+
+            $label = $display.' '.$r['SKU'].'-'.$r['itemDescription'];
+            $result[] = array('id'=>$r['_id'],'value'=>$r['SKU'],'link'=>$r['SKU'],'pic'=>$display,'description'=>$r['itemDescription'],'label'=>$label);
         }
 
         return Response::json($result);

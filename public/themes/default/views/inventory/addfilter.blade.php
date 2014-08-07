@@ -35,13 +35,30 @@
                 Resolution
                 <input type="text" value="150" id="label_res"  class="span1" /> ppi
                 Label height
-                <input type="text" value="45" id="label_height" class="span1" /> px
-                Gap between label
-                <input type="text" value="20" id="label_gap" class="span1" /> px
+                <input type="text" value="75" id="label_cell_height" class="span1" /> px
+                Label width
+                <input type="text" value="145" id="label_cell_width" class="span1" /> px
+                Label right margin
+                <input type="text" value="10" id="label_margin_right" class="span1" /> px
+                Label bottom margin
+                <input type="text" value="10" id="label_margin_bottom" class="span1" /> px
+                Page left offset
+                <input type="text" value="0" id="label_offset_left" class="span1" /> px
+                Page top offset
+                <input type="text" value="0" id="label_offset_top" class="span1" /> px
+                Font size
+                <input type="text" value="8" id="font_size" class="span1" /> px
+                Code Type
+                <select id="code_type" class="span3" >
+                    <option value="barcode" selected >Bar Code</option>
+                    <option value="qr">QR Code</option>
+                </select>
+
                 <button id="label_default">make default</button>
                 <button id="label_refresh">refresh</button>
             </label>
         </div>
+        <input type="hidden" value="" id="session_name" />
         <input type="hidden" value="" id="label_id" />
         <iframe id="label_frame" name="label_frame" width="100%" height="90%"
         marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
@@ -50,7 +67,7 @@
     </div>
     <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button class="btn btn-primary" id="do-assign">Print</button>
+    <button class="btn btn-primary" id="do-print">Print</button>
     </div>
 </div>
 
@@ -83,6 +100,24 @@
             e.preventDefault();
         });
 
+        $('#label_refresh').on('click',function(){
+            var sessionname = $('#session_name').val();
+
+            var col = $('#label_columns').val();
+            var res = $('#label_res').val();
+            var cell_width = $('#label_cell_width').val();
+            var cell_height = $('#label_cell_height').val();
+            var margin_right = $('#label_margin_right').val();
+            var margin_bottom = $('#label_margin_bottom').val();
+            var font_size = $('#font_size').val();
+            var code_type = $('#code_type').val();
+            var offset_left = $('#label_offset_left').val();
+            var offset_top = $('#label_offset_top').val();
+            var src = '{{ URL::to('inventory/printlabel')}}/' + sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
+
+            $('#label_frame').attr('src',src);
+        });
+
         $('#print_barcodes').on('click',function(){
 
             var props = $('.selector:checked');
@@ -100,12 +135,19 @@
                     },
                     function(data){
                         if(data.result == 'OK'){
+                            $('#session_name').val(data.sessionname);
 
                             var col = $('#label_columns').val();
                             var res = $('#label_res').val();
-                            var gap = $('#label_gap').val();
-                            var height = $('#label_height').val();
-                            var src = '{{ URL::to('inventory/printlabel')}}/' + data.sessionname + '/' + col + '/' + res + '/' + gap + '/' + height;
+                            var cell_width = $('#label_cell_width').val();
+                            var cell_height = $('#label_cell_height').val();
+                            var margin_right = $('#label_margin_right').val();
+                            var margin_bottom = $('#label_margin_bottom').val();
+                            var font_size = $('#font_size').val();
+                            var code_type = $('#code_type').val();
+                            var offset_left = $('#label_offset_left').val();
+                            var offset_top = $('#label_offset_top').val();
+                            var src = '{{ URL::to('inventory/printlabel')}}/' + data.sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
                             $('#label_frame').attr('src',src);
                             $('#print-modal').modal('show');
                         }else{
@@ -120,6 +162,51 @@
             }
 
         });
+
+        $('#do-print').click(function(){
+
+            var pframe = document.getElementById('label_frame');
+            var pframeWindow = pframe.contentWindow;
+            pframeWindow.print();
+
+        });
+
+        $('#label_default').on('click',function(){
+            var col = $('#label_columns').val();
+            var res = $('#label_res').val();
+            var cell_width = $('#label_cell_width').val();
+            var cell_height = $('#label_cell_height').val();
+            var margin_right = $('#label_margin_right').val();
+            var margin_bottom = $('#label_margin_bottom').val();
+            var font_size = $('#font_size').val();
+            var code_type = $('#code_type').val();
+            var offset_left = $('#label_offset_left').val();
+            var offset_top = $('#label_offset_top').val();
+
+            $.post('{{ URL::to('ajax/printdefault')}}',
+                {
+                    col : col,
+                    res : res,
+                    cell_width : cell_width,
+                    cell_height : cell_height,
+                    margin_right : margin_right,
+                    margin_bottom : margin_bottom,
+                    font_size : font_size,
+                    code_type : code_type,
+                    offset_left : offset_left,
+                    offset_top : offset_top
+                },
+                function(data){
+                    if(data.result == 'OK'){
+                        alert('Print parameters set as default');
+                    }else{
+                        alert('Print parameters failed to set default');
+                    }
+                }
+                ,'json');
+
+        });
+
 
         $('#do-assign').on('click',function(){
             var props = $('.selector:checked');

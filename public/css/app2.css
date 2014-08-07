@@ -209,3 +209,7 @@ b.fa{
 .action{
     cursor: pointer;
 }
+
+ul#relatedList li, ul#recommendedList li{
+    list-style-type: none;
+}

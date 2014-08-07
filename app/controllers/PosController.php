@@ -58,7 +58,7 @@ class PosController extends AdminController {
 
         $this->is_additional_action = true;
 
-        $this->additional_action = View::make('scan.poscan')->with('additional_page_data',$this->additional_page_data)->render();
+        $this->additional_action = View::make('pos.poscan')->with('additional_page_data',$this->additional_page_data)->render();
 
         $this->js_additional_param = "aoData.push( { 'name':'session', 'value': $('#current_session').val() } );";
 
@@ -464,7 +464,151 @@ class PosController extends AdminController {
     public function getPrint($session_id)
     {
         $trx = Transaction::where('sessionId',$session_id)->get()->toArray();
-        return View::make('pos.print')->with('trx', $trx);
+        $pay = Payment::where('sessionId',$session_id)->get()->toArray();
+
+        $tab = array();
+        foreach($trx as $t){
+
+            $tab[ $t['SKU'] ]['description'] = $t['productDetail']['itemDescription'];
+            $tab[ $t['SKU'] ]['qty'] = ( isset($tab[ $t['SKU'] ]['qty']) )? $tab[ $t['SKU'] ]['qty'] + 1:1;
+            $tab[ $t['SKU'] ]['tagprice'] = $t['productDetail']['priceRegular'];
+            $tab[ $t['SKU'] ]['total'] = ( isset($tab[ $t['SKU'] ]['total']) )? $tab[ $t['SKU'] ]['total'] + $t['productDetail']['priceRegular']:$t['productDetail']['priceRegular'];
+
+        }
+
+        $tab_data = array();
+        $gt = 0;
+        foreach($tab as $k=>$v){
+            $tab_data[] = array(
+                    array('value'=>$v['description'], 'attr'=>'class="left"'),
+                    array('value'=>$v['qty'], 'attr'=>'class="center"'),
+                    array('value'=>Ks::idr($v['tagprice']), 'attr'=>'class="right"'),
+                    array('value'=>Ks::idr($v['total']), 'attr'=>'class="right"'),
+                );
+            $gt += $v['tagprice'];
+        }
+
+        $tab_data[] = array('','','',Ks::idr($gt));
+
+        $header = array(
+            'things to buy',
+            'unit',
+            'tagprice',
+            array('value'=>'price to pay', 'attr'=>'style="text-align:right"')
+            );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($tab_data, $attr, $header);
+        $tr_tab = $t->build();
+
+        $viewmodel = Template::where('type','invoice')->where('status','active')->first();
+        return DbView::make($viewmodel)
+                        ->field('body')
+                        ->with('transtab', $tr_tab)
+                        ->with('trx', $trx)
+                        ->with('pay',$pay);
+    }
+
+    public function postCancel()
+    {
+        $in = Input::get();
+
+        $trx = Transaction::where('sessionId', $in['sessionId'])->update(array('sessionStatus'=>'void', 'lastUpdate'=>new MongoDate() ));
+        $pay = Payment::where('sessionId', $in['sessionId'])->update(array('sessionStatus'=>'void', 'lastUpdate'=>new MongoDate() ));
+
+
+        $checktrx = Transaction::where('sessionId', $in['sessionId'])->where('sessionStatus','!=','void')->get()->toArray();
+        $checkpay = Payment::where('sessionId', $in['sessionId'])->where('sessionStatus','!=','void')->get()->toArray();
+
+        if( empty($checktrx) && empty($checkpay) ){
+            return Response::json(array('result'=>'OK'));
+        }else{
+            return Response::json(array('result'=>'NOK'));
+        }
+
+        return Response::json(array('result'=>'OK'));
+    }
+
+    public function postSave()
+    {
+        $in = Input::get();
+        //print_r($in);
+            /*
+            current_trx:3IseB
+            cc_amount:
+            cc_number:
+            cc_expiry:
+            dc_amount:
+            dc_number:
+            payable_amount:632500
+            cash_amount:
+            cash_change:
+            */
+        $trx = Payment::where('sessionId', $in['current_trx'])->first();
+
+        //print_r($trx);
+
+        if($trx){
+
+        }else{
+            $trx = new Payment();
+            $trx->sessionId = $in['current_trx'];
+            $trx->createdDate = new MongoDate();
+            $trx->sessionStatus = 'open';
+        }
+            $trx->by_name = $in['by_name'];
+            $trx->by_gender = $in['by_gender'];
+            $trx->by_address = $in['by_address'];
+            $trx->cc_amount = $in['cc_amount'];
+            $trx->cc_number = $in['cc_number'];
+            $trx->cc_expiry = $in['cc_expiry'];
+            $trx->dc_amount = $in['dc_amount'];
+            $trx->dc_number = $in['dc_number'];
+            $trx->payable_amount = $in['payable_amount'];
+            $trx->cash_amount = $in['cash_amount'];
+            $trx->cash_change = $in['cash_change'];
+            $trx->lastUpdate = new MongoDate();
+
+            $trx->save();
+
+            return Response::json(array( 'result'=>'OK' ));
+
+    }
+
+    public function postDelunit()
+    {
+        $id = Input::get('id');
+
+        $controller_name = strtolower($this->controller_name);
+
+        $model = $this->model;
+
+        if(is_null($id)){
+            $result = array('status'=>'ERR','data'=>'NOID');
+        }else{
+
+            Stockunit::where('_id', $id)->update(array('status'=>'available'));
+
+            $stat = Stockunit::where('_id', $id)->first()->toArray();
+
+            if(isset($stat['status']) && $stat['status'] == 'available'){
+                if($model->where('unitId',$id)->delete()){
+                    Event::fire($controller_name.'.delete_unit',array('id'=>$id,'result'=>'OK'));
+                    $result = array('status'=>'OK','data'=>'UNITDELETED');
+                }else{
+                    Event::fire($controller_name.'.delete_unit',array('id'=>$id,'result'=>'FAILED'));
+                    $result = array('status'=>'ERR','data'=>'DELETEFAILED');
+                }
+            }else{
+                Event::fire($controller_name.'.delete_unit',array('id'=>$id,'result'=>'FAILED'));
+                $result = array('status'=>'ERR','data'=>'DELETEFAILED');
+            }
+
+
+        }
+
+        return Response::json($result);
+
     }
 
     public function postScan()

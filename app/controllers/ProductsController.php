@@ -36,7 +36,7 @@ class ProductsController extends AdminController {
             array('Description',array('search'=>true,'sort'=>true)),
             array('Series',array('search'=>true,'sort'=>true)),
             array('Price',array('search'=>true,'sort'=>true)),
-            array('Discounted Price',array('search'=>true,'sort'=>true)),
+            array('Disc. Price',array('search'=>true,'sort'=>true)),
             array('Category',array('search'=>true,'sort'=>true,'select'=>Prefs::ExtractProductCategory() )),
             array('Length / Panjang',array('search'=>true,'sort'=>true)),
             array('Width / Lebar',array('search'=>true,'sort'=>true)),

@@ -116,6 +116,7 @@ return array(
         'Maatwebsite\Excel\ExcelServiceProvider',
         'AlexWhitman\ViewThemes\ViewThemesServiceProvider',
         'Barryvdh\Snappy\ServiceProvider',
+        'Flynsarmy\DbBladeCompiler\DbBladeCompilerServiceProvider',
 	),
 
 	/*
@@ -193,6 +194,7 @@ return array(
         'Theme'           => 'AlexWhitman\ViewThemes\ThemeFacade',
         'Carbon'          => 'Carbon\Carbon',
         'PDF'             => 'Barryvdh\DomPDF\Facade',
+        'DbView'          => 'Flynsarmy\DbBladeCompiler\Facades\DbView',
 	),
 
 );

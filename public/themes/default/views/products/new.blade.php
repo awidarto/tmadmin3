@@ -20,6 +20,16 @@
         {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
         {{ Former::text('priceRegular','Regular Price')->class('span4') }}
         {{ Former::text('priceDiscount','Discount Price')->class('span4') }}
+        {{ Former::text('discFromDate','Disc. From')->class('span7 offset-2 eventdate')
+            ->id('fromDate')
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
+
+        {{ Former::text('discToDate','Disc. Until')->class('span7 offset-2 eventdate')
+            ->id('toDate')
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
+
         {{ Former::text('material','Material') }}
         {{ Former::text('colour','Colour')->class('span4') }}
 
@@ -44,6 +54,10 @@
         </div>
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
+        {{ Former::text('relatedProducts','Related Products')->class('tag_related') }}
+
+        {{ Former::text('recommendedProducts','Recommended Products')->class('tag_recommended') }}
 
     </div>
     <div class="span6">
@@ -95,8 +109,11 @@
 </div>
 {{Former::close()}}
 
-{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
-{{ HTML::script('js/parser_rules/advanced.js') }}
+
+{{ HTML::style('css/autocompletes.css') }}
+{{ HTML::script('js/autocompletes.js') }}
+
+{{ HTML::script('js/autocompletes.js') }}
 
 <script type="text/javascript">
 
@@ -104,89 +121,7 @@
 $(document).ready(function() {
 
 
-    function setVisibleOptions(){
-        var mc = $('#mainCategory').val();
-
-        console.log(mc);
-
-        if( mc == 'Structure'){
-            $('#productFunction').hide();
-            $('#productSystem').show();
-            $('#productApplication').hide();
-        }else if( mc == 'Furniture'){
-            $('#productFunction').show();
-            $('#productSystem').hide();
-            $('#productApplication').hide();
-        }else{
-            $('#productFunction').hide();
-            $('#productSystem').hide();
-            $('#productApplication').show();
-        }
-
-    }
-
-    setVisibleOptions();
-
-    $('select').select2({
-      width : 'resolve'
-    });
-
     $('.pick-a-color').pickAColor();
-
-    var url = '{{ URL::to('upload') }}';
-
-    $('#fileupload').fileupload({
-        url: url,
-        dataType: 'json',
-        done: function (e, data) {
-            $('#progress .bar').css(
-                'width',
-                '0%'
-            );
-
-            $.each(data.result.files, function (index, file) {
-                var thumb = '<li><img src="' + file.thumbnail_url + '" /><input type="radio" name="defaultpic" value="' + file.name + '"> Default<br /><span class="img-title">' + file.name + '</span>' +
-                '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
-                '<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
-                '<label for="tags">Tags</label><input type="text" name="tag[]" />' +
-                '</li>';
-                $(thumb).appendTo('#files ul');
-
-                var upl = '<input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';
-                upl += '<input type="hidden" name="delete_url[]" value="' + file.delete_url + '">';
-                upl += '<input type="hidden" name="filename[]" value="' + file.name  + '">';
-                upl += '<input type="hidden" name="filesize[]" value="' + file.size  + '">';
-                upl += '<input type="hidden" name="temp_dir[]" value="' + file.temp_dir  + '">';
-                upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
-                upl += '<input type="hidden" name="filetype[]" value="' + file.type + '">';
-                upl += '<input type="hidden" name="fileurl[]" value="' + file.url + '">';
-
-                $(upl).appendTo('#uploadedform');
-
-            });
-        },
-        progressall: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('#progress .bar').css(
-                'width',
-                progress + '%'
-            );
-        }
-    })
-    .prop('disabled', !$.support.fileInput)
-        .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-    $('#field_role').change(function(){
-        //alert($('#field_role').val());
-        // load default permission here
-    });
-
-    /*
-    var editor = new wysihtml5.Editor('ecofriendly', { // id of textarea element
-      toolbar:      'wysihtml5-toolbar', // id of toolbar element
-      parserRules:  wysihtml5ParserRules // defined in parser rules set
-    });
-    */
 
     $('#name').keyup(function(){
         var title = $('#name').val();

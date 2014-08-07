@@ -112,16 +112,16 @@
                 maxDate: moment().add('months',12)
             },function(start, end){
                 if ( typeof(start) !== "undefined" && start !== null && start !== '' ) {
-                    $('#fromDate').val(start.format('MM/DD/YYYY'));
-                    $('#toDate').val(end.format('MM/DD/YYYY'));
+                    $('#fromDate').val(start.format('DD/MM/YYYY'));
+                    $('#toDate').val(end.format('DD/MM/YYYY'));
                 }
             });
 
         $('.eventdate').on('show',function(ev, picker){
                 var start = $('#fromDate').val();
                 if ( typeof(start) !== "undefined" && start !== null && start !== '' && start !== 'invalid date' ) {
-                    picker.setStartDate(moment( $('#fromDate').val(), 'MM/DD/YYYY' ));
-                    picker.setEndDate(moment( $('#toDate').val(), 'MM/DD/YYYY' ));
+                    picker.setStartDate(moment( $('#fromDate').val(), 'DD/MM/YYYY' ));
+                    picker.setEndDate(moment( $('#toDate').val(), 'DD/MM/YYYY' ));
                 }else{
                     picker.setStartDate(moment());
                     picker.setEndDate(moment().add('days',3));
@@ -424,7 +424,6 @@
 				$('#emp_city').val(ui.item.userdata.city);
 				$('#emp_zip').val(ui.item.userdata.zip);
 
-
 			}
 		});
 
@@ -435,43 +434,7 @@
 			}
 		});
 
-		var hallId;
-
-		$('.auto_hall').autocomplete({
-			source: base + 'ajax/hall',
-			select: function(event, ui){
-				$('#hallid').val(ui.item.id);
-				hallId = $('#hallid').val();
-			},
-			change: function( event, ui ) {
-				$('#boothid').val('');
-				$('.auto_booth').val('');
-			}
-		});
-
-
-		$('.auto_booth').bind("focus blur change keyup", function(){
-			hallId = $('#hallid').val();
-
-			$('.auto_booth').autocomplete({
-
-				source: base + 'ajax/booth/'+hallId,
-
-				select: function(event, ui){
-					$('#boothid').val(ui.item.id);
-
-				}
-			});
-		});
-
-		$('.auto_exhibitor').autocomplete({
-			source: base + 'ajax/exhibitor',
-			select: function(event, ui){
-				$('#exhibitorid').val(ui.item.id);
-				hallId = $('#exhibitorid').val();
-			}
-		});
-
+        /*
 		$('.autocomplete_product').autocomplete({
             source: function (request, response) {
                 $.ajax({
@@ -482,7 +445,7 @@
 
                         response($.map(data, function (item) {
                             return {
-                                value: item.label,
+                                value: item.id,
                                 avatar: item.pic,
                                 title: item.label,
                                 description: item.description,
@@ -516,6 +479,7 @@
 	                    .appendTo(ul);
 	        };
 		});
+        */
 
 		$('.autocomplete_product_link').autocomplete({
             source: function (request, response) {

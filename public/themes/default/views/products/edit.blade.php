@@ -5,6 +5,7 @@
 
 <h3>{{$title}}</h3>
 
+
 {{Former::open_for_files($submit,'POST',array('class'=>'custom'))}}
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
@@ -20,6 +21,17 @@
         {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
         {{ Former::text('priceRegular','Regular Price')->class('span4') }}
         {{ Former::text('priceDiscount','Discount Price')->class('span4') }}
+
+        {{ Former::text('discFromDate','Disc. From')->class('span7 offset-2 eventdate')
+            ->id('fromDate')
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
+
+        {{ Former::text('discToDate','Disc. Until')->class('span7 offset-2 eventdate')
+            ->id('toDate')
+            //->data_format('dd-mm-yyyy')
+            ->append('<i class="icon-th"></i>') }}
+
         {{ Former::text('material','Material') }}
         {{ Former::text('colour','Colour')->class('span4') }}
         {{--
@@ -55,6 +67,10 @@
         </div>
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
+        {{ Former::text('relatedProducts')->class('tag_related') }}
+
+        {{ Former::text('recommendedProducts')->class('tag_recommended') }}
 
     </div>
     <div class="span6">
@@ -130,11 +146,12 @@
 </div>
 {{Former::close()}}
 
-{{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
-{{ HTML::script('js/parser_rules/advanced.js') }}
+{{ HTML::style('css/autocompletes.css') }}
+{{ HTML::script('js/autocompletes.js') }}
+
+
 
 <script type="text/javascript">
-
 
 $(document).ready(function() {
 

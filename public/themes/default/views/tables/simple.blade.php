@@ -37,6 +37,10 @@ th:first-child{
 	cursor:pointer;
 }
 
+td.group{
+	background-color: #AAA;
+}
+
 </style>
 <div class="row-fluid">
 	<div class="span12 command-bar">
@@ -408,6 +412,12 @@ th:first-child{
 					"sSwfPath": "{{ URL::to('/')  }}/swf/copy_csv_xls_pdf.swf"
 				},
 
+				"fnRowCallback": function (nRow, aData, iDisplayIndex) {
+					console.log(aData);
+				    //nRow.setAttribute('id', aData.RowOrder);  //Initialize row id for every row
+				    nRow.setAttribute('id', aData[0]);  //Initialize row id for every row
+				},
+
 				"aoColumnDefs": [
 				    { "bSortable": false, "aTargets": [ {{ $disablesort }} ] }
 				 ],
@@ -424,6 +434,22 @@ th:first-child{
 
 			}
         );
+
+        @if($table_dnd == true)
+        	oTable.rowReordering(
+        		{
+        			sURL:'{{ URL::to( $table_dnd_url ) }}',
+        			sRequestType: 'GET',
+        			iIndexColumn: {{ $table_dnd_idx }}
+        		}
+        	);
+        @elseif($table_group == true)
+        	oTable.rowGrouping({
+        		bExpandableGrouping: {{ ($table_group_collapsible)?'true':'false' }},
+        		iGroupingColumnIndex: {{ $table_group_idx }}
+        	});
+        @endif
+
 
     	$('div.dataTables_length select').wrap('<div class="ingrid styled-select" />');
 
@@ -612,20 +638,11 @@ th:first-child{
 
 		*/
 
-		$('#select_all').click(function(){
+		$('#select_all').on('click',function(){
 			if($('#select_all').is(':checked')){
-				$('.selector').attr('checked', true);
+				$('.selector').prop('checked', true);
 			}else{
-				$('.selector').attr('checked', false);
-			}
-		});
-
-		$(".selectorAll").on("click", function(){
-			var id = $(this).attr("id");
-			if($(this).is(':checked')){
-				$('.selector_'+id).attr('checked', true);
-			}else{
-				$('.selector_'+id).attr('checked', false);
+				$('.selector').prop('checked',false);
 			}
 		});
 

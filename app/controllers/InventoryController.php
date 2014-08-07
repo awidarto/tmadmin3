@@ -82,15 +82,37 @@ class InventoryController extends AdminController {
         return parent::postIndex();
     }
 
-    public function getPrintlabel($sessionname, $columns, $resolution, $gap)
+    //public function getPrintlabel($sessionname, $columns = 2, $resolution = 150,$cell_width = 120,$cell_height = 75, $margin_right = 10,$margin_bottom = 20,$font_size = 8,$code_type = 'barcode', $left_offset = 0, $top_offset = 0, $format = 'html' )
+    public function getPrintlabel($sessionname, $printparam, $format = 'html' )
     {
-        session_start();
-        $session = $_SESSION[$sessionname];
+        $pr = explode(':',$printparam);
+
+        $columns = $pr[0];
+        $resolution = $pr[1];
+        $cell_width = $pr[2];
+        $cell_height = $pr[3];
+        $margin_right = $pr[4];
+        $margin_bottom = $pr[5];
+        $font_size = $pr[6];
+        $code_type = $pr[7];
+        $left_offset = $pr[8];
+        $top_offset = $pr[9];
+
+        $session = Printsession::find($sessionname)->first()->toArray();
+        $labels = Stockunit::whereIn('_id', $session)->get()->toArray();
+
         return View::make('inventory.printlabel')
             ->with('columns',$columns)
             ->with('resolution',$resolution)
-            ->with('gap',$gap)
-            ->with('sess', $session);
+            ->with('cell_width',$cell_width)
+            ->with('cell_height',$cell_height)
+            ->with('margin_right',$margin_right)
+            ->with('margin_bottom',$margin_bottom)
+            ->with('font_size',$font_size)
+            ->with('code_type',$code_type)
+            ->with('left_offset', $left_offset)
+            ->with('top_offset', $top_offset)
+            ->with('labels', $labels);
     }
 
     public function beforeSave($data)

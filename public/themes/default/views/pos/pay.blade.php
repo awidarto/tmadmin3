@@ -1,17 +1,23 @@
 <form id="pay-form">
     <div class="row-fluid form-vertical payform" >
-        <div class="span4">
+        <div class="span3">
+            <h3>Buyer Info</h3>
+            {{ Former::text('name','Name')->id('name')->class('span12 left') }}
+            {{ Former::select('gender','L/P')->id('gender')->class('span4')->options(array('L'=>'L','P'=>'P')) }}
+            {{ Former::text('address','Address')->id('address')->class('span12 left') }}
+        </div>
+        <div class="span3">
             <h3>Credit Card</h3>
             {{ Former::text('cc_amount','Amount')->id('cc-amount')->class('span12 amounts') }}
             {{ Former::text('cc_number','Card Number')->id('cc-number')->class('span12') }}
             {{ Former::text('cc_expiry','Expiry Date')->id('cc-expiry')->class('span6')->help('MMYY') }}
         </div>
-        <div class="span4">
+        <div class="span3">
             <h3>Debit Card</h3>
             {{ Former::text('dc_amount','Amount')->id('dc-amount')->class('span12 amounts') }}
             {{ Former::text('dc_number','Card Number')->id('dc-number')->class('span12') }}
         </div>
-        <div class="span4">
+        <div class="span3">
             <h3>Cash</h3>
             {{ Former::text('payable_amount','Payable Amount')->id('payable-amount')->class('span12 amounts') }}
             {{ Former::text('cash_amount','Paid In Cash')->id('cash-amount')->class('span12') }}
@@ -38,6 +44,10 @@
 .payform input[disabled]:focus,
 .payform input[disabled="disabled"]:focus{
     color:#000;
+}
+
+input.left{
+    text-align: left;
 }
 </style>
 

@@ -74,6 +74,10 @@ div.payform input[type="text"]{
     min-height: 28px;
 }
 
+div.payform input[type="text"].left{
+    text-align: left;
+}
+
 div.payform label{
     line-height: 22px;
     font-size: 14px;
@@ -593,17 +597,106 @@ div.payform h3{
 
         */
 
+        $('#btn-cancel').on('click',function(){
+            var current_trx = $('#current_session').val();
+            var answer = confirm("Are you sure you want to cancel this session ?");
+
+            if (answer == true){
+
+                $.post('{{ URL::to('pos/cancel') }}',{'sessionId':current_trx}, function(data) {
+                    if(data.result == 'OK'){
+                        var sessions = $('.session-select');
+                        console.log(sessions);
+                        var lbl = 0;
+                        var is_next = false;
+                        var next_active = true;
+                        sessions.each(function(idx, el){
+                            console.log(el.id);
+                            if(el.id == current_trx){
+                                lbl = parseInt( $(el).html() );
+                                $(el).remove();
+                                is_next = true;
+                                $('#session-list button').removeClass('active');
+                            }else{
+                                if(is_next == true){
+                                    $(el).html(lbl);
+                                    if(next_active == true){
+                                        $(el).addClass('active');
+                                        next_active = false;
+                                    }
+                                    lbl++;
+                                }
+                            }
+                        });
+
+                        var active_session = $('.session-select .active');
+
+                        console.log(active_session.size());
+
+                        if(active_session.size() <= 0){
+                            $('.session-select:first').addClass('active');
+                        }
+
+                        var active_id = $('button.session-select.active').attr('id');
+
+                        $('#current_session').val(active_id);
+
+                        oTable.fnStandingRedraw();
+                        alert("Session id : " + current_trx + " deleted");
+                    }
+                },'json');
+
+            }else{
+                alert("Deletion cancelled");
+            }
+
+        });
+
+
         $('#print-trans').on('click',function(){
             var current_trx = $('#current_session').val();
-            $('#print-window').attr('src','{{ URL::to('pos/print') }}/' + current_trx );
-            $('#print-modal').modal('show');
+
+            var by_name = $('#name').val();
+            var by_gender = $('#gender').val();
+            var by_address = $('#address').val();
+            var cc_amount = $('#cc-amount').val();
+            var cc_number = $('#cc-number').val();
+            var cc_expiry = $('#cc-expiry').val();
+            var dc_amount = $('#dc-amount').val();
+            var dc_number = $('#dc-number').val();
+            var payable_amount = $('#payable-amount').val();
+            var cash_amount = $('#cash-amount').val();
+            var cash_change = $('#cash-change').val();
+
+            $.post('{{ URL::to('pos/save') }}',
+                {
+                    current_trx: current_trx,
+                    by_name: by_name,
+                    by_gender: by_gender,
+                    by_address: by_address,
+                    cc_amount: cc_amount,
+                    cc_number: cc_number,
+                    cc_expiry: cc_expiry,
+                    dc_amount: dc_amount,
+                    dc_number: dc_number,
+                    payable_amount: payable_amount,
+                    cash_amount: cash_amount,
+                    cash_change: cash_change
+                },
+                function(data){
+                    if(data.result == 'OK'){
+                        $('#print-window').attr('src','{{ URL::to('pos/print') }}/' + current_trx );
+                        $('#print-modal').modal('show');
+                    }
+                },'json');
+
         });
 
         $('#select_all').click(function(){
             if($('#select_all').is(':checked')){
-                $('.selector').attr('checked', true);
+                $('.selector').prop('checked', true);
             }else{
-                $('.selector').attr('checked', false);
+                $('.selector').prop('checked', false);
             }
         });
 
@@ -710,6 +803,9 @@ div.payform h3{
 
         function collectPayData(){
             return {
+                by_name: $('#name').val(),
+                by_gender: $('#gender').val(),
+                by_address: $('#address').val(),
                 cc_amount: $('#cc-amount').val(),
                 cc_number: $('#cc-number').val(),
                 cc_expiry: $('#cc-expiry').val(),
@@ -729,6 +825,29 @@ div.payform h3{
         });
 
         $('table.dataTable').click(function(e){
+
+            if ($(e.target).is('.del_unit')) {
+                var _id = e.target.id;
+                var answer = confirm("Are you sure you want to delete this item ?");
+
+                console.log(answer);
+
+                if (answer == true){
+
+                    $.post('{{ URL::to('pos/delunit') }}',{'id':_id}, function(data) {
+                        if(data.status == 'OK'){
+                            //redraw table
+
+                            oTable.fnStandingRedraw();
+                            alert("Item id : " + _id + " deleted");
+                        }
+                    },'json');
+
+                }else{
+                    alert("Deletion cancelled");
+                }
+            }
+
 
             if ($(e.target).is('.del')) {
                 var _id = e.target.id;

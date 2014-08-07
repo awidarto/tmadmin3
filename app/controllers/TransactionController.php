@@ -29,7 +29,8 @@ class TransactionController extends AdminController {
     {
 
         $this->heads = array(
-            array('Item',array('search'=>false,'sort'=>false)),
+            array('Transaction Id',array('search'=>true,'sort'=>true)),
+            array('SKU',array('search'=>false,'sort'=>false)),
             array('Unit Id',array('search'=>false,'sort'=>false)),
             array('Quantity',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
             array('Unit Price',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
@@ -37,6 +38,15 @@ class TransactionController extends AdminController {
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
+        $this->place_action = 'none';
+
+        $this->table_dnd = false;
+        $this->table_dnd_url = URL::to(strtolower($this->controller_name).'/reorder');
+        $this->table_dnd_idx = 3;
+
+        $this->table_group = true;
+        $this->table_group_field = URL::to(strtolower($this->controller_name).'/reorder');
+        $this->table_group_idx = 2;
 
         $this->title = 'Transaction';
 
@@ -68,6 +78,7 @@ class TransactionController extends AdminController {
     {
 
         $this->fields = array(
+            array('sessionId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'itemDesc')),
             array('unitId',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
             array('quantity',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -77,7 +88,7 @@ class TransactionController extends AdminController {
 
         $this->place_action = 'none';
 
-        $this->def_order_by = 'SKU';
+        $this->def_order_by = 'sessionId';
 
         $this->def_order_dir = 'desc';
 
@@ -85,7 +96,7 @@ class TransactionController extends AdminController {
 
         $session = (is_null($session) || !isset($session))?'':$session;
 
-        $this->additional_query = array('distinct'=>'sessionId');
+        //$this->additional_query = array('distinct'=>'sessionId');
 
         return parent::postIndex();
     }

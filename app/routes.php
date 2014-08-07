@@ -53,6 +53,8 @@ Route::controller('activity', 'ActivityController');
 
 Route::controller('inprop', 'InpropController');
 
+Route::controller('templates', 'TemplatesController');
+
 Route::controller('music', 'MusicController');
 Route::controller('video', 'VideoController');
 Route::controller('event', 'EventController');

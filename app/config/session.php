@@ -94,7 +94,7 @@ return array(
 	|
 	*/
 
-	'cookie' => 'iadmin_session',
+	'cookie' => 'tmadmin_session',
 
 	/*
 	|--------------------------------------------------------------------------

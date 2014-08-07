@@ -46,6 +46,20 @@
         </li>
 
 
+
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Templates
+                <b class="caret"></b>
+              </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('newsletter') }}" {{ sa('newsletter') }} >Newsletter</a></li>
+                <li><a href="{{ URL::to('brochure') }}" {{ sa('brochure') }} >Brochure</a></li>
+                <li><a href="{{ URL::to('templates') }}" {{ sa('templates') }} >Other Templates</a></li>
+            </ul>
+        </li>
+
+
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 Reports
