@@ -41,10 +41,14 @@ td.group{
 	background-color: #AAA;
 }
 
+.ingrid.styled-select select{
+    width:100px;
+}
+
 </style>
 <div class="row-fluid">
 	<div class="span12 command-bar">
-        <h3>{{ $title }}</h3>
+        <h1>{{ $title }}</h1>
 	 </div>
 </div>
 
@@ -73,10 +77,10 @@ td.group{
 	 </div>
 </div>
 
-<div class="row-fluid">
-   <div class="span12">
+<div class="row-fluid box">
+   <div class="span12 box-content">
 
-      <table class="table table-condensed dataTable">
+      <table class="table table-condensed no-wrap dataTable" style="max-width:1024px;">
 
 		    <thead>
 
@@ -399,8 +403,9 @@ td.group{
 		        "sAjaxSource": "{{$ajaxsource}}",
 				"oLanguage": { "sSearch": "Search "},
 				"sPaginationType": "full_numbers",
-				"sDom": 'Tlpirt',
+                "sDom": 'l<"#paginator" ip>rt',
 				"iDisplayLength":50,
+                "responsive":true,
 
 				@if(isset($excludecol) && $excludecol != '')
 				"oColVis": {
@@ -418,6 +423,24 @@ td.group{
 				    nRow.setAttribute('id', aData[0]);  //Initialize row id for every row
 				},
 
+        @if($table_group == true)
+
+                "drawCallback": function(settings) {
+                    var api = this.api();
+                    var rows = api.rows( {page:'current'} ).nodes();
+                    var last = null;
+
+                    api.column({{ $table_dnd_idx }}, {page:'current'} ).data().each(function( group, i ){
+                        if ( last !== group ) {
+                            $(rows).eq( i ).before(
+                                '<tr class="group"><td colspan="5">'+group+'</td></tr>'
+                            );
+
+                            last = group;
+                        }
+                    } )
+                },
+        @endif
 				"aoColumnDefs": [
 				    { "bSortable": false, "aTargets": [ {{ $disablesort }} ] }
 				 ],
@@ -434,21 +457,6 @@ td.group{
 
 			}
         );
-
-        @if($table_dnd == true)
-        	oTable.rowReordering(
-        		{
-        			sURL:'{{ URL::to( $table_dnd_url ) }}',
-        			sRequestType: 'GET',
-        			iIndexColumn: {{ $table_dnd_idx }}
-        		}
-        	);
-        @elseif($table_group == true)
-        	oTable.rowGrouping({
-        		bExpandableGrouping: {{ ($table_group_collapsible)?'true':'false' }},
-        		iGroupingColumnIndex: {{ $table_group_idx }}
-        	});
-        @endif
 
 
     	$('div.dataTables_length select').wrap('<div class="ingrid styled-select" />');
@@ -474,12 +482,10 @@ td.group{
 		//header search
 
 		$('thead input.filter').keyup( function () {
-			//console.log($('thead input').index(this));
-			//console.log(this.id);
-			/* Filter on the column (the index) of this element */
-			//var search_index = $('thead input').index(this);
-			var search_index = this.id;
-			oTable.fnFilter( this.value, search_index );
+            var search_index = this.id;
+            oTable.column( search_index )
+                    .search( this.value )
+                    .draw();
 		} );
 
 
@@ -503,7 +509,9 @@ td.group{
 			}
 			var search_index = e.currentTarget.id;
 
-			oTable.fnFilter( dateval, search_index );
+            oTable.column( search_index )
+                    .search( dateval )
+                    .draw();
 		});
 
 		eldatetime.on('changeDate', function(e) {
@@ -515,42 +523,23 @@ td.group{
 			}
 			var search_index = e.target.id;
 
-			oTable.fnFilter( dateval, search_index );
+            oTable.column( search_index )
+                    .search( dateval )
+                    .draw();
 		});
 
 		$('thead select.selector').change( function () {
-			/* Filter on the column (the index) of this element */
-			//var prev = $(this).parent().prev('input');
-
-			//var search_index = $('thead input').index(prev);
 			var search_index = this.id;
-
-			//console.log(search_index);
-
-			oTable.fnFilter( this.value,  search_index  );
+            oTable.column( search_index )
+                    .search( this.value )
+                    .draw();
 		} );
 
 		$('#clearsearch').click(function(){
-
-			console.log($('thead td input').val());
 			$('thead td input').val('');
-
-			console.log($('thead td input').val());
-
-			console.log('reloading table');
-			//oTable.fnClearTable(1);
-			/*
-			$('thead td input').each(function(){
-				console.log(this.id);
-				var index = this.id;
-				oTable.fnFilter('',index);
-			});
-			oTable.fnFilter('',1);
-
-			oTable.fnFilter('');
-			*/
-			oTable.fnFilterClear();
-			oTable.fnDraw();
+            oTable.search( '' )
+                .columns().search( '' )
+                .draw();
 		});
 
 		$('#download-xls').on('click',function(){
@@ -687,7 +676,7 @@ td.group{
 					function(data){
 						if(data.result == 'OK:UPLOADED'){
 							$('#upload-modal').modal('hide');
-							oTable.fnDraw();
+							oTable.draw();
 						}else if( data.result == 'ERR:UPDATEFAILED' ){
 							alert('Upload failed');
 						}
@@ -713,7 +702,7 @@ td.group{
 					function(data){
 						if(data.result == 'OK:UPDATED'){
 							$('#upinv-modal').modal('hide');
-							oTable.fnDraw();
+							oTable.draw();
 						}else if( data.result == 'ERR:UPDATEFAILED' ){
 							alert('Update failed');
 						}
@@ -749,62 +738,6 @@ td.group{
 
 		   	{{ $js_table_event }}
 
-			if ($(e.target).is('.pbadge')) {
-				var _id = e.target.id;
-
-				current_print_id = _id;
-
-				$('#print_id').val(_id);
-
-				<?php
-
-					$printsource = (isset($printsource))?$printsource.'/': '/';
-
-				?>
-
-				var src = '{{ $printsource }}' + _id;
-
-				$('#print_frame').attr('src',src);
-
-				$('#printBadge').modal();
-		   	}
-
-
-
-		   	if ($(e.target).is('.viewform')) {
-
-				var _id = e.target.id;
-				var _rel = $(e.target).attr('rel');
-				var url = '{{ URL::to('/')  }}' + '/exhibitor/' + _rel + '/' + _id;
-
-
-				//var url = $(this).attr('url');
-			    //var modal_id = $(this).attr('data-controls-modal');
-			    $("#viewformModal .modal-body").load(url);
-
-
-				$('#viewformModal').modal();
-
-		   	}
-
-		   	if ($(e.target).is('.editform')) {
-
-				var _id = e.target.id;
-				var _rel = $(e.target).attr('rel');
-				var url = '{{ URL::to('/')  }}' + '/exhibitor/' + _rel + '/' + _id;
-
-
-				//var url = $(this).attr('url');
-			    //var modal_id = $(this).attr('data-controls-modal');
-			    setTimeout(function() {
-				    $("#editformModal .modal-body").load(url);
-				}, 1000);
-
-
-
-				$('#editformModal').modal();
-
-		   	}
 
 			if ($(e.target).is('.thumbnail')) {
 				var _id = e.target.id;
@@ -1003,7 +936,7 @@ td.group{
 		            function(data){
 		            	if(data.result == 'OK'){
 		            		alert('Attendance data cleared, ready to start the event.');
-		            		oTable.fnDraw();
+		            		oTable.draw();
 		            	}
 		            },
 	            'json');

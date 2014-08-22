@@ -116,7 +116,7 @@ $(document).ready(function() {
         var session = e.target.id;
         console.log(session);
         $('#current_session').val(session);
-        oTable.fnDraw();
+        oTable.draw();
     });
 
     $('#barcode').on('keyup',function(ev){
@@ -171,7 +171,7 @@ $(document).ready(function() {
                     label++;
                     $('#session-list').append(newitem);
                 });
-                oTable.fnDraw();
+                oTable.draw();
             },'json'
         );
 
@@ -205,7 +205,7 @@ $(document).ready(function() {
                 },
                 function(data){
                     if(data.result == 'OK'){
-                        oTable.fnDraw();
+                        oTable.draw();
                     }
                     $('#scanResult').html(data.msg);
                     $('#total').html(data.total_price);

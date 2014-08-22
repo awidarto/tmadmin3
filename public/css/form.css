@@ -6,7 +6,7 @@
 .btn-primary.disabled,
 .btn-primary[disabled]
 {
-	background-color: maroon;
+	background-color: black;
     background-image:none;
 }
 
@@ -94,6 +94,10 @@ textarea{
     min-height: 27px;
     height:16px;
     border: 1px solid #cccccc;
+}
+
+input.filter[placeholder]{
+    color: #000 !important;
 }
 
 #searchinput{

@@ -44,10 +44,11 @@ class TransactionController extends AdminController {
         $this->table_dnd_url = URL::to(strtolower($this->controller_name).'/reorder');
         $this->table_dnd_idx = 3;
 
-        $this->table_group = true;
+        $this->table_group = false;
         $this->table_group_field = URL::to(strtolower($this->controller_name).'/reorder');
-        $this->table_group_idx = 2;
+        $this->table_group_idx = 0;
 
+        $this->show_select = false;
         $this->title = 'Transaction';
 
         return parent::getIndex();
@@ -96,6 +97,7 @@ class TransactionController extends AdminController {
 
         $session = (is_null($session) || !isset($session))?'':$session;
 
+        $this->show_select = false;
         //$this->additional_query = array('distinct'=>'sessionId');
 
         return parent::postIndex();

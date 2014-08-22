@@ -92,6 +92,8 @@ class AdminController extends Controller {
 
     public $place_action = 'both'; // first, both
 
+    public $show_select = true; // first, both
+
     public $additional_page_data = array();
 
     public $table_view = 'tables.simple';
@@ -153,13 +155,15 @@ class AdminController extends Controller {
 
         $this->newbutton = (is_null($this->newbutton))? Str::singular($this->controller_name): $this->newbutton;
 
-		$select_all = Former::checkbox()->name('Select All')->check(false)->id('select_all');
+		$select_all = Former::checkbox()->name('All')->check(false)->id('select_all');
 
 		// add selector and sequence columns
         if($this->place_action == 'both' || $this->place_action == 'first'){
             array_unshift($heads, array('Actions',array('sort'=>false,'class'=>'action')));
         }
-		array_unshift($heads, array($select_all,array('sort'=>false)));
+        if($this->show_select == true){
+            array_unshift($heads, array($select_all,array('sort'=>false)));
+        }
 		array_unshift($heads, array('#',array('sort'=>false)));
 
 		// add action column
@@ -449,9 +453,11 @@ class AdminController extends Controller {
 
 			$row[] = $counter;
 
-			//$sel = Former::checkbox('sel_'.$doc['_id'])->check(false)->label(false)->id($doc['_id'])->class('selector')->__toString();
-			$sel = '<input type="checkbox" name="sel_'.$doc['_id'].'" id="'.$doc['_id'].'" value="'.$doc['_id'].'" class="selector" />';
-			$row[] = $sel;
+            if($this->show_select == true){
+                //$sel = Former::checkbox('sel_'.$doc['_id'])->check(false)->label(false)->id($doc['_id'])->class('selector')->__toString();
+                $sel = '<input type="checkbox" name="sel_'.$doc['_id'].'" id="'.$doc['_id'].'" value="'.$doc['_id'].'" class="selector" />';
+                $row[] = $sel;
+            }
 
             if($this->place_action == 'both' || $this->place_action == 'first'){
                 $row[] = $actions;

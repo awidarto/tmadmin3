@@ -51,7 +51,7 @@ class DashboardController extends AdminController {
 
         $this->title = 'Dashboard';
 
-        $this->table_view = 'tables.dash';
+        $this->table_view = 'dashboard.dashboard';
 
         return parent::getIndex();
 

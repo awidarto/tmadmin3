@@ -32,23 +32,25 @@ class StockcheckController extends AdminController {
             //array('Photos',array('search'=>false,'sort'=>false)),
             array('SKU',array('search'=>true,'sort'=>true)),
             array('Unit Id',array('search'=>true,'sort'=>true)),
-            array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
-            array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
-            array('Outlet',array('search'=>true,'sort'=>true, 'select'=>Prefs::getOutlet()->OutletToSelection('name','name') )),
+            array('Last Outlet',array('search'=>true,'sort'=>true, 'select'=>Prefs::getOutlet()->OutletToSelection('name','name') )),
             array('Status',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.inventory_status_select') )),
-            array('Tags',array('search'=>true,'sort'=>true)),
-            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Mutation',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>''))),
+            array('Mutated',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
+        $this->can_add = false;
+
+        $this->place_action = 'none';
 
         $this->is_additional_action = true;
 
-        $this->additional_action = View::make('stockcheck.scanbox')->render();
+        $this->additional_action = View::make('scan.dashscan')->render();
 
-        $this->title = 'Stock Check Log';
+        $this->title = 'Stock Check';
+
+        $this->table_view = 'tables.dash';
 
         return parent::getIndex();
 
@@ -58,17 +60,19 @@ class StockcheckController extends AdminController {
     {
 
         $this->fields = array(
-            //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('unitId',array('kind'=>'text','query'=>'like','pos'=>'after','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('unitId',array('kind'=>'text','query'=>'like','callback'=>'shortunit','pos'=>'after','attr'=>array('class'=>'expander'),'show'=>true)),
             array('outletName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true )),
             array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('action',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('scancheckDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
+
+        $this->place_action = 'none';
+
+        $this->def_order_by = 'scancheckDate';
+
+        $this->def_order_dir = 'desc';
 
         return parent::postIndex();
     }
@@ -430,6 +434,7 @@ class StockcheckController extends AdminController {
         }
     }
 
+
     public function namePic($data)
     {
         $name = HTML::link('property/view/'.$data['_id'],$data['address']);
@@ -464,14 +469,14 @@ class StockcheckController extends AdminController {
     public function dispBar($data)
 
     {
-        $code = $data['SKU'].'|'.substr($data['_id'], -5 );
+        $code = $data['unitId'];
         $display = HTML::image(URL::to('barcode/'.$code), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
         $display = '<a href="'.URL::to('barcode/dl/'.$code).'">'.$display.'</a>';
         return $display.'<br />'.$data['SKU'];
     }
 
     public function shortunit($data){
-        return substr($data['_id'], -5);
+        return substr($data['unitId'], -10);
     }
 
     public function pics($data)

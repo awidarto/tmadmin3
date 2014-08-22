@@ -31,18 +31,20 @@ class ProductsController extends AdminController {
         $this->heads = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
             array('SKU',array('search'=>true,'sort'=>true)),
-            array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
+            //array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
             array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Description',array('search'=>true,'sort'=>true)),
             array('Series',array('search'=>true,'sort'=>true)),
             array('Price',array('search'=>true,'sort'=>true)),
             array('Disc. Price',array('search'=>true,'sort'=>true)),
             array('Category',array('search'=>true,'sort'=>true,'select'=>Prefs::ExtractProductCategory() )),
+            /*
             array('Length / Panjang',array('search'=>true,'sort'=>true)),
             array('Width / Lebar',array('search'=>true,'sort'=>true)),
             array('Height / Tinggi',array('search'=>true,'sort'=>false)),
             array('Diameter',array('search'=>true,'sort'=>false)),
             array('Size Description',array('search'=>true,'sort'=>true)),
+            */
             array('Color',array('search'=>true,'sort'=>true)),
             array('Material',array('search'=>true,'sort'=>true)),
             array('Tags',array('search'=>true,'sort'=>true)),
@@ -53,6 +55,8 @@ class ProductsController extends AdminController {
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
         $this->title = 'Products';
+
+        $this->place_action = 'first';
 
         $this->additional_filter = View::make('products.addfilter')->render();
 
@@ -68,18 +72,20 @@ class ProductsController extends AdminController {
         $this->fields = array(
             //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
+            //array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
             array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('priceRegular',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
             array('priceDiscount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('L',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('W',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('H',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('D',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            /*
+            array('L',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('W',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('H',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('D',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
             array('sizeDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            */
             array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
@@ -92,6 +98,8 @@ class ProductsController extends AdminController {
         if($categoryFilter != ''){
             $this->additional_query = array('category'=>$categoryFilter);
         }
+
+        $this->place_action = 'first';
 
         return parent::postIndex();
     }

@@ -33,6 +33,12 @@ th:first-child{
     border-left:thin solid #eee;
 }
 
+th.price{
+    min-width: 125px;
+    max-width: 125px;
+    width: 125px;
+}
+
 .del_unit, .del,.upload,.upinv,.outlet{
     cursor:pointer;
     padding: 2px;
@@ -92,7 +98,7 @@ div.payform h3{
 </style>
 <div class="row-fluid">
     <div class="span12 command-bar">
-        <h3>{{ $title }}</h3>
+        <h1>{{ $title }}</h1>
      </div>
 </div>
 
@@ -103,136 +109,140 @@ div.payform h3{
 </div>
 
 <div class="row-fluid">
-   <div class="span6">
+   <div class="span7">
+        <div class="box">
+            <div class="box-content">
+                  <table class="table table-condensed dataTable">
 
-      <table class="table table-condensed dataTable">
+                        <thead>
 
-            <thead>
-
-                <tr>
-                    @foreach($heads as $head)
-                        @if(is_array($head))
-                            <th
-                                @foreach($head[1] as $key=>$val)
-                                    @if(!is_array($val))
-                                        {{ $key }}="{{ $val }}"
+                            <tr>
+                                @foreach($heads as $head)
+                                    @if(is_array($head))
+                                        <th
+                                            @foreach($head[1] as $key=>$val)
+                                                @if(!is_array($val))
+                                                    {{ $key }}="{{ $val }}"
+                                                @endif
+                                            @endforeach
+                                        >
+                                        {{ $head[0] }}
+                                        </th>
+                                    @else
+                                    <th>
+                                        {{ $head }}
+                                    </th>
                                     @endif
                                 @endforeach
-                            >
-                            {{ $head[0] }}
-                            </th>
-                        @else
-                        <th>
-                            {{ $head }}
-                        </th>
-                        @endif
-                    @endforeach
-                </tr>
-                @if(isset($secondheads) && !is_null($secondheads))
-                    <tr>
-                    @foreach($secondheads as $head)
-                        @if(is_array($head))
-                            <th
-                                @foreach($head[1] as $key=>$val)
-                                    @if($key != 'search')
-                                        {{ $key }}="{{ $val }}"
+                            </tr>
+                            @if(isset($secondheads) && !is_null($secondheads))
+                                <tr>
+                                @foreach($secondheads as $head)
+                                    @if(is_array($head))
+                                        <th
+                                            @foreach($head[1] as $key=>$val)
+                                                @if($key != 'search')
+                                                    {{ $key }}="{{ $val }}"
+                                                @endif
+                                            @endforeach
+                                        >
+                                        {{ $head[0] }}
+                                        </th>
+                                    @else
+                                    <th>
+                                        {{ $head }}
+                                    </th>
                                     @endif
                                 @endforeach
-                            >
-                            {{ $head[0] }}
-                            </th>
-                        @else
-                        <th>
-                            {{ $head }}
-                        </th>
-                        @endif
-                    @endforeach
-                    </tr>
-                @endif
-            </thead>
-
-            <?php
-                $form = new Former();
-            ?>
-
-            <thead id="searchinput">
-                <tr>
-                <?php $index = -1 ;?>
-                @foreach($heads as $in)
-                    @if( $in[0] != 'select_all' && $in[0] != '')
-                        @if(isset($in[1]['search']) && $in[1]['search'] == true)
-                            @if(isset($in[1]['date']) && $in[1]['date'])
-                                <td>
-                                    <div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                        <input class="span8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                        <span class="add-on"><i class="icon-th"></i></span>
-                                    </div>
-                                    {{--
-                                    <div id="{{ $index }}" class="input-append datepickersearch">
-                                        <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
-                                        <span class="add-on">
-                                            <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
-                                            </i>
-                                        </span>
-                                    </div>
-
-                                    --}}
-
-                                </td>
-                            @elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
-                                <td>
-                                    <div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                        <input class="span8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                        <span class="add-on"><i class="icon-th"></i></span>
-                                    </div>
-                                    {{--
-                                    <div id="{{ $index }}" class="input-append datetimepickersearch">
-                                        <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
-                                        <span class="add-on">
-                                            <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
-                                            </i>
-                                        </span>
-                                    </div>
-                                    --}}
-                                </td>
-                            @elseif(isset($in[1]['select']) && is_array($in[1]['select']))
-                                <td>
-                                    <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
-                                    <div class="styled-select">
-                                        {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small','id'=>$index ))}}
-                                    </div>
-                                </td>
-                            @else
-                                <td>
-                                    <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
-                                </td>
+                                </tr>
                             @endif
-                        @else
-                            @if(isset($in[1]['clear']) && $in[1]['clear'] == true)
-                                <td><span id="clearsearch" style="cursor:pointer;">Clear Search</span></td>
-                            @else
-                                <td>&nbsp;</td>
-                            @endif
-                        @endif
+                        </thead>
 
-                        <?php $index++; ?>
+                        <?php
+                            $form = new Former();
+                        ?>
 
-                    @elseif($in[0] == 'select_all')
-                        <td>{{ Former::checkbox('select_all') }}</td>
-                    @elseif($in[0] == '')
-                        <td>&nbsp;</td>
-                    @endif
+                        <thead id="searchinput">
+                            <tr>
+                            <?php $index = -1 ;?>
+                            @foreach($heads as $in)
+                                @if( $in[0] != 'select_all' && $in[0] != '')
+                                    @if(isset($in[1]['search']) && $in[1]['search'] == true)
+                                        @if(isset($in[1]['date']) && $in[1]['date'])
+                                            <td>
+                                                <div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+                                                    <input class="span8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                                    <span class="add-on"><i class="icon-th"></i></span>
+                                                </div>
+                                                {{--
+                                                <div id="{{ $index }}" class="input-append datepickersearch">
+                                                    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
+                                                    <span class="add-on">
+                                                        <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+                                                        </i>
+                                                    </span>
+                                                </div>
+
+                                                --}}
+
+                                            </td>
+                                        @elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
+                                            <td>
+                                                <div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+                                                    <input class="span8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                                    <span class="add-on"><i class="icon-th"></i></span>
+                                                </div>
+                                                {{--
+                                                <div id="{{ $index }}" class="input-append datetimepickersearch">
+                                                    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
+                                                    <span class="add-on">
+                                                        <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+                                                        </i>
+                                                    </span>
+                                                </div>
+                                                --}}
+                                            </td>
+                                        @elseif(isset($in[1]['select']) && is_array($in[1]['select']))
+                                            <td>
+                                                <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+                                                <div class="styled-select">
+                                                    {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small','id'=>$index ))}}
+                                                </div>
+                                            </td>
+                                        @else
+                                            <td>
+                                                <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+                                            </td>
+                                        @endif
+                                    @else
+                                        @if(isset($in[1]['clear']) && $in[1]['clear'] == true)
+                                            <td><span id="clearsearch" style="cursor:pointer;">Clear Search</span></td>
+                                        @else
+                                            <td>&nbsp;</td>
+                                        @endif
+                                    @endif
+
+                                    <?php $index++; ?>
+
+                                @elseif($in[0] == 'select_all')
+                                    <td>{{ Former::checkbox('select_all') }}</td>
+                                @elseif($in[0] == '')
+                                    <td>&nbsp;</td>
+                                @endif
 
 
-                @endforeach
-                </tr>
-            </thead>
+                            @endforeach
+                            </tr>
+                        </thead>
 
-         <tbody>
-            <!-- will be replaced by ajax content -->
-         </tbody>
+                     <tbody>
+                        <!-- will be replaced by ajax content -->
+                     </tbody>
 
-      </table>
+                  </table>
+
+            </div>
+        </div>
       <div class="row-fluid">
         <div class="span6">
             {{ Former::button('Cancel')->id('btn-cancel')->class('btn btn-danger btn-block btn-large') }}
@@ -242,7 +252,7 @@ div.payform h3{
         </div>
       </div>
    </div>
-   <div class="span6">
+   <div class="span5">
 
         @if(isset($can_add) && $can_add == true)
             <a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
@@ -380,7 +390,7 @@ div.payform h3{
                 "sAjaxSource": "{{$ajaxsource}}",
                 "oLanguage": { "sSearch": "Search "},
                 "sPaginationType": "full_numbers",
-                "sDom": 'Tlpirt',
+                "sDom": 'rt',
                 "iDisplayLength":50,
 
                 @if(isset($excludecol) && $excludecol != '')
@@ -433,12 +443,10 @@ div.payform h3{
         //header search
 
         $('thead input.filter').keyup( function () {
-            //console.log($('thead input').index(this));
-            //console.log(this.id);
-            /* Filter on the column (the index) of this element */
-            //var search_index = $('thead input').index(this);
             var search_index = this.id;
-            oTable.fnFilter( this.value, search_index );
+            oTable.column( search_index )
+                    .search( this.value )
+                    .draw();
         } );
 
 
@@ -462,7 +470,9 @@ div.payform h3{
             }
             var search_index = e.currentTarget.id;
 
-            oTable.fnFilter( dateval, search_index );
+            oTable.column( search_index )
+                    .search( dateval )
+                    .draw();
         });
 
         eldatetime.on('changeDate', function(e) {
@@ -474,42 +484,23 @@ div.payform h3{
             }
             var search_index = e.target.id;
 
-            oTable.fnFilter( dateval, search_index );
+            oTable.column( search_index )
+                    .search( dateval )
+                    .draw();
         });
 
         $('thead select.selector').change( function () {
-            /* Filter on the column (the index) of this element */
-            //var prev = $(this).parent().prev('input');
-
-            //var search_index = $('thead input').index(prev);
             var search_index = this.id;
-
-            //console.log(search_index);
-
-            oTable.fnFilter( this.value,  search_index  );
+            oTable.column( search_index )
+                    .search( this.value )
+                    .draw();
         } );
 
         $('#clearsearch').click(function(){
-
-            console.log($('thead td input').val());
             $('thead td input').val('');
-
-            console.log($('thead td input').val());
-
-            console.log('reloading table');
-            //oTable.fnClearTable(1);
-            /*
-            $('thead td input').each(function(){
-                console.log(this.id);
-                var index = this.id;
-                oTable.fnFilter('',index);
-            });
-            oTable.fnFilter('',1);
-
-            oTable.fnFilter('');
-            */
-            oTable.fnFilterClear();
-            oTable.fnDraw();
+            oTable.search( '' )
+                .columns().search( '' )
+                .draw();
         });
 
         $('#download-xls').on('click',function(){
@@ -750,7 +741,7 @@ div.payform h3{
                     function(data){
                         if(data.result == 'OK:UPLOADED'){
                             $('#upload-modal').modal('hide');
-                            oTable.fnDraw();
+                            oTable.draw();
                         }else if( data.result == 'ERR:UPDATEFAILED' ){
                             alert('Upload failed');
                         }
@@ -776,7 +767,7 @@ div.payform h3{
                     function(data){
                         if(data.result == 'OK:UPDATED'){
                             $('#upinv-modal').modal('hide');
-                            oTable.fnDraw();
+                            oTable.draw();
                         }else if( data.result == 'ERR:UPDATEFAILED' ){
                             alert('Update failed');
                         }
@@ -1125,7 +1116,7 @@ div.payform h3{
                     function(data){
                         if(data.result == 'OK'){
                             alert('Attendance data cleared, ready to start the event.');
-                            oTable.fnDraw();
+                            oTable.draw();
                         }
                     },
                 'json');
@@ -1172,7 +1163,7 @@ div.payform h3{
         });
 
         $('#chg-modal').on('hidden', function () {
-            oTable.fnDraw();
+            oTable.draw();
         })
 
 
@@ -1189,7 +1180,7 @@ div.payform h3{
         });
 
         $('#prop-chg-modal').on('hidden', function () {
-            oTable.fnDraw();
+            oTable.draw();
         });
 
         function dateFormat(indate) {

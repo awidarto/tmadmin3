@@ -62,6 +62,7 @@ Route::controller('event', 'EventController');
 Route::controller('scanner', 'ScannerController');
 
 Route::controller('stockcheck', 'StockcheckController');
+Route::controller('stockchecklist', 'StockchecklistController');
 Route::controller('dashboard', 'DashboardController');
 
 Route::controller('upload', 'UploadController');

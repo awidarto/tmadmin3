@@ -1,4 +1,4 @@
-@extends('layout.signin')
+@extends('layout.login')
 
 @section('content')
             <!-- if there are login errors, show them here -->
@@ -10,34 +10,27 @@
 @endif
 
 {{ Form::open(array('url' => 'login','class'=>'form-signin')) }}
-        <h1>{{ Config::get('site.name')}}</h1>
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h3>Welcome to</h3>
+        <h2>{{ Config::get('site.name')}}</h2>
+        <fieldset>
             @if (Session::get('loginError'))
                 <div class="alert alert-danger">{{ Session::get('loginError') }}</div>
                      <button type="button" class="close" data-dismiss="alert"></button>
             @endif
-        <p>
-            {{ $errors->first('email') }}
-            {{ $errors->first('password') }}
-        </p>
 
-        <p>
-            {{ Form::label('email', 'Email Address') }}
-            {{ Form::text('email', Input::old('email')) }}
-        </p>
-        <p>
-            {{ Form:: label('password', 'Password') }}
-            {{ Form::password('password') }}
-        </p>
-        <p>
-            <label class="checkbox">
-              <input type="checkbox" id="checks" value="remember-me" checked="checked">
-              Remember me
-              <span class="check" for="checks"></span>
-            </label>
-        </p>
+            <input class="input-large span12" name="email" id="username" type="text" placeholder="email" />
 
-    <p>{{ Form::submit('Submit!',array('class'=>'btn btn-primary')) }}</p>
+            <input class="input-large span12" name="password" id="password" type="password" placeholder="password" />
+
+            <div class="clearfix"></div>
+
+            <label class="remember" for="remember"><input type="checkbox" id="remember" />Remember me</label>
+
+            <div class="clearfix"></div>
+
+            <button type="submit" class="btn btn-primary span12">Login</button>
+        </fieldset>
+
 {{ Form::close() }}
 
 @stop
