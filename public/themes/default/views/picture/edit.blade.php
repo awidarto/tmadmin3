@@ -272,7 +272,7 @@
 {{ Former::hidden('filename')->value($pic_info['filename'])->id('filename') }}
 {{ Former::hidden('original')->value($src_url)->id('original') }}
 <div class="row">
-    <div class="span9" style="border:thin solid #ccc;">
+    <div class="col-md-9" style="border:thin solid #ccc;">
         <div class="img-container" style="position: relative;">
             <img src="{{ URL::to($src_url)}}" >
         </div>
@@ -282,12 +282,12 @@
     <div class="span3 property">
         {{-- print_r($pic_info) --}}
 
-        {{ Former::text('data-width','width')->id('data-width')->value($pic_info['width'])->class('span4')}}
-        {{ Former::text('data-height','height')->id('data-height')->value($pic_info['height'])->class('span4')}}
-        {{ Former::text('data-ratio','ratio')->id('data-ratio')->value($pic_info['ratio'])->class('span4')}}
+        {{ Former::text('data-width','width')->id('data-width')->value($pic_info['width'])->class('col-md-4')}}
+        {{ Former::text('data-height','height')->id('data-height')->value($pic_info['height'])->class('col-md-4')}}
+        {{ Former::text('data-ratio','ratio')->id('data-ratio')->value($pic_info['ratio'])->class('col-md-4')}}
 
         <div class="row">
-            <div class="span12">
+            <div class="col-md-12">
                 <div class="img-preview"></div>
             </div>
         </div>
@@ -298,8 +298,8 @@
             {{ Former::button('Preview')->class('btn pull-right')->id('expand_preview') }}
             {{ Former::button('Original')->class('btn pull-right')->id('expand_original') }}
             <br />
-            {{ Former::text('x-width','width')->id('x-width')->class('span4')->value(800)}}
-            {{ Former::text('x-height','height')->id('x-height')->class('span4')->value(600)}}
+            {{ Former::text('x-width','width')->id('x-width')->class('col-md-4')->value(800)}}
+            {{ Former::text('x-height','height')->id('x-height')->class('col-md-4')->value(600)}}
 
         </div>
 
@@ -309,10 +309,10 @@
             {{ Former::button('Preview')->class('btn pull-right')->id('crop_preview') }}
             {{ Former::button('Original')->class('btn pull-right')->id('crop_original') }}
             <br />
-            {{ Former::text('data-x1','x1')->id('data-x1')->class('span4')}}
-            {{ Former::text('data-y1','y1')->id('data-y1')->class('span4')}}
-            {{ Former::text('data-x2','x2')->id('data-x2')->class('span4')}}
-            {{ Former::text('data-y2','y2')->id('data-y2')->class('span4')}}
+            {{ Former::text('data-x1','x1')->id('data-x1')->class('col-md-4')}}
+            {{ Former::text('data-y1','y1')->id('data-y1')->class('col-md-4')}}
+            {{ Former::text('data-x2','x2')->id('data-x2')->class('col-md-4')}}
+            {{ Former::text('data-y2','y2')->id('data-y2')->class('col-md-4')}}
             <h6>Aspect Ratio ( width : height )</h6>
                 <ul style="list-style:none">
             <li><input type="radio" name='aspect-ratio' class="aspect-ratio" value="none" checked="checked" /> Free</li>
@@ -331,7 +331,7 @@
 
         </div>
         <div class="row action-box">
-            <div class="span12">
+            <div class="col-md-12">
                 <h5>Apply to</h5>
                 <ul style="list-style:none">
                     <li>

@@ -8,7 +8,7 @@
 {{Former::open_for_files($submit,'POST',array('class'=>''))}}
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
         {{ Former::text('title','Event Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
         {{ Former::text('venue','Venue') }}
@@ -16,18 +16,18 @@
 
         {{ Former::text('fromDate','From')->class('span7 eventdate')
             ->id('fromDate')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
 
         {{ Former::text('toDate','Until')->class('span7 eventdate')
             ->id('toDate')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
 
 
         {{ Former::select('category')->options(Config::get('ia.eventcat'))->label('Category') }}
         {{ Former::textarea('description','Description')->class('editor') }}
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <?php
             $fupload = new Fupload();
         ?>
@@ -36,23 +36,23 @@
 
         @for($i = 1;$i < 6;$i++)
             <div class="row form-horizontal">
-                <div class="span4">
-                    {{ Former::text('code_'.$i,'Code '.$i)->id('code_'.$i)->class('span12')->maxlength('6') }}
+                <div class="col-md-4">
+                    {{ Former::text('code_'.$i,'Code '.$i)->id('code_'.$i)->class('col-md-12')->maxlength('6') }}
 
                 </div>
-                <div class="span4">
-                    {{ Former::text('val_'.$i,'Value '.$i)->id('val_'.$i)->class('span12')->maxlength('6') }}
+                <div class="col-md-4">
+                    {{ Former::text('val_'.$i,'Value '.$i)->id('val_'.$i)->class('col-md-12')->maxlength('6') }}
                 </div>
             </div>
         @endfor
         {{ Former::text('expires','Expires')->class('span7 datepicker')
             //->data_format('dd-mm-yyyy')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
    </div>
 </div>
 
 <div class="row-fluid">
-    <div class="span12 pull-right">
+    <div class="col-md-12 pull-right">
         {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

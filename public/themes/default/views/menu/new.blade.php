@@ -91,7 +91,7 @@
         </div>
 
     </div>
-    <div class="span4">
+    <div class="col-md-4">
 
         {{ Former::text('menuTitle','Name')->id('#menuTitle') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
@@ -102,7 +102,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
@@ -133,7 +133,7 @@ input.mparam{
     width:100px;
 }
 
-.icon-* {
+.fa fa-* {
     width: 1.2em;
     height: 1.2em;
 }

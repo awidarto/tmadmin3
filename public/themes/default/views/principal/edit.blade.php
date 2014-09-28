@@ -9,14 +9,14 @@
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::text('company','Company Name')->required() }}
 
         {{ Former::text('address_1','Address')->required() }}
         {{ Former::text('address_2','') }}
         {{ Former::text('city','City')->required() }}
-        {{ Former::text('zipCode','ZIP / Postal Code')->id('zip')->class('span2')->maxlength(5)->required() }}
+        {{ Former::text('zipCode','ZIP / Postal Code')->id('zip')->class('col-md-2')->maxlength(5)->required() }}
         <div class="us" style="{{ ($formdata['countryOfOrigin'] == 'United States of America')?'':'display:none;' }}">
             {{ Former::select('state')->class('us')->options(Config::get('country.us_states'))->label('State')->id('us_states')
                 ->style(($formdata['countryOfOrigin'] == 'United States of America')?false:true)
@@ -38,13 +38,13 @@
 
         {{ Former::select('countryOfOrigin')->id('country')->options(Config::get('country.countries'))->label('Country of Origin') }}
     </div>
-    <div class="span6">
+    <div class="col-md-6">
 
     </div>
 </div>
 
 <div class="row-fluid right">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

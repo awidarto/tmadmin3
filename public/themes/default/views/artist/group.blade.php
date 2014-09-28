@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="metro span12">
+<div class="metro col-md-12">
 	<div class="metro-sections">
 
 	   <div id="section1" class="metro-section tile-span-4">
@@ -16,7 +16,7 @@
 	            <div class="text">Professional</div>
 	            <div class="text">Overseas</div>
 	            <div class="text">Convention Participant</div>
-	         </div>   
+	         </div>
 	      </a>
 	      <a class="tile imagetext bg-color-purple statistic" href="#">
 	         <div class="image-wrapper text-big">
@@ -101,11 +101,11 @@
 	            <div class="text-small">Confirmation Payment</div>
 	            <div class="text-small">Request to Process</div>
 	         </div>
-	         
+
 	      </a>
 	      <a class="tile app bg-color-blueDark" href="./icons.html">
 	         <div class="image-wrapper">
-	            <span class="icon icon-user-2"></span>
+	            <span class="icon fa fa-user-2"></span>
 	         </div>
 	         <span class="app-label">Register new attendee</span>
 	      </a>

@@ -10,7 +10,7 @@
 {{ Former::hidden('id')->value($formdata['_id']) }}
 
 <div class="row-fluid">
-    <div class="span9">
+    <div class="col-md-9">
         {{ Former::textarea('body','Body')->class('code')->id('body')->style('min-height:600px;') }}
     </div>
     <div class="span3">
@@ -31,7 +31,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

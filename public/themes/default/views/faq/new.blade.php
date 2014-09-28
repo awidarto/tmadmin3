@@ -8,13 +8,13 @@
 {{Former::open_for_files($submit,'POST',array('class'=>''))}}
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
         {{ Former::select('category')->options(Prefs::getFAQCategory()->FAQcatToSelection('title','title'))->label('Category') }}
         {{ Former::textarea('body','Body')->class('editor')->name('body') }}
     </div>
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
@@ -22,7 +22,7 @@
             <label class="control-label" for="userfile">Upload Images</label>
             <div class="controls">
                 <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
+                    <i class="fa fa-plus fa fa-white"></i>
                     <span>Add files...</span>
                     <!-- The file input field used as target for the file upload widget -->
                     <input id="fileupload" type="file" name="files[]" multiple>
@@ -104,7 +104,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12 pull-right">
+    <div class="col-md-12 pull-right">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

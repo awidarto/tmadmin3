@@ -39,13 +39,13 @@ th:first-child{
 
 </style>
 <div class="row-fluid">
-    <div class="span12 command-bar">
+    <div class="col-md-12 command-bar">
         <h3>{{ $title }}</h3>
      </div>
 </div>
 
 <div class="row-fluid">
-    <div class="span6 command-bar">
+    <div class="col-md-6 command-bar">
 
         @if(isset($can_add) && $can_add == true)
             <a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
@@ -54,7 +54,7 @@ th:first-child{
             <a class="btn" id="download-xls">Download Excel</a>
             <a class="btn" id="download-csv">Download CSV</a>
      </div>
-     <div class="span6 command-bar">
+     <div class="col-md-6 command-bar">
         @if(Auth::user()->role == 'admin' || Auth::user()->role == 'root')
             @if(isset($can_clear_att) && $can_clear_att == true)
                 <a class="btn pull-right" id="clear-attendance" >Clear Attendance</a>
@@ -67,7 +67,7 @@ th:first-child{
 </div>
 
 <div class="row-fluid">
-   <div class="span12">
+   <div class="col-md-12">
 
       <table class="table table-condensed dataTable">
 
@@ -128,14 +128,14 @@ th:first-child{
                             @if(isset($in[1]['date']) && $in[1]['date'])
                                 <td>
                                     <div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                        <input class="span8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                        <span class="add-on"><i class="icon-th"></i></span>
+                                        <input class="col-md-8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                        <span class="add-on"><i class="fa fa-th"></i></span>
                                     </div>
                                     {{--
                                     <div id="{{ $index }}" class="input-append datepickersearch">
                                         <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
                                         <span class="add-on">
-                                            <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+                                            <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
                                             </i>
                                         </span>
                                     </div>
@@ -146,14 +146,14 @@ th:first-child{
                             @elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
                                 <td>
                                     <div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                        <input class="span8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                        <span class="add-on"><i class="icon-th"></i></span>
+                                        <input class="col-md-8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                        <span class="add-on"><i class="fa fa-th"></i></span>
                                     </div>
                                     {{--
                                     <div id="{{ $index }}" class="input-append datetimepickersearch">
                                         <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
                                         <span class="add-on">
-                                            <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+                                            <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
                                             </i>
                                         </span>
                                     </div>
@@ -201,7 +201,7 @@ th:first-child{
    </div>
 </div>
 
-<div id="print-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="print-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Print Barcode Tag</h3>
@@ -216,7 +216,7 @@ th:first-child{
 </div>
 
 
-<div id="prop-chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="prop-chg-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Change Property Status</h3>
@@ -233,7 +233,7 @@ th:first-child{
 </div>
 
 
-<div id="chg-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="chg-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Change Transaction Status</h3>
@@ -249,7 +249,7 @@ th:first-child{
   </div>
 </div>
 
-<div id="upload-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="upload-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Upload Pictures</span></h3>
@@ -807,7 +807,7 @@ th:first-child{
 
 
                                     var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
-                                        '<span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span>'+
+                                        '<span class="file_del" id="' + file.file_id +'"><i class="fa fa-trash"></i></span>'+
                                         '&nbsp;&nbsp;<span class="img-title">' + file.filename + '</span><br />' +
                                         '<input type="radio" name="defaultpic" ' + isdefault + ' value="' + file.file_id + '"> Default<br />'+
                                         'Brochure <br />' +

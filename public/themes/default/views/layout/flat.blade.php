@@ -93,10 +93,10 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="apple-touch-fa fa-precomposed" sizes="144x144" href="../assets/ico/apple-touch-fa fa-144-precomposed.png">
+    <link rel="apple-touch-fa fa-precomposed" sizes="114x114" href="../assets/ico/apple-touch-fa fa-114-precomposed.png">
+      <link rel="apple-touch-fa fa-precomposed" sizes="72x72" href="../assets/ico/apple-touch-fa fa-72-precomposed.png">
+                    <link rel="apple-touch-fa fa-precomposed" href="../assets/ico/apple-touch-fa fa-57-precomposed.png">
                                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
 
 
@@ -119,9 +119,9 @@
       <div class="navbar-inner">
         <div class="container-fluid">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="fa fa-bar"></span>
+            <span class="fa fa-bar"></span>
+            <span class="fa fa-bar"></span>
           </button>
           <a class="brand" href="{{ URL::to('/') }}">{{ Config::get('site.name') }}</a>
           <div class="nav-collapse collapse">
@@ -130,13 +130,13 @@
                 @if(Auth::check())
                     <p class="navbar-text pull-right">
                         Hello {{ Auth::user()->fullname }}&nbsp;&nbsp;
-                        <a href="#" ><i class="icon-cog"></i>&nbsp;Settings</a>
-                        <a href="{{ URL::to('logout')}}" ><i class="icon-logout"></i>&nbsp;Logout</a>
+                        <a href="#" ><i class="fa fa-cog"></i>&nbsp;Settings</a>
+                        <a href="{{ URL::to('logout')}}" ><i class="fa fa-logout"></i>&nbsp;Logout</a>
                     </p>
                 @else
                     <form method="POST" action="{{ URL::to('login')}}" class="navbar-form pull-right">
-                        <input name="email" class="span2" type="text" placeholder="Email">
-                        <input name="password" class="span2" type="password" placeholder="Password">
+                        <input name="email" class="col-md-2" type="text" placeholder="Email">
+                        <input name="password" class="col-md-2" type="password" placeholder="Password">
                         <button type="submit" class="btn btn-primary">Sign in</button>
                     </form>
                 @endif
@@ -149,7 +149,7 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span12">
+        <div class="col-md-12">
             @yield('content')
         </div><!--/span-->
       </div><!--/row-->

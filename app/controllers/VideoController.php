@@ -79,8 +79,8 @@ class VideoController extends AdminController {
 
     public function makeActions($data)
     {
-        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('video/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-trash"></i>Delete</span>';
+        $edit = '<a href="'.URL::to('video/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

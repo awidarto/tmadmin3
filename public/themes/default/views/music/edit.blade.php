@@ -10,7 +10,7 @@
 {{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row">
 
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::text('songTitle','Song Title') }}
         {{ Former::text('artist','Artist') }}
@@ -26,7 +26,7 @@
             <label class="control-label" for="userfile">Upload Music</label>
             <div class="controls">
                 <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
+                    <i class="fa fa-plus fa fa-white"></i>
                     <span>Add file...</span>
                     <!-- The file input field used as target for the file upload widget -->
                     <input id="musicupload" type="file" name="files[]">
@@ -111,7 +111,7 @@
             <label class="control-label" for="userfile">Upload Images</label>
             <div class="controls">
                 <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
+                    <i class="fa fa-plus fa fa-white"></i>
                     <span>Add files...</span>
                     <!-- The file input field used as target for the file upload widget -->
                     <input id="fileupload" type="file" name="files[]" multiple>
@@ -190,7 +190,7 @@
         </div>
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         @include('partials.editortoolbar')
         {{ Former::textarea('lyric','Lyric') }}
 
@@ -199,7 +199,7 @@
 </div>
 
 <div class="row">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

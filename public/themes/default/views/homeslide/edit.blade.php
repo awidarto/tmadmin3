@@ -9,13 +9,13 @@
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
         {{ Former::text('widgetLocation','Widget Location')->class('wlocautocomplete')->help('Group slides in the same location / position in page') }}
 
         {{ Former::text('linkTo','Link to')->help('Link to URL on click event ( local controller or absolute URL )') }}
 
         {{ Former::select('slidetype')->options( Config::get('ia.slidetype') )->label('Type')->required() }}
-        {{ Former::text('sequence','Sequence')->class('span2')->value(1)->help('ascending display sequence') }}
+        {{ Former::text('sequence','Sequence')->class('col-md-2')->value(1)->help('ascending display sequence') }}
         {{ Former::select('publishing')->options(array('unpublished'=>'Unpublished','published'=>'Published'))->label('Status') }}
 
         <h6>Video</h6>
@@ -23,10 +23,10 @@
         {{ Former::text('youtubeUrl','Youtube ID') }}
 
         <h6>Content</h6>
-        {{ Former::textarea('content','HTML Content')->class('span10 editor')->rows(8)->help('Use HTML tags to format content') }}
+        {{ Former::textarea('content','HTML Content')->class('col-md-10 editor')->rows(8)->help('Use HTML tags to format content') }}
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <h6>Image</h6>
         <?php
             $fupload = new Fupload();
@@ -38,7 +38,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12 pull-right">
+    <div class="col-md-12 pull-right">
 
         {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}

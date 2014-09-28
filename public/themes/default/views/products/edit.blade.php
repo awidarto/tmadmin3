@@ -9,8 +9,8 @@
 {{Former::open_for_files($submit,'POST',array('class'=>'custom'))}}
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
-<div class="row-fluid">
-    <div class="span6">
+<div class="row">
+    <div class="col-md-6">
 
         {{ Former::text('SKU','SKU') }}
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
@@ -19,66 +19,66 @@
         {{ Former::text('series','Series') }}
         {{ Former::text('itemDescription','Description') }}
         {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
-        {{ Former::text('priceRegular','Regular Price')->class('span4') }}
-        {{ Former::text('priceDiscount','Discount Price')->class('span4') }}
+        {{ Former::text('priceRegular','Regular Price')->class('form-control col-md-4') }}
+        {{ Former::text('priceDiscount','Discount Price')->class('form-control col-md-4') }}
 
-        {{ Former::text('discFromDate','Disc. From')->class('span7 offset-2 eventdate')
+        {{ Former::text('discFromDate','Disc. From')->class('form-control span7 offset-2 eventdate')
             ->id('fromDate')
             //->data_format('dd-mm-yyyy')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
 
-        {{ Former::text('discToDate','Disc. Until')->class('span7 offset-2 eventdate')
+        {{ Former::text('discToDate','Disc. Until')->class('form-control span7 offset-2 eventdate')
             ->id('toDate')
             //->data_format('dd-mm-yyyy')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
 
         {{ Former::text('material','Material') }}
-        {{ Former::text('colour','Colour')->class('span4') }}
+        {{ Former::text('colour','Colour')->class('form-control col-md-4') }}
         {{--
 
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('colour','Colour')->class('span12') }}
+        <div class="row form-vertical">
+            <div class="col-md-4">
+                {{ Former::text('colour','Colour')->class('form-control col-md-12') }}
             </div>
-            <div class="span4">
-                {{ Former::text('colourHex','')->class('pick-a-color') }}
+            <div class="col-md-4">
+                {{ Former::text('colourHex','')->class('form-control pick-a-color') }}
             </div>
         </div>
         --}}
 
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('W','Width')->class('span12')}}
+        <div class="row form-vertical">
+            <div class="col-md-4">
+                {{ Former::text('W','Width')->class('form-control col-md-1')}}
             </div>
-            <div class="span4">
-                {{ Former::text('H','Height')->class('span12') }}
+            <div class="col-md-4">
+                {{ Former::text('H','Height')->class('form-control col-md-1') }}
             </div>
-            <div class="span4">
-                {{ Former::text('L','Length')->class('span12') }}
+            <div class="col-md-4">
+                {{ Former::text('L','Length')->class('form-control col-md-1') }}
             </div>
         </div>
-        <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('D','Diameter')->class('span12')}}
+        <div class="row form-vertical">
+            <div class="col-md-4">
+                {{ Former::text('D','Diameter')->class('form-control col-md-12')}}
             </div>
-            <div class="span4">
+            <div class="col-md-4">
                 {{ Former::text('sizeDescription','Dimension Description') }}
             </div>
         </div>
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
-        {{ Former::text('relatedProducts')->class('tag_related') }}
+        {{ Former::text('relatedProducts','Related Products')->class('tag_related') }}
 
-        {{ Former::text('recommendedProducts')->class('tag_recommended') }}
+        {{ Former::text('recommendedProducts','Recommended Products')->class('tag_recommended') }}
 
     </div>
-    <div class="span6">
-        <div class="row-fluid form-vertical">
-            <div class="span2" style="text-align:right;width:120px;">
+    <div class="col-md-6">
+        <div class="row form-vertical">
+            <div class="col-md-2" style="text-align:right;width:120px;">
                 Inventory
             </div>
-            <div class="span9" style="padding-left:10px;">
+            <div class="col-md-9" style="padding-left:10px;">
                 <table class="table " >
                     <tr>
                         <th>
@@ -117,10 +117,10 @@
                             <td>
                                 <input type="hidden" name="outlets[]"  value="{{ $o->_id }}">
                                 <input type="hidden" name="outletNames[]"  value="{{ $o->name }}">
-                                <input type="text" class="span6" id="{{ $o->_id }}" name="addQty[]" value="" />
+                                <input type="text" class="col-md-6" id="{{ $o->_id }}" name="addQty[]" value="" />
                             </td>
                             <td>
-                                <input type="text" class="span6" id="{{ $o->_id }}" name="adjustQty[]" value="" />
+                                <input type="text" class="col-md-6" id="{{ $o->_id }}" name="adjustQty[]" value="" />
                             </td>
                         </tr>
                     @endforeach
@@ -138,8 +138,8 @@
     </div>
 </div>
 
-<div class="row-fluid right">
-    <div class="span12">
+<div class="row right">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

@@ -1,7 +1,7 @@
 <div class="form-horizontal">
     {{ Former::select('outlet')->options(Prefs::getOutlet()->OutletToSelection('id','name') )->id('scanoutlet') }} &nbsp;<span>select one of existing outlet before scanning</span><br />
     {{ Former::checkbox('')->id('outlet-active')->text('Only search in selected outlet') }}<br />
-    {{ Former::text('barcode','')->id('barcode')->class('span6')->autocomplete('off')->placeholder('Always make sure to put cursor in this box when scanning') }}
+    {{ Former::text('barcode','')->id('barcode')->class('col-md-6')->autocomplete('off')->placeholder('Always make sure to put cursor in this box when scanning') }}
 
     <div id="scanResult">
         Hello !

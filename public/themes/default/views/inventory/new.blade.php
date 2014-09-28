@@ -8,33 +8,33 @@
 {{Former::open_for_files($submit,'POST',array('class'=>'custom'))}}
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::text('SKU','SKU') }}
         {{ Former::select('category','Category')->options(Prefs::ExtractProductCategory()) }}
         {{ Former::text('series','Series') }}
         {{ Former::text('itemDescription','Description') }}
         {{ Former::text('itemGroup','Item Group')->help('for compound product only') }}
-        {{ Former::text('priceRegular','Regular Price')->class('span4') }}
+        {{ Former::text('priceRegular','Regular Price')->class('col-md-4') }}
         {{ Former::text('material','Material') }}
-        {{ Former::text('colour','Colour')->class('span4') }}
+        {{ Former::text('colour','Colour')->class('col-md-4') }}
 
         <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('W','Width')->class('span12')}}
+            <div class="col-md-4">
+                {{ Former::text('W','Width')->class('col-md-12')}}
             </div>
-            <div class="span4">
-                {{ Former::text('H','Height')->class('span12') }}
+            <div class="col-md-4">
+                {{ Former::text('H','Height')->class('col-md-12') }}
             </div>
-            <div class="span4">
-                {{ Former::text('L','Length')->class('span12') }}
+            <div class="col-md-4">
+                {{ Former::text('L','Length')->class('col-md-12') }}
             </div>
         </div>
         <div class="row-fluid form-vertical">
-            <div class="span4">
-                {{ Former::text('D','Diameter')->class('span12')}}
+            <div class="col-md-4">
+                {{ Former::text('D','Diameter')->class('col-md-12')}}
             </div>
-            <div class="span4">
+            <div class="col-md-4">
                 {{ Former::text('sizeDescription','Dimension Description') }}
             </div>
         </div>
@@ -42,12 +42,12 @@
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <div class="row-fluid form-vertical">
-            <div class="span2" style="text-align:right;width:120px;">
+            <div class="col-md-2" style="text-align:right;width:120px;">
                 Inventory
             </div>
-            <div class="span9" style="padding-left:10px;">
+            <div class="col-md-9" style="padding-left:10px;">
                 <table class="table " >
                     <tr>
                         <th>
@@ -65,7 +65,7 @@
                             <td>
                                 <input type="hidden" name="outlets[]"  value="{{ $o->_id }}">
                                 <input type="hidden" name="outletNames[]"  value="{{ $o->name }}">
-                                <input type="text" class="span2" id="{{ $o->_id }}" name="addQty[]" value="" />
+                                <input type="text" class="col-md-2" id="{{ $o->_id }}" name="addQty[]" value="" />
                             </td>
                         </tr>
                     @endforeach
@@ -84,7 +84,7 @@
 </div>
 
 <div class="row-fluid right">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

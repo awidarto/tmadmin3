@@ -16,7 +16,7 @@ class AdminController extends Controller {
 
 	public $form;
 
-	public $form_framework = 'TwitterBootstrap';
+	public $form_framework = 'TwitterBootstrap3';
 
 	public $form_class = 'form-horizontal';
 
@@ -159,7 +159,7 @@ class AdminController extends Controller {
 
 		// add selector and sequence columns
         if($this->place_action == 'both' || $this->place_action == 'first'){
-            array_unshift($heads, array('Actions',array('sort'=>false,'class'=>'action')));
+            array_unshift($heads, array('Actions',array('sort'=>false,'clear'=>true,'class'=>'action')));
         }
         if($this->show_select == true){
             array_unshift($heads, array($select_all,array('sort'=>false)));

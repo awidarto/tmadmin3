@@ -57,13 +57,13 @@
 </style>
     {{-- print_r($prop['defaultpictures']) --}}
     <div class="row-fluid">
-        <div class="span2" id="side-bar">
+        <div class="col-md-2" id="side-bar">
             {{ HTML::image('images/v-ialogo-med.png')}}
         </div>
-        <div class="span10" id="broc-content" >
+        <div class="col-md-10" id="broc-content" >
             {{ HTML::image($prop['defaultpictures']['brchead'])}}
             <div class="row-fluid">
-                <div class="span4">
+                <div class="col-md-4">
                     <div class="sub">
                         {{ HTML::image($prop['defaultpictures']['brc1'])}}
                     </div>

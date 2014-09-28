@@ -3,18 +3,18 @@
       <div class="navbar-inner">
         <div class="container">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="fa fa-bar"></span>
+            <span class="fa fa-bar"></span>
+            <span class="fa fa-bar"></span>
           </button>
 
           <a class="brand" href="{{ URL::base()}}"><img src="{{ URL::base()}}/images/p2blogo.png"></a>
-            
+
             <div id="logged-in">
               @if(Auth::shoppercheck())
-                Welcome {{ HTML::link('myprofile',se(Auth::shopper()->firstname).' '.se(Auth::shopper()->lastname)) }} 
+                Welcome {{ HTML::link('myprofile',se(Auth::shopper()->firstname).' '.se(Auth::shopper()->lastname)) }}
                 @if(isset(Auth::shopper()->activeCart) && Auth::shopper()->activeCart != '')
-                  | <i class="icon-cart logo-type"></i> {{ HTML::link('shop/cart','Shopping Cart')}}
+                  | <i class="fa fa-cart logo-type"></i> {{ HTML::link('shop/cart','Shopping Cart')}}
                 <?php
                   /*
                   @else
@@ -25,7 +25,7 @@
                   | {{ HTML::link('shop/confirm','Confirm Payment')}}
                   | {{ HTML::link('logout','Logout')}}
               @else
-                Hello, what would you like to do ?  
+                Hello, what would you like to do ?
                 &nbsp;{{ HTML::link('shop/confirm','Confirm Payment')}}
                 | {{ HTML::link('signup','Sign Up')}}
                 | {{ HTML::link('signin','Sign In')}}
@@ -68,12 +68,12 @@ function is_active($r){
         width : 'resolve'
       });
     */
-    
+
     $('#createcart').click(function(){
           $.post('{{ URL::to("shopper/newcart") }}',{}, function(data) {
             if(data.result == 'OK'){
-              $('#nocart').html('| <i class="icon-cart logo-type"></i> {{ HTML::link('shopper/cart','Shopping Cart')}}');
-              alert(data.message);              
+              $('#nocart').html('| <i class="fa fa-cart logo-type"></i> {{ HTML::link('shopper/cart','Shopping Cart')}}');
+              alert(data.message);
             }else{
               alert(data.message);
             }

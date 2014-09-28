@@ -3,7 +3,7 @@
     <label class="control-label" for="userfile">{{ $label }}</label>
     <div class="controls">
         <span class="btn btn-success fileinput-button">
-            <i class="icon-plus icon-white"></i>
+            <i class="fa fa-plus fa fa-white"></i>
             <span>{{ $title }}</span>
             <!-- The file input field used as target for the file upload widget -->
             <input id="{{ $element_id }}" type="file" name="files[]" {{ ($multi)?'multiple':''}}  >
@@ -109,7 +109,7 @@
                         $full_url = $allin['fileurl'];
                         $file_id = $allin['file_id'];
                         /*
-                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
+                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del fa fa-trash" id="%s"></span>';
                         $thumb .= '<span class="img-title">%s</span>';
                         $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
 

@@ -10,15 +10,15 @@
 {{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
 
-        {{-- Former::text('propertyId','Property ID')->class('span4') --}}
+        {{-- Former::text('propertyId','Property ID')->class('col-md-4') --}}
 
         {{ Former::select('state')->options(Config::get('country.us_states'))->label('States') }}
         {{ Former::text('number','Street Number')->class('span3')->maxlength(6) }}
         {{ Former::text('address','Address') }}
         {{ Former::text('city','City') }}
-        {{ Former::text('zipCode','ZIP')->class('span2')->maxlength(5) }}
+        {{ Former::text('zipCode','ZIP')->class('col-md-2')->maxlength(5) }}
 
 
         <?php Former::framework('Nude');?>
@@ -26,20 +26,20 @@
         <div class="row-fluid lmargin">
             <div class="span3"></div>
             <div class="span3">
-                {{ Former::select('type')->options(Config::get('ia.type'))->label('Type')->class('span6') }}
+                {{ Former::select('type')->options(Config::get('ia.type'))->label('Type')->class('col-md-6') }}
             </div>
             <div class="span3">
-                {{ Former::text('yearBuilt','Year Built')->class('span6')->maxlength(4)  }}
+                {{ Former::text('yearBuilt','Year Built')->class('col-md-6')->maxlength(4)  }}
             </div>
         </div>
 
         <div class="row-fluid lmargin">
             <div class="span3"></div>
             <div class="span3">
-                {{ Former::text('FMV','FMV')->class('span6') }}
+                {{ Former::text('FMV','FMV')->class('col-md-6') }}
             </div>
             <div class="span3">
-                {{ Former::text('listingPrice','Listing Price')->class('span6') }}
+                {{ Former::text('listingPrice','Listing Price')->class('col-md-6') }}
             </div>
         </div>
 
@@ -59,20 +59,20 @@
         <div class="row-fluid lmargin">
             <div class="span3"></div>
             <div class="span3">
-                {{ Former::select('basement')->options(Config::get('ia.boolean'))->label('Basement')->class('span6') }}
+                {{ Former::select('basement')->options(Config::get('ia.boolean'))->label('Basement')->class('col-md-6') }}
             </div>
             <div class="span3">
-                {{ Former::select('pool')->options(Config::get('ia.boolean'))->label('Pool')->class('span6') }}
+                {{ Former::select('pool')->options(Config::get('ia.boolean'))->label('Pool')->class('col-md-6') }}
             </div>
         </div>
 
         <div class="row-fluid lmargin">
             <div class="span3"></div>
-            <div class="span4">
-                {{ Former::text('houseSize','House Size (SqFt)')->class('span6') }}
+            <div class="col-md-4">
+                {{ Former::text('houseSize','House Size (SqFt)')->class('col-md-6') }}
             </div>
-            <div class="span4">
-                {{ Former::text('lotSize','Lot Size (SqFt)')->class('span6') }}
+            <div class="col-md-4">
+                {{ Former::text('lotSize','Lot Size (SqFt)')->class('col-md-6') }}
             </div>
         </div>
 
@@ -82,7 +82,7 @@
 
         {{ Former::text('typeOfConstruction','Type of Construction')->class('span5') }}
 
-        {{ Former::textarea('description','Property Description')->class('span10 editor')->rows(8) }}
+        {{ Former::textarea('description','Property Description')->class('col-md-10 editor')->rows(8) }}
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
@@ -102,30 +102,30 @@
 
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::select('propertyStatus')->options(Config::get('ia.publishing'))->label('Status') }}
 
         {{ Former::select('category')->options(Config::get('ia.category'))->label('Category') }}
         {{ Former::text('monthlyRental','Monthly Rental')->class('span3') }}
         {{ Former::select('section8')->options(Config::get('ia.boolean'))->label('Section 8')->class('span3') }}
-        {{ Former::text('leaseTerms','Lease Terms')->append('months')->class('span2')->maxlength(2) }}
+        {{ Former::text('leaseTerms','Lease Terms')->append('months')->class('col-md-2')->maxlength(2) }}
         {{ Former::text('leaseStartDate','Lease Start Date')->class('span7 datepicker')
             ->data_format('dd-mm-yyyy')
-            ->append('<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>') }}
+            ->append('<i data-time-icon="fa fa-time" data-date-icon="fa fa-calendar"></i>') }}
 
         <?php Former::framework('Nude');?>
 
         <div class="row-fluid lmargin">
             <div class="span3"></div>
-            <div class="span2">
-                {{ Former::text('tax','Tax')->class('span6') }}
+            <div class="col-md-2">
+                {{ Former::text('tax','Tax')->class('col-md-6') }}
             </div>
             <div class="span3">
-                {{ Former::text('insurance','Insurance')->class('span6') }}
+                {{ Former::text('insurance','Insurance')->class('col-md-6') }}
             </div>
             <div class="span3">
-                {{ Former::text('HOA','HOA')->class('span6') }}
+                {{ Former::text('HOA','HOA')->class('col-md-6') }}
             </div>
         </div>
 
@@ -133,7 +133,7 @@
 
         {{ Former::text('propertyManager','Property Manager') }}
 
-        {{ Former::textarea('specialConditionRemarks','Special Condition Remarks')->class('span10')->rows(8) }}
+        {{ Former::textarea('specialConditionRemarks','Special Condition Remarks')->class('col-md-10')->rows(8) }}
 
         <?php
             $fupload = new Fupload();
@@ -145,7 +145,7 @@
 </div>
 
 <div class="row-fluid pull-right">
-    <div class="span4">
+    <div class="col-md-4">
         {{ Form::submit('Save',array('name'=>'submit','class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

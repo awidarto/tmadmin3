@@ -11,7 +11,7 @@
         {{ Former::checkbox('')->id('outlet-active')->text('Only search in selected outlet') }}<br />
     </div>
 
-    {{ Former::text('barcode','')->id('barcode')->class('span9 scan-in')->autocomplete('off')->placeholder('Put cursor in this box before scanning') }}
+    {{ Former::text('barcode','')->id('barcode')->class('col-md-9 scan-in')->autocomplete('off')->placeholder('Put cursor in this box before scanning') }}
 
     <div id="scanResult">
 

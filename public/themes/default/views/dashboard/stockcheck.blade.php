@@ -69,15 +69,15 @@
 <h3>{{$title}}</h3>
 
 <div class="row-fluid">
-    <div class="span7">
+    <div class="col-md-7">
 
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <div class="scannerbox">
             <img id="guest-photo" src="{{ URL::to('images/no-photo.png')}}">
             <h1 id="guest-name"></h1>
 
-            {{ Former::text('barcode','')->id('barcode')->class('span10') }}
+            {{ Former::text('barcode','')->id('barcode')->class('col-md-10') }}
 
             <div id="scanResult">
                 Hello !

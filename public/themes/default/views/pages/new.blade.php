@@ -8,10 +8,10 @@
 {{Former::open_for_files_vertical($submit,'POST',array('class'=>''))}}
 
 <div class="row-fluid">
-    <div class="span8">
+    <div class="col-md-8">
         {{ Former::textarea('body','Body')->name('body')->id('body')->style('min-height:600px;') }}
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
@@ -29,7 +29,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12 pull-right">
+    <div class="col-md-12 pull-right">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

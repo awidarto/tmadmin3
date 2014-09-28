@@ -8,7 +8,7 @@
 {{Former::open_for_files($submit,'POST',array('class'=>''))}}
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
         {{ Former::text('title','Campaign Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
 
@@ -16,18 +16,18 @@
 
         {{ Former::text('fromDate','From')->class('span7 eventdate')
             ->id('fromDate')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
 
         {{ Former::text('toDate','Until')->class('span7 eventdate')
             ->id('toDate')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
 
 
         {{-- Former::select('category')->options(Config::get('ia.eventcat'))->label('Category') --}}
         {{ Former::textarea('description','Description') }}
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <h6>Target</h6>
         {{ Former::select('contactGroup', 'Contact Group')
             ->options(Prefs::getContactGroup()->contactGroupToSelection('_id','title',false)) }}
@@ -41,12 +41,12 @@
         {{ Former::text('sendDate','Date')->class('span7 datepicker')
             //->data_format('dd-mm-yyyy')
             ->help('use if option "At Specified Date" is selected')
-            ->append('<i class="icon-th"></i>') }}
+            ->append('<i class="fa fa-th"></i>') }}
    </div>
 </div>
 
 <div class="row-fluid">
-    <div class="span12 pull-right">
+    <div class="col-md-12 pull-right">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

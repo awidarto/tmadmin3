@@ -9,10 +9,14 @@ table.table thead .sorting_desc_disabled { background: url('../images/sort_desc_
     margin-bottom: 20px;
     padding-right:10px;
     display: inline-block;
+    font-size: 11px;
+    font-family: 'Open Sans',Arial, sans-serif;
 }
 
 .dataTables_paginate{
     right: 25px;
+    font-size: 11px;
+    font-family: 'Open Sans',Arial, sans-serif;
 }
 
 .dataTables_length .ingrid{
@@ -21,12 +25,20 @@ table.table thead .sorting_desc_disabled { background: url('../images/sort_desc_
 
 .dataTables_length div.ingrid.styled-select{
     margin-right: 4px;
+    display: inline-block;
 }
 
+.dataTables_length div.ingrid.styled-select select{
+    font-size: 11px;
+    font-family: 'Open Sans',Arial, sans-serif;
+}
 
 div.dataTables_length label {
     margin-top: 4px;
     line-height: 24px;
+    font-size: 11px;
+    font-family: 'Open Sans',Arial, sans-serif;
+    width:250px;
 }
 
 
@@ -144,4 +156,14 @@ div.dataTables_length label {
 #paginator{
     display: inline-block;
     float:right;
+}
+
+input[type=text].search_init{
+    width:100%;
+    min-width: 50px;
+}
+
+input[type=text].search_init:focus{
+    width:100%;
+    min-width: 150px;
 }

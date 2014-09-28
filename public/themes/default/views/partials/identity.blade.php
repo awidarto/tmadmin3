@@ -1,270 +1,116 @@
+            <ul class="nav navbar-nav navbar-right hidden-xs">
+                <li class="hidden-xs">
+                    <a href="profile.html">
+                        {{ Auth::user()->fullname }}
+                    </a>
+                </li>
+                {{--
+                <li class="notifications dropdown hidden-xs">
+                    <a href="#" data-toggle="dropdown">
+                        <i class="fa fa-bell"></i>
+                        <div class="badge badge-top bg-danger animated flash">3</div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right animated slideInRight">
+                        <div class="panel bg-white no-border no-margin">
+                            <div class="panel-heading no-radius">
+                                <small>
+                                    <b>Notifications</b>
+                                </small>
+                                <small class="pull-right">
+                                    <a href="#" class="mg-r-xs">mark as read</a>&#8226;
+                                    <a href="#" class="fa fa-cog mg-l-xs"></a>
+                                </small>
+                            </div>
 
-                    <ul class="nav pull-right">
-                        {{--
-                        <li class="dropdown hidden-phone">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="icon-warning-sign"></i>
-                            </a>
-                            <ul class="dropdown-menu notifications">
-                                <li class="dropdown-menu-title">
-                                    <span>You have 11 notifications</span>
-                                </li>
-                                <li>
+                            <ul class="list-group">
+                                <li class="list-group-item">
                                     <a href="#">
-                                        <span class="icon blue"><i class="icon-user"></i></span>
-                                        <span class="message">New user registration</span>
-                                        <span class="time">1 min</span>
+                                        <span class="pull-left mg-t-xs mg-r-md">
+                                            <img src="{{ URL::to('cameo')}}/img/face4.jpg" class="avatar avatar-sm img-circle" alt="">
+                                        </span>
+                                        <div class="m-body show pd-t-xs">
+                                            <span>Dean Winchester</span>
+                                            <span>Posted on to your wall</span>
+                                            <small>2 mins ago</small>
+                                        </div>
                                     </a>
                                 </li>
-                                <li>
+                                <li class="list-group-item">
                                     <a href="#">
-                                        <span class="icon green"><i class="icon-comment-alt"></i></span>
-                                        <span class="message">New comment</span>
-                                        <span class="time">7 min</span>
+                                        <span class="pull-left mg-t-xs mg-r-md">
+                                            <span class="fa-stack fa-lg">
+                                                <i class="fa fa-circle fa-stack-2x text-warning"></i>
+                                                <i class="fa fa-download fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                        </span>
+                                        <div class="m-body show pd-t-xs">
+                                            <span>145 MB download in progress.</span>
+                                            <div class="progress progress-xs mg-t-xs mg-b-xs">
+                                                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                </div>
+                                            </div>
+                                            <small>Started 23 mins ago</small>
+                                        </div>
                                     </a>
                                 </li>
-                                <li>
+                                <li class="list-group-item">
                                     <a href="#">
-                                        <span class="icon green"><i class="icon-comment-alt"></i></span>
-                                        <span class="message">New comment</span>
-                                        <span class="time">8 min</span>
+                                        <span class="pull-left mg-t-xs mg-r-md">
+                                            <img src="{{ URL::to('cameo')}}/img/face3.jpg" class="avatar avatar-sm img-circle" alt="">
+                                        </span>
+                                        <div class="m-body show pd-t-xs">
+                                            <span>Application</span>
+                                            <span>Where is my workspace widget</span>
+                                            <small>5 days ago</small>
+                                        </div>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="icon green"><i class="icon-comment-alt"></i></span>
-                                        <span class="message">New comment</span>
-                                        <span class="time">16 min</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="icon blue"><i class="icon-user"></i></span>
-                                        <span class="message">New user registration</span>
-                                        <span class="time">36 min</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="icon yellow"><i class="icon-shopping-cart"></i></span>
-                                        <span class="message">2 items sold</span>
-                                        <span class="time">1 hour</span>
-                                    </a>
-                                </li>
-                                <li class="warning">
-                                    <a href="#">
-                                        <span class="icon red"><i class="icon-user"></i></span>
-                                        <span class="message">User deleted account</span>
-                                        <span class="time">2 hour</span>
-                                    </a>
-                                </li>
-                                <li class="warning">
-                                    <a href="#">
-                                        <span class="icon red"><i class="icon-shopping-cart"></i></span>
-                                        <span class="message">Transaction was canceled</span>
-                                        <span class="time">6 hour</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="icon green"><i class="icon-comment-alt"></i></span>
-                                        <span class="message">New comment</span>
-                                        <span class="time">yesterday</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="icon blue"><i class="icon-user"></i></span>
-                                        <span class="message">New user registration</span>
-                                        <span class="time">yesterday</span>
-                                    </a>
-                                </li>
-                                <li class="dropdown-menu-sub-footer">
-                                    <a>View all notifications</a>
                                 </li>
                             </ul>
-                        </li>
-                        <!-- start: Notifications Dropdown -->
-                        <li class="dropdown hidden-phone">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="icon-tasks"></i>
-                            </a>
-                            <ul class="dropdown-menu tasks">
-                                <li>
-                                    <span class="dropdown-menu-title">You have 17 tasks in progress</span>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="header">
-                                            <span class="title">iOS Development</span>
-                                            <span class="percent"></span>
-                                        </span>
-                                        <div class="taskProgress progressSlim progressBlue">80</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="header">
-                                            <span class="title">Android Development</span>
-                                            <span class="percent"></span>
-                                        </span>
-                                        <div class="taskProgress progressSlim progressYellow">47</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="header">
-                                            <span class="title">Django Project For Google</span>
-                                            <span class="percent"></span>
-                                        </span>
-                                        <div class="taskProgress progressSlim progressRed">32</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="header">
-                                            <span class="title">SEO for new sites</span>
-                                            <span class="percent"></span>
-                                        </span>
-                                        <div class="taskProgress progressSlim progressGreen">63</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="header">
-                                            <span class="title">New blog posts</span>
-                                            <span class="percent"></span>
-                                        </span>
-                                        <div class="taskProgress progressSlim progressPink">80</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-menu-sub-footer">View all tasks</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- end: Notifications Dropdown -->
-                        <!-- start: Message Dropdown -->
-                        <li class="dropdown hidden-phone">
-                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="icon-envelope"></i>
-                            </a>
-                            <ul class="dropdown-menu messages">
-                                <li>
-                                    <span class="dropdown-menu-title">You have 9 messages</span>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="avatar"><img src="{{ URL::to('sm')}}/img/avatar.jpg" alt="Avatar" /></span>
-                                        <span class="header">
-                                            <span class="from">
-                                                Łukasz Holeczek
-                                             </span>
-                                            <span class="time">
-                                                6 min
-                                            </span>
-                                        </span>
-                                        <span class="message">
-                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="avatar"><img src="{{ URL::to('sm')}}/img/avatar2.jpg" alt="Avatar" /></span>
-                                        <span class="header">
-                                            <span class="from">
-                                                Megan Abott
-                                             </span>
-                                            <span class="time">
-                                                56 min
-                                            </span>
-                                        </span>
-                                        <span class="message">
-                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="avatar"><img src="{{ URL::to('sm')}}/img/avatar3.jpg" alt="Avatar" /></span>
-                                        <span class="header">
-                                            <span class="from">
-                                                Kate Ross
-                                             </span>
-                                            <span class="time">
-                                                3 hours
-                                            </span>
-                                        </span>
-                                        <span class="message">
-                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="avatar"><img src="{{ URL::to('sm')}}/img/avatar4.jpg" alt="Avatar" /></span>
-                                        <span class="header">
-                                            <span class="from">
-                                                Julie Blank
-                                             </span>
-                                            <span class="time">
-                                                yesterday
-                                            </span>
-                                        </span>
-                                        <span class="message">
-                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="avatar"><img src="{{ URL::to('sm')}}/img/avatar5.jpg" alt="Avatar" /></span>
-                                        <span class="header">
-                                            <span class="from">
-                                                Jane Sanders
-                                             </span>
-                                            <span class="time">
-                                                Jul 25, 2012
-                                            </span>
-                                        </span>
-                                        <span class="message">
-                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-menu-sub-footer">View all messages</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- end: Message Dropdown -->
+
+                            <div class="panel-footer no-border">
+                                <a href="#">See all notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                --}}
+                <li class="quickmenu mg-r-md">
+                    <a href="#" data-toggle="dropdown">
+                        <img src="{{ URL::to('cameo')}}/img/avatar.jpg" class="avatar pull-left img-circle" alt="user" title="user">
+                        <i class="caret mg-l-xs hidden-xs no-margin"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right mg-r-xs">
                         <li>
-                            <a class="btn" href="#">
-                                <i class="icon-wrench"></i>
-                            </a>
-                        </li>
-                        --}}
-                        <!-- start: User Dropdown -->
-                        <li class="dropdown">
-                            <a class="btn account dropdown-toggle" data-toggle="dropdown" href="#" style="min-height:28px;">
-                                <div class="avatar"><img src="{{ URL::to('sm')}}/img/avatar.jpg" alt="Avatar" /></div>
-                                <div class="user">
-                                    <span class="hello">Welcome!</span>
-                                    <span class="name">{{ Auth::user()->fullname }}</span>
+                            <a href="#">
+                                <div class="pd-t-sm">
+                                    {{ Auth::user()->email }}
                                 </div>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-menu-title">
-
-                                </li>
-                                <li><a href="#"><i class="icon-user"></i> Profile</a></li>
-                                <li><a href="#"><i class="icon-cog"></i> Settings</a></li>
-                                <li><a href="#"><i class="icon-envelope"></i> Messages</a></li>
-                                <li><a href="{{ URL::to('logout')}}"><i class="icon-off"></i> Logout</a></li>
-                            </ul>
                         </li>
-                        <!-- end: User Dropdown -->
+                        {{--
+
+                        <li>
+                            <a href="profile.html">Settings</a>
+                        </li>
+                        <li>
+                            <a href="#">Upgrade</a>
+                        </li>
+                        <li>
+                            <a href="#">Notifications
+                                <div class="badge bg-danger pull-right">3</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">Help ?</a>
+                        </li>
+                        --}}
+                        <li class="divider"></li>
+                        <li>
+                            <a href="{{ URL::to('logout')}}">Logout</a>
+                        </li>
                     </ul>
+                </li>
+            </ul>
 
 

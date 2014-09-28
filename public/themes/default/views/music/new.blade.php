@@ -8,7 +8,7 @@
 {{Former::open_for_files($submit,'POST',array('class'=>''))}}
 
 <div class="row">
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::text('songTitle','Song Title') }}
         {{ Former::text('artist','Artist') }}
@@ -24,7 +24,7 @@
             <label class="control-label" for="userfile">Upload Images</label>
             <div class="controls">
                 <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
+                    <i class="fa fa-plus fa fa-white"></i>
                     <span>Add files...</span>
                     <!-- The file input field used as target for the file upload widget -->
                     <input id="fileupload" type="file" name="files[]" multiple>
@@ -103,13 +103,13 @@
         </div>
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         {{ Former::textarea('lyric','Lyric')->class('editor') }}
     </div>
 </div>
 
 <div class="row-fluid">
-    <div class="span12 pull-right">
+    <div class="col-md-12 pull-right">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

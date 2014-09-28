@@ -1,6 +1,6 @@
 @section('messages')
   <div class="panel sidepanel">
-    <h4><span class="foundicon-mail"></span>&nbsp;&nbsp;Messages</h4>
+    <h4><span class="foundfa fa-mail"></span>&nbsp;&nbsp;Messages</h4>
     <!--<p>Welcome back, {{ Auth::user()->fullname }}</p>-->
     <div class="message-list-side">
 

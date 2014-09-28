@@ -1,12 +1,12 @@
 {{ Former::select('assigned', 'Show only product in category : ')
         ->options(Prefs::ExtractProductCategory() )
         ->id('assigned-product-filter');
-}}&nbsp;&nbsp;
-<a class="btn" id="refresh_filter">Refresh</a>
-<a class="btn" id="assign-product">Assign Product to Category</a>
-<a class="btn" id="assign-status">Set Status</a>
+}}&nbsp;&nbsp;<br />
+<a class="btn btn-info btn-sm" id="refresh_filter">Refresh</a>
+<a class="btn btn-info btn-sm" id="assign-product">Assign Product to Category</a>
+<a class="btn btn-info btn-sm" id="assign-status">Set Status</a>
 
-<div id="assign-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="assign-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Assign Selected to</span></h3>
@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<div id="status-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalStatus" aria-hidden="true">
+<div id="status-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalStatus" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalStatus">Set Selected Status To</span></h3>
@@ -40,11 +40,11 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('#refresh_filter').on('click',function(){
-            oTable.fnDraw();
+            oTable.draw();
         });
 
         $('#assigned-product-filter').on('change',function(){
-            oTable.fnDraw();
+            oTable.draw();
         });
 
         $('#assign-product').on('click',function(e){
@@ -74,7 +74,7 @@
                     },
                     function(data){
                         $('#assign-modal').modal('hide');
-                        oTable.fnDraw();
+                        oTable.draw();
                     }
                     ,'json');
 
@@ -102,7 +102,7 @@
                     },
                     function(data){
                         $('#status-modal').modal('hide');
-                        oTable.fnDraw();
+                        oTable.draw();
                     }
                     ,'json');
 
@@ -135,7 +135,7 @@
                     prop_ids : ids
                 },
                 function(data){
-                    oTable.fnDraw();
+                    oTable.draw();
                 }
                 ,'json');
 

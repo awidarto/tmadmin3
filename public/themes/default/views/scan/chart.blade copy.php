@@ -112,7 +112,7 @@
         </ul>
 
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <div class="scannerbox">
             <img id="guest-photo" src="{{ URL::to('images/no-photo.jpg')}}">
             <h1 id="guest-name"></h1>
@@ -123,7 +123,7 @@
                 <h3 >Table : <span id="table-number">1</span>&nbsp;&nbsp;&nbsp; Seat : <span id="seat-number">1</span></h3>
             @endif
 
-            {{ Former::text('barcode','')->id('barcode')->class('span10') }}
+            {{ Former::text('barcode','')->id('barcode')->class('col-md-10') }}
 
             <div id="scanResult">
                 Hello !

@@ -8,23 +8,23 @@
 {{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
         {{ Former::file('inputfile','Select file ( .xls, .xlsx )') }}
 
         {{ Former::hidden( 'controller',$back ) }}
         {{ Former::hidden( 'importkey',$importkey ) }}
 
-        {{ Former::text('headindex','Row containing header')->class('span2')->value(2) }}
-        {{ Former::text('firstdata','Data starting at row')->class('span2')->value(3) }}
+        {{ Former::text('headindex','Row containing header')->class('col-md-2')->value(2) }}
+        {{ Former::text('firstdata','Data starting at row')->class('col-md-2')->value(3) }}
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
 
     </div>
 </div>
 
 <div class="row-fluid right">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

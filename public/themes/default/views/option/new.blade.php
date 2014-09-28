@@ -8,12 +8,12 @@
 {{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::text('title','Title') }}
         {{ Former::text('permalink', 'URL friendly name')->id('permalink')}}
         {{ Former::text('docDepartment','Department') }}
-        {{ Former::text('tags','Tags (visible)')->class('tag_keyword span6') }}
+        {{ Former::text('tags','Tags (visible)')->class('tag_keyword col-md-6') }}
 
         <?php
             $fupload = new Fupload();

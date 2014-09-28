@@ -1,12 +1,12 @@
 {{ Former::select('assigned', 'Show only product in category : ')
         ->options(Prefs::getOutlet()->OutletToSelection('name','name') )
         ->id('outlet-filter');
-}}&nbsp;&nbsp;
-<a class="btn" id="refresh_filter">Refresh</a><br />
-<a class="btn" id="print_barcodes"><i class="icon-print"></i> Print Selected Barcodes</a>
-<a class="btn" id="move_outlets">Move Selection's Outlets</a>
+}}<br />
+<a class="btn btn-info btn-sm" id="refresh_filter">Refresh</a>
+<a class="btn btn-info btn-sm" id="print_barcodes"><i class="fa fa-print"></i> Print Selected Barcodes</a>
+<a class="btn btn-info btn-sm" id="move_outlets">Move Selection's Outlets</a>
 
-<div id="assign-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="assign-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Move Selected to</span></h3>
@@ -21,45 +21,45 @@
   </div>
 </div>
 
-<div id="print-modal" class="modal hide fade large" tabindex="-1" role="dialog" aria-labelledby="myPrintModalLabel" aria-hidden="true">
+<div id="print-modal" class="modal fade large" tabindex="-1" role="dialog" aria-labelledby="myPrintModalLabel" aria-hidden="true">
     <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myPrintModalLabel">Print Selected Codes</span></h3>
     </div>
     <div class="modal-body" >
-        <div style="border-bottom:thin solid #ccc;">
-            Print options :
-            <label>
-                Number of columns
-                <input type="text" value="2" id="label_columns" class="span1" />
-                Resolution
-                <input type="text" value="150" id="label_res"  class="span1" /> ppi
-                Label height
-                <input type="text" value="75" id="label_cell_height" class="span1" /> px
-                Label width
-                <input type="text" value="145" id="label_cell_width" class="span1" /> px
-                Label right margin
-                <input type="text" value="10" id="label_margin_right" class="span1" /> px
-                Label bottom margin
-                <input type="text" value="10" id="label_margin_bottom" class="span1" /> px
-                Page left offset
-                <input type="text" value="0" id="label_offset_left" class="span1" /> px
-                Page top offset
-                <input type="text" value="0" id="label_offset_top" class="span1" /> px
-                Font size
-                <input type="text" value="8" id="font_size" class="span1" /> px
-                Code Type
-                <select id="code_type" class="span3" >
-                    <option value="barcode" selected >Bar Code</option>
-                    <option value="qr">QR Code</option>
-                </select>
-
-                <button id="label_default">make default</button>
-                <button id="label_refresh">refresh</button>
-            </label>
+        <h6>Print options</h6>
+        <form class="form-horizontal">
+        <div style="border-bottom:thin solid #ccc;" class="row clearfix">
+            <div class="col-md-2">
+                {{ Former::text('label_columns','Number of columns')->value('2')->id('label_columns')->class('form-control input-sm') }}
+                {{ Former::text('label_res','Resolution')->value('150')->id('label_res')->class('form-control input-sm') }}
+            </div>
+            <div class="col-md-2">
+                {{ Former::text('label_cell_height','Label height')->value('75')->id('label_cell_height')->class('form-control input-sm') }}
+                {{ Former::text('label_cell_width','Label width')->value('145')->id('label_cell_width')->class('form-control input-sm') }}
+            </div>
+            <div class="col-md-2">
+                {{ Former::text('label_margin_right','Label height')->value('10')->id('label_margin_right')->class('form-control input-sm') }}
+                {{ Former::text('label_margin_bottom','Label width')->value('10')->id('label_margin_bottom')->class('form-control input-sm') }}
+            </div>
+            <div class="col-md-2">
+                {{ Former::text('label_offset_right','Page left offset')->value('10')->id('label_offset_right')->class('form-control input-sm') }}
+                {{ Former::text('label_offset_bottom','Page top offset')->value('10')->id('label_offset_bottom')->class('form-control input-sm') }}
+            </div>
+            <div class="col-md-2">
+                {{ Former::text('font_size','Font size')->value('10')->id('font_size')->class('form-control input-sm') }}
+                {{ Former::select('code_type','Code type')->id('code_type')->options(array('barcode'=>'Barcode','qr'=>'QR') )}}
+            </div>
+            <div class="col-md-2">
+                <button id="label_default" class="form-control" >make default</button>
+                <button id="label_refresh" class="form-control" >refresh</button>
+            </div>
         </div>
         <input type="hidden" value="" id="session_name" />
         <input type="hidden" value="" id="label_id" />
+
+        </form>
+
         <iframe id="label_frame" name="label_frame" width="100%" height="90%"
         marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
         title="Dialog Title">Your browser does not suppr</iframe>

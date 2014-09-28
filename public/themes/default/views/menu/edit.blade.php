@@ -29,7 +29,7 @@
             </tbody>
         </table>
     </div>
-    <div class="span4">
+    <div class="col-md-4">
 
         {{ Former::text('menuTitle','Name')->id('#menuTitle') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
@@ -40,7 +40,7 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
@@ -69,7 +69,7 @@ input.mparam{
     width:100px;
 }
 
-.icon-* {
+.fa fa-* {
     width: 1.2em;
     height: 1.2em;
 }
@@ -264,15 +264,15 @@ $(document).ready(function() {
     $("#mainTree").contextmenu({
         delegate: "span.fancytree-title",
         menu: [
-            {title: "Edit", cmd: "rename", uiIcon: "ui-icon-pencil" },
-            {title: "Delete", cmd: "remove", uiIcon: "ui-icon-trash" },
+            {title: "Edit", cmd: "rename", uiIcon: "ui-fa fa-pencil" },
+            {title: "Delete", cmd: "remove", uiIcon: "ui-fa fa-trash" },
             {title: "----"},
-            {title: "New node", cmd: "addChild", uiIcon: "ui-icon-plus" },
-            {title: "New child node", cmd: "addChild", uiIcon: "ui-icon-arrowreturn-1-e" },
+            {title: "New node", cmd: "addChild", uiIcon: "ui-fa fa-plus" },
+            {title: "New child node", cmd: "addChild", uiIcon: "ui-fa fa-arrowreturn-1-e" },
             {title: "----"},
-            {title: "Cut", cmd: "cut", uiIcon: "ui-icon-scissors"},
-            {title: "Copy", cmd: "copy", uiIcon: "ui-icon-copy"},
-            {title: "Paste", cmd: "paste", uiIcon: "ui-icon-clipboard", disabled: true }
+            {title: "Cut", cmd: "cut", uiIcon: "ui-fa fa-scissors"},
+            {title: "Copy", cmd: "copy", uiIcon: "ui-fa fa-copy"},
+            {title: "Paste", cmd: "paste", uiIcon: "ui-fa fa-clipboard", disabled: true }
             ],
         beforeOpen: function(event, ui) {
             var node = $.ui.fancytree.getNode(ui.target);

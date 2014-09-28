@@ -9,19 +9,19 @@
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
         {{ Former::text('videoTitle','Title') }}
         {{ Former::text('url','Youtube URL') }}
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
     </div>
-    <div class="span6">
+    <div class="col-md-6">
 
 
     </div>
 </div>
 
 <div class="row-fluid">
-    <div class="span12">
+    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>

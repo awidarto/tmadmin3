@@ -369,14 +369,14 @@ class TemplatesController extends AdminController {
 
     public function makeActions($data)
     {
-        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
-        $active = '<span class="active" id="'.$data['_id'].'" data-type="'.$data['type'].'" ><i class="icon-trash"></i>Set Active</span>';
-        $edit = '<a href="'.URL::to('templates/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
+        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-trash"></i>Delete</span>';
+        $active = '<span class="active" id="'.$data['_id'].'" data-type="'.$data['type'].'" ><i class="fa fa-trash"></i>Set Active</span>';
+        $edit = '<a href="'.URL::to('templates/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
 
         $pdf = '<a href="'.URL::to('templates/preview/'.$data['_id'].'/pdf').'" target="blank"
-        ><i class="icon-edit"></i>PDF Preview</a>';
+        ><i class="fa fa-edit"></i>PDF Preview</a>';
         $html = '<a href="'.URL::to('templates/preview/'.$data['_id'].'/html').'" target="blank"
-        ><i class="icon-edit"></i>HTML Preview</a>';
+        ><i class="fa fa-edit"></i>HTML Preview</a>';
 
         $actions = $edit.'<br />'.$active.'<br />'.$delete.'<br />'.$pdf.'<br />'.$html;
         return $actions;

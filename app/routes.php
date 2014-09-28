@@ -72,7 +72,8 @@ Route::controller('home', 'HomeController');
 Route::controller('homeslide', 'HomeslideController');
 
 //Route::get('/', 'ProductsController@getIndex');
-Route::get('/', 'PosController@getIndex');
+//Route::get('/', 'PosController@getIndex');
+Route::get('/', 'DashboardController@getIndex');
 
 
 Route::get('content/pages', 'PagesController@getIndex');
@@ -313,7 +314,7 @@ Route::get('media',function(){
 });
 
 Route::get('login',function(){
-    return View::make('login');
+    return View::make('login')->with('title','Sign In');
 });
 
 Route::post('login',function(){

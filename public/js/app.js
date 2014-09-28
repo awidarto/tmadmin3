@@ -69,45 +69,6 @@
 
     	var sharelist = {};
 
-        var dateinputs = $('.datepicker');
-
-        // work around for Former form lib for Laravel to create proper markup for date picker element
-        dateinputs.each(function(){
-            $(this).parent().addClass('datepicker');
-            $(this).removeClass('datepicker');
-        })
-
-        console.log(dateinputs);
-
-        /*
-	    $('.timepicker').timepicker({
-	        minuteStep: 10,
-	        showSeconds: false,
-	        showMeridian: false
-	    });
-
-		//$('.date').datetimepicker({
-		$('.date').datepicker({
-			dateFormat: "dd-mm-yy"
-			//pickTime: false
-		});
-		*/
-
-        $('.datepicker').daterangepicker({
-            singleDatePicker:true,
-                    startDate: moment(),
-                    endDate: moment().add('days',30),
-                    minDate: '01/01/2012'
-            });
-
-        $('.datepicker').on('show',function(ev,picker){
-            console.log($(this).val());
-            var picked = $(this).val();
-            if ( typeof(picked) !== "undefined" && picked !== null && picked !== '' ) {
-                picker.setStartDate(moment(picked,'MM/DD/YYYY'));
-            }
-        });
-
         $('.eventdate').daterangepicker({
                 maxDate: moment().add('months',12)
             },function(start, end){
@@ -270,13 +231,6 @@
 		   'placeholderColor' : '#666666'
 		});
 
-		$('.tag_project').autocomplete({
-			source: base + 'ajax/project'
-		});
-
-		$('.tag_revision').autocomplete({
-			source: base + 'ajax/rev'
-		});
 
 		$('.auto_user').autocomplete({
 			source: base + 'ajax/email',
@@ -285,80 +239,6 @@
 				$('#user_name').val(ui.item.label);
 			}
 		});
-
-		$('.auto_pm').autocomplete({
-			source: base + 'ajax/user',
-			select: function(event, ui){
-				$('#pm_id').val(ui.item.id);
-				$('#pm_name').val(ui.item.value);
-				$('#pm_email').val(ui.item.email);
-			}
-		});
-
-		$('.auto_client').autocomplete({
-			source: base + 'ajax/email',
-			select: function(event, ui){
-				$('#client_id').val(ui.item.id);
-				$('#client_name').val(ui.item.label);
-			}
-		});
-
-		//project
-
-		$('.auto_project_number').autocomplete({
-			source: base + 'ajax/project',
-			select: function(event, ui){
-				$('#project_id').val(ui.item.id);
-				$('#project_title').val(ui.item.title);
-			}
-		});
-
-
-		$('.auto_project_name').autocomplete({
-			source: base + 'ajax/projectname',
-			select: function(event, ui){
-				$('#project_id').val(ui.item.id);
-				$('#project_number').val(ui.item.number);
-			}
-		});
-
-		//tender
-
-		$('.auto_tender_number').autocomplete({
-			source: base + 'ajax/tender',
-			select: function(event, ui){
-				$('#tender_id').val(ui.item.id);
-				$('#tender_title').val(ui.item.title);
-			}
-		});
-
-
-		$('.auto_tender_name').autocomplete({
-			source: base + 'ajax/tendername',
-			select: function(event, ui){
-				$('#tender_id').val(ui.item.id);
-				$('#tender_number').val(ui.item.number);
-			}
-		});
-
-		//opportunity
-
-		$('.auto_opportunity_number').autocomplete({
-			source: base + 'ajax/opportunity',
-			select: function(event, ui){
-				$('#opportunity_id').val(ui.item.id);
-				$('#opportunity_title').val(ui.item.title);
-			}
-		});
-
-		$('.auto_opportunity_name').autocomplete({
-			source: base + 'ajax/opportunityname',
-			select: function(event, ui){
-				$('#opportunity_id').val(ui.item.id);
-				$('#opportunity_number').val(ui.item.number);
-			}
-		});
-
 
 		$('.auto_userdata').autocomplete({
 			source: base + 'ajax/userdata',

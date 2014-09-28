@@ -79,7 +79,7 @@
         font-size: 36px;
     }
 
-    i.icon-download , i.icon-map-marker, i.icon-envelope, i.icon-print{
+    i.fa fa-download , i.fa fa-map-marker, i.fa fa-envelope, i.fa fa-print{
         font-size: 18px;
     }
 
@@ -143,7 +143,7 @@
             <div class="span3">
                 <a href="{{ URL::to('/')}}" >{{ HTML::image('images/ialogo.png','Investors Alliance',array('class'=>'img-responsive' ) ) }}</a>
             </div>
-            <div class="span9">
+            <div class="col-md-9">
             </div>
         </div>
         <h1 style="padding-left:0px;">Purchase Receipt</h1>
@@ -213,8 +213,8 @@
             <thead>
                 <tr>
                     <th>Price</th>
-                    <th style="text-align:center;" class="span2">Amount</th>
-                    <th style="text-align:center;" class="span2">Total</th>
+                    <th style="text-align:center;" class="col-md-2">Amount</th>
+                    <th style="text-align:center;" class="col-md-2">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -263,8 +263,8 @@
             <thead>
                 <tr>
                     <th colspan="2">Cash and Earnest Money</th>
-                    <th style="text-align:center;" class="span2">Amount</th>
-                    <th style="text-align:center;" class="span2">Total</th>
+                    <th style="text-align:center;" class="col-md-2">Amount</th>
+                    <th style="text-align:center;" class="col-md-2">Total</th>
                 </tr>
             </thead>
             <tbody>

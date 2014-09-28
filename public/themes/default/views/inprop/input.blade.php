@@ -9,18 +9,18 @@
 
 <div class="row">
 
-    <div class="span6">
+    <div class="col-md-6">
 
         {{ Former::file($input_name)->name($input_name)->label('Excel file ( .xls, .xlsx )')->accept('xls','xlsx') }}
 
     </div>
-    <div class="span6">
+    <div class="col-md-6">
 
     </div>
 </div>
 
 <div class="row">
-    <div class="span12 offset2">
+    <div class="col-md-12 offset2">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}
     </div>
 </div>

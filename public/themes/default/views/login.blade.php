@@ -1,36 +1,38 @@
 @extends('layout.login')
 
 @section('content')
-            <!-- if there are login errors, show them here -->
-@if(Auth::check())
-    <p class="navbar-text pull-right">
-        Hello {{ Auth::user()->fullname }}
-        <a href="{{ URL::to('logout')}}" >Logout</a>
-    </p>
-@endif
 
 {{ Form::open(array('url' => 'login','class'=>'form-signin')) }}
-        <h3>Welcome to</h3>
-        <h2>{{ Config::get('site.name')}}</h2>
+        <h2>Welcome to {{ Config::get('site.name')}}</h2>
+        <h6>
+            Please sign in to get started!
+        </h6>
         <fieldset>
             @if (Session::get('loginError'))
                 <div class="alert alert-danger">{{ Session::get('loginError') }}</div>
                      <button type="button" class="close" data-dismiss="alert"></button>
             @endif
 
-            <input class="input-large span12" name="email" id="username" type="text" placeholder="email" />
+            <input class="input-large form-control mg-b-sm" name="email" id="username" type="text" placeholder="email" />
 
-            <input class="input-large span12" name="password" id="password" type="password" placeholder="password" />
+            <input class="input-large form-control mg-b-sm" name="password" id="password" type="password" placeholder="password" />
 
-            <div class="clearfix"></div>
+            <label class="checkbox pull-left">
+                <input type="checkbox" value="remember-me">Remember me
+            </label>
 
-            <label class="remember" for="remember"><input type="checkbox" id="remember" />Remember me</label>
+            <button class="btn btn-info btn-block" type="submit">Sign in</button>
 
-            <div class="clearfix"></div>
+            <div class="text-right mg-b-sm mg-t-sm">
+                <a href="{{ URL::to('cameo') }}/#">Forgot password?</a>
+            </div>
 
-            <button type="submit" class="btn btn-primary span12">Login</button>
+            <p class="center-block mg-t mg-b text-right">Dont have an account?
+                <a href="{{ URL::to('signup') }}">Signup here.</a>
+            </p>
         </fieldset>
 
 {{ Form::close() }}
+
 
 @stop

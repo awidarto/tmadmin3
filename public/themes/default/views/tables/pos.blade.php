@@ -87,6 +87,7 @@ div.payform input[type="text"].left{
 div.payform label{
     line-height: 22px;
     font-size: 14px;
+    display: block;
 }
 
 div.payform h3{
@@ -96,26 +97,14 @@ div.payform h3{
 }
 
 </style>
-<div class="row-fluid">
-    <div class="span12 command-bar">
-        <h1>{{ $title }}</h1>
-     </div>
-</div>
 
-<div class="row-fluid">
-    <div class="span6 command-bar">
-
-     </div>
-</div>
-
-<div class="row-fluid">
-   <div class="span7">
-        <div class="box">
-            <div class="box-content">
-                  <table class="table table-condensed dataTable">
-
+<div class="row">
+   <div class="col-md-6">
+        <div class="panel panel-info">
+            <header class="panel-heading">{{ $title }}</header>
+            <div class="panel-body">
+                    <table class="table table-condensed dataTable">
                         <thead>
-
                             <tr>
                                 @foreach($heads as $head)
                                     @if(is_array($head))
@@ -171,14 +160,14 @@ div.payform h3{
                                         @if(isset($in[1]['date']) && $in[1]['date'])
                                             <td>
                                                 <div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                                    <input class="span8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                                    <span class="add-on"><i class="icon-th"></i></span>
+                                                    <input class="col-md-8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                                    <span class="add-on"><i class="fa fa-th"></i></span>
                                                 </div>
                                                 {{--
                                                 <div id="{{ $index }}" class="input-append datepickersearch">
                                                     <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
                                                     <span class="add-on">
-                                                        <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+                                                        <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
                                                         </i>
                                                     </span>
                                                 </div>
@@ -189,14 +178,14 @@ div.payform h3{
                                         @elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
                                             <td>
                                                 <div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                                    <input class="span8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                                    <span class="add-on"><i class="icon-th"></i></span>
+                                                    <input class="col-md-8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                                    <span class="add-on"><i class="fa fa-th"></i></span>
                                                 </div>
                                                 {{--
                                                 <div id="{{ $index }}" class="input-append datetimepickersearch">
                                                     <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
                                                     <span class="add-on">
-                                                        <i data-time-icon="icon-clock" data-date-icon="icon-calendar">
+                                                        <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
                                                         </i>
                                                     </span>
                                                 </div>
@@ -239,40 +228,47 @@ div.payform h3{
                         <!-- will be replaced by ajax content -->
                      </tbody>
 
-                  </table>
+                    </table>
+
+                    <div class="row-fluid">
+                        <div class="col-md-6">
+                            {{ Former::button('Cancel')->id('btn-cancel')->class('btn btn-danger btn-block btn-large') }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ Former::button('Pay')->id('btn-pay')->class('btn btn-primary btn-block btn-large') }}
+                        </div>
+                    </div>
+            </div>
+        </div>
+   </div>
+   <div class="col-md-5">
+
+        <div class="panel panel-info">
+            <header class="panel-heading">Session</header>
+            <div class="panel-body">
+
+                @if(isset($can_add) && $can_add == true)
+                    <a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
+                    <a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
+                    <a class="btn" id="download-xls">Download Excel</a>
+                    <a class="btn" id="download-csv">Download CSV</a>
+                @endif
+
+                @if(isset($is_report) && $is_report == true)
+                    {{ $report_action }}
+                @endif
+
+                @if(isset($is_additional_action) && $is_additional_action == true)
+                    {{ $additional_action }}
+                @endif
 
             </div>
         </div>
-      <div class="row-fluid">
-        <div class="span6">
-            {{ Former::button('Cancel')->id('btn-cancel')->class('btn btn-danger btn-block btn-large') }}
-        </div>
-        <div class="span6">
-            {{ Former::button('Pay')->id('btn-pay')->class('btn btn-primary btn-block btn-large') }}
-        </div>
-      </div>
-   </div>
-   <div class="span5">
-
-        @if(isset($can_add) && $can_add == true)
-            <a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
-            <a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
-            <a class="btn" id="download-xls">Download Excel</a>
-            <a class="btn" id="download-csv">Download CSV</a>
-        @endif
-
-        @if(isset($is_report) && $is_report == true)
-            {{ $report_action }}
-        @endif
-
-        @if(isset($is_additional_action) && $is_additional_action == true)
-            {{ $additional_action }}
-        @endif
 
    </div>
 </div>
 
-<div id="print-modal" class="modal hide fade medium" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="print-modal" class="modal fade medium" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Print Receipt</h3>
@@ -288,7 +284,7 @@ div.payform h3{
     </div>
 </div>
 
-<div id="pay-modal" class="modal hide fade large" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="pay-modal" class="modal fade large" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Payment</h3>
@@ -632,7 +628,7 @@ div.payform h3{
 
                         $('#current_session').val(active_id);
 
-                        oTable.fnStandingRedraw();
+                        oTable.draw();
                         alert("Session id : " + current_trx + " deleted");
                     }
                 },'json');
@@ -708,7 +704,7 @@ div.payform h3{
                     //redraw table
 
 
-                    oTable.fnStandingRedraw();
+                    oTable.draw();
 
                     $('#delstatusindicator').html('Payment status updated');
 
@@ -829,7 +825,7 @@ div.payform h3{
                         if(data.status == 'OK'){
                             //redraw table
 
-                            oTable.fnStandingRedraw();
+                            oTable.draw();
                             alert("Item id : " + _id + " deleted");
                         }
                     },'json');
@@ -852,7 +848,7 @@ div.payform h3{
                         if(data.status == 'OK'){
                             //redraw table
 
-                            oTable.fnStandingRedraw();
+                            oTable.draw();
                             alert("Item id : " + _id + " deleted");
                         }
                     },'json');
@@ -991,7 +987,7 @@ div.payform h3{
 
 
                                     var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
-                                        '<span class="file_del" id="' + file.file_id +'"><i class="icon-trash"></i></span>'+
+                                        '<span class="file_del" id="' + file.file_id +'"><i class="fa fa-trash"></i></span>'+
                                         '&nbsp;&nbsp;<span class="img-title">' + file.filename + '</span><br />' +
                                         '<input type="radio" name="defaultpic" ' + isdefault + ' value="' + file.file_id + '"> Default<br />'+
                                         'Brochure <br />' +

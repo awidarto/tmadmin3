@@ -13,14 +13,23 @@
 
 <div class="form-horizontal">
     <div id="outlet-box">
-        {{ Former::select('outlet')->options(Prefs::getOutlet()->OutletToSelection('id','name',false) )->id('scanoutlet') }} &nbsp;<span>select one of existing outlet before scanning</span><br /><br />
+        {{ Former::select('outlet')->options(Prefs::getOutlet()->OutletToSelection('id','name',false) )->id('scanoutlet') }} &nbsp;<span>select one of existing outlet before scanning</span>
     </div>
+    <h3>Search by name</h3>
+    {{ Former::text('search-product','')->id('search-product')->class('col-md-8 form-control')->autocomplete('off')->placeholder('Search by SKU or name') }}
 
-    {{ Former::text('barcode','')->id('barcode')->class('span8 scan-in')->autocomplete('off')->placeholder('Put cursor in this box before scanning') }}
+    <br /><br />
+
+    <h3>Scan In</h3>
+    {{ Former::text('barcode','')->id('barcode')->class('col-md-8 form-control scan-in')->autocomplete('off')->placeholder('Put cursor in this box before scanning') }}
+    {{--
+
     <div id="scan-mode" class="btn-group" data-toggle="buttons-radio">
-      <button type="button" id="mode-reduce" class="mode-select btn btn-large btn-info"><i class="icon-minus"></i></button>
-      <button type="button" id="mode-add" class="mode-select btn btn-large btn-info active"><i class="icon-plus"></i></button>
+      <button type="button" id="mode-reduce" class="mode-select btn btn-large btn-info"><i class="fa fa-minus"></i></button>
+      <button type="button" id="mode-add" class="mode-select btn btn-large btn-info active"><i class="fa fa-plus"></i></button>
     </div>
+    --}}
+
     <div id="scanResult">
 
     </div>
