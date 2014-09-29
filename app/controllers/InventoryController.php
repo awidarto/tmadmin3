@@ -101,6 +101,20 @@ class InventoryController extends AdminController {
         $session = Printsession::find($sessionname)->first()->toArray();
         $labels = Stockunit::whereIn('_id', $session)->get()->toArray();
 
+        $skus = array();
+        foreach($labels as $l){
+            $skus[] = $l['SKU'];
+        }
+
+        $skus = array_unique($skus);
+
+        $products = Product::whereIn('SKU',$skus)->get()->toArray();
+
+        $plist = array();
+        foreach($products as $product){
+            $plist[$product['SKU']] = $product;
+        }
+
         return View::make('inventory.printlabel')
             ->with('columns',$columns)
             ->with('resolution',$resolution)
@@ -112,6 +126,7 @@ class InventoryController extends AdminController {
             ->with('code_type',$code_type)
             ->with('left_offset', $left_offset)
             ->with('top_offset', $top_offset)
+            ->with('products',$plist)
             ->with('labels', $labels);
     }
 

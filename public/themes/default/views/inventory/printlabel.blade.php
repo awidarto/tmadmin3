@@ -109,11 +109,12 @@
 <div id="container">
 
 @foreach( $labels as $l )
+    <?php $pd = $products[ $l['SKU'] ]; ?>
     <div class="label">
         <table>
             <tr>
                 <td colspan="2" style="text-align:center">
-                    {{ $l['productDetail']['itemDescription']}}
+                    {{ $pd['itemDescription']}}
                 </td>
             </tr>
             <tr>
@@ -126,7 +127,7 @@
                     TOIMOI
                 </td>
                 <td style="text-align:center">
-                    {{ Ks::idr($l['productDetail']['priceRegular'])}}
+                    {{ Ks::idr($pd['priceRegular'])}}
                 </td>
             </tr>
         </table>

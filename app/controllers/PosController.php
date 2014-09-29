@@ -629,9 +629,14 @@ class PosController extends AdminController {
         $msg = '';
 
         if(strripos($code, '|') >= 0){
-            $code = explode('|', $code);
-            $SKU = $code[0];
-            $unit_id = $code[1];
+            $rcode = explode('|', $code);
+            if(count($rcode) > 1){
+                $SKU = $rcode[0];
+                $unit_id = $rcode[1];
+            }else{
+                $SKU = trim($code);
+                $unit_id = null;
+            }
         }else{
             $SKU = trim($code);
             $unit_id = null;

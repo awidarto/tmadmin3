@@ -70,6 +70,7 @@ Route::controller('ajax', 'AjaxController');
 
 Route::controller('home', 'HomeController');
 Route::controller('homeslide', 'HomeslideController');
+Route::controller('header', 'HeaderController');
 
 //Route::get('/', 'ProductsController@getIndex');
 //Route::get('/', 'PosController@getIndex');

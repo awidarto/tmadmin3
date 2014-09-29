@@ -6,7 +6,7 @@
 <h3>{{$title}}</h3>
 
 
-{{Former::open_for_files($submit,'POST',array('class'=>'custom'))}}
+{{Former::open_for_files_horizontal($submit,'POST',array('class'=>'custom'))}}
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row">
@@ -22,12 +22,12 @@
         {{ Former::text('priceRegular','Regular Price')->class('form-control col-md-4') }}
         {{ Former::text('priceDiscount','Discount Price')->class('form-control col-md-4') }}
 
-        {{ Former::text('discFromDate','Disc. From')->class('form-control span7 offset-2 eventdate')
+        {{ Former::text('discFromDate','Disc. From')->class('form-control col-md-7 offset-2 eventdate')
             ->id('fromDate')
             //->data_format('dd-mm-yyyy')
             ->append('<i class="fa fa-th"></i>') }}
 
-        {{ Former::text('discToDate','Disc. Until')->class('form-control span7 offset-2 eventdate')
+        {{ Former::text('discToDate','Disc. Until')->class('form-control col-md-7 offset-2 eventdate')
             ->id('toDate')
             //->data_format('dd-mm-yyyy')
             ->append('<i class="fa fa-th"></i>') }}
@@ -48,18 +48,18 @@
 
         <div class="row form-vertical">
             <div class="col-md-4">
-                {{ Former::text('W','Width')->class('form-control col-md-1')}}
+                {{ Former::text('W','Width')->class('form-control')}}
             </div>
             <div class="col-md-4">
-                {{ Former::text('H','Height')->class('form-control col-md-1') }}
+                {{ Former::text('H','Height')->class('form-control') }}
             </div>
             <div class="col-md-4">
-                {{ Former::text('L','Length')->class('form-control col-md-1') }}
+                {{ Former::text('L','Length')->class('form-control') }}
             </div>
         </div>
-        <div class="row form-vertical">
+        <div class="row">
             <div class="col-md-4">
-                {{ Former::text('D','Diameter')->class('form-control col-md-12')}}
+                {{ Former::text('D','Diameter')->class('form-control')}}
             </div>
             <div class="col-md-4">
                 {{ Former::text('sizeDescription','Dimension Description') }}

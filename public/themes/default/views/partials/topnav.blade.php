@@ -96,6 +96,7 @@
                 <li><a href="{{ URL::to('content/menu') }}" class="submenu {{ sa('content/menu') }}" ><i class="fa fa-sitemap"></i> Menu</a></li>
                 <li><a href="{{ URL::to('showcase') }}" class="submenu {{ sa('showcase') }}" ><i class="fa fa-eye-open"></i> Showcases</a></li>
                 <li><a href="{{ URL::to('homeslide') }}" class="submenu {{ sa('homeslide') }}" ><i class="fa fa-home"></i> Home Slide Show</a></li>
+                <li><a href="{{ URL::to('header') }}" class="submenu {{ sa('header') }}" ><i class="fa fa-home"></i> Site Header</a></li>
                 <li><a href="{{ URL::to('faq') }}" class="submenu {{ sa('faq') }}" ><i class="fa fa-question-sign"></i> FAQ Entries</a></li>
                 <li><a href="{{ URL::to('faqcat') }}" class="submenu {{ sa('faqcat') }}" ><i class="fa fa-sitemap"></i> FAQ Category</a></li>
                 <li><a href="{{ URL::to('glossary') }}" class="submenu {{ sa('glossary') }}" ><i class="fa fa-list"></i> Glossary Entries</a></li>
