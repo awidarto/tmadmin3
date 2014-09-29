@@ -98,7 +98,7 @@ class InventoryController extends AdminController {
         $left_offset = $pr[8];
         $top_offset = $pr[9];
 
-        $session = Printsession::find($sessionname)->first()->toArray();
+        $session = Printsession::find($sessionname)->toArray();
         $labels = Stockunit::whereIn('_id', $session)->get()->toArray();
 
         $skus = array();
