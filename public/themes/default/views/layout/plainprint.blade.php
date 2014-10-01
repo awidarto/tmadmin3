@@ -49,7 +49,7 @@
 
    </head>
 
-   <body onload="window.print()" >
+   <body>
     {{--
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">

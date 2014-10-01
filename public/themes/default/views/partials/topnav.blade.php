@@ -38,6 +38,7 @@
                 <i class="fa fa-money"></i> Sales<i class="toggle-accordion"></i>
             </a>
             <ul class="dropdown-menu">
+                <li><a href="{{ URL::to('salesreport') }}" class="submenu {{ sa('salesreport') }}" ><i class="fa fa-external-link" ></i> Sales Report</a></li>
                 <li><a href="{{ URL::to('outlet') }}" class="submenu {{ sa('outlet') }}" ><i class="fa fa-external-link" ></i> Outlets</a></li>
                 <li><a href="{{ URL::to('transaction') }}" class="submenu {{ sa('transaction') }}" ><i class="fa fa-credit-card"></i> Transactions List</a></li>
             </ul>

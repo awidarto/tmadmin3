@@ -54,7 +54,7 @@ class PosController extends AdminController {
 
         $this->can_add = false;
 
-        $this->place_action = 'none';
+        $this->place_action = 'first';
 
         $this->is_additional_action = true;
 
@@ -544,20 +544,24 @@ class PosController extends AdminController {
             cash_amount:
             cash_change:
             */
-        $trx = Payment::where('sessionId', $in['current_trx'])->first();
+            $trx = Payment::where('sessionId', $in['current_trx'])->first();
 
         //print_r($trx);
 
-        if($trx){
+            if($trx){
 
-        }else{
-            $trx = new Payment();
-            $trx->sessionId = $in['current_trx'];
-            $trx->createdDate = new MongoDate();
-            $trx->sessionStatus = 'open';
-        }
+            }else{
+                $trx = new Payment();
+                $trx->sessionId = $in['current_trx'];
+                $trx->createdDate = new MongoDate();
+                $trx->sessionStatus = 'open';
+            }
+
+            if($in['status'] == 'final'){
+                $trx->sessionStatus = 'final';
+            }
+
             $trx->by_name = $in['by_name'];
-            $trx->by_gender = $in['by_gender'];
             $trx->by_address = $in['by_address'];
             $trx->cc_amount = $in['cc_amount'];
             $trx->cc_number = $in['cc_number'];
@@ -569,7 +573,67 @@ class PosController extends AdminController {
             $trx->cash_change = $in['cash_change'];
             $trx->lastUpdate = new MongoDate();
 
+            $payment = $trx->toArray();
+
             $trx->save();
+
+
+            if($in['status'] == 'final'){
+
+                $itarray = array();
+                $unitarr = array();
+
+                $items = Transaction::where('sessionId',$in['current_trx'])->get();
+                $outlet_id = '';
+                $outlet_name = '';
+                foreach($items as $item){
+                    //print_r($item->toArray());
+                    $outletId = $item->outletId;
+                    $outletName = $item->outletName;
+
+                    $item->sessionStatus = 'final';
+
+                    $unit = Stockunit::find($item->unitId);
+                    //print_r($unit);
+                    $unit->status = 'sold';
+                    $unit->lastUpdate = new MongoDate();
+
+                    $itarray[] = $item->toArray();
+                    $unitarr[] = $unit->toArray();
+
+                    $unit->save();
+                    $item->save();
+                }
+
+                $sales = Sales::where('sessionId', $in['current_trx'])->first();
+
+                if($sales){
+
+                }else{
+                    $sales = new Sales();
+                    $sales->sessionId = $in['current_trx'];
+                    $sales->createdDate = new MongoDate();
+                }
+                $sales->outletId = $outletId;
+                $sales->outletName = $outletName;
+
+                $sales->buyer_name = $in['by_name'];
+                $sales->buyer_address = $in['by_address'];
+                $sales->cc_amount = $in['cc_amount'];
+                $sales->cc_number = $in['cc_number'];
+                $sales->cc_expiry = $in['cc_expiry'];
+                $sales->dc_amount = $in['dc_amount'];
+                $sales->dc_number = $in['dc_number'];
+                $sales->payable_amount = $in['payable_amount'];
+                $sales->cash_amount = $in['cash_amount'];
+                $sales->cash_change = $in['cash_change'];
+
+                $sales->transaction = $itarray;
+                $sales->stockunit = $unitarr;
+                $sales->payment = $payment;
+                $sales->transactiontype = 'pos';
+                $sales->save();
+            }
 
             return Response::json(array( 'result'=>'OK' ));
 

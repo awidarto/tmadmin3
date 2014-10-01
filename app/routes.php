@@ -39,6 +39,7 @@ Route::controller('picture','PictureController');
 Route::controller('enquiry', 'EnquiryController');
 
 Route::controller('order', 'OrderController');
+Route::controller('salesreport', 'SalesreportController');
 
 Route::controller('newsletter', 'NewsletterController');
 Route::controller('campaign', 'CampaignController');

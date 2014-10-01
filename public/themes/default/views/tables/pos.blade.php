@@ -161,7 +161,6 @@ div.payform h3{
                                             <td>
                                                 <div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
                                                     <input class="col-md-8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                                    <span class="add-on"><i class="fa fa-th"></i></span>
                                                 </div>
                                                 {{--
                                                 <div id="{{ $index }}" class="input-append datepickersearch">
@@ -179,7 +178,6 @@ div.payform h3{
                                             <td>
                                                 <div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
                                                     <input class="col-md-8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                                    <span class="add-on"><i class="fa fa-th"></i></span>
                                                 </div>
                                                 {{--
                                                 <div id="{{ $index }}" class="input-append datetimepickersearch">
@@ -280,7 +278,7 @@ div.payform h3{
         </div>
     <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" id="prop-save-chg">Save changes</button>
+    <button class="btn btn-primary" id="print-content">Print</button>
     </div>
 </div>
 
@@ -639,6 +637,14 @@ div.payform h3{
 
         });
 
+        $('#print-content').click(function(){
+
+            var pframe = document.getElementById('print-window');
+            var pframeWindow = pframe.contentWindow;
+            pframeWindow.print();
+
+        });
+
 
         $('#print-trans').on('click',function(){
             var current_trx = $('#current_session').val();
@@ -668,7 +674,49 @@ div.payform h3{
                     dc_number: dc_number,
                     payable_amount: payable_amount,
                     cash_amount: cash_amount,
-                    cash_change: cash_change
+                    cash_change: cash_change,
+                    status:'print'
+
+                },
+                function(data){
+                    if(data.result == 'OK'){
+                        $('#print-window').attr('src','{{ URL::to('pos/print') }}/' + current_trx );
+                        $('#print-modal').modal('show');
+                    }
+                },'json');
+
+        });
+
+        $('#finalize-trans').on('click',function(){
+            var current_trx = $('#current_session').val();
+
+            var by_name = $('#name').val();
+            var by_gender = $('#gender').val();
+            var by_address = $('#address').val();
+            var cc_amount = $('#cc-amount').val();
+            var cc_number = $('#cc-number').val();
+            var cc_expiry = $('#cc-expiry').val();
+            var dc_amount = $('#dc-amount').val();
+            var dc_number = $('#dc-number').val();
+            var payable_amount = $('#payable-amount').val();
+            var cash_amount = $('#cash-amount').val();
+            var cash_change = $('#cash-change').val();
+
+            $.post('{{ URL::to('pos/save') }}',
+                {
+                    current_trx: current_trx,
+                    by_name: by_name,
+                    by_gender: by_gender,
+                    by_address: by_address,
+                    cc_amount: cc_amount,
+                    cc_number: cc_number,
+                    cc_expiry: cc_expiry,
+                    dc_amount: dc_amount,
+                    dc_number: dc_number,
+                    payable_amount: payable_amount,
+                    cash_amount: cash_amount,
+                    cash_change: cash_change,
+                    status:'final'
                 },
                 function(data){
                     if(data.result == 'OK'){

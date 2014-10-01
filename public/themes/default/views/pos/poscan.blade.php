@@ -75,10 +75,10 @@
     }
 
     #session-list button.active{
-        /*
+
         background-color: maroon;
         color: #eee;
-        */
+
     }
 
     input.scan-in{
@@ -124,6 +124,10 @@ $(document).ready(function() {
     $('#session-list').on('click',function(e){
         var session = e.target.id;
         console.log(session);
+        console.log(e.target);
+        $('#session-list button.session-select').removeClass('active');
+        $(e.target).addClass('active');
+
         $('#current_session').val(session);
         oTable.draw();
     });

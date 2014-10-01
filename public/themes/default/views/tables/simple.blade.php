@@ -151,7 +151,6 @@ select.input-sm {
                                     <td>
                                         <div class="input-append date datepickersearch" id="{{ $index }}" >
                                             <input class="col-md-8 search_init form-control input-sm dateinput" data-date="" data-date-format="dd-mm-yyyy" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                            <span class="add-on"><i class="fa fa-th"></i></span>
                                         </div>
                                         {{--
                                         <div id="{{ $index }}" class="input-append datepickersearch">
@@ -169,7 +168,6 @@ select.input-sm {
                                     <td>
                                         <div class="input-append date datetimepickersearch" id="{{ $index }}" >
                                             <input class="col-md-8 search_init form-control input-sm datetimeinput"  data-date="" data-date-format="dd-mm-yyyy" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                            <span class="add-on"><i class="fa fa-th"></i></span>
                                         </div>
                                         {{--
                                         <div id="{{ $index }}" class="input-append datetimepickersearch">
