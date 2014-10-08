@@ -43,9 +43,11 @@ class SalesreportController extends AdminController {
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Stock Unit';
+        $this->title = 'Sales Report';
 
-        $this->additional_filter = View::make('inventory.addfilter')->render();
+        $this->additional_filter = View::make('salesreport.addfilter')->render();
+
+        $this->js_table_event = View::make('salesreport.jstableevent')->render();
 
         $this->js_additional_param = "aoData.push( { 'name':'outletNameFilter', 'value': $('#outlet-filter').val() } );";
 
@@ -77,9 +79,46 @@ class SalesreportController extends AdminController {
             $this->additional_query = array('outletName'=>$outletFilter);
         }
 
+
         $this->place_action ='first';
 
         return parent::postIndex();
+    }
+
+    public function getDetail($id){
+        $sales = Sales::find($id)->toArray();
+
+        $head = array(array('value'=>'Buyer Detail','attr'=>'colspan="2"'));
+        $btab = array();
+        $btab[] = array('Name',$sales['buyer_name']);
+        $btab[] = array('Address',$sales['buyer_address']);
+        $btab[] = array('City',$sales['buyer_city']);
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($btab, $attr, $head);
+        $tablebuyer = $t->build();
+
+
+        $head = array(array('value'=>'Purchase Detail','attr'=>'colspan="2"'));
+        $btab = array();
+        $btab[] = array(array('value'=>'<h3>Total</h3>','attr'=>''),
+            array('value'=>'<h3>IDR '.Ks::idr($sales['payable_amount']).'</h3>','attr'=>''));
+
+        $btab[] = array('Current Status',$sales['transactionstatus']);
+        $btab[] = array('Outlet',$sales['outletName']);
+        $btab[] = array('Transaction Type',$sales['transactiontype']);
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($btab, $attr, $head);
+        $tablepurchase = $t->build();
+
+
+        $tabletrans = $this->trxDetail($sales['sessionId']);
+
+        return View::make('salesreport.detail')
+                ->with('tablebuyer',$tablebuyer)
+                ->with('tablepurchase',$tablepurchase)
+                ->with('tabletrans',$tabletrans);
     }
 
     //public function getPrintlabel($sessionname, $columns = 2, $resolution = 150,$cell_width = 120,$cell_height = 75, $margin_right = 10,$margin_bottom = 20,$font_size = 8,$code_type = 'barcode', $left_offset = 0, $top_offset = 0, $format = 'html' )
@@ -437,14 +476,15 @@ class SalesreportController extends AdminController {
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-trash"></i> Delete</span>';
         $edit = '<a href="'.URL::to('products/edit/'.$data['_id']).'"><i class="fa fa-edit"></i> Update</a>';
-        $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="fa fa-download"></i> Download</a>';
-        $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="fa fa-print"></i> Print</a>';
+        $dl = '<a href="'.URL::to('salesreport/dl/'.$data['_id']).'" target="new"><i class="fa fa-download"></i> Download</a>';
+        $print = '<a href="'.URL::to('salesreport/print/'.$data['_id']).'" target="new"><i class="fa fa-print"></i> Print</a>';
         $upload = '<span class="upload action" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Upload Picture</span>';
         $outlet = '<span class="outlet action" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-external-link"></i> Move Outlet</span>';
         $printcode = '<span class="printcode action" id="'.$data['_id'].'" ><i class="fa fa-print"></i> Print Code</span>';
+        $view = '<span class="viewdetail action" id="'.$data['_id'].'" ><i class="fa fa-eye"></i> View Detail</span>';
 
-        $actions = $edit.'<br />'.$upload.'<br />'.$delete;
-        $actions = $printcode.'<br />'.$outlet;
+        //$actions = $edit.'<br />'.$upload.'<br />'.$delete;
+        $actions = $view;
         return $actions;
     }
 
@@ -620,5 +660,54 @@ class SalesreportController extends AdminController {
 
 
     }
+
+    public function trxDetail($trxid)
+    {
+        $itemtable = '';
+        $session_id = $trxid;
+        $trx = Transaction::where('sessionId',$session_id)->get()->toArray();
+        $pay = Payment::where('sessionId',$session_id)->get()->toArray();
+
+        $tab = array();
+        foreach($trx as $t){
+
+            $tab[ $t['SKU'] ]['description'] = $t['productDetail']['itemDescription'];
+            $tab[ $t['SKU'] ]['qty'] = ( isset($tab[ $t['SKU'] ]['qty']) )? $tab[ $t['SKU'] ]['qty'] + 1:1;
+            $tab[ $t['SKU'] ]['tagprice'] = $t['productDetail']['priceRegular'];
+            $tab[ $t['SKU'] ]['total'] = ( isset($tab[ $t['SKU'] ]['total']) )? $tab[ $t['SKU'] ]['total'] + $t['productDetail']['priceRegular']:$t['productDetail']['priceRegular'];
+
+        }
+
+        $tab_data = array();
+        $gt = 0;
+        foreach($tab as $k=>$v){
+            $tab_data[] = array(
+                    array('value'=>$v['description'], 'attr'=>'class="left"'),
+                    array('value'=>$v['qty'], 'attr'=>'class="center"'),
+                    array('value'=>Ks::idr($v['tagprice']), 'attr'=>'class="right"'),
+                    array('value'=>Ks::idr($v['total']), 'attr'=>'class="right" id="total_'.$k.'"'),
+                );
+            $gt += $v['total'];
+        }
+
+        $totalform = Former::hidden('totalprice',$gt);
+
+        $tab_data[] = array('','',$totalform,array('value'=>Ks::idr($gt), 'attr'=>'class="right"'));
+
+        $header = array(
+            'things to buy',
+            'unit',
+            'tagprice',
+            array('value'=>'price to pay', 'attr'=>'style="text-align:right"')
+            );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($tab_data, $attr, $header);
+        $itemtable = $t->build();
+
+        return $itemtable;
+
+    }
+
 
 }

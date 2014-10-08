@@ -10,20 +10,11 @@
 {{ Former::hidden('id')->value($formdata['_id']) }}
 <div class="row-fluid">
     <div class="col-md-6">
-        {{ Former::text('widgetLocation','Widget Location')->class('wlocautocomplete')->help('Group slides in the same location / position in page') }}
-
-        {{ Former::text('linkTo','Link to')->help('Link to URL on click event ( local controller or absolute URL )') }}
-
-        {{ Former::select('slidetype')->options( Config::get('ia.slidetype') )->label('Type')->required() }}
-        {{ Former::text('sequence','Sequence')->class('col-md-2')->value(1)->help('ascending display sequence') }}
+        {{ Former::text('title','Title') }}
+        {{ Former::text('slug','Permalink')->id('permalink') }}
         {{ Former::select('publishing')->options(array('unpublished'=>'Unpublished','published'=>'Published'))->label('Status') }}
 
-        <h6>Video</h6>
-        {{ Former::text('videoTitle','Title') }}
-        {{ Former::text('youtubeUrl','Youtube ID') }}
-
-        <h6>Content</h6>
-        {{ Former::textarea('content','HTML Content')->class('col-md-10 editor')->rows(8)->help('Use HTML tags to format content') }}
+        {{ Former::textarea('body','HTML Content')->class('col-md-10 editor')->rows(8)->help('Use HTML tags to format content') }}
 
     </div>
     <div class="col-md-6">

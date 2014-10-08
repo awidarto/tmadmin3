@@ -15,7 +15,7 @@
     <div id="outlet-box">
         {{ Former::select('outlet')->options(Prefs::getOutlet()->OutletToSelection('id','name',false) )->id('scanoutlet') }} &nbsp;<span>select one of existing outlet before scanning</span>
     </div>
-    <h3>Search by name</h3>
+    <h3>Code Type In</h3>
     {{ Former::text('search-product','')->id('search-product')->class('col-md-8 form-control')->autocomplete('off')->placeholder('Search by SKU or name') }}
 
     <br /><br />
@@ -29,7 +29,7 @@
       <button type="button" id="mode-add" class="mode-select btn btn-large btn-info active"><i class="fa fa-plus"></i></button>
     </div>
     --}}
-
+    <br />
     <div id="scanResult">
 
     </div>
@@ -132,6 +132,17 @@ $(document).ready(function() {
         oTable.draw();
     });
 
+    $('#search-product').autocomplete({
+        //source: '{{ URL::to('pos/sku')}}',
+        source: function(request, response) {
+            $.getJSON('{{ URL::to('pos/sku')}}', { term: request.term , outlet: $('#scanoutlet').val() },
+                      response);
+        },
+        select: function(event, ui){
+            onTypeResult('add');
+        }
+    });
+
     $('#barcode').on('keyup',function(ev){
         if(ev.keyCode == '13'){
             onScanResult('add');
@@ -224,6 +235,46 @@ $(document).ready(function() {
                     $('#total').html(data.total_price);
                     $('#barcode').val('');
                     $('#barcode').focus();
+                },'json'
+            );
+        }
+
+    }
+
+    function onTypeResult(action){
+        var txtin = $('#search-product').val();
+        var outlet_id = $('#scanoutlet').val();
+        var session = $('#current_session').val();
+        var action = action;
+
+        console.log(session);
+
+        if( outlet_id == '' || txtin == '' ){
+            alert('Select outlet before scanning');
+            $('#search-product').focus();
+            $('#search-product').val('');
+        }else if( typeof session =='undefined' || session == ''){
+            alert('No session defined, click on New button to start new session');
+        }else{
+
+            var search_outlet = ($('#outlet-active').is(':checked'))?1:0;
+
+            $.post('{{ URL::to('pos/scan') }}',
+                {
+                    'txtin':txtin,
+                    'outlet_id': outlet_id,
+                    'search_outlet': search_outlet,
+                    'session':session,
+                    'action':action
+                },
+                function(data){
+                    if(data.result == 'OK'){
+                        oTable.draw();
+                    }
+                    $('#scanResult').html(data.msg);
+                    $('#total').html(data.total_price);
+                    $('#search-product').val('');
+                    $('#search-product').focus();
                 },'json'
             );
         }

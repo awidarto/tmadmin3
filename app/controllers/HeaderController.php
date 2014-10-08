@@ -23,11 +23,8 @@ class HeaderController extends AdminController {
     {
 
         $this->heads = array(
-            array('Widget Location',array('search'=>true,'sort'=>true)),
-            array('Sequence / Priority',array('search'=>true,'sort'=>true)),
-            array('Image',array('search'=>true,'sort'=>true)),
-            array('Youtube URL',array('search'=>true,'sort'=>true)),
-            array('Link To URL',array('search'=>true,'sort'=>true)),
+            array('Title',array('search'=>true,'sort'=>true)),
+            array('Permalink',array('search'=>true,'sort'=>true)),
             array('Status',array('search'=>true,'sort'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -40,11 +37,8 @@ class HeaderController extends AdminController {
     {
 
         $this->fields = array(
-            array('widgetLocation',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('sequence',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('sequence',array('kind'=>'text','callback'=>'namePic','query'=>'like','pos'=>'both','show'=>true)),
-            array('youtubeUrl',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('linkTo',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('title',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('slug',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('publishing',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'date','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -242,7 +236,7 @@ class HeaderController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('homeslide/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('header/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

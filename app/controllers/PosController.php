@@ -54,7 +54,7 @@ class PosController extends AdminController {
 
         $this->can_add = false;
 
-        $this->place_action = 'first';
+        $this->place_action = 'none';
 
         $this->is_additional_action = true;
 
@@ -457,6 +457,26 @@ class PosController extends AdminController {
             'qrs'=>$q,
             'sort'=>array($sort_col=>$sort_dir)
         );
+
+        return Response::json($result);
+    }
+
+    public function getSku()
+    {
+        $q = Input::get('term');
+        $outlet = Input::get('outlet');
+
+        $qsearch = new MongoRegex('/'.$q.'/i');
+
+        $res = Stockunit::where('_id','regex',$qsearch)
+                    ->where('status','available')
+                    ->where('outletId',$outlet)->get()->toArray();
+
+        $result = array();
+
+        foreach($res as $r){
+            $result[] = array('id'=>$r['_id'],'value'=>$r['_id'],'name'=>$r['_id'],'label'=>$r['_id'].' : '.$r['productDetail']['itemDescription'].' )');
+        }
 
         return Response::json($result);
     }

@@ -27,38 +27,27 @@
     <h3 id="myPrintModalLabel">Print Selected Codes</span></h3>
     </div>
     <div class="modal-body" >
-        <h6>Print options</h6>
-        <div style="border-bottom:thin solid #ccc;" class="row clearfix">
-            <div class="col-md-2">
-                {{ Former::text('label_columns','Number of columns')->value('2')->id('label_columns')->class('form-control input-sm') }}
-                {{ Former::text('label_res','Resolution')->value('150')->id('label_res')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('label_cell_height','Label height')->value('75')->id('label_cell_height')->class('form-control input-sm') }}
-                {{ Former::text('label_cell_width','Label width')->value('145')->id('label_cell_width')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('label_margin_right','Label margin right')->value('10')->id('label_margin_right')->class('form-control input-sm') }}
-                {{ Former::text('label_margin_bottom','Label margin bottom')->value('10')->id('label_margin_bottom')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('label_offset_right','Page left offset')->value('10')->id('label_offset_right')->class('form-control input-sm') }}
-                {{ Former::text('label_offset_bottom','Page top offset')->value('10')->id('label_offset_bottom')->class('form-control input-sm') }}
-            </div>
-            <div class="col-md-2">
-                {{ Former::text('font_size','Font size')->value('10')->id('font_size')->class('form-control input-sm') }}
-                {{ Former::select('code_type','Code type')->id('code_type')->options(array('barcode'=>'Barcode','qr'=>'QR') )}}
-            </div>
-            <div class="col-md-2">
-                <button id="label_default" class="form-control" >make default</button>
-                <button id="label_refresh" class="form-control" >refresh</button>
-            </div>
-        </div>
-        <input type="hidden" value="" id="session_name" />
-        <input type="hidden" value="" id="label_id" />
-
+        <h6>Print Sales Detail</h6>
 
         <iframe id="label_frame" name="label_frame" width="100%" height="90%"
+        marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+        title="Dialog Title">Your browser does not suppr</iframe>
+
+    </div>
+    <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary" id="do-print">Print</button>
+    </div>
+</div>
+
+<div id="detail-modal" class="modal fade large" tabindex="-1" role="dialog" aria-labelledby="myPrintModalLabel" aria-hidden="true">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myPrintModalLabel">Sales Detail</span></h3>
+    </div>
+    <div class="modal-body" >
+
+        <iframe id="detail_frame" name="label_frame" width="100%" height="90%"
         marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
         title="Dialog Title">Your browser does not suppr</iframe>
 
