@@ -36,10 +36,10 @@
             <td>
                 <input type="hidden" name="outlets[]"  value="{{ $o->_id }}">
                 <input type="hidden" name="outletNames[]"  value="{{ $o->name }}">
-                <input type="text" class="col-md-1" id="{{ $o->_id }}" name="addQty[]" value="" />
+                <input type="text" class="col-md-10" id="{{ $o->_id }}" name="addQty[]" value="" />
             </td>
             <td>
-                <input type="text" class="col-md-1" id="{{ $o->_id }}" name="adjustQty[]" value="" />
+                <input type="text" class="col-md-10" id="{{ $o->_id }}" name="adjustQty[]" value="" />
             </td>
         </tr>
     @endforeach

@@ -90,9 +90,9 @@ class SalesreportController extends AdminController {
 
         $head = array(array('value'=>'Buyer Detail','attr'=>'colspan="2"'));
         $btab = array();
-        $btab[] = array('Name',$sales['buyer_name']);
-        $btab[] = array('Address',$sales['buyer_address']);
-        $btab[] = array('City',$sales['buyer_city']);
+        $btab[] = array('Name',(isset($sales['buyer_name']))?$sales['buyer_name']:'');
+        $btab[] = array('Address',(isset($sales['buyer_address']) )?$sales['buyer_address']:'');
+        $btab[] = array('City',(isset($sales['buyer_city']))?$sales['buyer_city']:'');
 
         $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
         $t = new HtmlTable($btab, $attr, $head);
@@ -101,12 +101,14 @@ class SalesreportController extends AdminController {
 
         $head = array(array('value'=>'Purchase Detail','attr'=>'colspan="2"'));
         $btab = array();
-        $btab[] = array(array('value'=>'<h3>Total</h3>','attr'=>''),
-            array('value'=>'<h3>IDR '.Ks::idr($sales['payable_amount']).'</h3>','attr'=>''));
+        $btab[] = array(
+            array('value'=>'<h3>Total</h3>','attr'=>''),
+            array('value'=>'<h3>IDR '.Ks::idr($sales['payable_amount']).'</h3>','attr'=>'')
+        );
 
-        $btab[] = array('Current Status',$sales['transactionstatus']);
+        $btab[] = array('Current Status',(isset($sales['transactionstatus']))?$sales['transactionstatus']:'');
         $btab[] = array('Outlet',$sales['outletName']);
-        $btab[] = array('Transaction Type',$sales['transactiontype']);
+        $btab[] = array('Transaction Type',(isset($sales['transactiontype']))?$sales['transactiontype']:'' );
 
         $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
         $t = new HtmlTable($btab, $attr, $head);
