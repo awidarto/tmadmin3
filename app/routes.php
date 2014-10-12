@@ -66,6 +66,12 @@ Route::controller('stockcheck', 'StockcheckController');
 Route::controller('stockchecklist', 'StockchecklistController');
 Route::controller('dashboard', 'DashboardController');
 
+Route::controller('assettype', 'AssettypeController');
+Route::controller('assetlocation', 'AssetlocationController');
+Route::controller('rack', 'RackController');
+Route::controller('asset', 'AssetController');
+
+
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 
@@ -84,6 +90,11 @@ Route::get('content/category', 'CategoryController@getIndex');
 Route::get('content/section', 'SectionController@getIndex');
 Route::get('content/menu', 'MenuController@getIndex');
 
+Route::group(array('prefix' => 'api/v1' ), function()
+{
+    Route::resource('location', 'LocationapiController');
+    Route::resource('asset', 'AssetapiController');
+});
 
 
 Route::get('regenerate',function(){

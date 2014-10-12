@@ -2,10 +2,11 @@
 return array(
 
     'cities' => array(
-        '-'                     => 'Select City',
-        'Singapore'               => 'Singapore',
+        'Jakarta'       => 'Jakarta',
+        'Bandung'       => 'Bandung',
+        'Surabaya'       => 'Surabaya',
+        'Singapore'     => 'Singapore',
         'Kuala Lumpur'  => 'Kuala Lumpur',
-        'Jakarta'           => 'Jakarta'
     )
 
 );

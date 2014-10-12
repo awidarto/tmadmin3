@@ -55,6 +55,10 @@ select.input-sm {
     padding-top: 0px !important;
 }
 
+.panel-heading{
+    font-size: 20px;
+    font-weight: bold;
+}
 </style>
 
 

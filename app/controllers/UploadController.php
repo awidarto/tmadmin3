@@ -17,10 +17,6 @@ class UploadController extends Controller {
 
         //exit();
 
-        $large_wm = public_path().'/wm/wm_lrg.png';
-        $med_wm = public_path().'/wm/wm_med.png';
-        $sm_wm = public_path().'/wm/wm_sm.png';
-
         $rstring = str_random(15);
 
         $destinationPath = realpath('storage/media').'/'.$rstring;

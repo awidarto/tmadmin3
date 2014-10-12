@@ -11,15 +11,16 @@
 <ul class="nav navbar-nav">
     @if(Auth::check())
         <li><a href="{{ URL::to('dashboard') }}" class="submenu {{ sa('dashboard') }}" ><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li><a href="{{ URL::to('pos') }}" class="submenu {{ sa('pos') }}" ><i class="fa fa-desktop"></i> POS</a></li>
 
         <li class="dropdown show-on-hover">
             <a href="#" data-toggle="dropdown">
-                <i class="fa fa-tag"></i> Products <i class="toggle-accordion"></i>
+                <i class="fa fa-tag"></i> Assets <i class="toggle-accordion"></i>
             </a>
             <ul class="dropdown-menu">
-                <li><a class="submenu {{ sa('products') }}" href="{{ URL::to('products') }}"  ><i class="fa fa-th-list"></i> Catalog</a></li>
-                <li><a class="submenu {{ sa('productcategory')}}" href="{{ URL::to('productcategory') }}" ><i class="fa fa-sitemap"></i> Category</a></li>
+                <li><a class="submenu {{ sa('asset') }}" href="{{ URL::to('asset') }}"  ><i class="fa fa-th-list"></i> Assets List</a></li>
+                <li><a class="submenu {{ sa('rack') }}" href="{{ URL::to('rack') }}"  ><i class="fa fa-th-list"></i> Racks</a></li>
+                <li><a class="submenu {{ sa('assetlocation')}}" href="{{ URL::to('assetlocation') }}" ><i class="fa fa-sitemap"></i> Locations</a></li>
+                <li><a class="submenu {{ sa('assettype')}}" href="{{ URL::to('assettype') }}" ><i class="fa fa-sitemap"></i> Asset Type</a></li>
             </ul>
         </li>
         <li class="dropdown show-on-hover">
@@ -35,41 +36,12 @@
 
         <li class="dropdown show-on-hover">
             <a href="#" data-toggle="dropdown">
-                <i class="fa fa-money"></i> Sales<i class="toggle-accordion"></i>
+                <i class="fa fa-money"></i> Logs<i class="toggle-accordion"></i>
             </a>
             <ul class="dropdown-menu">
                 <li><a href="{{ URL::to('salesreport') }}" class="submenu {{ sa('salesreport') }}" ><i class="fa fa-external-link" ></i> Sales Report</a></li>
                 <li><a href="{{ URL::to('outlet') }}" class="submenu {{ sa('outlet') }}" ><i class="fa fa-external-link" ></i> Outlets</a></li>
                 <li><a href="{{ URL::to('transaction') }}" class="submenu {{ sa('transaction') }}" ><i class="fa fa-credit-card"></i> Transactions List</a></li>
-            </ul>
-        </li>
-
-
-
-        <li class="dropdown show-on-hover">
-            <a href="#" data-toggle="dropdown">
-                <i class="fa fa-bullhorn"></i> Marketing
-                <i class="toggle-accordion"></i>
-              </a>
-            <ul class="dropdown-menu">
-                <li><a href="{{ URL::to('event') }}" class="submenu {{ sa('event') }}" ><i class="fa fa-lightbulb"></i> Events</a></li>
-                <li><a href="{{ URL::to('buyer') }}" class="submenu {{ sa('buyer') }}" ><i class="fa fa-group"></i> Buyers</a></li>
-                <li><a href="{{ URL::to('contactgroup') }}" class="submenu {{ sa('contactgroup') }}" ><i class="fa fa-folder-close"></i> Contact Groups</a></li>
-                <li><a href="{{ URL::to('enquiry') }}" class="submenu {{ sa('enquiry') }}" ><i class="fa fa-question-sign"></i> Enquiries</a></li>
-                <li><a href="{{ URL::to('campaign') }}" class="submenu {{ sa('campaign') }}" ><i class="fa fa-bullhorn"></i> Campaign</a></li>
-
-            </ul>
-        </li>
-
-        <li class="dropdown show-on-hover">
-            <a href="#" data-toggle="dropdown">
-                <i class="fa fa-file"></i> Templates
-                <i class="toggle-accordion"></i>
-              </a>
-            <ul class="dropdown-menu">
-                <li><a href="{{ URL::to('newsletter') }}" class="submenu {{ sa('newsletter') }}" ><i class="fa fa-file-alt"></i> Newsletter</a></li>
-                <li><a href="{{ URL::to('brochure') }}" class="submenu {{ sa('brochure') }}" ><i class="fa fa-file-alt"></i> Brochure</a></li>
-                <li><a href="{{ URL::to('templates') }}" class="submenu {{ sa('templates') }}" ><i class="fa fa-file-alt"></i> Other Templates</a></li>
             </ul>
         </li>
 
@@ -83,7 +55,7 @@
                 <li><a href="{{ URL::to('report/activity') }}" class="submenu {{ sa('report/activity') }}" ><i class="fa fa-refresh"></i> Activity</a></li>
             </ul>
         </li>
-        <li>
+
         <li class="dropdown show-on-hover">
             <a href="#" data-toggle="dropdown">
                 <i class="fa fa-sitemap"></i> Site Content
