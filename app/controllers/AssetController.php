@@ -34,19 +34,10 @@ class AssetController extends AdminController {
             //array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
             array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Description',array('search'=>true,'sort'=>true)),
-            array('Series',array('search'=>true,'sort'=>true)),
-            array('Price',array('search'=>true,'sort'=>true)),
-            array('Disc. Price',array('search'=>true,'sort'=>true)),
-            array('Category',array('search'=>true,'sort'=>true,'select'=>Prefs::ExtractProductCategory() )),
-            /*
-            array('Length / Panjang',array('search'=>true,'sort'=>true)),
-            array('Width / Lebar',array('search'=>true,'sort'=>true)),
-            array('Height / Tinggi',array('search'=>true,'sort'=>false)),
-            array('Diameter',array('search'=>true,'sort'=>false)),
-            array('Size Description',array('search'=>true,'sort'=>true)),
-            */
-            array('Color',array('search'=>true,'sort'=>true)),
-            array('Material',array('search'=>true,'sort'=>true)),
+            array('Type',array('search'=>true,'sort'=>true, 'select'=>Assets::getType()->TypeToSelection('type','type',true) )),
+            array('IP',array('search'=>true,'sort'=>true)),
+            array('Location',array('search'=>true,'sort'=>true,'class'=>'location','select'=>Assets::getLocation()->LocationToSelection('_id','name',true) )),
+            array('Rack',array('search'=>true,'sort'=>true,'class'=>'rack','attr'=>array('class'=>'col-md-2 rack'),'select'=>Assets::getRack()->RackToSelection('_id','SKU',true) )),
             array('Tags',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
@@ -58,7 +49,7 @@ class AssetController extends AdminController {
 
         $this->place_action = 'first';
 
-        $this->additional_filter = View::make('products.addfilter')->render();
+        $this->additional_filter = View::make('asset.addfilter')->render();
 
         $this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
 
@@ -75,19 +66,10 @@ class AssetController extends AdminController {
             //array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
             array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('priceRegular',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('priceDiscount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            /*
-            array('L',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('W',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('H',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('D',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
-            array('sizeDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            */
-            array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('assetType',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('IP',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('locationId',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'locationName','show'=>true)),
+            array('rackId',array('kind'=>'text', 'query'=>'like','pos'=>'both','callback'=>'rackName','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
@@ -162,9 +144,6 @@ class AssetController extends AdminController {
 
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
-
-        $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
-        $data['category'] = $cats[$data['categoryLink']];
 
         return $data;
     }
@@ -254,17 +233,6 @@ class AssetController extends AdminController {
         $data['defaultpictures'] = $defaults;
         $data['files'] = $files;
 
-
-        $cats = Prefs::getProductCategory()->ProductCatToSelection('slug', 'title', false);
-        $data['category'] = $cats[$data['categoryLink']];
-
-
-        $unitdata = array_merge(array('id'=>$id),$data);
-
-        //$this->updateStock($unitdata);
-
-        Commerce::updateStock($unitdata);
-
         unset($data['outlets']);
         unset($data['outletNames']);
         unset($data['addQty']);
@@ -318,9 +286,9 @@ class AssetController extends AdminController {
 
         $this->validator = array(
             'SKU' => 'required',
-            'categoryLink' => 'required',
+            'locationId' => 'required',
             'itemDescription' => 'required',
-            'priceRegular' => 'required',
+            'rackId' => 'required',
         );
 
         return parent::postAdd($data);
@@ -330,9 +298,9 @@ class AssetController extends AdminController {
     {
         $this->validator = array(
             'SKU' => 'required',
-            'categoryLink' => 'required',
+            'locationId' => 'required',
             'itemDescription' => 'required',
-            'priceRegular' => 'required',
+            'rackId' => 'required',
         );
 
         return parent::postEdit($id,$data);
@@ -415,11 +383,24 @@ class AssetController extends AdminController {
         return $data;
     }
 
+    public function postRack()
+    {
+        $locationId = Input::get('loc');
+        if($locationId == ''){
+            $racks = Assets::getRack()->RackToSelection('_id','SKU',true);
+        }else{
+            $racks = Assets::getRack(array('locationId'=>$locationId))->RackToSelection('_id','SKU',true);
+        }
+
+        $options = Assets::getRack(array('locationId'=>$locationId));
+
+        return Response::json(array('result'=>'OK','html'=>$racks, 'options'=>$options ));
+    }
 
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-times-circle"></i> Delete</span>';
-        $edit = '<a href="'.URL::to('products/edit/'.$data['_id']).'"><i class="fa fa-edit"></i> Update</a>';
+        $edit = '<a href="'.URL::to('asset/edit/'.$data['_id']).'"><i class="fa fa-edit"></i> Update</a>';
         $dl = '<a href="'.URL::to('brochure/dl/'.$data['_id']).'" target="new"><i class="fa fa-download"></i> Download</a>';
         $print = '<a href="'.URL::to('brochure/print/'.$data['_id']).'" target="new"><i class="fa fa-print"></i> Print</a>';
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Upload Picture</span>';
@@ -469,6 +450,27 @@ class AssetController extends AdminController {
             return $data['docShare'];
         }
     }
+
+    public function locationName($data){
+        if(isset($data['locationId']) && $data['locationId'] != ''){
+            $loc = Assets::getLocationDetail($data['locationId']);
+            return $loc->name;
+        }else{
+            return '';
+        }
+
+    }
+
+    public function rackName($data){
+        if(isset($data['rackId']) && $data['rackId'] != ''){
+            $loc = Assets::getRackDetail($data['rackId']);
+            return $loc->SKU;
+        }else{
+            return '';
+        }
+
+    }
+
 
     public function namePic($data)
     {

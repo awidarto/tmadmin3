@@ -10,11 +10,43 @@ class Assets {
 
     }
 
+    public static function getType($filter = null){
+        if(is_null($filter)){
+            $c = Assettype::get();
+        }else{
+            $c = Assettype::whereRaw($filter)->get();
+        }
+
+        self::$rack = $c;
+        return new self;
+    }
+
+    public function TypeToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'Select Category');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$rack as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function TypeToArray()
+    {
+        return self::$rack;
+    }
+
     public static function getRack($filter = null){
         if(is_null($filter)){
             $c = Rack::get();
         }else{
-            $c = Assetlocation::whereRaw($filter)->get();
+            $c = Rack::whereRaw($filter)->get();
         }
 
         self::$rack = $c;
@@ -24,7 +56,7 @@ class Assets {
     public function RackToSelection($value, $label, $all = true)
     {
         if($all){
-            $ret = array(''=>'Select Category');
+            $ret = array(''=>'Select Rack');
         }else{
             $ret = array();
         }
@@ -42,6 +74,12 @@ class Assets {
         return self::$rack;
     }
 
+    public static function getRackDetail($id){
+
+        $c = Rack::find($id);
+
+        return $c;
+    }
 
     public static function getLocationDetail($id){
 

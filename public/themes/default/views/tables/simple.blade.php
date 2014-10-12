@@ -187,7 +187,8 @@ select.input-sm {
                                     <td>
                                         <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init form-control input-sm {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
                                         <div class="styled-select">
-                                            {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector form-control input-sm','id'=>$index ))}}
+                                            <?php $select_class = (isset($in[1]['class']))?$in[1]['class']:'filter' ?>
+                                            {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector form-control input-sm select-'.$select_class,'id'=>$index ))}}
                                         </div>
                                     </td>
                                 @else
@@ -1007,6 +1008,30 @@ select.input-sm {
 		$('#prop-chg-modal').on('hidden', function () {
 			oTable.fnDraw();
 		});
+
+        $('.select-location').on('change',function(){
+            var location = $('.select-location').val();
+            console.log(location);
+
+            $.post('{{ URL::to('asset/rack' ) }}',
+                {
+                    loc : location
+                },
+                function(data){
+                    var opt = updateselector(data.html);
+                    $('.select-rack').html(opt);
+                },'json'
+            );
+
+        })
+
+        function updateselector(data){
+            var opt = '';
+            for(var k in data){
+                opt += '<option value="' + k + '">' + data[k] +'</option>';
+            }
+            return opt;
+        }
 
 		function dateFormat(indate) {
 	        var yyyy = indate.getFullYear().toString();
