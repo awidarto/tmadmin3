@@ -24,7 +24,7 @@ class Assets {
     public function TypeToSelection($value, $label, $all = true)
     {
         if($all){
-            $ret = array(''=>'Select Category');
+            $ret = array(''=>'Select Type');
         }else{
             $ret = array();
         }
