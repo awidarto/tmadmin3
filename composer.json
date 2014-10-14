@@ -18,7 +18,9 @@
         "knplabs/knp-snappy": "*",
         "barryvdh/laravel-snappy": "dev-master",
         "flynsarmy/db-blade-compiler": "1.*",
-        "pingpong/menus": "1.0.*"
+        "pingpong/menus": "1.0.*",
+        "simplesoftwareio/simple-qrcode": "1.1.*",
+        "dinesh/barcode": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

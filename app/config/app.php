@@ -117,6 +117,8 @@ return array(
         'AlexWhitman\ViewThemes\ViewThemesServiceProvider',
         'Barryvdh\Snappy\ServiceProvider',
         'Flynsarmy\DbBladeCompiler\DbBladeCompilerServiceProvider',
+        'Dinesh\Barcode\BarcodeServiceProvider',
+        'SimpleSoftwareIO\QrCode\QrCodeServiceProvider'
 	),
 
 	/*
@@ -195,6 +197,9 @@ return array(
         'Carbon'          => 'Carbon\Carbon',
         'PDF'             => 'Barryvdh\DomPDF\Facade',
         'DbView'          => 'Flynsarmy\DbBladeCompiler\Facades\DbView',
+        'Code1D'          => 'Dinesh\Barcode\Facades\DNS1DFacade',
+        'Code2D'          => 'Dinesh\Barcode\Facades\DNS2DFacade',
+        'QRCode'              => 'SimpleSoftwareIO\QrCode\Facades\QrCode'
 	),
 
 );

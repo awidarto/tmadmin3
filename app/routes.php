@@ -319,6 +319,11 @@ Route::get('barcode/{txt}',function($txt){
     return $barcode->render('jpg',$txt);
 });
 
+Route::get('qr/{txt}',function($txt){
+    $txt = base64_decode($txt);
+    return QRCode::format('png')->size(399)->color(40,40,40)->generate($txt);
+});
+
 Route::get('media',function(){
     $media = Product::all();
 

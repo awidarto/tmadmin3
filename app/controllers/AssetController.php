@@ -30,7 +30,7 @@ class AssetController extends AdminController {
 
         $this->heads = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
-            array('SKU',array('search'=>true,'sort'=>true)),
+            array('Asset ID',array('search'=>true,'sort'=>true)),
             //array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
             array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Description',array('search'=>true,'sort'=>true)),
@@ -62,7 +62,7 @@ class AssetController extends AdminController {
 
         $this->fields = array(
             //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
-            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'dispBar','attr'=>array('class'=>'expander'),'show'=>true)),
             //array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
             array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
@@ -500,8 +500,8 @@ class AssetController extends AdminController {
     public function dispBar($data)
 
     {
-        $display = HTML::image(URL::to('barcode/'.urlencode($data['SKU'])), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
-        $display = '<a href="'.URL::to('barcode/dl/'.urlencode($data['SKU'])).'">'.$display.'</a>';
+        $display = HTML::image(URL::to('qr/'.urlencode(base64_encode($data['SKU']))), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
+        //$display = '<a href="'.URL::to('barcode/dl/'.urlencode($data['SKU'])).'">'.$display.'</a>';
         return $display.'<br />'.$data['SKU'];
     }
 
@@ -516,6 +516,54 @@ class AssetController extends AdminController {
             return $name;
         }
     }
+
+    public function getPrintlabel($sessionname, $printparam, $format = 'html' )
+    {
+        $pr = explode(':',$printparam);
+
+        $columns = $pr[0];
+        $resolution = $pr[1];
+        $cell_width = $pr[2];
+        $cell_height = $pr[3];
+        $margin_right = $pr[4];
+        $margin_bottom = $pr[5];
+        $font_size = $pr[6];
+        $code_type = $pr[7];
+        $left_offset = $pr[8];
+        $top_offset = $pr[9];
+
+        $session = Printsession::find($sessionname)->toArray();
+        $labels = Asset::whereIn('_id', $session)->get()->toArray();
+
+        $skus = array();
+        foreach($labels as $l){
+            $skus[] = $l['SKU'];
+        }
+
+        $skus = array_unique($skus);
+
+        $products = Asset::whereIn('SKU',$skus)->get()->toArray();
+
+        $plist = array();
+        foreach($products as $product){
+            $plist[$product['SKU']] = $product;
+        }
+
+        return View::make('asset.printlabel')
+            ->with('columns',$columns)
+            ->with('resolution',$resolution)
+            ->with('cell_width',$cell_width)
+            ->with('cell_height',$cell_height)
+            ->with('margin_right',$margin_right)
+            ->with('margin_bottom',$margin_bottom)
+            ->with('font_size',$font_size)
+            ->with('code_type',$code_type)
+            ->with('left_offset', $left_offset)
+            ->with('top_offset', $top_offset)
+            ->with('products',$plist)
+            ->with('labels', $labels);
+    }
+
 
     public function getViewpics($id)
     {
