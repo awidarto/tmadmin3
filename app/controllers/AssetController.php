@@ -36,6 +36,7 @@ class AssetController extends AdminController {
             array('Description',array('search'=>true,'sort'=>true)),
             array('Type',array('search'=>true,'sort'=>true, 'select'=>Assets::getType()->TypeToSelection('type','type',true) )),
             array('IP',array('search'=>true,'sort'=>true)),
+            array('Host Name',array('search'=>true,'sort'=>true)),
             array('Location',array('search'=>true,'sort'=>true,'class'=>'location','select'=>Assets::getLocation()->LocationToSelection('_id','name',true) )),
             array('Rack',array('search'=>true,'sort'=>true,'class'=>'rack','attr'=>array('class'=>'col-md-2 rack'),'select'=>Assets::getRack()->RackToSelection('_id','SKU',true) )),
             array('Tags',array('search'=>true,'sort'=>true)),
@@ -68,6 +69,7 @@ class AssetController extends AdminController {
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('assetType',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('IP',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('hostName',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
             array('locationId',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'locationName','show'=>true)),
             array('rackId',array('kind'=>'text', 'query'=>'like','pos'=>'both','callback'=>'rackName','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
@@ -285,7 +287,7 @@ class AssetController extends AdminController {
     {
 
         $this->validator = array(
-            'SKU' => 'required',
+            'SKU' => 'required|unique:SKU',
             'locationId' => 'required',
             'itemDescription' => 'required',
             'rackId' => 'required',

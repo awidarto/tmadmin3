@@ -731,7 +731,7 @@ select.input-sm {
 						if(data.status == 'OK'){
 							//redraw table
 
-							oTable.fnStandingRedraw();
+							oTable.draw();
 							alert("Item id : " + _id + " deleted");
 						}
 					},'json');

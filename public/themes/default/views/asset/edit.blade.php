@@ -15,13 +15,14 @@
         {{ Former::text('SKU','Asset Code') }}
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
 
-        {{ Former::select('assetType','Asset Type')->id('rack')->options( Assets::getType()->TypeToSelection('type','type',true) ) }}
+        {{ Former::select('assetType','Asset Type')->options( Assets::getType()->TypeToSelection('type','type',true) ) }}
 
         {{ Former::select('locationId','Location')->id('location')->options( Assets::getLocation()->LocationToSelection('_id','name',true) ) }}
         {{ Former::select('rackId','Rack')->id('rack')->options( Assets::getRack()->RackToSelection('_id','SKU',true) ) }}
         {{ Former::text('itemDescription','Description') }}
 
         {{ Former::text('IP','IP Address')->class('col-md-4 form-control') }}
+        {{ Former::text('hostName','Host Name')->class('col-md-4 form-control') }}
 
         {{ Former::text('owner','Owner') }}
 
