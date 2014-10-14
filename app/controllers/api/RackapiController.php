@@ -1,6 +1,6 @@
 <?php
 
-class LocationapiController extends \BaseController {
+class RackapiController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -10,7 +10,7 @@ class LocationapiController extends \BaseController {
 	public function index()
 	{
 		//
-        $locations = Assetlocation::get();
+        $locations = Rack::get();
         for($i = 0; $i < count($locations);$i++){
 
                 $locations[$i]->extId = $locations[$i]->_id;

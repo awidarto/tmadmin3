@@ -93,6 +93,7 @@ Route::get('content/menu', 'MenuController@getIndex');
 Route::group(array('prefix' => 'api/v1' ), function()
 {
     Route::resource('location', 'LocationapiController');
+    Route::resource('rack', 'RackapiController');
     Route::resource('asset', 'AssetapiController');
 });
 
