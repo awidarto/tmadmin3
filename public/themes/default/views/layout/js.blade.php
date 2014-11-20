@@ -1,4 +1,3 @@
-    {{ HTML::script('bootstrap311/js/bootstrap.js') }}
 
     {{ HTML::script('js/bootstrap-modalmanager.js') }}
     {{ HTML::script('js/bootstrap-modal.js') }}

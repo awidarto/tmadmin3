@@ -560,6 +560,8 @@ class AdminController extends Controller {
 
 		$controller_name = strtolower($this->controller_name);
 
+        Former::framework($this->form_framework);
+
 		//$this->crumb->add($controller_name.'/add','New '.Str::singular($this->controller_name));
         $data = $this->beforeAddForm();
 

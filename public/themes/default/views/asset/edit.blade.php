@@ -1,67 +1,72 @@
-@extends('layout.front')
+@extends('layout.formthree')
 
-
-@section('content')
-
-<h3>{{$title}}</h3>
-
-
-{{Former::open_for_files_horizontal($submit,'POST',array('class'=>'custom'))}}
-
-{{ Former::hidden('id')->value($formdata['_id']) }}
-<div class="row">
-    <div class="col-md-6">
+@section('left')
+        <h4>Device Info</h4>
+        {{ Former::hidden('id')->value($formdata['_id']) }}
 
         {{ Former::text('SKU','Asset Code') }}
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
 
-        {{ Former::select('assetType','Asset Type')->options( Assets::getType()->TypeToSelection('type','type',true) ) }}
+        {{ Former::select('assetType','Device Type')->options( Assets::getType()->TypeToSelection('type','type',true) ) }}
 
         {{ Former::select('locationId','Location')->id('location')->options( Assets::getLocation()->LocationToSelection('_id','name',true) ) }}
         {{ Former::select('rackId','Rack')->id('rack')->options( Assets::getRack()->RackToSelection('_id','SKU',true) ) }}
         {{ Former::text('itemDescription','Description') }}
 
-        {{ Former::text('IP','IP Address')->class('col-md-4 form-control') }}
-        {{ Former::text('hostName','Host Name')->class('col-md-4 form-control') }}
-
+        <h4>Owner & Person In Charge</h4>
         {{ Former::text('owner','Owner') }}
+
+        {{ Former::text('PIC','Person In Charge') }}
+
+        {{ Former::text('PIC','PIC Phone') }}
+        {{ Former::text('PIC','PIC Email') }}
+
+        {{ Former::text('contractNumber','Contract Number') }}
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
-    </div>
-    <div class="col-md-6">
+@stop
+
+@section('middle')
+        <h4>Host Info</h4>
+        {{ Former::text('IP','IP Address') }}
+        {{ Former::text('hostName','Host Name') }}
+        {{ Former::text('OS','Operating System') }}
+        <h4>Status</h4>
+
+        {{ Former::select('powerStatus')->label('Power Status')->options(array('1'=>'Yes','0'=>'No')) }}
+        {{ Former::select('labelStatus')->label('Label Status')->options(array('1'=>'Yes','0'=>'No')) }}
+        {{ Former::select('virtualStatus')->label('Virtual Status')->options(array('1'=>'Yes','0'=>'No')) }}
+@stop
+
+@section('right')
+        <h4>Pictures</h4>
         <?php
             $fupload = new Fupload();
         ?>
+        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')
+            ->url('upload')
+            ->singlefile(false)
+            ->prefix('assetpic')->multi(true)->make() }}
 
-        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make($formdata) }}
+@stop
 
-    </div>
-</div>
 
-<div class="row right">
-    <div class="col-md-12">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
-{{Former::close()}}
-
+@section('aux')
 
 <script type="text/javascript">
 
+
 $(document).ready(function() {
 
-    $('.pick-a-color').pickAColor({
-        showHexInput:false
-    });
+
+    $('.pick-a-color').pickAColor();
 
     $('#name').keyup(function(){
         var title = $('#name').val();
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
     });
-
 
     $('#location').on('change',function(){
         var location = $('#location').val();
@@ -86,6 +91,7 @@ $(document).ready(function() {
         }
         return opt;
     }
+
 
 });
 

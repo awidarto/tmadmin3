@@ -7,6 +7,8 @@ class Fupload {
     public static $title = 'Select File';
     public static $url = 'upload';
     public static $multi = true;
+    public static $prefix = '';
+    public static $singlefile = true;
 
     public function __construct()
     {
@@ -22,6 +24,18 @@ class Fupload {
     public static function multi($flag = true)
     {
         self::$multi = $flag;
+        return new self;
+    }
+
+    public static function singlefile($flag = true)
+    {
+        self::$singlefile = $flag;
+        return new self;
+    }
+
+    public function prefix($prefix)
+    {
+        self::$prefix = $prefix;
         return new self;
     }
 
@@ -50,6 +64,8 @@ class Fupload {
             ->with('title',self::$title)
             ->with('url',self::$url)
             ->with('multi',self::$multi)
+            ->with('singlefile',self::$singlefile)
+            ->with('prefix',self::$prefix)
             ->with('element_id', self::$element_id )
             ->with('formdata',$formdata);
     }
