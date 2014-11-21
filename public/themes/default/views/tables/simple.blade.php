@@ -75,16 +75,6 @@ select.input-sm {
 <div class="row-fluid box">
    <div class="col-md-12 box-content">
         <table class="table table-condensed dataTable">--}}
-<section class="panel panel-info">
-    <header class="panel-heading">{{ $title }}</header>
-    <div class="panel-body">
-
-                            <!-- Widget -->
-
-    </div>
-
-
-</section>
 
 <div class="widget">
     <div class="widget-body innerAll inner-2x">

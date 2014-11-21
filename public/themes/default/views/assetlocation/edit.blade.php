@@ -1,41 +1,32 @@
-@extends('layout.front')
+@extends('layout.formthree')
 
 
-@section('content')
-
-<h3>{{$title}}</h3>
-
-{{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
+@section('left')
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
-<div class="row-fluid">
-    <div class="col-md-6">
+        <h5>Location Info</h5>
         {{ Former::text('name','Name') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
         {{ Former::text('venue','Venue') }}
         {{ Former::text('address','Address') }}
         {{ Former::text('phone','Phone') }}
+@stop
 
-        <h6>Geo Point ( for Google Map Marker )</h6>
-        {{ Former::text('latitude','Latitude') }}
-        {{ Former::text('longitude','Longitude') }}
+@section('middle')
+    <h5>Geo Point ( for Google Map Marker )</h5>
+    {{ Former::text('latitude','Latitude') }}
+    {{ Former::text('longitude','Longitude') }}
+@stop
 
-    </div>
-    <div class="col-md-6">
-        {{ Former::select('category')->options(Config::get('asset.location_category'))->label('Category') }}
-        {{ Former::textarea('description','Description')->class('editor form-control') }}
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
-    </div>
+@section('right')
+    {{ Former::select('category')->options(Config::get('asset.location_category'))->label('Category') }}
+    {{ Former::textarea('description','Description')->class('editor form-control') }}
+    {{ Former::text('tags','Tags')->class('tag_keyword') }}
 </div>
 
-<div class="row-fluid">
-    <div class="col-md-12">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
+@stop
 
-{{Former::close()}}
+@section('aux')
 
 <script type="text/javascript">
 

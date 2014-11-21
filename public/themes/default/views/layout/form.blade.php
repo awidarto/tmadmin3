@@ -24,6 +24,7 @@
     <link rel="stylesheet/less" href="{{ URL::to('coral') }}/assets/less/admin/module.admin.stylesheet-complete.layout_fixed.true.less" />
 
     <link rel="stylesheet" href="{{  URL::to('/') }}/css/typography.css">
+    {{ HTML::style('css/jquery.tagsinput.css') }}
 
         <!--[if lt IE 9]><link rel="stylesheet" href="{{ URL::to('coral') }}/assets/components/library/bootstrap/css/bootstrap.min.css" /><![endif]-->
 
@@ -47,6 +48,10 @@
         });
     </script>
 
+    <script type="text/javascript">
+        var base = '{{ URL::to('/') }}/';
+    </script>
+
 </head>
 <body class=" menu-right-hidden">
 
@@ -68,7 +73,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a id="logo" href="{{ URL::to('/')}}" class="animated fadeInDown pull-left"><b class="fa fa-3x fa-headphones"></b></a>
+                <a id="logo" href="{{ URL::to('/')}}" class="animated fadeInDown pull-left"><b class="fa fa-3x fa-bar-chart-o"></b></a>
             </div>
 
             <div class="navbar-collapse collapse">
@@ -141,6 +146,18 @@
             <div class="layout-app">
 
                     <div class="container-fluid">
+
+                        <div class="row">
+                            <!-- Column -->
+                            <div class="col-md-12">
+                                <h4>{{ $title }}</h4>
+
+                                {{ Breadcrumbs::render() }}
+                            </div>
+                        </div>
+
+                        <div class="col-separator-h"></div>
+
                         <!-- row -->
                             {{Former::open_for_files_horizontal($submit,'POST',array('class'=>'custom'))}}
 
@@ -152,11 +169,10 @@
                                         <div class="widget widget-inverse" >
 
                                             <!-- Widget heading -->
-                                            {{--
-                                            <div class="widget-head">
-                                                <h4 class="heading">Default Inputs</h4>
+                                            <div class="widget-head" style="height:45px;padding:4px;text-align:right;">
+                                                {{ HTML::link($back,'Cancel',array('class'=>'btn btn-info'))}}&nbsp;&nbsp;
+                                                {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}
                                             </div>
-                                            --}}
                                             <!-- // Widget heading END -->
 
                                             <div class="widget-body">
@@ -182,13 +198,6 @@
                                                 @yield('right')
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="row right">
-                                    <div class="col-md-12">
-                                        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-                                        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
                                     </div>
                                 </div>
 

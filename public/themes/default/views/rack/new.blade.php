@@ -1,42 +1,33 @@
-@extends('layout.front')
+@extends('layout.form')
 
 
-@section('content')
+@section('left')
 
-<h3>{{$title}}</h3>
+    {{ Former::text('SKU','Asset Code') }}
+    {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
 
-{{Former::open_for_files($submit,'POST',array('class'=>'custom'))}}
+    {{ Former::select('locationId','Location')->options( Assets::getLocation()->LocationToSelection('_id','name',true) ) }}
+    {{ Former::text('itemDescription','Description') }}
 
-<div class="row-fluid">
-    <div class="col-md-6">
+    {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
-        {{ Former::text('SKU','Asset Code') }}
-        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
+@stop
 
-        {{ Former::select('locationId','Location')->options( Assets::getLocation()->LocationToSelection('_id','name',true) ) }}
-        {{ Former::text('itemDescription','Description') }}
+@section('right')
 
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
+    <h5>Pictures</h5>
+    <?php
+        $fupload = new Fupload();
+    ?>
+    {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')
+        ->url('upload')
+        ->singlefile(false)
+        ->prefix('assetpic')->multi(true)->make() }}
 
-    </div>
-    <div class="col-md-6">
+@stop
 
-        <?php
-            $fupload = new Fupload();
-        ?>
 
-        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make() }}
-
-    </div>
-</div>
-
-<div class="row-fluid right">
-    <div class="col-md-12">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
-{{Former::close()}}
+@section('aux')
 
 
 <script type="text/javascript">

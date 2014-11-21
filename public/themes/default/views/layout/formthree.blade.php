@@ -73,7 +73,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                <a id="logo" href="{{ URL::to('/')}}" class="animated fadeInDown pull-left"><b class="fa fa-3x fa-headphones"></b></a>
+                <a id="logo" href="{{ URL::to('/')}}" class="animated fadeInDown pull-left"><b class="fa fa-3x fa-bar-chart-o"></b></a>
             </div>
 
             <div class="navbar-collapse collapse">
@@ -146,10 +146,19 @@
             <div class="layout-app">
 
                     <div class="container-fluid">
+                        <div class="row">
+                            <!-- Column -->
+                            <div class="col-md-12">
+                                <h4>{{ $title }}</h4>
+
+                                {{ Breadcrumbs::render() }}
+                            </div>
+                        </div>
+
+                        <div class="col-separator-h"></div>
+
                         <!-- row -->
                             {{Former::open_for_files_horizontal($submit,'POST',array('class'=>'custom'))}}
-
-                            <h3>{{ $title }}</h3>
 
 
                                 <div class="row">
@@ -208,13 +217,6 @@
                                                 @yield('right')
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div class="row right">
-                                    <div class="col-md-12">
-                                        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-                                        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
                                     </div>
                                 </div>
 

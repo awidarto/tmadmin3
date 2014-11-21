@@ -108,6 +108,10 @@ class AdminController extends Controller {
 
         $this->backlink = strtolower($this->controller_name);
 
+        Breadcrumbs::setDivider('');
+        Breadcrumbs::setCssClasses('breadcrumb');
+        Breadcrumbs::addCrumb('Home',URL::to('/'));
+
         Logger::access();
 
 	}
