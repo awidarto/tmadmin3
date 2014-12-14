@@ -102,14 +102,17 @@ class AuthController extends \Controller {
 
     public function login(){
 
+        $userfield = Config::get('kickstart.user_field');
+        $passwordfield = Config::get('kickstart.password_field');
+
     	if(Input::has('user') && Input::has('pwd'))
     	{
     		$retVal = array("status" => "ERR", "msg" => "Invalid username or password.");
     		try {
-    			$user = \User::where('email', '=', Input::get('user'))->firstorFail();
+    			$user = \User::where($userfield, '=', Input::get('user'))->firstorFail();
     			if($user)
     			{
-    				if(Hash::check(Input::get('pwd'), $user->password))
+    				if(Hash::check(Input::get('pwd'), $user->{$passwordfield} ))
     				{
     					$sessionKey = md5(time() . $user->email . $user->_id . "momumu<-Salt?");
 
