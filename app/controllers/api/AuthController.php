@@ -106,7 +106,7 @@ class AuthController extends \Controller {
     	{
     		$retVal = array("status" => "ERR", "msg" => "Invalid username or password.");
     		try {
-    			$user = \Member::where('email', '=', Input::get('user'))->firstorFail();
+    			$user = \User::where('email', '=', Input::get('user'))->firstorFail();
     			if($user)
     			{
     				if(Hash::check(Input::get('pwd'), $user->password))
@@ -153,7 +153,7 @@ class AuthController extends \Controller {
     	{
     		$retVal = array("status" => "ERR", "msg" => "Invalid session.");
     		try {
-	    		$user = \Member::where('session_key', '=', Input::get('session_key'))->firstorFail();
+	    		$user = \User::where('session_key', '=', Input::get('session_key'))->firstorFail();
 	    		if($user)
 	    		{
 	    				$retVal = array("status" => "OK");
