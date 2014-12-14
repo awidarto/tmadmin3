@@ -4,7 +4,7 @@
 
     {{ HTML::style('css/blueimp-gallery.min.css') }}
 
-    {{ HTML::style('css/app-style.css') }}
+    {{-- HTML::style('css/app-style.css') --}}
 
     {{ HTML::style('css/typography.css') }}
 

@@ -92,6 +92,19 @@ Route::get('content/menu', 'MenuController@getIndex');
 
 Route::group(array('prefix' => 'api/v1' ), function()
 {
+});
+
+/*
+ * @author juntriaji
+ * Route for API
+ */
+
+Route::group(array('prefix' => 'api/v1'), function (){
+    Route::get('/auth', 'Api\AuthController@index');
+    Route::post('/auth/login', 'Api\AuthController@login');
+    Route::put('/auth/login', 'Api\AuthController@login');
+    Route::post('/auth/logout', 'Api\AuthController@logout');
+    Route::put('/auth/logout', 'Api\AuthController@logout');
     Route::resource('location', 'LocationapiController');
     Route::resource('rack', 'RackapiController');
     Route::resource('asset', 'AssetapiController');
