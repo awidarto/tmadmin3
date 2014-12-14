@@ -120,7 +120,7 @@ class AuthController extends \Controller {
     					$user->save();
 
                         $userarray = $user->toArray();
-                        $userarray['createdDate'] = date('Y-m-d H:i:s',$userarray['createdDate']->sec);
+                        //$userarray['createdDate'] = date('Y-m-d H:i:s',$userarray['createdDate']->sec);
                         $userarray['lastUpdate'] = date('Y-m-d H:i:s',$userarray['lastUpdate']->sec);
                         $userarray['mongoid'] = $userarray['_id'];
                         unset($userarray['password']);
