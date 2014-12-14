@@ -102,8 +102,8 @@ class AuthController extends \Controller {
 
     public function login(){
 
-        $userfield = Config::get('kickstart.user_field');
-        $passwordfield = Config::get('kickstart.password_field');
+        $userfield = \Config::get('kickstart.user_field');
+        $passwordfield = \Config::get('kickstart.password_field');
 
     	if(Input::has('user') && Input::has('pwd'))
     	{
