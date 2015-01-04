@@ -717,8 +717,12 @@ select.input-sm {
 
 					            $.each(data.data.files, function (index, file) {
 					            	console.log(file);
-
+                                    @if( isset($prefix) && $prefix != '' && !is_null($product_info_url) )
 					            	{{ View::make($prefix.'.jsajdetail')->render() }}
+                                    @else
+                                    {{ View::make('fupload.jsajdetail')->render() }}
+                                    @endif
+
 
 					                $(thumb).appendTo('#pictureupload_files ul');
 

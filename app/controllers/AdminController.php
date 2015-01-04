@@ -167,7 +167,7 @@ class AdminController extends Controller {
         $this->newbutton = (is_null($this->newbutton))? Str::singular($this->controller_name): $this->newbutton;
 
         //dialog related url
-        $this->product_info_url = (is_null($this->product_info_url))? strtolower($this->controller_name).'/info': $this->product_info_url;
+        //$this->product_info_url = (is_null($this->product_info_url))? strtolower($this->controller_name).'/info': $this->product_info_url;
 
         $this->prefix = (is_null($this->prefix))? strtolower($this->controller_name):$this->prefix;
 

@@ -54,6 +54,8 @@ class AssetController extends AdminController {
 
         $this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
 
+        $this->product_info_url = strtolower($this->controller_name).'/info';
+
         return parent::getIndex();
 
     }
