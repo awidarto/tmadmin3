@@ -1,30 +1,21 @@
-@extends('layout.front')
+@extends('layout.fixedtwo')
+
+@section('left')
+
+    {{ Former::text('type','Type')->id('title') }}
+    {{ Former::text('slug','Permalink')->id('permalink') }}
+    {{ Former::textarea('description','Description')->class('form-control') }}
+
+    {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
+
+@stop
+@section('right')
+@stop
 
 
-@section('content')
+@section('aux')
 
-<h3>{{$title}}</h3>
-
-{{Former::open_for_files($submit,'POST',array('class'=>''))}}
-
-<div class="row-fluid">
-    <div class="col-md-6">
-        {{ Former::text('type','Type')->id('title') }}
-        {{ Former::text('slug','Permalink')->id('permalink') }}
-    </div>
-    <div class="col-md-6">
-
-    </div>
-</div>
-
-<div class="row-fluid">
-    <div class="col-md-12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
-
-{{Former::close()}}
 
 {{ HTML::script('js/wysihtml5-0.3.0.min.js') }}
 {{ HTML::script('js/parser_rules/advanced.js') }}

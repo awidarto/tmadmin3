@@ -77,8 +77,8 @@
         <!-- Content -->
         <div id="content">
             <div class="navbar hidden-print main navbar-default" role="navigation">
-                <div class="container">
-                    <div class="navbar-header">
+                {{--<div class="container">--}}
+                    <div class="navbar-header" style="margin-left:16px;">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
@@ -99,7 +99,7 @@
 
                         <div class="clearfix"></div>
                     </div>
-                </div>
+                {{--</div>--}}
             </div>
             <!-- // END navbar -->
             <div class="container">
@@ -167,7 +167,9 @@
 
 
     <script src="{{ URL::to('coral')}}/assets/components/core/js/core.init.js?v=v1.9.6"></script>
+    {{--
     <script src="{{ URL::to('coral')}}/assets/components/core/js/animations.init.js?v=v1.9.6"></script>
+    --}}
 
 
 @include('layout.js')

@@ -1,8 +1,10 @@
-@extends('layout.formthree')
+@extends('layout.fixedtwo')
 
 
 @section('left')
-        <h4>Device Info</h4>
+
+        <h5>Device Info</h5>
+
 
         {{ Former::text('SKU','Asset Code') }}
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
@@ -13,7 +15,29 @@
         {{ Former::select('rackId','Rack')->id('rack')->options( Assets::getRack()->RackToSelection('_id','SKU',true) ) }}
         {{ Former::text('itemDescription','Description') }}
 
-        <h4>Owner & Person In Charge</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Host Info</h5>
+                {{ Former::text('IP','IP Address') }}
+                {{ Former::text('hostName','Host Name') }}
+                {{ Former::text('OS','Operating System') }}
+            </div>
+            <div class="col-md-6">
+                <h5>Status</h5>
+
+                {{ Former::select('powerStatus')->label('Power Status')->options(array('1'=>'Yes','0'=>'No')) }}
+                {{ Former::select('labelStatus')->label('Label Status')->options(array('1'=>'Yes','0'=>'No')) }}
+                {{ Former::select('virtualStatus')->label('Virtual Status')->options(array('1'=>'Yes','0'=>'No')) }}
+            </div>
+        </div>
+
+        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
+
+@stop
+
+@section('right')
+        <h5>Owner & Person In Charge</h5>
         {{ Former::text('owner','Owner') }}
 
         {{ Former::text('PIC','Person In Charge') }}
@@ -25,32 +49,21 @@
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
-@stop
-
-@section('middle')
-        <h4>Host Info</h4>
-        {{ Former::text('IP','IP Address') }}
-        {{ Former::text('hostName','Host Name') }}
-        {{ Former::text('OS','Operating System') }}
-        <h4>Status</h4>
-
-        {{ Former::select('powerStatus')->label('Power Status')->options(array('1'=>'Yes','0'=>'No')) }}
-        {{ Former::select('labelStatus')->label('Label Status')->options(array('1'=>'Yes','0'=>'No')) }}
-        {{ Former::select('virtualStatus')->label('Virtual Status')->options(array('1'=>'Yes','0'=>'No')) }}
-@stop
-
-@section('right')
-        <h4>Pictures</h4>
+        <h5>Pictures</h5>
         <?php
             $fupload = new Fupload();
         ?>
-        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')
-            ->url('upload')
+        {{ $fupload->id('imageupload')->title('Select Picture')->label('Upload Picture')
+            ->url('upload/asset')
             ->singlefile(false)
-            ->prefix('assetpic')->multi(true)->make() }}
+            ->prefix('asset')
+            ->multi(true)->make() }}
 
 @stop
 
+@section('modals')
+
+@stop
 
 @section('aux')
 

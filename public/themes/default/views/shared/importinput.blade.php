@@ -1,47 +1,35 @@
-@extends('layout.front')
+@extends('layout.fixedtwo')
 
 
-@section('content')
+@section('left')
 
-<h3>{{$title}}</h3>
+<h5>Import {{ $title }}</h5>
 
-{{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
-
-<div class="row-fluid">
-    <div class="col-md-6">
+{{Former::open_for_files_vertical($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
         {{ Former::file('inputfile','Select file ( .xls, .xlsx )') }}
 
         {{ Former::hidden( 'controller',$back ) }}
         {{ Former::hidden( 'importkey',$importkey ) }}
+        <div class="row">
+            <div class="col-md-4">
+                {{ Former::text('headindex','Row containing header')->value(2) }}
+                {{ Former::text('firstdata','Data starting at row')->value(3) }}
+            </div>
+        </div>
 
-        {{ Former::text('headindex','Row containing header')->class('col-md-2')->value(2) }}
-        {{ Former::text('firstdata','Data starting at row')->class('col-md-2')->value(3) }}
-
-    </div>
-    <div class="col-md-6">
-
-    </div>
-</div>
-
-<div class="row-fluid right">
-    <div class="col-md-12">
         {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
         {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
+
 {{Former::close()}}
+
+@stop
+
+@section('aux')
 
 <script type="text/javascript">
 
 
 $(document).ready(function() {
-
-
-    $('select').select2({
-      width : 'resolve'
-    });
-
-
 
 });
 

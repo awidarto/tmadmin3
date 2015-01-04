@@ -426,3 +426,11 @@ Route::filter('auth', function()
 
     //if (Auth::guest()) return Redirect::to('login');
 });
+
+function sa($item){
+    if(URL::to($item) == URL::full() ){
+        return  'active';
+    }else{
+        return '';
+    }
+}

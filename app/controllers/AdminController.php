@@ -98,6 +98,12 @@ class AdminController extends Controller {
 
     public $table_view = 'tables.simple';
 
+    //public $product_info_url = 'ajax/productinfo';
+
+    public $product_info_url = null;
+
+    public $prefix = null;
+
 	public function __construct(){
 
 		date_default_timezone_set('Asia/Jakarta');
@@ -133,6 +139,7 @@ class AdminController extends Controller {
     public function getIndex()
     {
 
+        Breadcrumbs::addCrumb($this->title,URL::to('/'));
         return $this->pageGenerator();
     }
 
@@ -158,6 +165,11 @@ class AdminController extends Controller {
         $this->delurl = (is_null($this->delurl))? strtolower($this->controller_name).'/del': $this->delurl;
 
         $this->newbutton = (is_null($this->newbutton))? Str::singular($this->controller_name): $this->newbutton;
+
+        //dialog related url
+        $this->product_info_url = (is_null($this->product_info_url))? strtolower($this->controller_name).'/info': $this->product_info_url;
+
+        $this->prefix = (is_null($this->prefix))? strtolower($this->controller_name):$this->prefix;
 
 		$select_all = Former::checkbox()->name('All')->check(false)->id('select_all');
 
@@ -219,6 +231,8 @@ class AdminController extends Controller {
             ->with('table_group_collapsible', $this->table_group_collapsible)
             ->with('js_table_event', $this->js_table_event)
             ->with('additional_page_data',$this->additional_page_data)
+            ->with('product_info_url',$this->product_info_url)
+            ->with('prefix',$this->prefix)
 			->with('heads',$heads )
 			->with('row',$this->rowdetail );
 
@@ -352,11 +366,12 @@ class AdminController extends Controller {
                     $datestring = date('d-m-Y', $datestring / 1000);
 
 					if (($timestamp = $datestring) === false) {
+
 					} else {
 						$daystart = new MongoDate(strtotime($datestring.' 00:00:00'));
 						$dayend = new MongoDate(strtotime($datestring.' 23:59:59'));
 
-						$qval = array($field =>array('$gte'=>$daystart,'$lte'=>$dayend));
+						//$qval = array($field =>array('$gte'=>$daystart,'$lte'=>$dayend));
 					    //echo "$str == " . date('l dS \o\f F Y h:i:s A', $timestamp);
 
 						//$this->model->whereBetween($field,$daystart,$dayend);
@@ -366,6 +381,47 @@ class AdminController extends Controller {
 					//$qval = Input::get('sSearch_'.$idx);
 
                     $q[$field] = $qval;
+                }elseif($type == 'daterange'){
+                    $datestring = Input::get('sSearch_'.$idx);
+
+                    if($datestring != ''){
+                        $dates = explode(' - ', $datestring);
+
+                        if(count($dates) == 2){
+                            $daystart = new MongoDate(strtotime($dates[0].' 00:00:00'));
+                            $dayend = new MongoDate(strtotime($dates[1].' 23:59:59'));
+
+                            //$qval = array($field =>array('$gte'=>$daystart,'$lte'=>$dayend));
+
+                            $qval = array('$gte'=>$daystart,'$lte'=>$dayend);
+                            //$qval = Input::get('sSearch_'.$idx);
+
+                            $q[$field] = $qval;
+                        }
+
+                    }
+
+                }elseif($type == 'datetimerange'){
+                    $datestring = Input::get('sSearch_'.$idx);
+
+                    if($datestring != ''){
+                        $dates = explode(' - ', $datestring);
+
+                        //print_r($dates);
+
+                        if(count($dates) == 2){
+                            $daystart = new MongoDate(strtotime($dates[0]));
+                            $dayend = new MongoDate(strtotime($dates[1]));
+
+                            //$qval = array($field =>array('$gte'=>$daystart,'$lte'=>$dayend));
+
+                            $qval = array('$gte'=>$daystart,'$lte'=>$dayend);
+                            //$qval = Input::get('sSearch_'.$idx);
+
+                            $q[$field] = $qval;
+                        }
+
+                    }
 
 				}elseif($type == '__datetime'){
 					$datestring = Input::get('sSearch_'.$idx);
@@ -487,7 +543,7 @@ class AdminController extends Controller {
 							$callback = $field[1]['callback'];
 							$row[] = $this->$callback($doc, $field[0]);
 						}else{
-							if($field[1]['kind'] == 'datetime'){
+							if($field[1]['kind'] == 'datetime' || $field[1]['kind'] == 'datetimerange'){
                                 if($doc[$field[0]] instanceof MongoDate){
                                     $rowitem = date('d-m-Y H:i:s',$doc[$field[0]]->sec);
                                 }elseif ($doc[$field[0]] instanceof Date) {
@@ -500,7 +556,7 @@ class AdminController extends Controller {
                                         $rowitem = date('d-m-Y H:i:s',strtotime($doc[$field[0]]) );
                                     }
                                 }
-							}elseif($field[1]['kind'] == 'date'){
+							}elseif($field[1]['kind'] == 'date' || $field[1]['kind'] == 'daterange'){
                                 if($doc[$field[0]] instanceof MongoDate){
                                     $rowitem = date('d-m-Y',$doc[$field[0]]->sec);
                                 }elseif ($doc[$field[0]] instanceof Date) {
@@ -575,6 +631,10 @@ class AdminController extends Controller {
 
         $this->title = ($this->title == '')?Str::singular($this->controller_name):Str::singular($this->title);
 
+        Breadcrumbs::addCrumb($this->title,URL::to($controller_name));
+
+        Breadcrumbs::addCrumb('New '.$this->title,URL::to('/'));
+
 		return View::make($controller_name.'.'.$this->form_add)
 					->with('back',$controller_name)
                     ->with('auxdata',$data)
@@ -613,6 +673,12 @@ class AdminController extends Controller {
 			$data['createdDate'] = new MongoDate();
 			$data['lastUpdate'] = new MongoDate();
 
+            // process tags by default
+            if(isset($data['tags'])){
+                $tags = $this->tagToArray($data['tags']);
+                $data['tagArray'] = $tags;
+                $this->saveTags($tags);
+            }
 
 			$model = $this->model;
 
@@ -664,7 +730,9 @@ class AdminController extends Controller {
 
         $this->title = ($this->title == '')?Str::singular($this->controller_name):Str::singular($this->title);
 
-		//$this->crumb->add(strtolower($this->controller_name).'/edit/'.$id,$id,false);
+        Breadcrumbs::addCrumb($this->title,URL::to($controller_name));
+
+        Breadcrumbs::addCrumb('Update '.$this->title,URL::to('/'));
 
 		return View::make(strtolower($this->controller_name).'.'.$this->form_edit)
 					->with('back',$controller_name)
@@ -702,6 +770,14 @@ class AdminController extends Controller {
 
 			//print_r($data);
 			//exit();
+
+
+            // process tags by default
+            if(isset($data['tags'])){
+                $tags = $this->tagToArray($data['tags']);
+                $data['tagArray'] = $tags;
+                $this->saveTags($tags);
+            }
 
 			$model = $this->model;
 
@@ -795,6 +871,19 @@ class AdminController extends Controller {
 		}
 		return $population;
 	}
+
+    public function postInfo(){
+        $pid = Input::get('product_id');
+
+        $p = $this->model->find($pid);
+
+        if($p){
+            return Response::json(array('result'=>'OK:FOUND', 'data'=>$p->toArray() ));
+        }else{
+            return Response::json(array('result'=>'ERR:NOTFOUND'));
+        }
+    }
+
 
     public function completeHeads($heads){
 
@@ -1208,6 +1297,14 @@ class AdminController extends Controller {
 
     public function getImport()
     {
+        $controller_name = strtolower($this->controller_name);
+
+        $this->title = ($this->title == '')?Str::plural($this->controller_name):Str::plural($this->title);
+
+        Breadcrumbs::addCrumb($this->title,URL::to($controller_name));
+
+        Breadcrumbs::addCrumb('Import '.$this->title,URL::to('/'));
+
         return View::make('shared.importinput')
             ->with('title',$this->title)
             //->with('input_name',$this->input_name)
@@ -1323,11 +1420,22 @@ class AdminController extends Controller {
 
         $submit = strtolower($this->controller_name).'/commit/'.$sessid;
 
+        $controller_name = strtolower($this->controller_name);
+
+        $this->title = ($this->title == '')?Str::plural($this->controller_name):Str::plural($this->title);
+
+        Breadcrumbs::addCrumb($this->title,URL::to($controller_name));
+
+        Breadcrumbs::addCrumb('Import '.$this->title,URL::to($controller_name.'/import'));
+
+        Breadcrumbs::addCrumb('Preview',URL::to($controller_name.'/import'));
+
         return View::make('shared.commitselect')
             ->with('title',$title)
             ->with('submit',$submit)
             ->with('headselect',$headselect)
             ->with('heads',$heads)
+            ->with('back',$controller_name.'/import')
             ->with('imports',$imports);
     }
 
@@ -1401,7 +1509,9 @@ class AdminController extends Controller {
     public function saveTags($tags)
     {
         foreach($tags as $tag){
-            Tag::insert(array('tag'=>$tag));
+            $tag = trim($tag);
+            //Tag::insert(array('tag'=>$tag));
+            DB::collection('tags')->where('tag', $tag)->update(array('tag'=>$tag), array('upsert' => true));
         }
 
         return true;

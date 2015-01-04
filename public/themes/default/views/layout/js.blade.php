@@ -6,11 +6,11 @@
     {{ HTML::script('js/jquery.collagePlus.min.js')}}
     {{ HTML::script('js/jquery.collageCaption.js')}}
     {{ HTML::script('datatables/js/jquery.dataTables.min.js')}}
-    {{ HTML::script('datatables/js/dataTables.bootstrap.js')}}
+    {{ HTML::script('datatables/js/dataTables.bootstrap.min.js')}}
     {{ HTML::script('js/jquery.dataTables.rowReordering.js') }}
     {{ HTML::script('js/jquery.dataTables.rowGrouping.js') }}
 
-    {{ HTML::script('js/jquery.tagsinput.js') }}
+    {{ HTML::script('js/jquery.tagsinput.min.js') }}
 
     {{ HTML::script('js/moment.min.js') }}
 
@@ -43,4 +43,6 @@
     {{ HTML::script('js/jquery-fileupload/jquery.fileupload-audio.js') }}
     {{ HTML::script('js/jquery-fileupload/jquery.fileupload-video.js') }}
     {{ HTML::script('js/jquery-fileupload/jquery.fileupload-validate.js') }}
+
+    {{ HTML::script('js/blueimp-gallery.min.js') }}
 

@@ -10,9 +10,25 @@ class Fupload {
     public static $prefix = '';
     public static $singlefile = true;
 
+    public static $editreplacer = '';
+    public static $newreplacer = '';
+
+
     public function __construct()
     {
 
+    }
+
+    public function newreplacer($ar)
+    {
+        self::$newreplacer = $ar;
+        return new self;
+    }
+
+    public function editreplacer($ar)
+    {
+        self::$editreplacer = $ar;
+        return new self;
     }
 
     public static function id($id)
@@ -65,6 +81,8 @@ class Fupload {
             ->with('url',self::$url)
             ->with('multi',self::$multi)
             ->with('singlefile',self::$singlefile)
+            ->with('editreplacer',self::$editreplacer)
+            ->with('newreplacer',self::$newreplacer)
             ->with('prefix',self::$prefix)
             ->with('element_id', self::$element_id )
             ->with('formdata',$formdata);

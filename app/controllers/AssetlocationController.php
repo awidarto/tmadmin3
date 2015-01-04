@@ -35,8 +35,8 @@ class AssetlocationController extends AdminController {
             array('Address',array('search'=>true,'sort'=>true)),
             array('Category',array('search'=>true,'sort'=>true,'select'=>Config::get('asset.location_category') )),
             array('Tags',array('search'=>true,'sort'=>true)),
-            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Created',array('search'=>true,'sort'=>true,'daterange'=>true)),
+            array('Last Update',array('search'=>true,'sort'=>true,'daterange'=>true)),
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();

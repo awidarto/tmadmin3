@@ -1,12 +1,3 @@
-<?php
-    function sa($item){
-        if(URL::to($item) == URL::full() ){
-            return  'active';
-        }else{
-            return '';
-        }
-    }
-?>
 
 <ul class="nav navbar-nav">
 

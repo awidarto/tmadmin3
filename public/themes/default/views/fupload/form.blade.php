@@ -27,75 +27,41 @@
                         $showold = true;
                     }
 
-                    //print_r($formdata);
-
-                    //exit();
-
                     if( !is_null($formdata) && isset($formdata['files']) && $showold == false ){
 
                         /* external detail template */
-                        if($prefix == ''){
-                            $thumb = View::make($prefix.'.detail')->render();
-                        }else{
-                            $thumb = View::make('fupload.detail')->render();
-                        }
 
-                        // display previously saved data
+                                                // display previously saved data
                         //for($t = 0; $t < count($filename);$t++){
 
                         foreach ($formdata['files'] as $k => $v) {
 
-                            if(isset($formdata['defaultpic'])){
-                                if($formdata['defaultpic'] == $k){
-                                    $isdef = 'checked="checked"';
-                                }else{
-                                    $isdef = ' ';
-                                }
-
+                            if($prefix != ''){
+                                $detailview = $prefix.'.detail';
                             }else{
-                                if($t == 0){
-                                    $isdef = 'checked="checked"';
-                                }else{
-                                    $isdef = ' ';
-                                }
+                                $detailview = 'fupload.detail';
                             }
 
-                            if(isset($formdata['brchead']) && $formdata['brchead'] == $k){
-                                $headdef = 'checked="checked"';
+                            if(isset($v['mediatitle'])){
+                                $mediatitle = $v['mediatitle'];
                             }else{
-                                $headdef = ' ';
-                            }
-                            if(isset($formdata['brc1']) && $formdata['brc1'] == $k){
-                                $isdef1 = 'checked="checked"';
-                            }else{
-                                $isdef1 = ' ';
-                            }
-                            if(isset($formdata['brc2']) && $formdata['brc2'] == $k){
-                                $isdef2 = 'checked="checked"';
-                            }else{
-                                $isdef2 = ' ';
-                            }
-                            if(isset($formdata['brc3']) && $formdata['brc3'] == $k){
-                                $isdef3 = 'checked="checked"';
-                            }else{
-                                $isdef3 = ' ';
+                                $mediatitle = $v['filename'];
                             }
 
+                            $thumb = View::make($detailview)
+                                            ->with('filename',$v['filename'])
+                                            ->with('thumbnail_url',$v['thumbnail_url'])
+                                            ->with('full_url',$v['fileurl'])
+                                            ->with('file_id',$v['file_id'])
+                                            ->with('is_audio',$v['is_audio'])
+                                            ->with('is_video',$v['is_video'])
+                                            ->with('filetype',$v['filetype'])
+                                            ->with('filetitle',$mediatitle)
+                                            ->render();
 
-                            printf($thumb,
-                                $v['file_id'],
-                                $v['thumbnail_url'],
-                                $v['fileurl'],
-                                $v['filename'],
-                                $v['file_id'],
-                                $v['file_id'],
-                                $isdef,
-                                $v['file_id'], $headdef,
-                                $v['file_id'], $isdef1,
-                                $v['file_id'], $isdef2,
-                                $v['file_id'], $isdef3,
-                                $v['caption']
-                                );
+                            if($v['ns'] == $prefix){
+                                print $thumb;
+                            }
 
                         }
 
@@ -103,102 +69,46 @@
 
                     // display re-populated data from error form
 
-                    if($showold && isset( $allin['thumbnail_url'])){
+                    if($showold && isset( $allin['file_id'])){
 
                         $filename = $allin['filename'];
                         $thumbnail_url = $allin['thumbnail_url'];
                         $full_url = $allin['fileurl'];
                         $file_id = $allin['file_id'];
-                        /*
-                        $thumb = '<li><img style="width:125px;" src="%s"><span class="file_del icon-trash" id="%s"></span>';
-                        $thumb .= '<span class="img-title">%s</span>';
-                        $thumb .= '<label for="defaultpic"><input type="radio" name="defaultpic" value="%s" %s > Default</label>';
+                        $is_audio = $allin['is_audio'];
+                        $is_video = $allin['is_video'];
+                        $filetype = $allin['filetype'];
 
-                        $thumb .= 'Gallery<br />';
-                        $thumb .= '<input type="radio" name="brchead" value="%s" %s > Head &nbsp;';
-                        $thumb .= '<input type="radio" name="brc1" value="%s" %s > Pic 1 &nbsp;';
-                        $thumb .= '<input type="radio" name="brc2" value="%s" %s > Pic 2 &nbsp;';
-                        $thumb .= '<input type="radio" name="brc3" value="%s" %s > Pic 3 &nbsp;';
-
-                        $thumb .= '<label for="caption">Caption</label><input type="text" name="caption[]" value="%s" />';
-                        $thumb .= '</li>';
-                        */
-
-                        if($prefix == ''){
-                            $thumb = View::make($prefix.'.detail')->render();
+                        if(isset($allin['mediatitle'])){
+                            $mediatitle = $allin['mediatitle'];
                         }else{
-                            $thumb = View::make('fupload.detail')->render();
+                            $mediatitle = $allin['filename'];
                         }
 
+                        $ns = $allin['ns'];
 
                         for($t = 0; $t < count($filename);$t++){
-                            if(isset($allin['defaultpic'])){
-                                if($allin['defaultpic'] == $allin['file_id'][$t]){
-                                    $isdef = 'checked="checked"';
-                                }else{
-                                    $isdef = ' ';
-                                }
 
+                            if($prefix != ''){
+                                $detailview = $prefix.'.detail';
                             }else{
-                                if($t == 0){
-                                    $isdef = 'checked="checked"';
-                                }else{
-                                    $isdef = ' ';
-                                }
+                                $detailview = 'fupload.detail';
                             }
 
-                            if( isset($allin['brchead']) && $allin['brchead'] == $allin['file_id'][$t]){
-                                $headdef = 'checked="checked"';
-                            }else{
-                                if($t == 0){
-                                    $headdef = 'checked="checked"';
-                                }else{
-                                    $headdef = ' ';
-                                }
-                            }
-                            if( isset($allin['brc1']) && $allin['brc1'] == $allin['file_id'][$t]){
-                                $isdef1 = 'checked="checked"';
-                            }else{
-                                if($t == 0){
-                                    $isdef1 = 'checked="checked"';
-                                }else{
-                                    $isdef1 = ' ';
-                                }
-                            }
-                            if( isset($allin['brc2']) && $allin['brc2'] == $allin['file_id'][$t]){
-                                $isdef2 = 'checked="checked"';
-                            }else{
-                                if($t == 0){
-                                    $isdef2 = 'checked="checked"';
-                                }else{
-                                    $isdef2 = ' ';
-                                }
-                            }
-                            if( isset($allin['brc3']) && $allin['brc3'] == $allin['file_id'][$t]){
-                                $isdef3 = 'checked="checked"';
-                            }else{
-                                if($t == 0){
-                                    $isdef3 = 'checked="checked"';
-                                }else{
-                                    $isdef3 = ' ';
-                                }
-                            }
+                            $thumb = View::make($detailview)
+                                            ->with('filename',$filename[$t])
+                                            ->with('thumbnail_url',$thumbnail_url[$t])
+                                            ->with('full_url',$full_url[$t])
+                                            ->with('file_id',$file_id[$t])
+                                            ->with('is_audio',$is_audio[$t])
+                                            ->with('is_video',$is_video[$t])
+                                            ->with('filetype',$filetype[$t])
+                                            ->with('filetitle',$mediatitle[$t])
+                                            ->render();
 
-                            printf($thumb,
-                                $file_id[$t],
-                                $thumbnail_url[$t],
-                                $full_url[$t],
-                                $filename[$t],
-                                $file_id[$t],
-                                $file_id[$t],
-                                $isdef,
-                                $file_id[$t], $headdef,
-                                $file_id[$t], $isdef1,
-                                $file_id[$t], $isdef2,
-                                $file_id[$t], $isdef3,
-                                $allin['caption'][$t]
-                            );
-
+                            //if($ns[$t] == $prefix){
+                                print $thumb;
+                            //}
                         }
 
                     }
@@ -216,43 +126,55 @@
 
                     $upl = '';
                     for($u = 0; $u < $upcount; $u++){
-                        $upl .= '<li id="fdel_'.$formdata['file_id'][$u].'">';
-                        $upl .= '<input type="hidden" name="delete_type[]" value="' . $formdata['delete_type'][$u] . '">';
-                        $upl .= '<input type="hidden" name="delete_url[]" value="' . $formdata['delete_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="filename[]" value="' . $formdata['filename'][$u]  . '">';
-                        $upl .= '<input type="hidden" name="filesize[]" value="' . $formdata['filesize'][$u]  . '">';
-                        $upl .= '<input type="hidden" name="temp_dir[]" value="' . $formdata['temp_dir'][$u]  . '">';
 
-                        foreach(Config::get('picture.sizes') as $k=>$s ){
-                            if(isset($formdata[$k.'_url'][$u])){
-                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="'. $formdata[$k.'_url'][$u].'">';
+                        if($formdata['ns'][$u] == $prefix){
 
-                            }else{
-                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="">';
+                            $upl .= '<li id="fdel_'.$formdata['file_id'][$u].'">';
+
+                            $upl .= '<input type="hidden" name="ns[]" value="' . $formdata['ns'][$u] . '">';
+                            $upl .= '<input type="hidden" name="role[]" value="' . $formdata['role'][$u] . '">';
+
+                            $upl .= '<input type="hidden" name="delete_type[]" value="' . $formdata['delete_type'][$u] . '">';
+                            $upl .= '<input type="hidden" name="delete_url[]" value="' . $formdata['delete_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="filename[]" value="' . $formdata['filename'][$u]  . '">';
+                            $upl .= '<input type="hidden" name="filesize[]" value="' . $formdata['filesize'][$u]  . '">';
+                            $upl .= '<input type="hidden" name="temp_dir[]" value="' . $formdata['temp_dir'][$u]  . '">';
+
+                            foreach(Config::get('picture.sizes') as $k=>$s ){
+                                if(isset($formdata[$k.'_url'][$u])){
+                                    $upl .= '<input type="hidden" name="'.$k.'_url[]" value="'. $formdata[$k.'_url'][$u].'">';
+
+                                }else{
+                                    $upl .= '<input type="hidden" name="'.$k.'_url[]" value="">';
+                                }
+
+                            }
+                            /*
+                            $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $formdata['thumbnail_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="large_url[]" value="' . $formdata['large_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="medium_url[]" value="' . $formdata['medium_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="full_url[]" value="' . $formdata['full_url'][$u] . '">';
+                            */
+                            if(isset($formdata['is_image'])){
+                                $upl .= '<input type="hidden" name="is_image[]" value="' . $formdata['is_image'][$u] . '">';
+                                $upl .= '<input type="hidden" name="is_audio[]" value="' . $formdata['is_audio'][$u] . '">';
+                                $upl .= '<input type="hidden" name="is_video[]" value="' . $formdata['is_video'][$u] . '">';
+                                $upl .= '<input type="hidden" name="is_pdf[]" value="' . $formdata['is_pdf'][$u] . '">';
+                                $upl .= '<input type="hidden" name="is_doc[]" value="' . $formdata['is_doc'][$u] . '">';
                             }
 
-                        }
-                        /*
-                        $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $formdata['thumbnail_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="large_url[]" value="' . $formdata['large_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="medium_url[]" value="' . $formdata['medium_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="full_url[]" value="' . $formdata['full_url'][$u] . '">';
-                        */
-                        if(isset($formdata['is_image'])){
-                            $upl .= '<input type="hidden" name="is_image[]" value="' . $formdata['is_image'][$u] . '">';
-                            $upl .= '<input type="hidden" name="is_audio[]" value="' . $formdata['is_audio'][$u] . '">';
-                            $upl .= '<input type="hidden" name="is_video[]" value="' . $formdata['is_video'][$u] . '">';
-                            $upl .= '<input type="hidden" name="is_pdf[]" value="' . $formdata['is_pdf'][$u] . '">';
-                            $upl .= '<input type="hidden" name="is_doc[]" value="' . $formdata['is_doc'][$u] . '">';
+                            $upl .= '<input type="hidden" name="filetype[]" value="' . $formdata['filetype'][$u] . '">';
+                            $upl .= '<input type="hidden" name="fileurl[]" value="' . $formdata['fileurl'][$u] . '">';
+                            $upl .= '<input type="hidden" name="file_id[]" value="' . $formdata['file_id'][$u] . '">';
+                            $upl .= '</li>';
+
                         }
 
-                        $upl .= '<input type="hidden" name="filetype[]" value="' . $formdata['filetype'][$u] . '">';
-                        $upl .= '<input type="hidden" name="fileurl[]" value="' . $formdata['fileurl'][$u] . '">';
-                        $upl .= '<input type="hidden" name="file_id[]" value="' . $formdata['file_id'][$u] . '">';
-                        $upl .= '</li>';
                     }
 
-                    print $upl;
+                    //if($formdata['ns'][$u] == $prefix){
+                        print $upl;
+                    //}
                 }
 
             ?>
@@ -265,42 +187,52 @@
 
                     $upl = '';
                     for($u = 0; $u < $upcount; $u++){
-                        $upl .= '<li id="fdel_'.$allin['file_id'][$u].'">';
-                        $upl .= '<input type="hidden" name="delete_type[]" value="' . $allin['delete_type'][$u] . '">';
-                        $upl .= '<input type="hidden" name="delete_url[]" value="' . $allin['delete_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="filename[]" value="' . $allin['filename'][$u]  . '">';
-                        $upl .= '<input type="hidden" name="filesize[]" value="' . $allin['filesize'][$u]  . '">';
-                        $upl .= '<input type="hidden" name="temp_dir[]" value="' . $allin['temp_dir'][$u]  . '">';
 
-                        foreach(Config::get('picture.sizes') as $k=>$s ){
-                            if(isset($allin[$k.'_url'][$u])){
-                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="'. $allin[$k.'_url'][$u].'">';
+                        if( $allin['ns'][$u] == $prefix){
+                            $upl .= '<li id="fdel_'.$allin['file_id'][$u].'">';
 
-                            }else{
-                                $upl .= '<input type="hidden" name="'.$k.'_url[]" value="">';
+                            $upl .= '<input type="hidden" name="ns[]" value="' . $allin['ns'][$u] . '">';
+                            $upl .= '<input type="hidden" name="role[]" value="' . $allin['role'][$u] . '">';
+
+                            $upl .= '<input type="hidden" name="delete_type[]" value="' . $allin['delete_type'][$u] . '">';
+                            $upl .= '<input type="hidden" name="delete_url[]" value="' . $allin['delete_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="filename[]" value="' . $allin['filename'][$u]  . '">';
+                            $upl .= '<input type="hidden" name="filesize[]" value="' . $allin['filesize'][$u]  . '">';
+                            $upl .= '<input type="hidden" name="temp_dir[]" value="' . $allin['temp_dir'][$u]  . '">';
+
+                            foreach(Config::get('picture.sizes') as $k=>$s ){
+                                if(isset($allin[$k.'_url'][$u])){
+                                    $upl .= '<input type="hidden" name="'.$k.'_url[]" value="'. $allin[$k.'_url'][$u].'">';
+
+                                }else{
+                                    $upl .= '<input type="hidden" name="'.$k.'_url[]" value="">';
+
+                                }
 
                             }
+                            /*
+                            $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $allin['thumbnail_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="large_url[]" value="' . $allin['large_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="medium_url[]" value="' . $allin['medium_url'][$u] . '">';
+                            $upl .= '<input type="hidden" name="full_url[]" value="' . $allin['full_url'][$u] . '">';
+                            */
+                            $upl .= '<input type="hidden" name="is_image[]" value="' . $allin['is_image'][$u] . '">';
+                            $upl .= '<input type="hidden" name="is_audio[]" value="' . $allin['is_audio'][$u] . '">';
+                            $upl .= '<input type="hidden" name="is_video[]" value="' . $allin['is_video'][$u] . '">';
+                            $upl .= '<input type="hidden" name="is_pdf[]" value="' . $allin['is_pdf'][$u] . '">';
+                            $upl .= '<input type="hidden" name="is_doc[]" value="' . $allin['is_doc'][$u] . '">';
+
+                            $upl .= '<input type="hidden" name="filetype[]" value="' . $allin['filetype'][$u] . '">';
+                            $upl .= '<input type="hidden" name="fileurl[]" value="' . $allin['fileurl'][$u] . '">';
+                            $upl .= '<input type="hidden" name="file_id[]" value="' . $allin['file_id'][$u] . '">';
+                            $upl .= '</li>';
 
                         }
-                        /*
-                        $upl .= '<input type="hidden" name="thumbnail_url[]" value="' . $allin['thumbnail_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="large_url[]" value="' . $allin['large_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="medium_url[]" value="' . $allin['medium_url'][$u] . '">';
-                        $upl .= '<input type="hidden" name="full_url[]" value="' . $allin['full_url'][$u] . '">';
-                        */
-                        $upl .= '<input type="hidden" name="is_image[]" value="' . $allin['is_image'][$u] . '">';
-                        $upl .= '<input type="hidden" name="is_audio[]" value="' . $allin['is_audio'][$u] . '">';
-                        $upl .= '<input type="hidden" name="is_video[]" value="' . $allin['is_video'][$u] . '">';
-                        $upl .= '<input type="hidden" name="is_pdf[]" value="' . $allin['is_pdf'][$u] . '">';
-                        $upl .= '<input type="hidden" name="is_doc[]" value="' . $allin['is_doc'][$u] . '">';
 
-                        $upl .= '<input type="hidden" name="filetype[]" value="' . $allin['filetype'][$u] . '">';
-                        $upl .= '<input type="hidden" name="fileurl[]" value="' . $allin['fileurl'][$u] . '">';
-                        $upl .= '<input type="hidden" name="file_id[]" value="' . $allin['file_id'][$u] . '">';
-                        $upl .= '</li>';
                     }
-
-                    print $upl;
+                    //if( $allin['ns'][$u] == $prefix){
+                        print $upl;
+                    //}
                 }
 
             ?>
@@ -366,11 +298,14 @@ $(document).ready(function(){
 
                 $.each(data.result.files, function (index, file) {
 
+
                     @if($prefix == '')
                         {{ View::make('fupload.jsdetail') }}
                     @else
                         {{ View::make($prefix.'.jsdetail') }}
                     @endif
+
+                    console.log(thumb);
 
                     @if($singlefile == true)
                         $('#{{ $element_id }}_files ul').html(thumb);
@@ -379,6 +314,8 @@ $(document).ready(function(){
                     @endif
 
                     var upl = '<li id="fdel_' + file.file_id +'" ><input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';
+
+                    upl += '<input type="hidden" name="ns[]" value="' + file.ns  + '">';
                     upl += '<input type="hidden" name="role[]" value="' + data.result.role + '">';
                     upl += '<input type="hidden" name="delete_url[]" value="' + file.delete_url + '">';
                     upl += '<input type="hidden" name="filename[]" value="' + file.name  + '">';
@@ -418,7 +355,7 @@ $(document).ready(function(){
                     });
 
                 });
-                $('audio').audioPlayer();
+                //$('audio').audioPlayer();
                 //videojs(document.getElementsByClassName('video-js')[0], {}, function(){});
             }else{
                 alert(data.result.message)

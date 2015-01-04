@@ -32,8 +32,8 @@ class AssettypeController extends AdminController {
 
         $this->heads = array(
             array('Type',array('search'=>true,'sort'=>true)),
-            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Created',array('search'=>true,'sort'=>true,'daterange'=>true)),
+            array('Last Update',array('search'=>true,'sort'=>true,'daterange'=>true)),
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();

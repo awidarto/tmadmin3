@@ -1,4 +1,4 @@
-@extends('layout.form')
+@extends('layout.fixedtwo')
 
 
 @section('left')
@@ -12,6 +12,9 @@
 
     {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
+    {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
+
 @stop
 
 @section('right')
@@ -20,10 +23,12 @@
     <?php
         $fupload = new Fupload();
     ?>
-    {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')
-        ->url('upload')
+
+    {{ $fupload->id('imageupload')->title('Select Picture')->label('Upload Picture')
+        ->url('upload/asset/rack')
         ->singlefile(false)
-        ->prefix('assetpic')->multi(true)->make($formdata) }}
+        ->prefix('asset')
+        ->multi(true)->make($formdata) }}
 
 @stop
 

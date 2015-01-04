@@ -82,63 +82,63 @@ class RackController extends AdminController {
 
     public function beforeSave($data)
     {
-        $defaults = array();
-
-        $files = array();
-
         if( isset($data['file_id']) && count($data['file_id'])){
 
-            $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
-            $data['brchead'] = (isset($data['brchead']))?$data['brchead']:$data['file_id'][0];
-            $data['brc1'] = (isset($data['brc1']))?$data['brc1']:$data['file_id'][0];
-            $data['brc2'] = (isset($data['brc2']))?$data['brc2']:$data['file_id'][0];
-            $data['brc3'] = (isset($data['brc3']))?$data['brc3']:$data['file_id'][0];
+            $mediaindex = 0;
 
             for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
 
-                if($data['defaultpic'] == $data['file_id'][$i]){
-                    $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
-                    $defaults['large_url'] = $data['large_url'][$i];
-                    $defaults['medium_url'] = $data['medium_url'][$i];
-                    $defaults['full_url'] = $data['full_url'][$i];
-                }
+                $index = $mediaindex;
 
-                $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
-                $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
-                $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
-                $files[$data['file_id'][$i]]['full_url'] = $data['full_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['ns'] = $data['ns'][$i];
+                $data['files'][ $data['file_id'][$i] ]['role'] = $data['role'][$i];
+                $data['files'][ $data['file_id'][$i] ]['thumbnail_url'] = $data['thumbnail_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['large_url'] = $data['large_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['medium_url'] = $data['medium_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['full_url'] = $data['full_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['delete_type'] = $data['delete_type'][$i];
+                $data['files'][ $data['file_id'][$i] ]['delete_url'] = $data['delete_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['filename'] = $data['filename'][$i];
+                $data['files'][ $data['file_id'][$i] ]['filesize'] = $data['filesize'][$i];
+                $data['files'][ $data['file_id'][$i] ]['temp_dir'] = $data['temp_dir'][$i];
+                $data['files'][ $data['file_id'][$i] ]['filetype'] = $data['filetype'][$i];
+                $data['files'][ $data['file_id'][$i] ]['is_image'] = $data['is_image'][$i];
+                $data['files'][ $data['file_id'][$i] ]['is_audio'] = $data['is_audio'][$i];
+                $data['files'][ $data['file_id'][$i] ]['is_video'] = $data['is_video'][$i];
+                $data['files'][ $data['file_id'][$i] ]['fileurl'] = $data['fileurl'][$i];
+                $data['files'][ $data['file_id'][$i] ]['file_id'] = $data['file_id'][$i];
+                $data['files'][ $data['file_id'][$i] ]['sequence'] = $mediaindex;
 
-                $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
-                $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
-                $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
-                $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
-                $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
-                $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
-                $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
-                $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
-                $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
+                $mediaindex++;
+
+                $data['defaultpic'] = $data['file_id'][$i];
+                $data['defaultpictures'] = $data['files'][$data['file_id'][$i]];
+
             }
+                /*
+                unset($data['role']);
+                unset($data['thumbnail_url']);
+                unset($data['large_url']);
+                unset($data['medium_url']);
+                unset($data['full_url']);
+                unset($data['delete_type']);
+                unset($data['delete_url']);
+                unset($data['filename']);
+                unset($data['filesize']);
+                unset($data['temp_dir']);
+                unset($data['filetype']);
+                unset($data['is_image']);
+                unset($data['is_audio']);
+                unset($data['is_video']);
+                unset($data['fileurl']);
+                unset($data['file_id']);
+                */
+
         }else{
-            $data['thumbnail_url'] = array();
-            $data['large_url'] = array();
-            $data['medium_url'] = array();
-            $data['full_url'] = array();
-            $data['delete_type'] = array();
-            $data['delete_url'] = array();
-            $data['filename'] = array();
-            $data['filesize'] = array();
-            $data['temp_dir'] = array();
-            $data['filetype'] = array();
-            $data['fileurl'] = array();
-            $data['file_id'] = array();
-            $data['caption'] = array();
 
             $data['defaultpic'] = '';
+            $data['defaultpictures'] = '';
         }
-
-
-        $data['defaultpictures'] = $defaults;
-        $data['files'] = $files;
 
         $data['locationName'] = Assets::getLocationDetail($data['locationId'])->name;
         return $data;
@@ -146,88 +146,63 @@ class RackController extends AdminController {
 
     public function beforeUpdate($id,$data)
     {
-        $defaults = array();
-
-        $files = array();
-
         if( isset($data['file_id']) && count($data['file_id'])){
 
-            $data['defaultpic'] = (isset($data['defaultpic']))?$data['defaultpic']:$data['file_id'][0];
-            $data['brchead'] = (isset($data['brchead']))?$data['brchead']:$data['file_id'][0];
-            $data['brc1'] = (isset($data['brc1']))?$data['brc1']:$data['file_id'][0];
-            $data['brc2'] = (isset($data['brc2']))?$data['brc2']:$data['file_id'][0];
-            $data['brc3'] = (isset($data['brc3']))?$data['brc3']:$data['file_id'][0];
+            $mediaindex = 0;
 
+            for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
 
-            for($i = 0 ; $i < count($data['file_id']); $i++ ){
+                $index = $mediaindex;
 
+                $data['files'][ $data['file_id'][$i] ]['ns'] = $data['ns'][$i];
+                $data['files'][ $data['file_id'][$i] ]['role'] = $data['role'][$i];
+                $data['files'][ $data['file_id'][$i] ]['thumbnail_url'] = $data['thumbnail_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['large_url'] = $data['large_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['medium_url'] = $data['medium_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['full_url'] = $data['full_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['delete_type'] = $data['delete_type'][$i];
+                $data['files'][ $data['file_id'][$i] ]['delete_url'] = $data['delete_url'][$i];
+                $data['files'][ $data['file_id'][$i] ]['filename'] = $data['filename'][$i];
+                $data['files'][ $data['file_id'][$i] ]['filesize'] = $data['filesize'][$i];
+                $data['files'][ $data['file_id'][$i] ]['temp_dir'] = $data['temp_dir'][$i];
+                $data['files'][ $data['file_id'][$i] ]['filetype'] = $data['filetype'][$i];
+                $data['files'][ $data['file_id'][$i] ]['is_image'] = $data['is_image'][$i];
+                $data['files'][ $data['file_id'][$i] ]['is_audio'] = $data['is_audio'][$i];
+                $data['files'][ $data['file_id'][$i] ]['is_video'] = $data['is_video'][$i];
+                $data['files'][ $data['file_id'][$i] ]['fileurl'] = $data['fileurl'][$i];
+                $data['files'][ $data['file_id'][$i] ]['file_id'] = $data['file_id'][$i];
+                $data['files'][ $data['file_id'][$i] ]['sequence'] = $mediaindex;
 
-                $files[$data['file_id'][$i]]['thumbnail_url'] = $data['thumbnail_url'][$i];
-                $files[$data['file_id'][$i]]['large_url'] = $data['large_url'][$i];
-                $files[$data['file_id'][$i]]['medium_url'] = $data['medium_url'][$i];
-                $files[$data['file_id'][$i]]['full_url'] = $data['full_url'][$i];
+                $mediaindex++;
 
-                $files[$data['file_id'][$i]]['delete_type'] = $data['delete_type'][$i];
-                $files[$data['file_id'][$i]]['delete_url'] = $data['delete_url'][$i];
-                $files[$data['file_id'][$i]]['filename'] = $data['filename'][$i];
-                $files[$data['file_id'][$i]]['filesize'] = $data['filesize'][$i];
-                $files[$data['file_id'][$i]]['temp_dir'] = $data['temp_dir'][$i];
-                $files[$data['file_id'][$i]]['filetype'] = $data['filetype'][$i];
-                $files[$data['file_id'][$i]]['fileurl'] = $data['fileurl'][$i];
-                $files[$data['file_id'][$i]]['file_id'] = $data['file_id'][$i];
-                $files[$data['file_id'][$i]]['caption'] = $data['caption'][$i];
-
-                if($data['defaultpic'] == $data['file_id'][$i]){
-                    $defaults['thumbnail_url'] = $data['thumbnail_url'][$i];
-                    $defaults['large_url'] = $data['large_url'][$i];
-                    $defaults['medium_url'] = $data['medium_url'][$i];
-                    $defaults['full_url'] = $data['full_url'][$i];
-                }
-
-                if($data['brchead'] == $data['file_id'][$i]){
-                    $defaults['brchead'] = $data['large_url'][$i];
-                }
-
-                if($data['brc1'] == $data['file_id'][$i]){
-                    $defaults['brc1'] = $data['large_url'][$i];
-                }
-
-                if($data['brc2'] == $data['file_id'][$i]){
-                    $defaults['brc2'] = $data['large_url'][$i];
-                }
-
-                if($data['brc3'] == $data['file_id'][$i]){
-                    $defaults['brc3'] = $data['large_url'][$i];
-                }
-
+                $data['defaultpic'] = $data['file_id'][$i];
+                $data['defaultpictures'] = $data['files'][$data['file_id'][$i]];
 
             }
+                /*
+                unset($data['role']);
+                unset($data['thumbnail_url']);
+                unset($data['large_url']);
+                unset($data['medium_url']);
+                unset($data['full_url']);
+                unset($data['delete_type']);
+                unset($data['delete_url']);
+                unset($data['filename']);
+                unset($data['filesize']);
+                unset($data['temp_dir']);
+                unset($data['filetype']);
+                unset($data['is_image']);
+                unset($data['is_audio']);
+                unset($data['is_video']);
+                unset($data['fileurl']);
+                unset($data['file_id']);
+                */
 
         }else{
 
-            $data['thumbnail_url'] = array();
-            $data['large_url'] = array();
-            $data['medium_url'] = array();
-            $data['full_url'] = array();
-            $data['delete_type'] = array();
-            $data['delete_url'] = array();
-            $data['filename'] = array();
-            $data['filesize'] = array();
-            $data['temp_dir'] = array();
-            $data['filetype'] = array();
-            $data['fileurl'] = array();
-            $data['file_id'] = array();
-            $data['caption'] = array();
-
             $data['defaultpic'] = '';
-            $data['brchead'] = '';
-            $data['brc1'] = '';
-            $data['brc2'] = '';
-            $data['brc3'] = '';
+            $data['defaultpictures'] = '';
         }
-
-        $data['defaultpictures'] = $defaults;
-        $data['files'] = $files;
 
         $data['locationName'] = Assets::getLocationDetail($data['locationId'])->name;
 
@@ -458,7 +433,7 @@ class RackController extends AdminController {
 
             $thumbnail_url = $gdata['thumbnail_url'];
             foreach($data['files'] as $g){
-                $g['caption'] = ($g['caption'] == '')?$data['propertyId']:$data['propertyId'].' : '.$g['caption'];
+                $g['caption'] = ( isset($g['caption']) && $g['caption'] != '')?$g['caption']:$data['SKU'];
                 $g['full_url'] = isset($g['full_url'])?$g['full_url']:$g['fileurl'];
                 $glinks .= '<input type="hidden" class="g_'.$data['_id'].'" data-caption="'.$g['caption'].'" value="'.$g['full_url'].'" >';
             }

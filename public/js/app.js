@@ -89,6 +89,19 @@
                 }
         });
 
+        $('.daterangespicker').daterangepicker({
+            format:'DD-MM-YYYY',
+            opens:'left'
+        });
+
+        $('.datetimerangepicker').daterangepicker({
+            format:'DD-MM-YYYY hh:mm:ss',
+            timePicker: true,
+            timePicker12Hour: false,
+            timePickerSeconds: true,
+            opens:'left'
+        });
+
 		$('.pop').click(function(){
 			var _id = $(this).attr('id');
 

@@ -1,4 +1,4 @@
-@extends('layout.front')
+@extends('layout.fixed')
 
 @section('content')
 
@@ -75,35 +75,32 @@ select.input-sm {
 <div class="row-fluid box">
    <div class="col-md-12 box-content">
         <table class="table table-condensed dataTable">--}}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 command-bar">
 
-<div class="widget">
-    <div class="widget-body innerAll inner-2x">
-        <div class="row">
-            <div class="col-md-6 command-bar">
+            @if(isset($can_add) && $can_add == true)
+                <a href="{{ URL::to($addurl) }}" class="btn btn-sm btn-primary">Add</a>
+                <a href="{{ URL::to($importurl) }}" class="btn btn-sm btn-primary">Import Excel</a>
+            @endif
 
-                @if(isset($can_add) && $can_add == true)
-                    <a href="{{ URL::to($addurl) }}" class="btn btn-sm btn-primary">Add</a>
-                    <a href="{{ URL::to($importurl) }}" class="btn btn-sm btn-primary">Import Excel</a>
-                @endif
+            <a class="btn btn-info btn-sm" id="download-xls">Download Excel</a>
+            <a class="btn btn-info btn-sm" id="download-csv">Download CSV</a>
 
-                <a class="btn btn-info btn-sm" id="download-xls">Download Excel</a>
-                <a class="btn btn-info btn-sm" id="download-csv">Download CSV</a>
+            @if(isset($is_report) && $is_report == true)
+                {{ $report_action }}
+            @endif
+            @if(isset($is_additional_action) && $is_additional_action == true)
+                {{ $additional_action }}
+            @endif
 
-                @if(isset($is_report) && $is_report == true)
-                    {{ $report_action }}
-                @endif
-                @if(isset($is_additional_action) && $is_additional_action == true)
-                    {{ $additional_action }}
-                @endif
+         </div>
+         <div class="col-md-6 command-bar">
+            {{ $additional_filter }}
 
-             </div>
-             <div class="col-md-6 command-bar">
-                {{ $additional_filter }}
-
-             </div>
-        </div>
-
-
+         </div>
+    </div>
+</div>
         <table class="table table-striped mg-t dataTable">
 
             <thead>
@@ -162,10 +159,6 @@ select.input-sm {
                         @if(isset($in[1]['search']) && $in[1]['search'] == true)
                             @if(isset($in[1]['date']) && $in[1]['date'])
                                 <td>
-                                    <div class="input-append date datepickersearch" id="{{ $index }}" >
-                                        <input class="col-md-8 search_init form-control input-sm dateinput" data-date="" data-date-format="dd-mm-yyyy" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                    </div>
-                                    {{--
                                     <div id="{{ $index }}" class="input-append datepickersearch">
                                         <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init form-control input-sm dateinput" type="text" placeholder="{{$in[0]}}" ></input>
                                         <span class="add-on">
@@ -174,15 +167,9 @@ select.input-sm {
                                         </span>
                                     </div>
 
-                                    --}}
-
                                 </td>
                             @elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
                                 <td>
-                                    <div class="input-append date datetimepickersearch" id="{{ $index }}" >
-                                        <input class="col-md-8 search_init form-control input-sm datetimeinput"  data-date="" data-date-format="dd-mm-yyyy" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                    </div>
-                                    {{--
                                     <div id="{{ $index }}" class="input-append datetimepickersearch">
                                         <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init form-control input-sm datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
                                         <span class="add-on">
@@ -190,7 +177,18 @@ select.input-sm {
                                             </i>
                                         </span>
                                     </div>
-                                    --}}
+                                </td>
+                            @elseif(isset($in[1]['daterange']) && $in[1]['daterange'])
+                                <td>
+                                    <div class="input-append datetimerangepickersearch">
+                                        <input id="{{ $index }}" name="search_{{$in[0]}}" class="search_init form-control input-sm daterangespicker" type="text" placeholder="{{$in[0]}}" />
+                                    </div>
+                                </td>
+                            @elseif(isset($in[1]['datetimerange']) && $in[1]['datetimerange'])
+                                <td>
+                                    <div class="input-append datetimerangepickersearch">
+                                        <input id="{{ $index }}" name="search_{{$in[0]}}" class="search_init form-control input-sm datetimerangepicker" type="text" placeholder="{{$in[0]}}" />
+                                    </div>
                                 </td>
                             @elseif(isset($in[1]['select']) && is_array($in[1]['select']))
                                 <td>
@@ -231,106 +229,7 @@ select.input-sm {
          </tbody>
         </table>
 
-    </diV>
-</div>
 
-
-<div id="print-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Print Barcode Tag</h3>
-	</div>
-		<div class="modal-body">
-
-		</div>
-	<div class="modal-footer">
-	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	<button class="btn btn-primary" id="prop-save-chg">Save changes</button>
-	</div>
-</div>
-
-
-<div id="prop-chg-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Change Property Status</h3>
-  </div>
-  <div class="modal-body">
-  	<h4 id="prop-trx-order"></h4>
-  	{{ Former::hidden('prop_id')->id('prop-trx-chg') }}
-  	{{ Former::select('status', 'Status')->options(Config::get('ia.publishing'))->id('prop-stat-chg')}}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" id="prop-save-chg">Save changes</button>
-  </div>
-</div>
-
-
-<div id="chg-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Change Transaction Status</h3>
-  </div>
-  <div class="modal-body">
-  	<h4 id="trx-order"></h4>
-  	{{ Former::hidden('trx_id')->id('trx-chg') }}
-  	{{ Former::select('status', 'Status')->options(Config::get('ia.trx_status'))->id('stat-chg')}}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" id="save-chg">Save changes</button>
-  </div>
-</div>
-
-<div id="upload-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Upload Pictures</span></h3>
-  </div>
-  <div class="modal-body" >
-	  	<h4 id="upload-title-id"></h4>
-	  	{{ Former::open()->id('upload-form') }}
-		{{ Former::hidden('upload_id')->id('upload-id') }}
-
-        <?php
-            $fupload = new Fupload();
-        ?>
-
-        {{ $fupload->id('pictureupload')->title('Select Images')->label('Upload Images')->make() }}
-
-        {{ Former::close() }}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button class="btn btn-primary" id="do-upload">Save changes</button>
-  </div>
-</div>
-
-<div id="upinv-modal" class="modal fade large" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Update Inventory</span></h3>
-  </div>
-  <div class="modal-body" >
-	  	<h4 id="upinv-title-id"></h4>
-
-	  	{{ Former::open()->id('upinv-form') }}
-		{{ Former::hidden('id')->id('upinv-id') }}
-		{{ Former::hidden('SKU')->id('upinv-sku') }}
-	        <span id="inv-loading-pictures" style="display:none;" ><img src="{{URL::to('/') }}/images/loading.gif" />loading existing pictures...</span>
-		<div id="upinv-container">
-
-		</div>
-        {{ Former::close() }}
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button class="btn btn-primary" id="do-upinv">Save changes</button>
-  </div>
-</div>
-
-{{ $modal_sets }}
 
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
     <div class="slides"></div>
@@ -426,7 +325,7 @@ select.input-sm {
 		        "sAjaxSource": "{{$ajaxsource}}",
 				"oLanguage": { "sSearch": "Search "},
 				"sPaginationType": "full_numbers",
-                "sDom": 'l<"#paginator" ip>rt',
+                "sDom": '<".container" <"#paginator" lp>i >rt',
 				"iDisplayLength":50,
 
 				@if(isset($excludecol) && $excludecol != '')
@@ -542,6 +441,17 @@ select.input-sm {
                     .draw();
 		});
 
+        $('.datetimerangepicker').on('apply.daterangepicker',function(ev, picker){
+            console.log(this.value);
+            var search_index = this.id;
+            var datevals = this.value;
+
+            oTable.column( search_index )
+                    .search( datevals )
+                    .draw();
+
+        });
+
 		$('thead select.selector').change( function () {
 			var search_index = this.id;
             oTable.column( search_index )
@@ -570,7 +480,8 @@ select.input-sm {
 			});
 			console.log(dlfilter);
 
-			var sort = oTable.fnSettings().aaSorting;
+			//var sort = oTable.fnSettings().aaSorting;
+            var sort = oTable.order();
 			console.log(sort);
 			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
 				if(data.status == 'OK'){
@@ -794,7 +705,7 @@ select.input-sm {
 
 				$('#loading-pictures').show();
 
-				$.post('{{ URL::to('ajax/productinfo') }}', { product_id: _id },
+				$.post('{{ URL::to($product_info_url) }}', { product_id: _id },
 					function(data){
 
 						$('#loading-pictures').hide();
@@ -802,45 +713,12 @@ select.input-sm {
 						if(data.result == 'OK:FOUND'){
 							var defaultpic = data.data.defaultpic;
 
-							var brchead = data.data.brchead;
-							var brc1 = data.data.brc1;
-							var brc2 = data.data.brc2;
-							var brc3 = data.data.brc3;
-
-			            	console.log(brchead);
-
 							if(data.data.files){
 
 					            $.each(data.data.files, function (index, file) {
 					            	console.log(file);
 
-					            	var isdefault = (defaultpic == file.file_id)?'checked':'';
-					            	var isbrchead = (brchead == file.file_id)?'checked':'';
-					            	var isbrc1 = (brc1 == file.file_id)?'checked':'';
-					            	var isbrc2 = (brc2 == file.file_id)?'checked':'';
-					            	var isbrc3 = (brc3 == file.file_id)?'checked':'';
-
-					            	{{ View::make('fupload.jsajdetail') }}
-
-					            	{{--
-
-
-					                var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
-					                    '<span class="file_del" id="' + file.file_id +'"><i class="fa fa-trash"></i></span>'+
-					                    '&nbsp;&nbsp;<span class="img-title">' + file.filename + '</span><br />' +
-					                    '<input type="radio" name="defaultpic" ' + isdefault + ' value="' + file.file_id + '"> Default<br />'+
-					                    'Brochure <br />' +
-					                    '<input type="radio" name="brchead" ' + isbrchead + ' value="' + file.file_id + '"> Head &nbsp;'+
-					                    '<input type="radio" name="brc1" ' + isbrc1 + ' value="' + file.file_id + '"> Pic 1 &nbsp;'+
-					                    '<input type="radio" name="brc2" ' + isbrc2 + ' value="' + file.file_id + '"> Pic 2 &nbsp;'+
-					                    '<input type="radio" name="brc3" ' + isbrc3 + ' value="' + file.file_id + '"> Pic 3 <br />'+
-					                '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
-					                //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
-					                //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
-					                '</li>';
-
-				            		--}}
-
+					            	{{ View::make($prefix.'.jsajdetail')->render() }}
 
 					                $(thumb).appendTo('#pictureupload_files ul');
 
@@ -1053,5 +931,90 @@ select.input-sm {
 
     });
   </script>
+
+@stop
+
+@section('modals')
+
+<div id="print-modal" class="modal fade large" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Print Barcode Tag</h3>
+    </div>
+        <div class="modal-body">
+
+        </div>
+    <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="prop-save-chg">Save changes</button>
+    </div>
+</div>
+
+
+<div id="chg-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Change Transaction Status</h3>
+  </div>
+  <div class="modal-body">
+    <h4 id="trx-order"></h4>
+    {{ Former::hidden('trx_id')->id('trx-chg') }}
+    {{ Former::select('status', 'Status')->options(Config::get('ia.trx_status'))->id('stat-chg')}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="save-chg">Save changes</button>
+  </div>
+</div>
+
+<div id="upload-modal" class="modal fade" tabindex="-1" data-width="760" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Upload Pictures</span></h3>
+  </div>
+  <div class="modal-body" >
+        <h4 id="upload-title-id"></h4>
+        {{ Former::open()->id('upload-form') }}
+        {{ Former::hidden('upload_id')->id('upload-id') }}
+
+        <?php
+            $fupload = new Fupload();
+        ?>
+
+        {{ $fupload->id('pictureupload')->title('Select Images')->label('Upload Images')->make() }}
+
+        {{ Former::close() }}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary" id="do-upload">Save changes</button>
+  </div>
+</div>
+
+<div id="upinv-modal" class="modal fade large" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Update Inventory</span></h3>
+  </div>
+  <div class="modal-body" >
+        <h4 id="upinv-title-id"></h4>
+
+        {{ Former::open()->id('upinv-form') }}
+        {{ Former::hidden('id')->id('upinv-id') }}
+        {{ Former::hidden('SKU')->id('upinv-sku') }}
+            <span id="inv-loading-pictures" style="display:none;" ><img src="{{URL::to('/') }}/images/loading.gif" />loading existing pictures...</span>
+        <div id="upinv-container">
+
+        </div>
+        {{ Former::close() }}
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary" id="do-upinv">Save changes</button>
+  </div>
+</div>
+
+{{ $modal_sets }}
+
 
 @stop
