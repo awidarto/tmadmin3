@@ -8,12 +8,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{{ sa('dashboard') }}">{{ Config::get('site.name')}}</a>
+          <a class="navbar-brand {{ sa('dashboard') }} " href="{{ URL::to('/') }}">{{ Config::get('site.name')}}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="dropdown  class="{{ sa('asset') }}"">
-                <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false">Assets <span class="caret"></span></a>
+                <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Assets <span class="caret"></span></a>
                 <ul class="dropdown-menu pull-left">
                     <li class="{{ sa('asset') }}">
                         <a class="{{ sa('asset') }}" href="{{ URL::to('asset') }}"  ><i class="fa fa-th-list"></i> Assets List</a>
@@ -22,7 +22,7 @@
                         <a class="{{ sa('rack') }}" href="{{ URL::to('rack') }}"  ><i class="fa fa-th-list"></i> Racks</a>
                     </li>
                     <li class="{{ sa('assetlocation')}}">
-                        <a class="{{ sa('assetlocation')}}" href="{{ URL::to('assetlocation') }}" ><i class="fa fa-sitemap"></i> Locations</a>
+                        <a class="{{ sa('assetlocation')}}" href="{{ URL::to('assetlocation') }}" ><i class="fa fa-map-marker"></i> Locations</a>
                     </li>
                     <li class="{{ sa('assettype')}}">
                         <a class="{{ sa('assettype')}}" href="{{ URL::to('assettype') }}" ><i class="fa fa-sitemap"></i> Device Type</a>
@@ -30,16 +30,44 @@
 
                 </ul>
             </li>
+            <li class="{{ sa('approval') }}" >
+                <a href="{{ URL::to('approval') }}" class="{{ sa('approval') }}" ><i class="fa fa-check-square-o"></i> Approval</a>
+            </li>
             <li class="dropdown">
                 <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false">
                     <i class="fa fa-bar-chart-o"></i> Reports <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="{{ sa('report/siteaccess') }}">
-                        <a href="{{ URL::to('report/siteaccess') }}" class="{{ sa('report/siteaccess') }}" ><i class="fa fa-globe"></i> Site Access</a>
+                    <li class="{{ sa('activity') }}" >
+                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Audit Trails</a>
                     </li>
-                    <li class="{{ sa('report/activity') }}" >
-                        <a href="{{ URL::to('report/activity') }}" class="{{ sa('report/activity') }}" ><i class="fa fa-refresh"></i> Activity</a>
+                    <li class="{{ sa('activity') }}" >
+                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Activity</a>
+                    </li>
+                    <li class="{{ sa('access') }}">
+                        <a href="{{ URL::to('access') }}" class="{{ sa('access') }}" ><i class="fa fa-globe"></i> Site Access</a>
+                    </li>
+                    <li class="{{ sa('apiaccess') }}">
+                        <a href="{{ URL::to('apiaccess') }}" class="{{ sa('apiaccess') }}" ><i class="fa fa-plug"></i> API Access</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false">
+                    <i class="fa fa-list"></i> Logs <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ sa('activity') }}" >
+                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Audit Trails</a>
+                    </li>
+                    <li class="{{ sa('activity') }}" >
+                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Activity</a>
+                    </li>
+                    <li class="{{ sa('access') }}">
+                        <a href="{{ URL::to('access') }}" class="{{ sa('access') }}" ><i class="fa fa-globe"></i> Site Access</a>
+                    </li>
+                    <li class="{{ sa('apiaccess') }}">
+                        <a href="{{ URL::to('apiaccess') }}" class="{{ sa('apiaccess') }}" ><i class="fa fa-plug"></i> API Access</a>
                     </li>
                 </ul>
             </li>

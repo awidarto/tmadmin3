@@ -135,6 +135,15 @@ class AssetlocationController extends AdminController {
         }
     }
 
+    public function dispBar($data)
+
+    {
+        $display = HTML::image(URL::to('qr/'.urlencode(base64_encode($data['SKU']))), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
+        //$display = '<a href="'.URL::to('barcode/dl/'.urlencode($data['SKU'])).'">'.$display.'</a>';
+        return $display.'<br />'.$data['SKU'];
+    }
+
+
     public function namePic($data)
     {
         $name = HTML::link('property/view/'.$data['_id'],$data['address']);

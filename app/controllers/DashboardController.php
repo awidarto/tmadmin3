@@ -31,11 +31,8 @@ class DashboardController extends AdminController {
         $this->heads = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
             array('SKU',array('search'=>true,'sort'=>true)),
-            array('Unit Id',array('search'=>true,'sort'=>true)),
             array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
-            array('Last Outlet',array('search'=>true,'sort'=>true, 'select'=>Prefs::getOutlet()->OutletToSelection('name','name') )),
             array('Status',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.inventory_status_select') )),
-            array('Mutation',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>''))),
             array('Mutated',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
         );
 
@@ -47,11 +44,9 @@ class DashboardController extends AdminController {
 
         $this->is_additional_action = true;
 
-        $this->additional_action = View::make('scan.dashscan')->render();
-
         $this->title = 'Dashboard';
 
-        $this->table_view = 'dashboard.dashboard';
+        $this->table_view = 'tables.dual';
 
         return parent::getIndex();
 
@@ -62,12 +57,9 @@ class DashboardController extends AdminController {
 
         $this->fields = array(
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('unitId',array('kind'=>'text','query'=>'like','callback'=>'shortunit','pos'=>'after','attr'=>array('class'=>'expander'),'show'=>true)),
             array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('outletName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true )),
             array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('action',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('scancheckDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
 
         $this->place_action = 'none';

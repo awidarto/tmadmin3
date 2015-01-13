@@ -80,6 +80,9 @@ class ActivityController extends AdminController {
             array('result',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
         );
 
+        $this->def_order_by = 'timestamp';
+        $this->def_order_dir = 'desc';
+
         return parent::postIndex();
     }
 
@@ -143,8 +146,8 @@ class ActivityController extends AdminController {
 
     public function makeActions($data)
     {
-        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('agent/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
+        $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
+        $edit = '<a href="'.URL::to('agent/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

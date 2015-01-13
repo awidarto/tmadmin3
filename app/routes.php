@@ -71,6 +71,10 @@ Route::controller('assetlocation', 'AssetlocationController');
 Route::controller('rack', 'RackController');
 Route::controller('asset', 'AssetController');
 
+Route::controller('approval', 'ApprovalController');
+Route::controller('activity', 'ActivityController');
+Route::controller('access', 'AccessController');
+Route::controller('apiaccess', 'ApiaccessController');
 
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
