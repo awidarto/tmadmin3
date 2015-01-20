@@ -43,6 +43,7 @@ class AssetlocationController extends AdminController {
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
         $this->title = 'Location';
+        Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
 
         return parent::getIndex();
 

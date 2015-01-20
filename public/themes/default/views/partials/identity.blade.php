@@ -6,7 +6,7 @@
                 </li>
                 <li class="hidden-xs">
                     <a href="{{ URL::to('profile')}}">
-                        <img src="{{ URL::to('cameo')}}/img/avatar.jpg" class="avatar pull-left img-circle" alt="user" title="user">
+                        <img src="{{ Auth::user()->avatar }}" class="avatar pull-left img-circle" alt="user" title="user">
                     </a>
                 </li>
                 <li>

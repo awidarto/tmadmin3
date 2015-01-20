@@ -12,13 +12,6 @@
     <!-- Le styles -->
     {{ HTML::style('css/typography.css') }}
 
-    {{ HTML::style('bootstrap232/css/bootstrap.css') }}
-
-    {{ HTML::style('bootstrap232/css/bootstrap-responsive.css') }}
-
-    {{ HTML::style('aflat/css/aflat.css') }}
-
-    {{ HTML::style('aflat/css/aflat-responsive.css') }}
 
     {{ HTML::style('bootplus/css/font-awesome.min.css') }}
 

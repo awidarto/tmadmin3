@@ -1,6 +1,6 @@
 <?php
 
-class AssettypeController extends AdminController {
+class UsergroupController extends AdminController {
 
     public function __construct()
     {
@@ -12,10 +12,10 @@ class AssettypeController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Assettype();
+        $this->model = new Role();
         //$this->model = DB::collection('documents');
-        $this->title = $this->controller_name;
-        $this->title = 'Device Type';
+
+        $this->title = 'Roles';
 
     }
 
@@ -31,14 +31,14 @@ class AssettypeController extends AdminController {
     {
 
         $this->heads = array(
-            array('Type',array('search'=>true,'sort'=>true)),
-            array('Created',array('search'=>true,'sort'=>true,'daterange'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'daterange'=>true)),
+            array('Role',array('search'=>true,'sort'=>false, 'select'=>Prefs::getRole()->RoleToSelection('_id','rolename' )  )),
+            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
-        $this->title = 'Device Type';
-        Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
+
+        Breadcrumbs::addCrumb('System',URL::to( strtolower($this->controller_name) ));
 
         return parent::getIndex();
 
@@ -48,7 +48,7 @@ class AssettypeController extends AdminController {
     {
 
         $this->fields = array(
-            array('type',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('rolename',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -60,18 +60,46 @@ class AssettypeController extends AdminController {
     {
 
         $this->validator = array(
-            'type' => 'required',
-            'slug'=> 'required'
+            'rolename' => 'required'
         );
 
         return parent::postAdd($data);
     }
 
+    public function beforeSave($data)
+    {
+        foreach(Config::get('role.entities') as $e){
+            foreach( Config::get('role.actions') as $a ){
+                if(isset($data[$e.'_'.$a])){
+                    $data[$e.'_'.$a] = 'on';
+                }else{
+                    $data[$e.'_'.$a] = 'off';
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public function beforeUpdate($id,$data)
+    {
+
+        foreach(Config::get('role.entities') as $e){
+            foreach( Config::get('role.actions') as $a ){
+                if(isset($data[$e.'_'.$a])){
+                    $data[$e.'_'.$a] = 'on';
+                }else{
+                    $data[$e.'_'.$a] = 'off';
+                }
+            }
+        }
+        return $data;
+    }
+
     public function postEdit($id,$data = null)
     {
         $this->validator = array(
-            'type' => 'required',
-            'slug'=> 'required'
+            'rolename' => 'required'
         );
 
         return parent::postEdit($id,$data);
@@ -80,7 +108,7 @@ class AssettypeController extends AdminController {
     public function makeActions($data)
     {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="fa fa-trash"></i>Delete</span>';
-        $edit = '<a href="'.URL::to('assettype/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
+        $edit = '<a href="'.URL::to('usergroup/edit/'.$data['_id']).'"><i class="fa fa-edit"></i>Update</a>';
 
         $actions = $edit.'<br />'.$delete;
         return $actions;

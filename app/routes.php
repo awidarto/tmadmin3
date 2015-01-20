@@ -11,6 +11,8 @@
 |
 */
 Route::controller('user', 'UserController');
+Route::controller('usergroup', 'UsergroupController');
+
 Route::controller('report', 'ReportController');
 Route::controller('menu', 'MenuController');
 
@@ -58,33 +60,6 @@ Route::group(array('prefix' => 'api/v1'), function (){
     Route::resource('location', 'LocationapiController');
     Route::resource('rack', 'RackapiController');
     Route::resource('asset', 'AssetapiController');
-});
-
-
-Route::get('regenerate',function(){
-    $property = new Property();
-
-    $props = $property->get()->toArray();
-
-    $seq = new Sequence();
-
-    foreach($props as $p){
-
-        $_id = new MongoId($p['_id']);
-
-        $nseq = $seq->getNewId('property');
-
-        $sdata = array(
-            'sequence'=>$nseq,
-            'propertyId' => Config::get('ia.property_id_prefix').$nseq
-            );
-
-        if( $property->where('_id','=', $_id )->update( $sdata ) ){
-            print $p['_id'].'->'.$sdata['propertyId'].'<br />';
-        }
-
-    }
-
 });
 
 Route::get('tonumber',function(){

@@ -12,7 +12,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="dropdown  class="{{ sa('asset') }}"">
+            <li class="dropdown  {{ sa('asset') }} {{ sa('rack') }} {{ sa('assetlocation') }} {{ sa('assettype') }} ">
                 <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Assets <span class="caret"></span></a>
                 <ul class="dropdown-menu pull-left">
                     <li class="{{ sa('asset') }}">
@@ -80,16 +80,16 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown {{ sa('user') }} {{ sa('usergroup') }} {{ sa('option') }}">
                 <a href="#" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false">
                     <i class="fa fa-cogs"></i> System <span class="caret"></span>
                   </a>
                 <ul class="dropdown-menu">
                     <li class="{{ sa('user') }}" >
-                      <a href="{{ URL::to('user') }}" class="{{ sa('user') }}" ><i class="fa fa-group"></i> Admins</a>
+                      <a href="{{ URL::to('user') }}" class="{{ sa('user') }}" ><i class="fa fa-group"></i> Users</a>
                     </li>
                     <li class="{{ sa('usergroup') }}">
-                      <a href="{{ URL::to('usergroup') }}" class="{{ sa('usergroup') }}" ><i class="fa fa-group"></i> Group</a>
+                      <a href="{{ URL::to('usergroup') }}" class="{{ sa('usergroup') }}" ><i class="fa fa-group"></i> Roles</a>
                     </li>
                     <li class="{{ sa('option') }}">
                       <a href="{{ URL::to('option') }}" class="{{ sa('option') }}" ><i class="fa fa-wrench"></i> Options</a>

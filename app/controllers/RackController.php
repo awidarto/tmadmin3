@@ -46,9 +46,11 @@ class RackController extends AdminController {
 
         $this->place_action = 'first';
 
-        $this->additional_filter = View::make('rack.addfilter')->render();
+        Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
 
-        $this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
+        //$this->additional_filter = View::make('rack.addfilter')->render();
+
+        //$this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
 
         return parent::getIndex();
 

@@ -14,10 +14,6 @@
     {{ HTML::style('bootflat/css/site.min.css')}}
     <!-- /bootstrap -->
 
-    <!-- core styles -->
-    <link rel="stylesheet" href="{{ URL::to('cameo') }}/min/main.min.css">
-    <!-- /core styles -->
-
     <!-- page styles -->
     @include('layout.css')
     <!-- /page styles -->
@@ -29,7 +25,6 @@
     <![endif]-->
 
     <!-- load modernizer -->
-    <script src="{{ URL::to('cameo') }}/vendor/modernizr.js"></script>
     {{ HTML::script('bootflat/js/site.min.js')}}
     <style type="text/css">
         .bg-dark{
@@ -41,12 +36,22 @@
 
 <body class="bg-dark">
     <div class="app-user">
-        <div class="user-container">
-            <section class="panel panel-default">
-                <header class="panel-heading">{{ $title }}</header>
-                <div class="bg-white user pd-lg">
-                    @yield('content')
-            </section>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+
+                </div>
+                <div  class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="display:table;">
+                    <div class="panel panel-primary" style="margin-top:100px;">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ $title }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            @yield('content')
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

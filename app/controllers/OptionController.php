@@ -50,6 +50,8 @@ class OptionController extends AdminController {
 
         $this->js_table_event = View::make(strtolower($this->controller_name).'.tableevent')->render();
 
+        Breadcrumbs::addCrumb('System',URL::to( strtolower($this->controller_name) ));
+
         return parent::getIndex();
 
     }

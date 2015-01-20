@@ -27,34 +27,10 @@ class UserController extends AdminController {
 
     public function getIndex()
     {
-        /*
-'activeCart' => '5260f68b8dfa19da49000000',
-'address_1' => 'jl cibaduyut lama komplek sauyunan mas 1 no 19',
-'address_2' => '',
-'agreetnc' => 'Yes',
-'bankname' => 'bca',
-'branch' => 'bandung',
-'city' => 'bandung',
-'country' => 'Indonesia',
-'createdDate' => new MongoDate(1382086083, 795000),
-'email' => 'emptyshalu@gmail.com',
-'firstname' => 'shalu',
-'fullname' => 'shalu hz',
-'lastUpdate' => new MongoDate(1382086083, 795000),
-'lastname' => 'shalu',
-'mobile' => '0818229096',
-'pass' => '$2a$08$9XwvZZVLsHSzu4MIX1ro3.X3cdhK0btglG7qqLGPgOA6/yYz5a51C',
-'role' => 'shopper',
-'salutation' => 'Ms',
-'saveinfo' => 'No',
-'shippingphone' => '02285447649',
-'shopperseq' => '0000000019',
-'zip' => '40235',
-        */
-
 
         $this->heads = array(
             array('Full Name',array('search'=>true,'sort'=>true)),
+            array('Role',array('search'=>true,'sort'=>false, 'select'=>Prefs::getRole()->RoleToSelection('_id','rolename' )  )),
             array('Email',array('search'=>true,'sort'=>true)),
             array('Mobile',array('search'=>true,'sort'=>true)),
             array('Address',array('search'=>true,'sort'=>true)),
@@ -62,7 +38,11 @@ class UserController extends AdminController {
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
 
-        //print $this->model->where('docFormat','picture')->get()->toJSON();
+        $this->title = 'Users';
+
+        $this->place_action = 'first';
+
+        Breadcrumbs::addCrumb('System',URL::to( strtolower($this->controller_name) ));
 
         return parent::getIndex();
 
@@ -73,6 +53,7 @@ class UserController extends AdminController {
 
         $this->fields = array(
             array('fullname',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('roleId',array('kind'=>'text', 'callback'=>'idRole' ,'query'=>'like','pos'=>'both','show'=>true)),
             array('email',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
             array('mobile',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('address_1',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -103,6 +84,37 @@ class UserController extends AdminController {
 
         $data['fullname'] = $data['firstname'].' '.$data['lastname'];
 
+            $photo = array();
+            $avatar = '';
+
+            if( isset($data['file_id']) && count($data['file_id'])){
+
+                for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+
+                    $photo['role'] = $data['role'][$i];
+                    $photo['thumbnail_url'] = $data['thumbnail_url'][$i];
+                    $photo['large_url'] = $data['large_url'][$i];
+                    $photo['medium_url'] = $data['medium_url'][$i];
+                    $photo['full_url'] = $data['full_url'][$i];
+                    $photo['delete_type'] = $data['delete_type'][$i];
+                    $photo['delete_url'] = $data['delete_url'][$i];
+                    $photo['filename'] = $data['filename'][$i];
+                    $photo['filesize'] = $data['filesize'][$i];
+                    $photo['temp_dir'] = $data['temp_dir'][$i];
+                    $photo['filetype'] = $data['filetype'][$i];
+                    $photo['is_image'] = $data['is_image'][$i];
+                    $photo['is_audio'] = $data['is_audio'][$i];
+                    $photo['is_video'] = $data['is_video'][$i];
+                    $photo['fileurl'] = $data['fileurl'][$i];
+                    $photo['file_id'] = $data['file_id'][$i];
+
+                    $avatar = $photo['medium_url'];
+                }
+            }
+
+            $data['photo']= $photo;
+            $data['avatar'] = $avatar;
+
         return $data;
     }
 
@@ -121,9 +133,37 @@ class UserController extends AdminController {
 
         $data['fullname'] = $data['firstname'].' '.$data['lastname'];
 
-        //print_r($data);
+            $photo = array();
+            $avatar = '';
 
-        //exit();
+            if( isset($data['file_id']) && count($data['file_id'])){
+
+                for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+
+                    $photo['role'] = $data['role'][$i];
+                    $photo['thumbnail_url'] = $data['thumbnail_url'][$i];
+                    $photo['large_url'] = $data['large_url'][$i];
+                    $photo['medium_url'] = $data['medium_url'][$i];
+                    $photo['full_url'] = $data['full_url'][$i];
+                    $photo['delete_type'] = $data['delete_type'][$i];
+                    $photo['delete_url'] = $data['delete_url'][$i];
+                    $photo['filename'] = $data['filename'][$i];
+                    $photo['filesize'] = $data['filesize'][$i];
+                    $photo['temp_dir'] = $data['temp_dir'][$i];
+                    $photo['filetype'] = $data['filetype'][$i];
+                    $photo['is_image'] = $data['is_image'][$i];
+                    $photo['is_audio'] = $data['is_audio'][$i];
+                    $photo['is_video'] = $data['is_video'][$i];
+                    $photo['fileurl'] = $data['fileurl'][$i];
+                    $photo['file_id'] = $data['file_id'][$i];
+
+                    $avatar = $photo['medium_url'];
+
+                }
+            }
+
+            $data['photo']= $photo;
+            $data['avatar'] = $avatar;
 
         return $data;
     }
@@ -191,6 +231,16 @@ class UserController extends AdminController {
             return $display.'<br />'.$name;
         }else{
             return $name;
+        }
+    }
+
+    public function idRole($data)
+    {
+        $role = Role::find($data['roleId']);
+        if($role){
+            return $role->rolename;
+        }else{
+            return '';
         }
     }
 

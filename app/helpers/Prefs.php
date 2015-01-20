@@ -6,7 +6,7 @@ class Prefs {
     public static $section;
     public static $faqcategory;
     public static $productcategory;
-    public static $outlet;
+    public static $role;
 
     public function __construct()
     {
@@ -68,23 +68,22 @@ class Prefs {
         return self::$category;
     }
 
+    public static function getRole(){
+        $c = Role::get();
 
-    public static function getFAQCategory(){
-        $c = Faqcat::get();
-
-        self::$faqcategory = $c;
+        self::$role = $c;
         return new self;
     }
 
-    public function FAQcatToSelection($value, $label, $all = true)
+    public function RoleToSelection($value, $label, $all = true)
     {
         if($all){
-            $ret = array(''=>'All');
+            $ret = array(''=>'Select Role');
         }else{
             $ret = array();
         }
 
-        foreach (self::$faqcategory as $c) {
+        foreach (self::$role as $c) {
             $ret[$c->{$value}] = $c->{$label};
         }
 
@@ -92,67 +91,9 @@ class Prefs {
         return $ret;
     }
 
-    public function FAQcatToArray()
+    public function RoleToArray()
     {
-        return self::$faqcategory;
-    }
-
-
-    public static function getProductCategory(){
-        $c = Productcategory::get();
-
-        self::$productcategory = $c;
-        return new self;
-    }
-
-    public function ProductCatToSelection($value, $label, $all = true)
-    {
-        if($all){
-            $ret = array(''=>'Select Category');
-        }else{
-            $ret = array();
-        }
-
-        foreach (self::$productcategory as $c) {
-            $ret[$c->{$value}] = $c->{$label};
-        }
-
-
-        return $ret;
-    }
-
-    public function ProductCatToArray()
-    {
-        return self::$productcategory;
-    }
-
-
-    public static function getOutlet(){
-        $c = Outlet::get();
-
-        self::$outlet = $c;
-        return new self;
-    }
-
-    public function OutletToSelection($value, $label, $all = true)
-    {
-        if($all){
-            $ret = array(''=>'Select Outlet');
-        }else{
-            $ret = array();
-        }
-
-        foreach (self::$outlet as $c) {
-            $ret[$c->{$value}] = $c->{$label};
-        }
-
-
-        return $ret;
-    }
-
-    public function OutletToArray()
-    {
-        return self::$outlet;
+        return self::$role;
     }
 
     public static function yearSelection(){

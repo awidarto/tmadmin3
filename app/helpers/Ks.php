@@ -57,5 +57,20 @@ class Ks {
         $roi = ((12*$prop['monthlyRental']) - $prop['tax'] - $prop['insurance'] - ( (12*$prop['monthlyRental']) / 10 )) / $prop['listingPrice'];
         return number_format( $roi * 100, 1,'.',',');
     }
+
+    public static function can($action, $entity){
+        $roleid = Auth::user()->roleId;
+        $role = Role::find($roleid);
+        if($role){
+            if($role->{$entity.'_'.$action} == 'on'){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+    }
 }
 

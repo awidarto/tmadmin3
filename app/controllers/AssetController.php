@@ -24,6 +24,70 @@ class AssetController extends AdminController {
         print $raw->toJSON();
     }
 
+    public function getHistory($id)
+    {
+        $_id = new MongoId($id);
+        $history = History::where('historyObject._id',$_id)->where('historyObjectType','asset')
+                        ->orderBy('historyTimestamp','desc')
+                        ->orderBy('historySequence','desc')
+                        ->get();
+        $diffs = array();
+
+        foreach($history as $h){
+            $h->date = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
+            $diffs[$h->date][$h->historySequence] = $h->historyObject;
+        }
+
+        $history = History::where('historyObject._id',$_id)->where('historyObjectType','asset')
+                        ->where('historySequence',0)
+                        ->orderBy('historyTimestamp','desc')
+                        ->get();
+
+        $tab_data = array();
+        foreach($history as $h){
+                    $d = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
+                $tab_data[] = array(
+                    $d,
+                    $h->historyAction,
+                    $h->historyObject['SKU'],
+                    $this->objdiff( $diffs[$d] )
+                );
+        }
+
+        $header = array(
+            'Modified',
+            'Event',
+            'Name',
+            'Diff'
+            );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($tab_data, $attr, $header);
+        $itemtable = $t->build();
+
+        return View::make('history.table')->with('table',$itemtable);
+    }
+
+    public function objdiff($obj)
+    {
+
+        if(is_array($obj) && count($obj) == 2){
+            $diff = array();
+            foreach ($obj[0] as $key=>$value) {
+                if(isset($obj[0][$key]) && isset($obj[1][$key])){
+                    if($obj[0][$key] !== $obj[1][$key]){
+                        if($key != '_id' && $key != 'createdDate' && $key != 'lastUpdate'){
+                            $diff[] = $key.' : '. $obj[0][$key].' -> '.$obj[1][$key];
+                        }
+                    }
+                }
+            }
+            return implode('<br />', $diff);
+        }else{
+            return 'NA';
+        }
+    }
+
 
     public function getIndex()
     {
@@ -49,6 +113,8 @@ class AssetController extends AdminController {
         $this->title = 'Asset';
 
         $this->place_action = 'first';
+
+        Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
 
         //$this->additional_filter = View::make('asset.addfilter')->render();
 
@@ -226,8 +292,31 @@ class AssetController extends AdminController {
         return $population;
     }
 
+    public function afterSave($data)
+    {
+        $hdata = array();
+        $hdata['historyTimestamp'] = new MongoDate();
+        $hdata['historyAction'] = 'new';
+        $hdata['historySequence'] = 0;
+        $hdata['historyObjectType'] = 'asset';
+        $hdata['historyObject'] = $data;
+        History::insert($hdata);
+
+        return $data;
+    }
+
     public function afterUpdate($id,$data = null)
     {
+        $data['_id'] = new MongoId($id);
+
+        $hdata = array();
+        $hdata['historyTimestamp'] = new MongoDate();
+        $hdata['historyAction'] = 'update';
+        $hdata['historySequence'] = 1;
+        $hdata['historyObjectType'] = 'asset';
+        $hdata['historyObject'] = $data;
+        History::insert($hdata);
+
         Assets::createApprovalRequest('update', $data['assetType'],$id, $id );
         return $id;
     }
@@ -254,6 +343,16 @@ class AssetController extends AdminController {
             'itemDescription' => 'required',
             'rackId' => 'required',
         );
+
+        $hobj = Asset::find($id)->toArray();
+        $hobj['_id'] = new MongoId($id);
+
+        $hdata['historyTimestamp'] = new MongoDate();
+        $hdata['historyAction'] = 'update';
+        $hdata['historySequence'] = 0;
+        $hdata['historyObjectType'] = 'asset';
+        $hdata['historyObject'] = $hobj;
+        History::insert($hdata);
 
         return parent::postEdit($id,$data);
     }
@@ -358,7 +457,9 @@ class AssetController extends AdminController {
         $upload = '<span class="upload" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Upload Picture</span>';
         $inv = '<span class="upinv" id="'.$data['_id'].'" rel="'.$data['SKU'].'" ><i class="fa fa-upload"></i> Update Inventory</span>';
 
-        $actions = $edit.'<br />'.$upload.'<br />'.$delete;
+        $history = '<a href="'.URL::to('asset/history/'.$data['_id']).'"><i class="fa fa-clock-o"></i> History</a>';
+
+        $actions = $edit.'<br />'.$history.'<br />'.$delete;
         return $actions;
     }
 

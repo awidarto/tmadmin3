@@ -12,7 +12,7 @@ class DashboardController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Stockunitlog();
+        $this->model = new Asset();
         //$this->model = DB::collection('documents');
 
     }
