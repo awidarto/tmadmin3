@@ -170,6 +170,21 @@ class Assets {
         return $cats;
     }
 
+    public static function createApprovalRequest($status, $assettype, $assetid, $requestedto = 'any' ){
+        //status : new or update
+        //assettype : any which one of registered asset Type
+        $data = array(
+            'requestDate' => new MongoDate(),
+            'actor'=> Auth::user()->_id,
+            'status'=>$status,
+            'assetType'=>$assettype,
+            'assetId'=>$assetid,
+            'requestedTo'=>$requestedto,
+            'approvalStatus'=>'pending'
+        );
+        return Approval::insertGetId($data);
+    }
+
 
 
 

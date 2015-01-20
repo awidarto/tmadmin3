@@ -21,7 +21,7 @@
                 <input type="checkbox" value="remember-me">Remember me
             </label>
 
-            <button class="btn btn-info btn-block" type="submit">Sign in</button>
+            <button class="btn btn-primary btn-block" type="submit">Sign in</button>
 
             <div class="text-right mg-b-sm mg-t-sm">
                 <a href="{{ URL::to('cameo') }}/#">Forgot password?</a>

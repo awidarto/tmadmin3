@@ -31,6 +31,7 @@ class AssetlocationController extends AdminController {
 
         $this->heads = array(
             array('Name',array('search'=>false,'sort'=>false)),
+            array('Code',array('search'=>false,'sort'=>false)),
             array('Venue',array('search'=>true,'sort'=>true)),
             array('Address',array('search'=>true,'sort'=>true)),
             array('Category',array('search'=>true,'sort'=>true,'select'=>Config::get('asset.location_category') )),
@@ -52,6 +53,7 @@ class AssetlocationController extends AdminController {
 
         $this->fields = array(
             array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('_id',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'dispBar','attr'=>array('class'=>'expander'),'show'=>true)),
             array('venue',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
@@ -138,7 +140,7 @@ class AssetlocationController extends AdminController {
     public function dispBar($data)
 
     {
-        $display = HTML::image(URL::to('qr/'.urlencode(base64_encode($data['SKU']))), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
+        $display = HTML::image(URL::to('qr/'.urlencode(base64_encode($data['_id']))), $data['_id'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
         //$display = '<a href="'.URL::to('barcode/dl/'.urlencode($data['SKU'])).'">'.$display.'</a>';
         return $display.'<br />'.$data['SKU'];
     }

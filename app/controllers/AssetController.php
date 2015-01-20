@@ -226,6 +226,13 @@ class AssetController extends AdminController {
         return $population;
     }
 
+    public function afterUpdate($id,$data = null)
+    {
+        Assets::createApprovalRequest('update', $data['assetType'],$id, $id );
+        return $id;
+    }
+
+
     public function postAdd($data = null)
     {
 

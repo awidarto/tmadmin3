@@ -12,7 +12,7 @@ class ApprovalController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Activelog();
+        $this->model = new Approval();
         //$this->model = DB::collection('documents');
 
     }
@@ -55,10 +55,9 @@ class ApprovalController extends AdminController {
 
         $this->heads = array(
             array('Time',array('search'=>true,'sort'=>true,'date'=>true)),
-            array('Main Activity',array('search'=>true,'sort'=>false)),
-            array('Sub Activity',array('search'=>true,'sort'=>true)),
-            array('Actor',array('search'=>true,'sort'=>true)),
-            array('Result',array('search'=>true,'sort'=>true)),
+            array('Change Type',array('search'=>true,'sort'=>false)),
+            array('Asset',array('search'=>true,'sort'=>true)),
+            array('Actor',array('search'=>true,'sort'=>true))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
@@ -71,13 +70,20 @@ class ApprovalController extends AdminController {
 
     public function postIndex()
     {
-
+            /*
+            'requestDate' => new MongoDate(),
+            'actor'=> Auth::user()->_id,
+            'status'=>$status,
+            'assetType'=>$assettype,
+            'assetId'=>$assetid,
+            'requestedTo'=>$requestedto,
+            'approvalStatus'=>'pending'
+            */
         $this->fields = array(
-            array('timestamp',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-            array('class',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('method',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('actor',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
-            array('result',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('requestDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('assetId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('actor',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander')))
         );
 
         $this->def_order_by = 'timestamp';

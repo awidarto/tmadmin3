@@ -30,26 +30,25 @@
 
                 </ul>
             </li>
-            <li class="{{ sa('approval') }}" >
-                <a href="{{ URL::to('approval') }}" class="{{ sa('approval') }}" ><i class="fa fa-check-square-o"></i> Approval</a>
-            </li>
             <li class="dropdown">
                 <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false">
-                    <i class="fa fa-bar-chart-o"></i> Reports <span class="caret"></span>
+                    <i class="fa fa-check-square-o"></i> Approval <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="{{ sa('activity') }}" >
-                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Audit Trails</a>
+                    <li class="{{ sa('approval') }}" >
+                        <a href="{{ URL::to('approval') }}" class="{{ sa('approval') }}" ><i class="fa fa-clock-o"></i> Pending</a>
                     </li>
                     <li class="{{ sa('activity') }}" >
-                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Activity</a>
+                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-check-circle-o"></i> Verified</a>
                     </li>
+                    {{--
                     <li class="{{ sa('access') }}">
-                        <a href="{{ URL::to('access') }}" class="{{ sa('access') }}" ><i class="fa fa-globe"></i> Site Access</a>
+                        <a href="{{ URL::to('access') }}" class="{{ sa('access') }}" ><i class="fa fa-edit"></i> To Be Revised</a>
                     </li>
                     <li class="{{ sa('apiaccess') }}">
-                        <a href="{{ URL::to('apiaccess') }}" class="{{ sa('apiaccess') }}" ><i class="fa fa-plug"></i> API Access</a>
+                        <a href="{{ URL::to('apiaccess') }}" class="{{ sa('apiaccess') }}" ><i class="fa fa-times-circle-o"></i> Rejected</a>
                     </li>
+                    --}}
                 </ul>
             </li>
             <li class="dropdown">
@@ -61,13 +60,23 @@
                         <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Audit Trails</a>
                     </li>
                     <li class="{{ sa('activity') }}" >
-                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Activity</a>
+                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Site Activity</a>
                     </li>
                     <li class="{{ sa('access') }}">
                         <a href="{{ URL::to('access') }}" class="{{ sa('access') }}" ><i class="fa fa-globe"></i> Site Access</a>
                     </li>
                     <li class="{{ sa('apiaccess') }}">
                         <a href="{{ URL::to('apiaccess') }}" class="{{ sa('apiaccess') }}" ><i class="fa fa-plug"></i> API Access</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" aria-expanded="false">
+                    <i class="fa fa-bar-chart-o"></i> Reports <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ sa('activity') }}" >
+                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-refresh"></i> Audit Trails</a>
                     </li>
                 </ul>
             </li>

@@ -11,7 +11,7 @@
     <title>{{ Config::get('site.name') }}</title>
 
     <!-- bootstrap -->
-    <link rel="stylesheet" href="{{ URL::to('cameo') }}/bootstrap/css/bootstrap.min.css">
+    {{ HTML::style('bootflat/css/site.min.css')}}
     <!-- /bootstrap -->
 
     <!-- core styles -->
@@ -30,7 +30,12 @@
 
     <!-- load modernizer -->
     <script src="{{ URL::to('cameo') }}/vendor/modernizr.js"></script>
-    <script src="{{ URL::to('cameo') }}/min/main.min.js"></script>
+    {{ HTML::script('bootflat/js/site.min.js')}}
+    <style type="text/css">
+        .bg-dark{
+            background-color: #8b1a1a;
+        }
+    </style>
 
 </head>
 
