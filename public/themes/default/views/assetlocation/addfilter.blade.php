@@ -25,7 +25,7 @@
                 {{ Former::text('label_offset_bottom','Page top offset')->value('20')->id('label_offset_bottom')->class('form-control input-sm') }}
             </div>
             <div class="col-md-2">
-                {{ Former::text('font_size','Font size')->value('12')->id('font_size')->class('form-control input-sm') }}
+                {{ Former::text('font_size','Font size')->value('8')->id('font_size')->class('form-control input-sm') }}
                 {{ Former::select('code_type','Code type')->id('code_type')->options(array('qr'=>'QR','barcode'=>'Barcode') )}}
             </div>
             <div class="col-md-2">
@@ -89,7 +89,7 @@ button#label_default{
             var code_type = $('#code_type').val();
             var offset_left = $('#label_offset_left').val();
             var offset_top = $('#label_offset_top').val();
-            var src = '{{ URL::to('asset/printlabel')}}/' + sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
+            var src = '{{ URL::to('assetlocation/printlabel')}}/' + sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
 
             $('#label_frame').attr('src',src);
 
@@ -125,7 +125,7 @@ button#label_default{
                             var code_type = $('#code_type').val();
                             var offset_left = $('#label_offset_left').val();
                             var offset_top = $('#label_offset_top').val();
-                            var src = '{{ URL::to('asset/printlabel')}}/' + data.sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
+                            var src = '{{ URL::to('assetlocation/printlabel')}}/' + data.sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
                             $('#label_frame').attr('src',src);
                             $('#print-modal').modal('show');
                         }else{

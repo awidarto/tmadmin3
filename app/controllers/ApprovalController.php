@@ -24,45 +24,116 @@ class ApprovalController extends AdminController {
         print $raw->toJSON();
     }
 
+    public function getHistory($type = 'asset',$id)
+    {
+        $_id = new MongoId($id);
+
+        if($type == 'Location'){
+            $type = 'location';
+        }elseif ($type == 'Rack') {
+            $type = 'rack';
+        }else{
+            $type = 'asset';
+        }
+
+        $history = History::where('historyObject._id',$_id)->where('historyObjectType',$type)
+                        ->orderBy('historyTimestamp','desc')
+                        ->orderBy('historySequence','desc')
+                        ->get();
+        $diffs = array();
+
+        foreach($history as $h){
+            $h->date = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
+            $diffs[$h->date][$h->historySequence] = $h->historyObject;
+        }
+
+        $history = History::where('historyObject._id',$_id)->where('historyObjectType',$type)
+                        ->where('historySequence',0)
+                        ->orderBy('historyTimestamp','desc')
+                        ->get();
+
+        $tab_data = array();
+        foreach($history as $h){
+                $apv_status = Assets::getApprovalStatus($h->approvalTicket);
+                if($apv_status == 'pending'){
+                    $bt_apv = '<span class="btn btn-info change-approval '.$h->approvalTicket.'" data-id="'.$h->approvalTicket.'" >'.$apv_status.'</span>';
+                }else if($apv_status == 'verified'){
+                    $bt_apv = '<span class="btn btn-success" >'.$apv_status.'</span>';
+                }else{
+                    $bt_apv = '';
+                }
+                $d = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
+                $tab_data[] = array(
+                    $d,
+                    $h->historyAction,
+                    $h->historyObject['SKU'],
+                    ($h->historyAction == 'new')?'NA':$this->objdiff( $diffs[$d] ),
+                    $bt_apv
+                );
+        }
+
+        $header = array(
+            'Modified',
+            'Event',
+            'Name',
+            'Diff',
+            'Approval'
+            );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($tab_data, $attr, $header);
+        $itemtable = $t->build();
+
+        $asset = Asset::find($id);
+
+        Breadcrumbs::addCrumb('Approval',URL::to( strtolower($this->controller_name) ));
+        Breadcrumbs::addCrumb('Change Detail',URL::to( strtolower($this->controller_name) ));
+
+        return View::make('history.table')
+                    ->with('a',$asset)
+                    ->with('title','Change Detail')
+                    ->with('table',$itemtable);
+    }
+
+    public function objdiff($obj)
+    {
+
+        if(is_array($obj) && count($obj) == 2){
+            $diff = array();
+            foreach ($obj[0] as $key=>$value) {
+                if(isset($obj[0][$key]) && isset($obj[1][$key])){
+                    if($obj[0][$key] !== $obj[1][$key]){
+                        if($key != '_id' && $key != 'createdDate' && $key != 'lastUpdate'){
+                            if(!is_array($obj[0][$key])){
+                                $diff[] = $key.' : '. $obj[0][$key].' -> '.$obj[1][$key];
+                            }
+                        }
+                    }
+                }
+            }
+            return implode('<br />', $diff);
+        }else{
+            return 'NA';
+        }
+    }
+
 
     public function getIndex()
     {
-        /*
-'activeCart' => '5260f68b8dfa19da49000000',
-'address_1' => 'jl cibaduyut lama komplek sauyunan mas 1 no 19',
-'address_2' => '',
-'agreetnc' => 'Yes',
-'bankname' => 'bca',
-'branch' => 'bandung',
-'city' => 'bandung',
-'country' => 'Indonesia',
-'createdDate' => new MongoDate(1382086083, 795000),
-'email' => 'emptyshalu@gmail.com',
-'firstname' => 'shalu',
-'fullname' => 'shalu hz',
-'lastUpdate' => new MongoDate(1382086083, 795000),
-'lastname' => 'shalu',
-'mobile' => '0818229096',
-'pass' => '$2a$08$9XwvZZVLsHSzu4MIX1ro3.X3cdhK0btglG7qqLGPgOA6/yYz5a51C',
-'role' => 'shopper',
-'salutation' => 'Ms',
-'saveinfo' => 'No',
-'shippingphone' => '02285447649',
-'shopperseq' => '0000000019',
-'zip' => '40235',
-        */
-
 
         $this->heads = array(
-            array('Time',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Time',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
             array('Change Type',array('search'=>true,'sort'=>false)),
+            array('Approval Status',array('search'=>true,'sort'=>false)),
             array('Asset',array('search'=>true,'sort'=>true)),
-            array('Actor',array('search'=>true,'sort'=>true))
+            array('Requester',array('search'=>true,'sort'=>true))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
 
-        $this->title = 'Activity';
+        $this->title = 'Pending Approval';
+
+        $this->place_action = 'first';
 
         return parent::getIndex();
 
@@ -70,27 +141,66 @@ class ApprovalController extends AdminController {
 
     public function postIndex()
     {
-            /*
-            'requestDate' => new MongoDate(),
-            'actor'=> Auth::user()->_id,
-            'status'=>$status,
-            'assetType'=>$assettype,
-            'assetId'=>$assetid,
-            'requestedTo'=>$requestedto,
-            'approvalStatus'=>'pending'
-            */
         $this->fields = array(
             array('requestDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('assetId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('actor',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander')))
+            array('approvalStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('assetId',array('kind'=>'text','callback'=>'dispAsset','query'=>'like','pos'=>'both','show'=>true)),
+            array('actor',array('kind'=>'text','callback'=>'dispActor' ,'query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander')))
         );
 
-        $this->def_order_by = 'timestamp';
+        $this->additional_query = array('approvalStatus'=>'pending');
+
+        $this->def_order_by = 'requestDate';
         $this->def_order_dir = 'desc';
 
         return parent::postIndex();
     }
+
+
+    public function getVerified()
+    {
+
+        $this->heads = array(
+            array('Time',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
+            array('Change Type',array('search'=>true,'sort'=>false)),
+            array('Approval Status',array('search'=>true,'sort'=>false)),
+            array('Asset',array('search'=>true,'sort'=>true)),
+            array('Requester',array('search'=>true,'sort'=>true))
+        );
+
+        //print $this->model->where('docFormat','picture')->get()->toJSON();
+
+        $this->title = 'Verified Approval';
+
+        $this->ajaxsource = 'approval/verified';
+
+        $this->place_action = 'first';
+
+        return parent::getIndex();
+
+    }
+
+    public function postVerified()
+    {
+        $this->fields = array(
+            array('requestDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('approvalStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('assetId',array('kind'=>'text','callback'=>'dispAsset','query'=>'like','pos'=>'both','show'=>true)),
+            array('actor',array('kind'=>'text','callback'=>'dispActor' ,'query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander')))
+        );
+
+        $this->additional_query = array('approvalStatus'=>'verified');
+
+        $this->def_order_by = 'timestamp';
+        $this->def_order_dir = 'desc';
+
+        $this->place_action = 'first';
+
+        return parent::postIndex();
+    }
+
 
     public function postAdd($data = null)
     {
@@ -155,7 +265,9 @@ class ApprovalController extends AdminController {
         $delete = '<span class="del" id="'.$data['_id'].'" ><i class="icon-trash"></i>Delete</span>';
         $edit = '<a href="'.URL::to('agent/edit/'.$data['_id']).'"><i class="icon-edit"></i>Update</a>';
 
-        $actions = $edit.'<br />'.$delete;
+        $history = '<a href="'.URL::to('approval/history/'.$data['assetType'].'/'.$data['assetId']).'"><i class="fa fa-clock-o"></i> Change Detail</a>';
+
+        $actions = $history;
         return $actions;
     }
 
@@ -185,6 +297,24 @@ class ApprovalController extends AdminController {
         }else{
             return $data['docShare'];
         }
+    }
+
+    public function dispAsset($data)
+    {
+        if($data['assetType'] == 'location'){
+            return 'location';
+        }else if($data['assetType'] == 'rack'){
+            return 'rack';
+        }else{
+            $asset = Asset::find($data['assetId']);
+            return (isset($asset->SKU))?$asset->SKU:'';
+        }
+    }
+
+    public function dispActor($data)
+    {
+        $actor = User::find($data['actor']);
+        return (isset($actor->fullname))?$actor->fullname:'';
     }
 
     public function namePic($data)

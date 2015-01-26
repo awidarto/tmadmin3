@@ -66,7 +66,7 @@ class AccessController extends AdminController {
   'created_at' => new MongoDate(1390369027, 990000),
 */
         $this->heads = array(
-            array('REQUEST_TIME',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('REQUEST_TIME',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
             array('HTTP_REFERER',array('search'=>true,'sort'=>false)),
             array('REQUEST_URI',array('search'=>true,'sort'=>true)),
             array('REMOTE_ADDR',array('search'=>true,'sort'=>true)),

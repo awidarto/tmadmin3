@@ -30,7 +30,7 @@ class RackController extends AdminController {
 
         $this->heads = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
-            array('SKU',array('search'=>true,'sort'=>true)),
+            array('Rack Code',array('search'=>true,'sort'=>true)),
             //array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
             array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
             array('Description',array('search'=>true,'sort'=>true)),
@@ -48,7 +48,7 @@ class RackController extends AdminController {
 
         Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
 
-        //$this->additional_filter = View::make('rack.addfilter')->render();
+        $this->additional_filter = View::make('rack.addfilter')->render();
 
         //$this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
 

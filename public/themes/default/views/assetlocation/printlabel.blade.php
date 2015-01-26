@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Delivery Slip</title>
+    <title>Location Code</title>
 
 <style type="text/css">
     body{
@@ -109,17 +109,18 @@
 <div id="container">
 
 @foreach( $labels as $l )
-    <?php $pd = $products[ $l['SKU'] ]; ?>
+    <?php $pd = $products[ $l['_id'] ]; ?>
     <div class="label">
         <table>
             <tr>
                 <td style="text-align:center">
-                    <img src="{{ URL::to('qr/'.urlencode(base64_encode($l['SKU'])) ) }}" class="barcode" alt="{{ $l['_id'] }}" />
+                    <img src="{{ URL::to('qr/'.urlencode(base64_encode($l['_id'])) ) }}" class="barcode" alt="{{ $l['_id'] }}" />
                 </td>
             </tr>
             <tr>
                 <td style="text-align:center">
-                    {{ $pd['SKU']}}
+                    {{ $pd['_id']}}
+                    <h3>{{ $pd['name'] }}</h3>
                 </td>
             </tr>
         </table>

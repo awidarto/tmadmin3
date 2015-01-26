@@ -54,7 +54,7 @@ class ActivityController extends AdminController {
 
 
         $this->heads = array(
-            array('Time',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Time',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
             array('Main Activity',array('search'=>true,'sort'=>false)),
             array('Sub Activity',array('search'=>true,'sort'=>true)),
             array('Actor',array('search'=>true,'sort'=>true)),

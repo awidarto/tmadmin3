@@ -741,6 +741,26 @@ class AjaxController extends BaseController {
 
     }
 
+    public function postApproval(){
+        $in = Input::get();
+
+        $ticket_id = $in['ticket_id'];
+        $approval_status = $in['approval_status'];
+
+        $approval = Approval::find($ticket_id);
+        if($approval){
+            $approval->approvalStatus = $approval_status;
+            $approval->save();
+
+            return Response::json(array('result'=>'OK'));
+        }else{
+            return Response::json(array('result'=>'ERR::NOTFOUND'));
+        }
+
+
+    }
+
+
     public function postAssigncat(){
         $in = Input::get();
 

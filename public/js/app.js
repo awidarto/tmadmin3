@@ -90,16 +90,14 @@
         });
 
         $('.daterangespicker').daterangepicker({
-            format:'DD-MM-YYYY',
-            opens:'left'
+            format:'DD-MM-YYYY'
         });
 
         $('.datetimerangepicker').daterangepicker({
             format:'DD-MM-YYYY hh:mm:ss',
             timePicker: true,
             timePicker12Hour: false,
-            timePickerSeconds: true,
-            opens:'left'
+            timePickerSeconds: true
         });
 
 		$('.pop').click(function(){

@@ -38,8 +38,8 @@
                     <li class="{{ sa('approval') }}" >
                         <a href="{{ URL::to('approval') }}" class="{{ sa('approval') }}" ><i class="fa fa-clock-o"></i> Pending</a>
                     </li>
-                    <li class="{{ sa('activity') }}" >
-                        <a href="{{ URL::to('activity') }}" class="{{ sa('activity') }}" ><i class="fa fa-check-circle-o"></i> Verified</a>
+                    <li class="{{ sa('approval/verified') }}" >
+                        <a href="{{ URL::to('approval/verified') }}" class="{{ sa('approval/verified') }}" ><i class="fa fa-check-circle-o"></i> Verified</a>
                     </li>
                     {{--
                     <li class="{{ sa('access') }}">

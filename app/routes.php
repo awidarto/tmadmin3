@@ -39,6 +39,8 @@ Route::controller('apiaccess', 'ApiaccessController');
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 
+Route::controller('profile', 'ProfileController');
+
 Route::get('/', 'DashboardController@getIndex');
 
 

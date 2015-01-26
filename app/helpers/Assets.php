@@ -176,6 +176,7 @@ class Assets {
         $data = array(
             'requestDate' => new MongoDate(),
             'actor'=> Auth::user()->_id,
+            'actorName'=> Auth::user()->fullname,
             'status'=>$status,
             'assetType'=>$assettype,
             'assetId'=>$assetid,
@@ -183,6 +184,13 @@ class Assets {
             'approvalStatus'=>'pending'
         );
         return Approval::insertGetId($data);
+    }
+
+    public static function getApprovalStatus($id)
+    {
+        $apv = Approval::find($id);
+
+        return (isset($apv->approvalStatus))?$apv->approvalStatus:'';
     }
 
 

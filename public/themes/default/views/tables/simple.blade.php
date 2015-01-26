@@ -49,6 +49,20 @@ td.group{
     overflow-x: auto;
 }
 
+th.action{
+    min-width: 150px !important;
+    max-width: 200px !important;
+    width: 175px !important;
+}
+
+td i.fa{
+    font-size: 18px;
+    line-height: 20px;
+}
+
+td a{
+    line-height: 22px;
+}
 select.input-sm {
     height: 30px;
     line-height: 30px;

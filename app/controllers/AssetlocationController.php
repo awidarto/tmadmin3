@@ -45,6 +45,8 @@ class AssetlocationController extends AdminController {
         $this->title = 'Location';
         Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
 
+        $this->additional_filter = View::make('assetlocation.addfilter')->render();
+
         return parent::getIndex();
 
     }
@@ -180,6 +182,54 @@ class AssetlocationController extends AdminController {
             return $name;
         }
     }
+
+    public function getPrintlabel($sessionname, $printparam, $format = 'html' )
+    {
+        $pr = explode(':',$printparam);
+
+        $columns = $pr[0];
+        $resolution = $pr[1];
+        $cell_width = $pr[2];
+        $cell_height = $pr[3];
+        $margin_right = $pr[4];
+        $margin_bottom = $pr[5];
+        $font_size = $pr[6];
+        $code_type = $pr[7];
+        $left_offset = $pr[8];
+        $top_offset = $pr[9];
+
+        $session = Printsession::find($sessionname)->toArray();
+        $labels = Assetlocation::whereIn('_id', $session)->get()->toArray();
+
+        $skus = array();
+        foreach($labels as $l){
+            $skus[] = $l['_id'];
+        }
+
+        $skus = array_unique($skus);
+
+        $products = Assetlocation::whereIn('_id',$skus)->get()->toArray();
+
+        $plist = array();
+        foreach($products as $product){
+            $plist[$product['_id']] = $product;
+        }
+
+        return View::make('assetlocation.printlabel')
+            ->with('columns',$columns)
+            ->with('resolution',$resolution)
+            ->with('cell_width',$cell_width)
+            ->with('cell_height',$cell_height)
+            ->with('margin_right',$margin_right)
+            ->with('margin_bottom',$margin_bottom)
+            ->with('font_size',$font_size)
+            ->with('code_type',$code_type)
+            ->with('left_offset', $left_offset)
+            ->with('top_offset', $top_offset)
+            ->with('products',$plist)
+            ->with('labels', $labels);
+    }
+
 
     public function getViewpics($id)
     {

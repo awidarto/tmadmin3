@@ -93,3 +93,27 @@ img.avatar{
 .form-vertical input[type=submit], .form-vertical a.btn{
     margin-top: 15px;
 }
+
+dl {
+    margin-bottom:50px;
+}
+
+dl dt {
+    background:#5f9be3;
+    color:#fff;
+    float:left;
+    font-weight:bold;
+    margin-right:10px;
+    padding:5px;
+    width:150px;
+}
+
+dl dd {
+    margin:2px 0;
+    padding:5px 0;
+}
+
+.avatar-medium{
+    width:150px;
+    height: auto;
+}

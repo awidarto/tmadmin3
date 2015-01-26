@@ -24,6 +24,71 @@ class AssetController extends AdminController {
         print $raw->toJSON();
     }
 
+    public function getDetail($id)
+    {
+        $_id = new MongoId($id);
+        $history = History::where('historyObject._id',$_id)->where('historyObjectType','asset')
+                        ->orderBy('historyTimestamp','desc')
+                        ->orderBy('historySequence','desc')
+                        ->get();
+        $diffs = array();
+
+        foreach($history as $h){
+            $h->date = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
+            $diffs[$h->date][$h->historySequence] = $h->historyObject;
+        }
+
+        $history = History::where('historyObject._id',$_id)->where('historyObjectType','asset')
+                        ->where('historySequence',0)
+                        ->orderBy('historyTimestamp','desc')
+                        ->get();
+
+        $tab_data = array();
+        foreach($history as $h){
+                $apv_status = Assets::getApprovalStatus($h->approvalTicket);
+                if($apv_status == 'pending'){
+                    $bt_apv = '<span class="btn btn-info change-approval '.$h->approvalTicket.'" data-id="'.$h->approvalTicket.'" >'.$apv_status.'</span>';
+                }else if($apv_status == 'verified'){
+                    $bt_apv = '<span class="btn btn-success" >'.$apv_status.'</span>';
+                }else{
+                    $bt_apv = '';
+                }
+
+                $d = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
+                $tab_data[] = array(
+                    $d,
+                    $h->historyAction,
+                    $h->historyObject['SKU'],
+                    ($h->historyAction == 'new')?'NA':$this->objdiff( $diffs[$d] ),
+                    $bt_apv
+                );
+        }
+
+        $header = array(
+            'Modified',
+            'Event',
+            'Name',
+            'Diff',
+            'Approval'
+            );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($tab_data, $attr, $header);
+        $itemtable = $t->build();
+
+        $asset = Asset::find($id);
+
+        Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
+        Breadcrumbs::addCrumb('Detail',URL::to( strtolower($this->controller_name).'/detail/'.$asset->_id ));
+        Breadcrumbs::addCrumb($asset->SKU,URL::to( strtolower($this->controller_name) ));
+
+        return View::make('history.table')
+                    ->with('a',$asset)
+                    ->with('title','Asset Detail '.$asset->SKU )
+                    ->with('table',$itemtable);
+    }
+
+
     public function getHistory($id)
     {
         $_id = new MongoId($id);
@@ -45,12 +110,21 @@ class AssetController extends AdminController {
 
         $tab_data = array();
         foreach($history as $h){
-                    $d = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
+                $apv_status = Assets::getApprovalStatus($h->approvalTicket);
+                if($apv_status == 'pending'){
+                    $bt_apv = '<span class="btn btn-info change-approval '.$h->approvalTicket.'" data-id="'.$h->approvalTicket.'" >'.$apv_status.'</span>';
+                }else if($apv_status == 'verified'){
+                    $bt_apv = '<span class="btn btn-success" >'.$apv_status.'</span>';
+                }else{
+                    $bt_apv = '';
+                }
+                $d = date( 'Y-m-d H:i:s', $h->historyTimestamp->sec );
                 $tab_data[] = array(
                     $d,
                     $h->historyAction,
                     $h->historyObject['SKU'],
-                    $this->objdiff( $diffs[$d] )
+                    ($h->historyAction == 'new')?'NA':$this->objdiff( $diffs[$d] ),
+                    $bt_apv
                 );
         }
 
@@ -58,14 +132,23 @@ class AssetController extends AdminController {
             'Modified',
             'Event',
             'Name',
-            'Diff'
+            'Diff',
+            'Approval'
             );
 
         $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
         $t = new HtmlTable($tab_data, $attr, $header);
         $itemtable = $t->build();
 
-        return View::make('history.table')->with('table',$itemtable);
+        $asset = Asset::find($id);
+
+        Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
+        Breadcrumbs::addCrumb('History',URL::to( strtolower($this->controller_name) ));
+
+        return View::make('history.table')
+                    ->with('a',$asset)
+                    ->with('title','Change History')
+                    ->with('table',$itemtable);
     }
 
     public function objdiff($obj)
@@ -77,7 +160,9 @@ class AssetController extends AdminController {
                 if(isset($obj[0][$key]) && isset($obj[1][$key])){
                     if($obj[0][$key] !== $obj[1][$key]){
                         if($key != '_id' && $key != 'createdDate' && $key != 'lastUpdate'){
-                            $diff[] = $key.' : '. $obj[0][$key].' -> '.$obj[1][$key];
+                            if(!is_array($obj[0][$key])){
+                                $diff[] = $key.' : '. $obj[0][$key].' -> '.$obj[1][$key];
+                            }
                         }
                     }
                 }
@@ -88,6 +173,32 @@ class AssetController extends AdminController {
         }
     }
 
+    public function ismoving($obj){
+        $location_move = false;
+        $rack_move = false;
+        if(is_array($obj) && count($obj) == 2){
+
+            if(isset($obj[0]['locationId']) && isset($obj[1]['locationId'])){
+                if($obj[0]['locationId'] !== $obj[0]['locationId']){
+                    $location_move = true;
+                }
+            }
+
+            if(isset($obj[0]['rackId']) && isset($obj[1]['rackId'])){
+                if($obj[0]['rackId'] !== $obj[0]['rackId']){
+                    $rack_move = true;
+                }
+            }
+
+            return array(
+                    'location_move'=>$location_move,
+                    'rack_move'=>$rack_move
+                );
+        }else{
+            return 'NA';
+        }
+
+    }
 
     public function getIndex()
     {
@@ -116,7 +227,7 @@ class AssetController extends AdminController {
 
         Breadcrumbs::addCrumb('Assets',URL::to( strtolower($this->controller_name) ));
 
-        //$this->additional_filter = View::make('asset.addfilter')->render();
+        $this->additional_filter = View::make('asset.addfilter')->render();
 
         $this->js_additional_param = "aoData.push( { 'name':'categoryFilter', 'value': $('#assigned-product-filter').val() } );";
 
@@ -192,24 +303,6 @@ class AssetController extends AdminController {
                 $data['defaultpictures'] = $data['files'][$data['file_id'][$i]];
 
             }
-                /*
-                unset($data['role']);
-                unset($data['thumbnail_url']);
-                unset($data['large_url']);
-                unset($data['medium_url']);
-                unset($data['full_url']);
-                unset($data['delete_type']);
-                unset($data['delete_url']);
-                unset($data['filename']);
-                unset($data['filesize']);
-                unset($data['temp_dir']);
-                unset($data['filetype']);
-                unset($data['is_image']);
-                unset($data['is_audio']);
-                unset($data['is_video']);
-                unset($data['fileurl']);
-                unset($data['file_id']);
-                */
 
         }else{
 
@@ -256,24 +349,6 @@ class AssetController extends AdminController {
                 $data['defaultpictures'] = $data['files'][$data['file_id'][$i]];
 
             }
-                /*
-                unset($data['role']);
-                unset($data['thumbnail_url']);
-                unset($data['large_url']);
-                unset($data['medium_url']);
-                unset($data['full_url']);
-                unset($data['delete_type']);
-                unset($data['delete_url']);
-                unset($data['filename']);
-                unset($data['filesize']);
-                unset($data['temp_dir']);
-                unset($data['filetype']);
-                unset($data['is_image']);
-                unset($data['is_audio']);
-                unset($data['is_video']);
-                unset($data['fileurl']);
-                unset($data['file_id']);
-                */
 
         }else{
 
@@ -294,12 +369,15 @@ class AssetController extends AdminController {
 
     public function afterSave($data)
     {
+        $apvticket = Assets::createApprovalRequest('new', $data['assetType'],$data['_id'], $data['_id'] );
+
         $hdata = array();
         $hdata['historyTimestamp'] = new MongoDate();
         $hdata['historyAction'] = 'new';
         $hdata['historySequence'] = 0;
         $hdata['historyObjectType'] = 'asset';
         $hdata['historyObject'] = $data;
+        $hdata['approvalTicket'] = $apvticket;
         History::insert($hdata);
 
         return $data;
@@ -309,15 +387,17 @@ class AssetController extends AdminController {
     {
         $data['_id'] = new MongoId($id);
 
+
         $hdata = array();
         $hdata['historyTimestamp'] = new MongoDate();
         $hdata['historyAction'] = 'update';
         $hdata['historySequence'] = 1;
         $hdata['historyObjectType'] = 'asset';
         $hdata['historyObject'] = $data;
+        $hdata['approvalTicket'] = '';
         History::insert($hdata);
 
-        Assets::createApprovalRequest('update', $data['assetType'],$id, $id );
+
         return $id;
     }
 
@@ -347,11 +427,14 @@ class AssetController extends AdminController {
         $hobj = Asset::find($id)->toArray();
         $hobj['_id'] = new MongoId($id);
 
+        $apvticket = Assets::createApprovalRequest('update', $hobj['assetType'],$id, $id );
+
         $hdata['historyTimestamp'] = new MongoDate();
         $hdata['historyAction'] = 'update';
         $hdata['historySequence'] = 0;
         $hdata['historyObjectType'] = 'asset';
         $hdata['historyObject'] = $hobj;
+        $hdata['approvalTicket'] = $apvticket;
         History::insert($hdata);
 
         return parent::postEdit($id,$data);
@@ -559,7 +642,7 @@ class AssetController extends AdminController {
     {
         $display = HTML::image(URL::to('qr/'.urlencode(base64_encode($data['SKU']))), $data['SKU'], array('id' => $data['_id'], 'style'=>'width:100px;height:auto;' ));
         //$display = '<a href="'.URL::to('barcode/dl/'.urlencode($data['SKU'])).'">'.$display.'</a>';
-        return $display.'<br />'.$data['SKU'];
+        return $display.'<br />'. '<a href="'.URL::to('asset/detail/'.$data['_id']).'" >'.$data['SKU'].'</a>';
     }
 
 
