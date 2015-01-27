@@ -572,7 +572,7 @@ class AjaxController extends BaseController {
 
         $_id = Auth::user()->id;
 
-        $def = Printdefault::where('ownerId',$_id)->first();
+        $def = Printdefault::where('ownerId',$_id)->where('type',$in['type'])->first();
 
         if($def){
 

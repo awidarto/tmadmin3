@@ -339,7 +339,7 @@ class RackController extends AdminController {
     public function getPrintlabel($sessionname, $printparam, $format = 'html' )
     {
         $pr = explode(':',$printparam);
-
+            //2:150:250:300:8:10:12:barcode:undefined:undefined
         $columns = $pr[0];
         $resolution = $pr[1];
         $cell_width = $pr[2];
@@ -368,7 +368,7 @@ class RackController extends AdminController {
             $plist[$product['SKU']] = $product;
         }
 
-        return View::make('asset.printlabel')
+        return View::make('rack.printlabel')
             ->with('columns',$columns)
             ->with('resolution',$resolution)
             ->with('cell_width',$cell_width)

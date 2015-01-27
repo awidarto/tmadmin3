@@ -1,6 +1,18 @@
 @extends('layout.fixedstatic')
 
 @section('left')
+<style type="text/css">
+    ul.gallery{
+        list-style:none;
+        padding-left: 0px !important;
+    }
+    ul.gallery li{
+        float: left;
+        display: block;
+        margin-right: 4px;
+        cursor:pointer;
+    }
+</style>
 <dl>
     <dt>Asset Code</dt>
     <dd>{{ $a->SKU }}</dd>
@@ -37,8 +49,15 @@
     <dd>{{ $a->tags }}</dd>
 
 </dl>
-
-
+@if(isset($a->files))
+<ul class="gallery">
+    @foreach($a->files as $k=>$f)
+        <li>
+            <img  class="thumbnail" data-href="{{ $f['full_url'] }}" src="{{ $f['thumbnail_url'] }}" alt="">
+        </li>
+    @endforeach
+</ul>
+@endif
 @stop
 
 @section('right')
@@ -64,6 +83,15 @@
   </div>
 </div>
 
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
 
 @stop
 
@@ -137,6 +165,25 @@
             }
 
         });
+
+        $('.thumbnail').on('click',function(){
+            var links = [];
+
+            var g = $('.thumbnail');
+
+            g.each(function(){
+                links.push({
+                    href:$(this).data('href'),
+                    title:''
+                });
+            })
+            var options = {
+                carousel: false
+            };
+
+            blueimp.Gallery(links, options);
+        });
+
 
     });
 </script>

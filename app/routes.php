@@ -265,6 +265,12 @@ Route::get('qr/{txt}',function($txt){
     return QRCode::format('png')->size(399)->color(40,40,40)->generate($txt);
 });
 
+Route::get('pdf417/{txt}',function($txt){
+    $txt = base64_decode($txt);
+    header('Content-Type: image/svg+xml');
+    print DNS2D::getBarcodeSVG($txt, "PDF417");
+});
+
 Route::get('media',function(){
     $media = Product::all();
 

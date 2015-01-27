@@ -162,4 +162,25 @@ class Prefs {
         return Config::get('kickstart.default_theme');
     }
 
+    public static function getPrintDefault($type = 'asset'){
+        $printdef = Printdefault::where('ownerId',Auth::user()->_id)
+                        ->where('type',$type)
+                        ->first();
+        if($printdef){
+            return $printdef;
+        }else{
+            $d = new stdClass();
+            $d->col = 2;
+            $d->res = 150;
+            $d->cell_width = 250;
+            $d->cell_height = 300;
+            $d->margin_right = 8;
+            $d->margin_bottom = 10;
+            $d->font_size = 8;
+            $d->code_type = 'qr';
+
+            return $d;
+        }
+    }
+
 }

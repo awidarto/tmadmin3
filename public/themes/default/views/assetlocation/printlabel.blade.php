@@ -114,7 +114,11 @@
         <table>
             <tr>
                 <td style="text-align:center">
-                    <img src="{{ URL::to('qr/'.urlencode(base64_encode($l['_id'])) ) }}" class="barcode" alt="{{ $l['_id'] }}" />
+                    @if($code_type == 'qr')
+                        <img src="{{ URL::to('qr/'.urlencode(base64_encode($l['_id'])) ) }}" class="barcode" alt="{{ $l['_id'] }}" />
+                    @else
+                        <img src="{{ URL::to('pdf417/'.urlencode(base64_encode($l['_id'])) ) }}" class="barcode" alt="{{ $l['_id'] }}" />
+                    @endif
                 </td>
             </tr>
             <tr>

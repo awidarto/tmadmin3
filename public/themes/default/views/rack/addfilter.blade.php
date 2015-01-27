@@ -7,26 +7,30 @@
     </div>
     <div class="modal-body" style="overflow:auto;" >
         <h6>Print options</h6>
+
+        <?php
+            $d = Prefs::getPrintDefault('rack');
+        ?>
         <div style="border-bottom:thin solid #ccc;" class="row form-vertical clearfix">
             <div class="col-md-2">
-                {{ Former::text('label_columns','Number of columns')->value('2')->id('label_columns')->class('form-control input-sm') }}
-                {{ Former::text('label_res','Resolution')->value('150')->id('label_res')->class('form-control input-sm') }}
+                {{ Former::text('label_columns','Number of columns')->value($d->col)->id('label_columns')->class('form-control input-sm') }}
+                {{ Former::text('label_res','Resolution')->value($d->res)->id('label_res')->class('form-control input-sm') }}
             </div>
             <div class="col-md-2">
-                {{ Former::text('label_cell_height','Label height')->value('300')->id('label_cell_height')->class('form-control input-sm') }}
-                {{ Former::text('label_cell_width','Label width')->value('250')->id('label_cell_width')->class('form-control input-sm') }}
+                {{ Former::text('label_cell_height','Label height')->value($d->cell_height)->id('label_cell_height')->class('form-control input-sm') }}
+                {{ Former::text('label_cell_width','Label width')->value($d->cell_width )->id('label_cell_width')->class('form-control input-sm') }}
             </div>
             <div class="col-md-2">
-                {{ Former::text('label_margin_right','Label margin right')->value('8')->id('label_margin_right')->class('form-control input-sm') }}
-                {{ Former::text('label_margin_bottom','Label margin bottom')->value('10')->id('label_margin_bottom')->class('form-control input-sm') }}
+                {{ Former::text('label_margin_right','Label margin right')->value( $d->margin_right )->id('label_margin_right')->class('form-control input-sm') }}
+                {{ Former::text('label_margin_bottom','Label margin bottom')->value( $d->margin_bottom )->id('label_margin_bottom')->class('form-control input-sm') }}
             </div>
             <div class="col-md-2">
                 {{ Former::text('label_offset_right','Page left offset')->value('40')->id('label_offset_right')->class('form-control input-sm') }}
                 {{ Former::text('label_offset_bottom','Page top offset')->value('20')->id('label_offset_bottom')->class('form-control input-sm') }}
             </div>
             <div class="col-md-2">
-                {{ Former::text('font_size','Font size')->value('12')->id('font_size')->class('form-control input-sm') }}
-                {{ Former::select('code_type','Code type')->id('code_type')->options(array('qr'=>'QR','barcode'=>'Barcode') )}}
+                {{ Former::text('font_size','Font size')->value( $d->font_size )->id('font_size')->class('form-control input-sm') }}
+                {{ Former::select('code_type','Code type')->id('code_type')->options(array('qr'=>'QR','pdf417'=>'PDF417'), $d->code_type ) }}
             </div>
             <div class="col-md-2">
                 <button id="label_default" class="form-control" >make default</button>
@@ -150,6 +154,7 @@ button#label_default{
         });
 
         $('#label_default').on('click',function(){
+            var type = 'rack';
             var col = $('#label_columns').val();
             var res = $('#label_res').val();
             var cell_width = $('#label_cell_width').val();
@@ -163,6 +168,7 @@ button#label_default{
 
             $.post('{{ URL::to('ajax/printdefault')}}',
                 {
+                    type : type,
                     col : col,
                     res : res,
                     cell_width : cell_width,
