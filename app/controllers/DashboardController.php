@@ -12,7 +12,7 @@ class DashboardController extends AdminController {
         //$this->crumb->append('Home','left',true);
         //$this->crumb->append(strtolower($this->controller_name));
 
-        $this->model = new Asset();
+        $this->model = new Activelog();
         //$this->model = DB::collection('documents');
 
     }
@@ -29,11 +29,20 @@ class DashboardController extends AdminController {
     {
 
         $this->heads = array(
+            array('Time',array('search'=>true,'sort'=>true,'datetimerange'=>true)),
+            array('Main Activity',array('search'=>true,'sort'=>false)),
+            array('Sub Activity',array('search'=>true,'sort'=>true)),
+            array('Actor',array('search'=>true,'sort'=>true)),
+            array('Result',array('search'=>true,'sort'=>true)),
+        );
+
+        $heads_two = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
-            array('SKU',array('search'=>true,'sort'=>true)),
-            array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
+            array('#',array('search'=>false,'sort'=>false)),
             array('Status',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.inventory_status_select') )),
-            array('Mutated',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
+            array('Asset',array('search'=>true,'sort'=>true)),
+            array('Requester',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
+            array('Request Date',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
@@ -43,6 +52,17 @@ class DashboardController extends AdminController {
         $this->place_action = 'none';
 
         $this->is_additional_action = true;
+
+        $this->additional_table_param = array(
+                'title_one'=>'Activities',
+                'title_two'=>'Approval Requests',
+                'ajax_url_one'=>URL::to('dashboard'),
+                'ajax_url_two'=>URL::to('dashboard/approval'),
+                'secondary_heads'=>$heads_two
+
+            );
+
+        $this->show_select = false;
 
         $this->title = 'Dashboard';
 
@@ -56,17 +76,44 @@ class DashboardController extends AdminController {
     {
 
         $this->fields = array(
-            array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('action',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('timestamp',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('class',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('method',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('actor',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'attr'=>array('class'=>'expander'))),
+            array('result',array('kind'=>'text','query'=>'like','callback'=>'eventResult','pos'=>'both','show'=>true)),
         );
 
         $this->place_action = 'none';
 
-        $this->def_order_by = 'scancheckDate';
+        $this->def_order_by = 'timestamp';
 
         $this->def_order_dir = 'desc';
+
+        $this->show_select = false;
+
+        return parent::postIndex();
+    }
+
+
+    public function postApproval()
+    {
+
+        $this->fields = array(
+            array('approvalStatus',array('kind'=>'text','callback'=>'buttonStatus','query'=>'like','pos'=>'both','show'=>true)),
+            array('assetId',array('kind'=>'text','callback'=>'assetName','query'=>'like','pos'=>'both','show'=>true)),
+            array('actorName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('requestDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+        );
+
+        $this->place_action = 'none';
+
+        $this->def_order_by = 'requestDate';
+
+        $this->def_order_dir = 'desc';
+
+        $this->model = new Approval();
+
+        $this->show_select = false;
 
         return parent::postIndex();
     }
@@ -428,6 +475,35 @@ class DashboardController extends AdminController {
         }
     }
 
+    public function eventResult($data)
+    {
+        if(json_decode($data['result'])){
+            return 'more';
+        }else{
+            return $data['result'];
+        }
+    }
+
+    public function buttonStatus($data)
+    {
+        if($data['approvalStatus'] == 'verified'){
+            return '<span class="btn btn-success">'.$data['approvalStatus'].'</span>';
+        }else{
+            return '<span class="btn btn-info">'.$data['approvalStatus'].'</span>';
+        }
+    }
+
+    public function assetName($data)
+    {
+        $asset = Asset::find($data['assetId']);
+
+        if($asset){
+            return '<a href="'.URL::to('asset/detail/'.$data['assetId']).'" >'.$asset->SKU.'</a>';
+        }else{
+            return '-';
+        }
+
+    }
 
     public function namePic($data)
     {

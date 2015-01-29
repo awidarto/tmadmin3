@@ -36,6 +36,10 @@ Route::controller('activity', 'ActivityController');
 Route::controller('access', 'AccessController');
 Route::controller('apiaccess', 'ApiaccessController');
 
+//report routes
+Route::controller('approvalreport', 'ApprovalreportController');
+
+
 Route::controller('upload', 'UploadController');
 Route::controller('ajax', 'AjaxController');
 

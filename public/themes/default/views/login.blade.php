@@ -2,7 +2,7 @@
 
 @section('content')
 <?php Former::framework('TwitterBootstrap3') ?>
-{{ Former::open_vertical('login') }}
+{{ Former::open_vertical('login')->class('form-signin')->role('form') }}
 
         <h2>Welcome to {{ Config::get('site.name')}}</h2>
         <h6>
@@ -17,13 +17,12 @@
 
             {{ Former::password('password','Password')->placeholder('Your password')->id('password') }}
 
-            <label class="pull-left">
+            <label class="checkbox">
                 <input type="checkbox" value="remember-me" name="remember"> Remember me
             </label>
 
             <button class="btn btn-primary btn-block" type="submit">Sign in</button>
 
 {{ Form::close() }}
-
 
 @stop

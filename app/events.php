@@ -15,6 +15,20 @@ Event::listen('log.a',function($class, $method, $actor, $result){
     return true;
 });
 
+Event::listen('log.api',function($class, $method, $actor, $result){
+    $data = array(
+            'timestamp'=>new MongoDate(),
+            'class'=>$class,
+            'method'=>$method,
+            'actor'=>$actor,
+            'result'=>$result
+        );
+
+    Apilog::insert($data);
+
+    return true;
+});
+
 Event::listen('cleanup',function(){
 
     $last = new MongoDate( time() - Config::get('ia.reserveTimeOut') );

@@ -24,7 +24,7 @@
                     @foreach( Config::get('role.actions') as $a )
                         <li>
                             <label>
-                                <input type="checkbox" name="{{ $e.'_'.$a }}" {{ ($formdata[$e.'_'.$a] == 'on')?'checked':'' }} > {{ $a }}
+                                <input type="checkbox" name="{{ $e.'_'.$a }}" {{ ( isset($formdata[$e.'_'.$a]) && $formdata[$e.'_'.$a] == 'on')?'checked':'' }} > {{ $a }}
                             </label>
                         </li>
                     @endforeach

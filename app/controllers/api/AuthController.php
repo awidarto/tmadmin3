@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Response;
 
 class AuthController extends \Controller {
+
+    public $controller_name = '';
+
 	public function  __construct()
 	{
 		//$this->model = "Member";
+        $this->controller_name = strtolower( str_replace('Controller', '', get_class()) );
+
 	}
 	/**
 	 * Display a listing of the resource.
@@ -131,11 +136,16 @@ class AuthController extends \Controller {
 
                         $retVal = array_merge(array("status" => "OK", "msg" => "Login Success.", "key" => $sessionKey), $userarray) ;
 
-    				}
-    			}
+                        $actor = $user->fullname.' - '.$user->email;
+                        Event::fire('log.api',array($this->controller_name, 'login' ,$actor,'logged in'));
 
-    		}
-    		catch (ModelNotFoundException $e){
+    				}
+    			}else{
+                        $actor = Input::get('user');
+                        Event::fire('log.api',array($this->controller_name, 'login' ,$actor,'user not found'));
+                }
+
+    		}catch (ModelNotFoundException $e){
 
     		}
 
@@ -159,10 +169,19 @@ class AuthController extends \Controller {
 	    		$user = \User::where('session_key', '=', Input::get('session_key'))->firstorFail();
 	    		if($user)
 	    		{
-	    				$retVal = array("status" => "OK");
-	    				$user->session_key = null;
-	    				$user->save();
-	    		}
+    				$retVal = array("status" => "OK");
+    				$user->session_key = null;
+    				$user->save();
+
+                    $actor = $user->fullname.' - '.$user->email;
+                    Event::fire('log.api',array($this->controller_name, 'logout' ,$actor,'logged out'));
+
+	    		}else{
+                    $actor = Input::get('session_key');
+                    Event::fire('log.api',array($this->controller_name, 'logout' ,$actor,'user not found'));
+                }
+
+
     		}
     		catch (ModelNotFoundException $e)
     		{

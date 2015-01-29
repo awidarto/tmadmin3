@@ -5,6 +5,8 @@ return array(
                 'asset',
                 'location',
                 'rack',
+                'approval',
+                'devicetype',
                 'report',
                 'log',
                 'user'

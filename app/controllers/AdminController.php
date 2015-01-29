@@ -98,6 +98,7 @@ class AdminController extends Controller {
 
     public $table_view = 'tables.simple';
 
+    public $additional_table_param = array();
     //public $product_info_url = 'ajax/productinfo';
 
     public $product_info_url = null;
@@ -139,7 +140,14 @@ class AdminController extends Controller {
     public function getIndex()
     {
 
+
         Breadcrumbs::addCrumb($this->title,URL::to('/'));
+
+        $controller_name = strtolower($this->controller_name);
+
+        $actor = (isset(Auth::user()->email))?Auth::user()->fullname.' - '.Auth::user()->email:'guest';
+        Event::fire('log.a',array($controller_name, 'view list' ,$actor,'OK'));
+
         return $this->pageGenerator();
     }
 
@@ -231,6 +239,7 @@ class AdminController extends Controller {
             ->with('table_group_collapsible', $this->table_group_collapsible)
             ->with('js_table_event', $this->js_table_event)
             ->with('additional_page_data',$this->additional_page_data)
+            ->with('additional_table_param',$this->additional_table_param)
             ->with('product_info_url',$this->product_info_url)
             ->with('prefix',$this->prefix)
 			->with('heads',$heads )
@@ -662,7 +671,11 @@ class AdminController extends Controller {
 
 	    $validation = Validator::make($input = $data, $this->validator);
 
+        $actor = (isset(Auth::user()->email))?Auth::user()->fullname.' - '.Auth::user()->email:'guest';
+
 	    if($validation->fails()){
+
+            Event::fire('log.a',array($controller_name, 'add' ,$actor,'validation failed'));
 
 	    	return Redirect::to($controller_name.'/add')->withErrors($validation)->withInput(Input::all());
 
@@ -682,19 +695,22 @@ class AdminController extends Controller {
 
 			$model = $this->model;
 
-
 			$data = $this->beforeSave($data);
+
 
 			if($obj = $model->insert($data)){
 
 				$obj = $this->afterSave($data);
 
+                Event::fire('log.a',array($controller_name, 'add' ,$actor,json_encode($obj)));
 				//Event::fire('product.createformadmin',array($obj['_id'],$passwordRandom,$obj['conventionPaymentStatus']));
 		    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
 			}else{
-		    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
-			}
 
+                Event::fire('log.a',array($controller_name, 'add' ,$actor,'saving failed'));
+
+    	    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
+			}
 
 	    }
 
@@ -751,10 +767,13 @@ class AdminController extends Controller {
 
 	    $validation = Validator::make($input = Input::all(), $this->validator);
 
+        $actor = (isset(Auth::user()->email))?Auth::user()->fullname.' - '.Auth::user()->email:'guest';
+
 	    if($validation->fails()){
 
+            Event::fire('log.a',array($controller_name, 'update' ,$actor,'validation failed'));
+
 	    	return Redirect::to($controller_name.'/edit/'.$id)->withInput(Input::all())->withErrors($validation);
-	    	//->with_input(Input::all());
 
 	    }else{
 
@@ -787,9 +806,15 @@ class AdminController extends Controller {
 
 				$obj = $this->afterUpdate($id,$data);
 				if($obj != false){
+
+                    Event::fire('log.a',array($controller_name, 'update' ,$actor,json_encode($obj)));
+
 			    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saved successfully');
 				}
 			}else{
+
+                Event::fire('log.a',array($controller_name, 'update' ,$actor,'saving failed'));
+
 		    	return Redirect::to($this->backlink)->with('notify_success',ucfirst(Str::singular($controller_name)).' saving failed');
 			}
 

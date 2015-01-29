@@ -1,4 +1,10 @@
 <?php
+namespace Api;
+
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Response;
 
 class AssetapiController extends \BaseController {
 
@@ -9,6 +15,8 @@ class AssetapiController extends \BaseController {
 	 */
 	public function index()
 	{
+        $key = Input::get('key');
+
         $assets = Asset::get();
         for($i = 0; $i < count($assets);$i++){
 
@@ -63,7 +71,12 @@ class AssetapiController extends \BaseController {
                 $assets[$i]->createdDate = date('Y-m-d H:i:s',$assets[$i]->createdDate->sec);
                 $assets[$i]->lastUpdate = date('Y-m-d H:i:s',$assets[$i]->lastUpdate->sec);
 
+
         }
+
+        $actor = $key;
+        Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'logged out'));
+
         return $assets;
 		//
 	}

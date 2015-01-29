@@ -1,60 +1,61 @@
 <!DOCTYPE html>
-<html class="no-js">
-
-<head>
-    <!-- Some assets concatenated and minified to improve load speed. Download version includes source css, javascript and less assets -->
-    <!-- meta -->
+<html>
+  <head>
     <meta charset="utf-8">
-    <meta name="description" content="Flat, Clean, Responsive, admin template built with bootstrap 3">
-    <meta name="viewport" content="width=device-width, user-scalable=1, initial-scale=1, maximum-scale=1">
-
     <title>{{ Config::get('site.name') }}</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="favicon_16.ico"/>
+    <link rel="bookmark" href="favicon_16.ico"/>
+    <!-- site css -->
 
-    <!-- bootstrap -->
-    {{ HTML::style('bootflat/css/site.min.css')}}
-    <!-- /bootstrap -->
+    {{ HTML::style('bootflat-admin/css/site.min.css')}}
 
-    <!-- page styles -->
+    {{ HTML::style('css/typography.css')}}
+
     @include('layout.css')
-    <!-- /page styles -->
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    {{ HTML::style('bootflat-admin/css/style.css')}}
+
+    <!-- <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'> -->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
-        <script src="{{ URL::to('cameo') }}/https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="{{ URL::to('cameo') }}/https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
     <![endif]-->
+    {{ HTML::script('bootflat-admin/js/site.min.js') }}
+    <style>
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #b60e10;
+        color: #C1C3C6
+      }
 
-    <!-- load modernizer -->
-    {{ HTML::script('bootflat/js/site.min.js')}}
-    <style type="text/css">
-        .bg-dark{
-            background-color: #8b1a1a;
-        }
+      .h2, h2{
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .form-signin{
+        max-width: 330px;
+      }
+
+      .form-signin input {
+        background-color: #FFF;
+      }
+
+      .btn-primary, .btn-primary.active, .btn-primary.disabled, .btn-primary:active, .btn-primary[disabled] {
+        border: thin solid #fff;
+      }
+
+
     </style>
-
-</head>
-
-<body class="bg-dark">
-    <div class="app-user">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-
-                </div>
-                <div  class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="display:table;">
-                    <div class="panel panel-primary" style="margin-top:100px;">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ $title }}</h3>
-                        </div>
-                        <div class="panel-body">
-                            @yield('content')
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  </head>
+  <body>
+    <div class="container">
+      @yield('content')
     </div>
-
-</body>
-
+    <div class="clearfix"></div>
+    <!--footer-->
+  </body>
 </html>

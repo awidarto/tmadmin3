@@ -11,13 +11,13 @@
     <title>{{ Config::get('site.name') }}</title>
 
     <!-- Bootstrap core CSS -->
-    {{ HTML::style('bootflat/css/site.min.css')}}
+    {{ HTML::style('bootflat-admin/css/site.min.css')}}
 
     {{ HTML::style('css/typography.css')}}
 
     @include('layout.css')
 
-    {{ HTML::style('bootflat/css/style.css')}}
+    {{ HTML::style('bootflat-admin/css/style.css')}}
 
     {{-- HTML::style('datatables/css/jquery.dataTables.min.css') --}}
 

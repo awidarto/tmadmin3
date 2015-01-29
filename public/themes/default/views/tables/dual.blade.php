@@ -82,10 +82,12 @@ select.input-sm {
             @if(isset($can_add) && $can_add == true)
                 <a href="{{ URL::to($addurl) }}" class="btn btn-sm btn-primary">Add</a>
                 <a href="{{ URL::to($importurl) }}" class="btn btn-sm btn-primary">Import Excel</a>
+
+                <a class="btn btn-info btn-sm" id="download-xls">Download Excel</a>
+                <a class="btn btn-info btn-sm" id="download-csv">Download CSV</a>
+
             @endif
 
-            <a class="btn btn-info btn-sm" id="download-xls">Download Excel</a>
-            <a class="btn btn-info btn-sm" id="download-csv">Download CSV</a>
 
             @if(isset($is_report) && $is_report == true)
                 {{ $report_action }}
@@ -104,7 +106,8 @@ select.input-sm {
 <div class="container">
 <div class="row">
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <table class="table table-striped mg-t dataTable">
+        <h5>{{ $additional_table_param['title_one'] }}</h5>
+        <table class="table table-striped dataTable one">
 
             <thead>
 
@@ -154,6 +157,7 @@ select.input-sm {
                 $form = new Former();
             ?>
 
+            @if(isset($table_search_1) && $table_search_1 == true)
             <thead id="searchinput">
                 <tr>
                 <?php $index = -1 ;?>
@@ -226,7 +230,7 @@ select.input-sm {
                 @endforeach
                 </tr>
             </thead>
-
+            @endif
          <tbody>
             <!-- will be replaced by ajax content -->
          </tbody>
@@ -235,12 +239,14 @@ select.input-sm {
     </div>
 
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <table class="table table-striped mg-t dataTable">
+        <h5>{{ $additional_table_param['title_two'] }}</h5>
+
+        <table class="table table-striped dataTable two">
 
             <thead>
 
                 <tr>
-                    @foreach($heads as $head)
+                    @foreach($additional_table_param['secondary_heads'] as $head)
                         @if(is_array($head))
                             <th
                                 @foreach($head[1] as $key=>$val)
@@ -285,6 +291,7 @@ select.input-sm {
                 $form = new Former();
             ?>
 
+            @if(isset($table_search_2) && $table_search_2 == true)
             <thead id="searchinput">
                 <tr>
                 <?php $index = -1 ;?>
@@ -357,7 +364,7 @@ select.input-sm {
                 @endforeach
                 </tr>
             </thead>
-
+            @endif
          <tbody>
             <!-- will be replaced by ajax content -->
          </tbody>
@@ -383,7 +390,7 @@ select.input-sm {
 
 <script type="text/javascript">
 
-	var oTable;
+	var oTableOne, oTableTwo;
 
 	var current_pay_id = 0;
 	var current_del_id = 0;
@@ -397,8 +404,6 @@ select.input-sm {
 	function fnFormatDetails ( nTr )
 	{
 	    var aData = oTable.fnGetData( nTr );
-
-	    //console.log(aData);
 
 	    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
 
@@ -458,15 +463,15 @@ select.input-sm {
 
 		asInitVals = new Array();
 
-        oTable = $('.dataTable').DataTable(
+        oTableOne = $('.dataTable.one').DataTable(
 			{
 				"bProcessing": true,
 		        "bServerSide": true,
-		        "sAjaxSource": "{{$ajaxsource}}",
+		        "sAjaxSource": "{{$additional_table_param['ajax_url_one']}}",
 				"oLanguage": { "sSearch": "Search "},
 				"sPaginationType": "full_numbers",
-                "sDom": '<".container" <"#paginator" lp>i >rt',
-				"iDisplayLength":50,
+                "sDom": '< <"#paginator" lp>i >rt',
+				"iDisplayLength":10,
 
 				@if(isset($excludecol) && $excludecol != '')
 				"oColVis": {
@@ -495,8 +500,45 @@ select.input-sm {
 			}
         );
 
+        oTableTwo = $('.dataTable.two').DataTable(
+            {
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "{{$additional_table_param['ajax_url_two']}}",
+                "oLanguage": { "sSearch": "Search "},
+                "sPaginationType": "full_numbers",
+                "sDom": '< <"#paginator" lp>i >rt',
+                "iDisplayLength":10,
+
+                @if(isset($excludecol) && $excludecol != '')
+                "oColVis": {
+                    "aiExclude": [ {{ $excludecol }} ]
+                },
+                @endif
+
+                "oTableTools": {
+                    "sSwfPath": "{{ URL::to('/')  }}/swf/copy_csv_xls_pdf.swf"
+                },
+
+                "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [ {{ $disablesort }} ] }
+                 ],
+                "fnServerData": function ( sSource, aoData, fnCallback ) {
+                    {{ $js_additional_param }}
+                    $.ajax( {
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                    } );
+                }
+
+            }
+        );
+
         @if($table_dnd == true)
-        	oTable.rowReordering(
+        	oTableOne.rowReordering(
         		{
         			sURL:'{{ URL::to( $table_dnd_url ) }}',
         			sRequestType: 'GET',
@@ -504,7 +546,7 @@ select.input-sm {
         		}
         	);
         @elseif($table_group == true)
-        	oTable.rowGrouping({
+        	oTableOne.rowGrouping({
         		bExpandableGrouping: {{ ($table_group_collapsible)?'true':'false' }},
         		iGroupingColumnIndex: {{ $table_group_idx }}
         	});
@@ -520,13 +562,13 @@ select.input-sm {
 
 		    var nTr = $(this).parents('tr')[0];
 
-		    if ( oTable.fnIsOpen(nTr) )
+		    if ( oTableOne.fnIsOpen(nTr) )
 		    {
-		        oTable.fnClose( nTr );
+		        oTableOne.fnClose( nTr );
 		    }
 		    else
 		    {
-		        oTable.fnOpen( nTr, fnFormatDetails(nTr), 'details-expand' );
+		        oTableOne.fnOpen( nTr, fnFormatDetails(nTr), 'details-expand' );
 		    }
 		} );
 
@@ -535,7 +577,7 @@ select.input-sm {
 
 		$('thead input.filter').keyup( function () {
             var search_index = this.id;
-            oTable.column( search_index )
+            oTableOne.column( search_index )
                     .search( this.value )
                     .draw();
 		} );
@@ -562,7 +604,7 @@ select.input-sm {
 			}
 			var search_index = e.currentTarget.id;
 
-            oTable.column( search_index )
+            oTableOne.column( search_index )
                     .search( dateval )
                     .draw();
 		});
@@ -576,7 +618,7 @@ select.input-sm {
 			}
 			var search_index = e.target.id;
 
-            oTable.column( search_index )
+            oTableOne.column( search_index )
                     .search( dateval )
                     .draw();
 		});
@@ -586,7 +628,7 @@ select.input-sm {
             var search_index = this.id;
             var datevals = this.value;
 
-            oTable.column( search_index )
+            oTableOne.column( search_index )
                     .search( datevals )
                     .draw();
 
@@ -594,14 +636,14 @@ select.input-sm {
 
 		$('thead select.selector').change( function () {
 			var search_index = this.id;
-            oTable.column( search_index )
+            oTableOne.column( search_index )
                     .search( this.value )
                     .draw();
 		} );
 
 		$('#clearsearch').click(function(){
 			$('thead td input').val('');
-            oTable.search( '' )
+            oTableOne.search( '' )
                 .columns().search( '' )
                 .draw();
 		});
@@ -620,8 +662,8 @@ select.input-sm {
 			});
 			console.log(dlfilter);
 
-			//var sort = oTable.fnSettings().aaSorting;
-            var sort = oTable.order();
+			//var sort = oTableOne.fnSettings().aaSorting;
+            var sort = oTableOne.order();
 			console.log(sort);
 			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
 				if(data.status == 'OK'){
@@ -648,7 +690,7 @@ select.input-sm {
 			});
 			console.log(dlfilter);
 
-			var sort = oTable.fnSettings().aaSorting;
+			var sort = oTableOne.fnSettings().aaSorting;
 			console.log(sort);
 			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
 				if(data.status == 'OK'){
@@ -660,37 +702,6 @@ select.input-sm {
 
 			return false;
 		});
-
-		/*
-		 * Support functions to provide a little bit of 'user friendlyness' to the textboxes in
-		 * the footer
-		 */
-		/*
-		$('thead input').each( function (i) {
-			asInitVals[i] = this.value;
-		} );
-
-		$('thead input.filter').focus( function () {
-
-			console.log(this);
-
-			if ( this.className == 'search_init form-control input-sm' )
-			{
-				this.className = '';
-				this.value = '';
-			}
-		} );
-
-		$('thead input.filter').blur( function (i) {
-			console.log(this);
-			if ( this.value == '' )
-			{
-				this.className = 'search_init form-control input-sm';
-				this.value = asInitVals[$('thead input').index(this)];
-			}
-		} );
-
-		*/
 
 		$('#select_all').on('click',function(){
 			if($('#select_all').is(':checked')){
@@ -705,10 +716,8 @@ select.input-sm {
 
 			$.post('{{ URL::to($ajaxdel) }}',{'id':current_del_id}, function(data) {
 				if(data.status == 'OK'){
-					//redraw table
 
-
-					oTable.fnStandingRedraw();
+					oTableOne.fnStandingRedraw();
 
 					$('#delstatusindicator').html('Payment status updated');
 
@@ -741,7 +750,7 @@ select.input-sm {
 					function(data){
 						if(data.result == 'OK:UPLOADED'){
 							$('#upload-modal').modal('hide');
-							oTable.draw();
+							oTableOne.draw();
 						}else if( data.result == 'ERR:UPDATEFAILED' ){
 							alert('Upload failed');
 						}
@@ -751,31 +760,6 @@ select.input-sm {
 
 		});
 
-		$('#upinv-modal').on('hidden',function(){
-			$('#upinv-id').val('');
-			$('#upinv-sku').val('');
-			$('#upinv-container').html('');
-		});
-
-		$('#do-upinv').on('click',function(){
-			var form = $('#upinv-form');
-			console.log(form.serialize());
-
-			$.post(
-				'{{ URL::to('ajax/updateinventory')}}',
-					form.serialize(),
-					function(data){
-						if(data.result == 'OK:UPDATED'){
-							$('#upinv-modal').modal('hide');
-							oTable.draw();
-						}else if( data.result == 'ERR:UPDATEFAILED' ){
-							alert('Update failed');
-						}
-					},
-					'json'
-				);
-
-		});
 
 		$('table.dataTable').click(function(e){
 
@@ -791,7 +775,7 @@ select.input-sm {
 						if(data.status == 'OK'){
 							//redraw table
 
-							oTable.draw();
+							oTableOne.draw();
 							alert("Item id : " + _id + " deleted");
 						}
 					},'json');
@@ -899,35 +883,6 @@ select.input-sm {
 
 		   	}
 
-			if ($(e.target).is('.upinv')) {
-				var _id = e.target.id;
-				var _rel = $(e.target).attr('rel');
-				var _status = $(e.target).data('status');
-
-				$('#inv-loading-pictures').show();
-
-				$('#upinv-id').val(_id);
-				$('#upinv-sku').val(_rel);
-
-				$.post('{{ URL::to('ajax/inventoryinfo') }}', { product_id: _id },
-					function(data){
-
-						$('#inv-loading-pictures').hide();
-
-						if(data.result == 'OK:FOUND'){
-							$('#upinv-container').html(data.html);
-						}
-
-					},'json');
-
-				$('#upinv-modal').modal();
-
-				$('#upinv-id').val(_id);
-
-				$('#upinv-title-id').html('SKU : ' + _rel);
-
-		   	}
-
 
 			if ($(e.target).is('.chg')) {
 				var _id = e.target.id;
@@ -942,46 +897,6 @@ select.input-sm {
 				$('#trx-order').html('Order # : ' + _rel);
 
 		   	}
-
-			if ($(e.target).is('.propchg')) {
-				var _id = e.target.id;
-				var _rel = $(e.target).attr('rel');
-				var _status = $(e.target).data('status');
-
-				console.log(_status);
-
-				$('#prop-chg-modal').modal();
-				$('#prop-trx-chg').val(_id);
-				$('#prop-stat-chg').val(_status);
-				$('#prop-trx-order').html('Property ID : ' + _rel);
-
-		   	}
-
-		});
-
-		$('#clear-attendance').on('click',function(){
-
-			var answer = confirm("Are you sure you want to delete this item ?");
-
-			if (answer == true){
-
-	            $.post('{{ URL::to('ajax/clearattendance')}}',
-		            {
-		                trx_id:$('#trx-chg').val(),
-		                status:$('#stat-chg').val()
-		            },
-		            function(data){
-		            	if(data.result == 'OK'){
-		            		alert('Attendance data cleared, ready to start the event.');
-		            		oTable.draw();
-		            	}
-		            },
-	            'json');
-
-			}else{
-				alert("Clear data cancelled");
-			}
-
 
 		});
 
@@ -1020,7 +935,7 @@ select.input-sm {
 		});
 
 		$('#chg-modal').on('hidden', function () {
-			oTable.fnDraw();
+			oTableOne.draw();
 		})
 
 
@@ -1037,7 +952,7 @@ select.input-sm {
 		});
 
 		$('#prop-chg-modal').on('hidden', function () {
-			oTable.fnDraw();
+			oTableOne.fnDraw();
 		});
 
         $('.select-location').on('change',function(){

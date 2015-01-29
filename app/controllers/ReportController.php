@@ -1,6 +1,6 @@
 <?php
 
-class ReportController extends AdminController {
+class ReportController extends BaseReportController {
 
     public function __construct()
     {
@@ -15,13 +15,6 @@ class ReportController extends AdminController {
         $this->model = new Document();
         //$this->model = DB::collection('documents');
 
-    }
-
-    public function getTest()
-    {
-        $raw = $this->model->where('docFormat','like','picture')->get();
-
-        print $raw->toJSON();
     }
 
 

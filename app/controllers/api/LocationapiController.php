@@ -1,4 +1,10 @@
 <?php
+namespace Api;
+
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Response;
 
 class LocationapiController extends \BaseController {
 
@@ -9,6 +15,8 @@ class LocationapiController extends \BaseController {
 	 */
 	public function index()
 	{
+
+        $key = Input::get('key');
 		//
         $locations = Assetlocation::get();
         for($i = 0; $i < count($locations);$i++){
@@ -65,6 +73,10 @@ class LocationapiController extends \BaseController {
                 $locations[$i]->lastUpdate = date('Y-m-d H:i:s',$locations[$i]->lastUpdate->sec);
 
         }
+
+        $actor = $key;
+        Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'logged out'));
+
         return $locations;
 	}
 

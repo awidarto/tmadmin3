@@ -752,8 +752,19 @@ class AjaxController extends BaseController {
             $approval->approvalStatus = $approval_status;
             $approval->save();
 
+            $p = json_encode($approval);
+            $actor = (isset(Auth::user()->email))?Auth::user()->fullname.' - '.Auth::user()->email:'guest';
+
+            Event::fire('log.a',array('approval','change',$actor,$p));
+
             return Response::json(array('result'=>'OK'));
         }else{
+
+            $p = 'asset not found';
+            $actor = (isset(Auth::user()->email))?Auth::user()->email:'guest';
+
+            Event::fire('log.a',array('approval','change',$actor,$p));
+
             return Response::json(array('result'=>'ERR::NOTFOUND'));
         }
 
