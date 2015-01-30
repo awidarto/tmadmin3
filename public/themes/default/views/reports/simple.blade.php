@@ -170,12 +170,12 @@ select.input-sm {
 
                 $labels = array("Januari", "Februari", "March", "April", "Mei", "June", "Juli");
             ?>
-            {{ $chart->id('myChart')
+            {{-- $chart->id('myChart')
                     ->setLabel($labels)
                     ->addDataArray($dataArray01)
                     ->addDataArray($dataArray02)
                     ->addDataArray($dataArray03)
-                    ->setType('bar')->make() }}
+                    ->setType('bar')->make() --}}
         </div>
         <div class="col-md-6">
 
@@ -196,6 +196,15 @@ select.input-sm {
     <ol class="indicator"></ol>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.filterdaterangepicker').daterangepicker({
+            opens:'right',
+            format:'DD-MM-YYYY'
+        });
+    });
+
+</script>
 
 @stop
 
