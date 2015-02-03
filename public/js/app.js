@@ -89,6 +89,11 @@
                 }
         });
 
+        $('.filterdaterangepicker').daterangepicker({
+            opens:'right',
+            format:'DD-MM-YYYY'
+        });
+
         $('.daterangespicker').daterangepicker({
             format:'DD-MM-YYYY'
         });

@@ -137,12 +137,12 @@ class AuthController extends \Controller {
                         $retVal = array_merge(array("status" => "OK", "msg" => "Login Success.", "key" => $sessionKey), $userarray) ;
 
                         $actor = $user->fullname.' - '.$user->email;
-                        Event::fire('log.api',array($this->controller_name, 'login' ,$actor,'logged in'));
+                        \Event::fire('log.api',array($this->controller_name, 'login' ,$actor,'logged in'));
 
     				}
     			}else{
                         $actor = Input::get('user');
-                        Event::fire('log.api',array($this->controller_name, 'login' ,$actor,'user not found'));
+                        \Event::fire('log.api',array($this->controller_name, 'login' ,$actor,'user not found'));
                 }
 
     		}catch (ModelNotFoundException $e){
@@ -174,11 +174,11 @@ class AuthController extends \Controller {
     				$user->save();
 
                     $actor = $user->fullname.' - '.$user->email;
-                    Event::fire('log.api',array($this->controller_name, 'logout' ,$actor,'logged out'));
+                    \Event::fire('log.api',array($this->controller_name, 'logout' ,$actor,'logged out'));
 
 	    		}else{
                     $actor = Input::get('session_key');
-                    Event::fire('log.api',array($this->controller_name, 'logout' ,$actor,'user not found'));
+                    \Event::fire('log.api',array($this->controller_name, 'logout' ,$actor,'user not found'));
                 }
 
 

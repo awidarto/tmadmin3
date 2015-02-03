@@ -21,19 +21,6 @@ class ApprovalreportController extends BaseReportController {
     public function getIndex()
     {
 
-        $this->heads = array(
-            array('Title',array('search'=>true,'sort'=>true)),
-            array('Access',array('search'=>true,'sort'=>true)),
-            array('Sharing',array('search'=>true,'sort'=>true)),
-            array('Creator',array('search'=>true,'sort'=>false)),
-            array('Folder',array('search'=>true,'sort'=>true)),
-            array('Attachment',array('search'=>true,'sort'=>true)),
-            array('Tags',array('search'=>true,'sort'=>true)),
-            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
-        );
-
-        //print $this->model->where('docFormat','picture')->get()->toJSON();
         Breadcrumbs::addCrumb('Reports',URL::to($this->controller_name));
 
         $this->report_action = $this->controller_name;
@@ -42,6 +29,49 @@ class ApprovalreportController extends BaseReportController {
             ->with('report_action', $this->report_action)
             ->render();
 
+                $dataArray01 = array(
+                    'label'=>'My First Dataset',
+                    'fillColor'=>'rgba(220,220,220,0.2)',
+                    'strokeColor'=>'rgba(220,220,220,1)',
+                    'pointColor'=>'rgba(220,220,220,1)',
+                    'pointStrokeColor'=>'#fff',
+                    'pointHighlightFill'=>'#fff',
+                    'pointHighlightStroke'=>'rgba(220,220,220,1)',
+                    'data'=>array(65, 59, 80, 81, 56, 55, 40)
+                );
+
+                $dataArray02 = array(
+                    'label'=>'My First Dataset',
+                    'fillColor'=>'rgba(220,220,220,0.2)',
+                    'strokeColor'=>'rgba(220,220,220,1)',
+                    'pointColor'=>'rgba(220,220,220,1)',
+                    'pointStrokeColor'=>'#fff',
+                    'pointHighlightFill'=>'#fff',
+                    'pointHighlightStroke'=>'rgba(220,220,220,1)',
+                    'data'=>array(28, 48, 40, 19, 86, 27, 90)
+                );
+
+                $dataArray03 = array(
+                    'label'=>'My Third Dataset',
+                    'fillColor'=>'rgba(200,200,200,0.2)',
+                    'strokeColor'=>'rgba(220,220,220,1)',
+                    'pointColor'=>'rgba(220,220,220,1)',
+                    'pointStrokeColor'=>'#fff',
+                    'pointHighlightFill'=>'#fff',
+                    'pointHighlightStroke'=>'rgba(220,220,220,1)',
+                    'data'=>array(35, 12, 60, 22, 100, 90, 85)
+                );
+
+                $labels = array("Januari", "Februari", "March", "April", "Mei", "June", "Juli");
+
+                $this->data = array(
+                    'series01'=>$dataArray01,
+                    'series02'=>$dataArray02,
+                    'series03'=>$dataArray03,
+                    'labels'=>$labels
+                    );
+
+        $this->report_view = 'approvalreport.report';
         $this->title = 'Approvals';
         return parent::getIndex();
 

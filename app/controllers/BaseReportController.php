@@ -96,7 +96,7 @@ class BaseReportController extends Controller {
 
     public $additional_page_data = array();
 
-    public $table_view = 'reports.simple';
+    public $report_view = 'reports.simple';
 
     public $additional_table_param = array();
     //public $product_info_url = 'ajax/productinfo';
@@ -104,6 +104,8 @@ class BaseReportController extends Controller {
     public $product_info_url = null;
 
     public $prefix = null;
+
+    public $data = '';
 
     public function __construct(){
 
@@ -145,9 +147,19 @@ class BaseReportController extends Controller {
         $controller_name = strtolower($this->controller_name);
 
         $actor = (isset(Auth::user()->email))?Auth::user()->fullname.' - '.Auth::user()->email:'guest';
-        Event::fire('log.a',array($this->controller_name, 'view list' ,$actor,'OK'));
+        Event::fire('log.a',array($this->controller_name, 'view report' ,$actor,'OK'));
 
-        return $this->pageGenerator();
+        return View::make($this->report_view)
+                    ->with('data',$this->data)
+                    ->with('can_add', $this->can_add )
+                    ->with('is_report',$this->is_report)
+                    ->with('report_action',$this->report_action)
+                    ->with('is_additional_action',$this->is_additional_action)
+                    ->with('additional_action',$this->additional_action)
+                    ->with('additional_filter',$this->additional_filter)
+                    ->with('js_additional_param', $this->js_additional_param)
+                    ->with('modal_sets', $this->modal_sets);
+        //return $this->pageGenerator();
     }
 
     public function postIndex()

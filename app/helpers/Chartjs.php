@@ -33,7 +33,7 @@ class Chartjs{
         return new self;
     }
 
-    public function options($options){
+    public function setOptions($options){
         self::$options = $options;
         return new self;
     }

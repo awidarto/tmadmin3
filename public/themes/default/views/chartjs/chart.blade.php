@@ -10,7 +10,8 @@
                 $opt = array();
                 foreach($options as $k=>$v){
                     if(is_bool($v)){
-                        $opt[] = $k.':'.($v)?'true':'false';
+                        $v = ($v)?'true':'false';
+                        $opt[] = $k.':'.$v;
                     }elseif(is_string($v)){
                         $opt[] = $k.':\''.$v.'\'';
                     }elseif(is_numeric($v)){

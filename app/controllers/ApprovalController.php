@@ -193,7 +193,7 @@ class ApprovalController extends AdminController {
 
         $this->additional_query = array('approvalStatus'=>'verified');
 
-        $this->def_order_by = 'timestamp';
+        $this->def_order_by = 'requestDate';
         $this->def_order_dir = 'desc';
 
         $this->place_action = 'first';

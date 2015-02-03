@@ -2,6 +2,7 @@
     {{ Former::open_vertical($report_action)->method('get') }}
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         {{ Former::text('date_filter','Date Range')->id('date_filter')->class('search_init form-control input-sm filterdaterangepicker')->placeholder('pick date range')->value(Input::get('date_filter')) }}
+        {{ Former::select('status','Status')->options(array('all'=>'All','pending'=>'Pending','verified'=>'Verified'))}}
         {{ Form::submit('Generate',array('name'=>'submit','class'=>'btn btn-primary input-sm pull-right'))}}
     </div>
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
