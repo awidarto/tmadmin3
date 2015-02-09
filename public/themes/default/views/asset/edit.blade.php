@@ -40,8 +40,8 @@
 
         {{ Former::text('PIC','Person In Charge') }}
 
-        {{ Former::text('PIC','PIC Phone') }}
-        {{ Former::text('PIC','PIC Email') }}
+        {{ Former::text('PicPhone','PIC Phone') }}
+        {{ Former::text('PicEmail','PIC Email') }}
 
         {{ Former::text('contractNumber','Contract Number') }}
 
