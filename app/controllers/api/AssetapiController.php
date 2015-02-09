@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Response;
 
 class AssetapiController extends \BaseController {
 
+    public $controller_name = '';
+
+    public function  __construct()
+    {
+        //$this->model = "Member";
+        $this->controller_name = strtolower( str_replace('Controller', '', get_class()) );
+
+    }
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -17,7 +26,7 @@ class AssetapiController extends \BaseController {
 	{
         $key = Input::get('key');
 
-        $assets = Asset::get();
+        $assets = \Asset::get();
         for($i = 0; $i < count($assets);$i++){
 
                 $assets[$i]->extId = $assets[$i]->_id;
@@ -75,7 +84,7 @@ class AssetapiController extends \BaseController {
         }
 
         $actor = $key;
-        Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'logged out'));
+        \Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'logged out'));
 
         return $assets;
 		//
