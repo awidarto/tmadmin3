@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Response;
 
 class LocationapiController extends \BaseController {
 
+    public $controller_name = '';
+
+    public function  __construct()
+    {
+        //$this->model = "Member";
+        $this->controller_name = strtolower( str_replace('Controller', '', get_class()) );
+
+    }
+
 	/**
 	 * Display a listing of the resource.
 	 *
