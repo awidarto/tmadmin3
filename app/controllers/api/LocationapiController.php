@@ -18,7 +18,7 @@ class LocationapiController extends \BaseController {
 
         $key = Input::get('key');
 		//
-        $locations = Assetlocation::get();
+        $locations = \Assetlocation::get();
         for($i = 0; $i < count($locations);$i++){
 
                 $locations[$i]->extId = $locations[$i]->_id;
@@ -75,7 +75,7 @@ class LocationapiController extends \BaseController {
         }
 
         $actor = $key;
-        Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'logged out'));
+        \Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'location list'));
 
         return $locations;
 	}

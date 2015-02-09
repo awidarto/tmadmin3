@@ -17,7 +17,7 @@ class RackapiController extends \BaseController {
 	{
         $key = Input::get('key');
 		//
-        $locations = Rack::get();
+        $locations = \Rack::get();
         for($i = 0; $i < count($locations);$i++){
 
                 $locations[$i]->extId = $locations[$i]->_id;
@@ -74,7 +74,7 @@ class RackapiController extends \BaseController {
         }
 
         $actor = $key;
-        Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'logged out'));
+        \Event::fire('log.api',array($this->controller_name, 'get' ,$actor,'rack list'));
 
         return $locations;
 	}
