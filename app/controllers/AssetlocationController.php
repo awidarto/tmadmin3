@@ -236,5 +236,41 @@ class AssetlocationController extends AdminController {
 
     }
 
+    public function postDlxl()
+    {
+        $this->heads = null;
+
+        $this->fields = array(
+            array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('slug',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('venue',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('phone',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('latitude',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('longitude',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('description',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))
+        );
+
+        return parent::postDlxl();
+    }
+
+    public function getImport(){
+
+        $this->importkey = 'name';
+
+        return parent::getImport();
+    }
+
+    public function postUploadimport()
+    {
+        $this->importkey = 'name';
+
+        return parent::postUploadimport();
+    }
+
 
 }
