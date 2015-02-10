@@ -1275,7 +1275,7 @@ class AdminController extends Controller {
         $path = Excel::create( $fname, function($excel) use ($sdata){
                 $excel->sheet('sheet1')
                     ->with($sdata);
-            })->save('xls',public_path().'/storage/dled',true);
+            })->store('xls',public_path().'/storage/dled',true);
 
         //print_r($path);
 

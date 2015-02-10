@@ -522,7 +522,9 @@ select.input-sm {
 			});
 			console.log(dlfilter);
 
-			var sort = oTable.fnSettings().aaSorting;
+			//var sort = oTable.fnSettings().aaSorting;
+            var sort = oTable.order();
+
 			console.log(sort);
 			$.post('{{ URL::to($ajaxdlxl) }}',{'filter' : dlfilter, 'sort':sort[0], 'sortdir' : sort[1] }, function(data) {
 				if(data.status == 'OK'){
