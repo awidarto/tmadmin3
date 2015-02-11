@@ -242,8 +242,8 @@ class RackController extends AdminController {
         $this->fields = array(
             array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-            array('locationId',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'locationName' ,'show'=>true)),
-            array('locationName',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'locationName' ,'show'=>true)),
+            array('locationId',array('kind'=>'text','query'=>'like','pos'=>'both' ,'show'=>true)),
+            array('locationName',array('kind'=>'text','query'=>'like','pos'=>'both' ,'show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))

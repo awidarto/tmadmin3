@@ -310,6 +310,9 @@ class AssetController extends AdminController {
             $data['defaultpictures'] = '';
         }
 
+        $data['locationName'] = Assets::getLocationDetail($data['locationId'])->name;
+        $data['rackName'] = Assets::getRackDetail($data['rackId'])->SKU;
+
         return $data;
     }
 
@@ -355,6 +358,9 @@ class AssetController extends AdminController {
             $data['defaultpic'] = '';
             $data['defaultpictures'] = '';
         }
+
+        $data['locationName'] = Assets::getLocationDetail($data['locationId'])->name;
+        $data['rackName'] = Assets::getRackDetail($data['rackId'])->SKU;
 
         return $data;
     }
@@ -457,6 +463,9 @@ class AssetController extends AdminController {
                 array('hostName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('locationId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('locationName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('rackId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+                array('rackName',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('owner',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('status',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
                 array('labelStatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
