@@ -32,7 +32,7 @@ class ProductsController extends AdminController {
             //array('Photos',array('search'=>false,'sort'=>false)),
             array('SKU',array('search'=>true,'sort'=>true)),
             //array('Code',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
-            array('Picture',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'span2'))),
+            array('Picture',array('search'=>true,'sort'=>true ,'picture'=>Config::get('kickstart.default_picture_search'),'attr'=>array('class'=>'span2'))),
             array('Description',array('search'=>true,'sort'=>true)),
             array('Series',array('search'=>true,'sort'=>true)),
             array('Price',array('search'=>true,'sort'=>true)),
@@ -73,7 +73,7 @@ class ProductsController extends AdminController {
             //array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','callback'=>'namePic','show'=>true)),
             array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             //array('SKU',array('kind'=>'text','callback'=>'dispBar', 'query'=>'like','pos'=>'both','show'=>true)),
-            array('SKU',array('kind'=>'text', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
+            array('SKU',array('kind'=>'picture', 'callback'=>'namePic', 'query'=>'like','pos'=>'both','show'=>true)),
             array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
             array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('priceRegular',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
@@ -89,8 +89,8 @@ class ProductsController extends AdminController {
             array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true,'callback'=>'splitTag')),
-            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
         );
 
         $categoryFilter = Input::get('categoryFilter');

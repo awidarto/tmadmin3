@@ -6,6 +6,7 @@ class Prefs {
     public static $section;
     public static $faqcategory;
     public static $productcategory;
+    public static $outlet;
     public static $role;
 
     public function __construct()
@@ -96,6 +97,63 @@ class Prefs {
         return self::$role;
     }
 
+    public static function getProductCategory(){
+        $c = Productcategory::get();
+
+        self::$productcategory = $c;
+        return new self;
+    }
+
+    public function ProductCatToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'Select Category');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$productcategory as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function ProductCatToArray()
+    {
+        return self::$productcategory;
+    }
+
+
+    public static function getOutlet(){
+        $c = Outlet::get();
+
+        self::$outlet = $c;
+        return new self;
+    }
+
+    public function OutletToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'Select Outlet');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$outlet as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function OutletToArray()
+    {
+        return self::$outlet;
+    }
+
     public static function yearSelection(){
         $ya = array();
         for( $i = 1970; $i < 2050; $i++ ){
@@ -126,6 +184,29 @@ class Prefs {
         $batchid = $year.$month.str_pad($new_id['sequence'], 4, '0', STR_PAD_LEFT);
 
         return $batchid;
+
+    }
+
+    public static function GetInvoiceSequence($prefix, $pad = 5, $infix = '', $suffix = ''){
+
+        $seq = DB::collection('invoicesequences')->raw();
+
+        $new_id = $seq->findAndModify(
+                array(
+                    'prefix'=>$prefix
+                    ),
+                array('$inc'=>array('sequence'=>1)),
+                null,
+                array(
+                    'new' => true,
+                    'upsert'=>true
+                )
+            );
+
+
+        $invseq = $prefix.$infix.str_pad($new_id['sequence'], $pad, '0', STR_PAD_LEFT).$suffix;
+
+        return $invseq;
 
     }
 

@@ -5,6 +5,11 @@ return array(
     'user_collection'=>'users',
     'invalidchars'=>array('%','&','|',' ','"',':',';','\'','\\','?','#','(',')','/'),
     'default_theme'=>'default',
+    'default_picture_search'=>array(
+            ''=>'All',
+            'has_picture'=>'Has Picture',
+            'no_picture'=>'No Picture'
+        ),
 
     'salutation'=>array(
             'Mr'=>'Mr',

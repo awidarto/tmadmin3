@@ -30,10 +30,12 @@ class OutletController extends AdminController {
 
         $this->heads = array(
             array('Name',array('search'=>false,'sort'=>false)),
+            array('Code',array('search'=>true,'sort'=>true)),
             array('Venue',array('search'=>true,'sort'=>true)),
             array('Address',array('search'=>true,'sort'=>true)),
             array('Category',array('search'=>true,'sort'=>true)),
             array('Tags',array('search'=>true,'sort'=>true)),
+            array('Outlet ID',array('search'=>true,'sort'=>true)),
             array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
             array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
         );
@@ -51,10 +53,12 @@ class OutletController extends AdminController {
 
         $this->fields = array(
             array('name',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-            array('venue',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
+            array('code',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('venue',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('address',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('_id',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
             array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
@@ -79,6 +83,7 @@ class OutletController extends AdminController {
 
         $this->validator = array(
             'name' => 'required',
+            'code' => 'required',
             'venue' => 'required',
             'address' => 'required',
         );
@@ -90,6 +95,7 @@ class OutletController extends AdminController {
     {
         $this->validator = array(
             'name' => 'required',
+            'code' => 'required',
             'venue' => 'required',
             'address' => 'required',
         );

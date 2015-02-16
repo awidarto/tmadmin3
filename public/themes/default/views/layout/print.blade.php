@@ -14,7 +14,7 @@
     <!-- Bootplus -->
     {{ HTML::style('css/typography.css') }}
 
-    {{ HTML::style('bootstrap311/css/bootstrap.css') }}
+    {{ HTML::style('bootflat-admin/css/site.min.css') }}
 
     {{ HTML::style('font-awesome/css/font-awesome.min.css') }}
 

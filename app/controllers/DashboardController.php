@@ -38,11 +38,13 @@ class DashboardController extends AdminController {
 
         $heads_two = array(
             //array('Photos',array('search'=>false,'sort'=>false)),
+
             array('#',array('search'=>false,'sort'=>false)),
+            array('Trx ID',array('search'=>false,'sort'=>false)),
             array('Status',array('search'=>true,'sort'=>true,'select'=>Config::get('shoplite.inventory_status_select') )),
-            array('Asset',array('search'=>true,'sort'=>true)),
-            array('Requester',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
-            array('Request Date',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
+            array('Store',array('search'=>true,'sort'=>true)),
+            array('Buyer',array('search'=>true,'sort'=>true, 'attr'=>array('class'=>'span2'))),
+            array('Amount',array('search'=>true,'sort'=>true ,'attr'=>array('class'=>'')))
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
@@ -55,9 +57,9 @@ class DashboardController extends AdminController {
 
         $this->additional_table_param = array(
                 'title_one'=>'Activities',
-                'title_two'=>'Approval Requests',
+                'title_two'=>'Sales',
                 'ajax_url_one'=>URL::to('dashboard'),
-                'ajax_url_two'=>URL::to('dashboard/approval'),
+                'ajax_url_two'=>URL::to('dashboard/sales'),
                 'secondary_heads'=>$heads_two
 
             );
@@ -94,6 +96,30 @@ class DashboardController extends AdminController {
         return parent::postIndex();
     }
 
+    public function postSales()
+    {
+
+        $this->fields = array(
+
+            array('sessionId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('transactionstatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('outletName',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
+            array('buyer_name',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
+            array('payable_amount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true, 'callback'=>'toIdr' )),
+        );
+
+        $this->place_action = 'none';
+
+        $this->def_order_by = 'createdDate';
+
+        $this->def_order_dir = 'desc';
+
+        $this->model = new Sales();
+
+        $this->show_select = false;
+
+        return parent::postIndex();
+    }
 
     public function postApproval()
     {
@@ -473,6 +499,11 @@ class DashboardController extends AdminController {
         }else{
             return $data['docShare'];
         }
+    }
+
+    public function toIdr($data, $field)
+    {
+        return '<span style="display:block;text-align:right;font-weight:bold;">IDR '. Ks::idr( $data[$field] ) .'</span>' ;
     }
 
     public function eventResult($data)

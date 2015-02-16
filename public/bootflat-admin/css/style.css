@@ -10,7 +10,7 @@ body {
 
 .navbar-default,
 .navbar-default a{
-    background-color: #b60e10;
+    background-color: #607D8B;
     color: #FFFFFF;
 }
 
@@ -27,15 +27,16 @@ body {
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
-    background-color: #F22613;
+    background-color: #CFD8DC;
+    color:#666;
 }
 
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover{
-    background-color: #F22613;
+    background-color: #CFD8DC;
 }
 
 .navbar-default .dropdown-menu {
-    background-color: #CF000F;
+    background-color: #607D8B;
     border: none;
     padding-top: 0px !important;
 }
@@ -43,11 +44,12 @@ body {
 .navbar-default .dropdown-menu .active a, .dropdown-menu .active a:focus,
 .navbar-default .dropdown-menu .active a:hover, .dropdown-menu li a:focus,
 .navbar-default .dropdown-menu li a:hover{
-    background-color: #F22613;
+    background-color: #CFD8DC;
+    color:#666;
 }
 
 .navbar-default .dropdown-menu .divider {
-    background-color: #F22613;
+    background-color: #607D8B;
     border-bottom: none;
     line-height: 1px;
 }
@@ -59,6 +61,11 @@ body {
 
 table{
     font-size: 11px;
+}
+
+table img.thumbnail{
+    width: 100px;
+    height:auto;
 }
 
 img.avatar{

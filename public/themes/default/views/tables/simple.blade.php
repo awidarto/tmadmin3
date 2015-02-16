@@ -212,6 +212,14 @@ select.input-sm {
                                         {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector form-control input-sm select-'.$select_class,'id'=>$index ))}}
                                     </div>
                                 </td>
+                            @elseif(isset($in[1]['picture']) && is_array($in[1]['picture']))
+                                <td>
+                                    <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init form-control input-sm {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+                                    <div class="styled-select">
+                                        <?php $select_class = (isset($in[1]['class']))?$in[1]['class']:'filter' ?>
+                                        {{ Form::select('select_'.$in[0],$in[1]['picture'],null,array('class'=>'selector form-control input-sm select-'.$select_class,'id'=>$index ))}}
+                                    </div>
+                                </td>
                             @else
                                 <td>
                                     <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" class="search_init form-control input-sm {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
@@ -576,6 +584,14 @@ select.input-sm {
 			}
 		});
 
+        $('#select_all').on('ifChecked',function(){
+            $('.selector').prop('checked', true);
+        });
+
+        $('#select_all').on('ifUnchecked',function(){
+            $('.selector').prop('checked', false);
+        });
+
 
 		$('#confirmdelete').click(function(){
 
@@ -714,66 +730,95 @@ select.input-sm {
 
 		   	}
 
-			if ($(e.target).is('.upload')) {
-				var _id = e.target.id;
-				var _rel = $(e.target).attr('rel');
-				var _status = $(e.target).data('status');
+            if ($(e.target).is('.upload')) {
+                var _id = e.target.id;
+                var _rel = $(e.target).attr('rel');
+                var _status = $(e.target).data('status');
 
-				$('#loading-pictures').show();
+                $('#loading-pictures').show();
 
-				$.post('{{ URL::to($product_info_url) }}', { product_id: _id },
-					function(data){
+                $.post('{{ URL::to('ajax/productinfo') }}', { product_id: _id },
+                    function(data){
 
-						$('#loading-pictures').hide();
+                        $('#loading-pictures').hide();
 
-						if(data.result == 'OK:FOUND'){
-							var defaultpic = data.data.defaultpic;
+                        if(data.result == 'OK:FOUND'){
+                            var defaultpic = data.data.defaultpic;
 
-							if(data.data.files){
+                            var brchead = data.data.brchead;
+                            var brc1 = data.data.brc1;
+                            var brc2 = data.data.brc2;
+                            var brc3 = data.data.brc3;
 
-					            $.each(data.data.files, function (index, file) {
-					            	console.log(file);
-                                    @if( isset($prefix) && $prefix != '' && !is_null($product_info_url) )
-					            	{{ View::make($prefix.'.jsajdetail')->render() }}
-                                    @else
-                                    {{ View::make('fupload.jsajdetail')->render() }}
-                                    @endif
+                            console.log(brchead);
 
+                            if(data.data.files){
 
-					                $(thumb).appendTo('#pictureupload_files ul');
+                                $.each(data.data.files, function (index, file) {
+                                    console.log(file);
 
-					                var upl = '<li id="fdel_' + file.file_id +'" ><input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';
-					                upl += '<input type="hidden" name="delete_url[]" value="' + file.delete_url + '">';
-					                upl += '<input type="hidden" name="filename[]" value="' + file.filename  + '">';
-					                upl += '<input type="hidden" name="filesize[]" value="' + file.filesize  + '">';
-					                upl += '<input type="hidden" name="temp_dir[]" value="' + file.temp_dir  + '">';
-					                upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
-					                upl += '<input type="hidden" name="large_url[]" value="' + file.large_url + '">';
-					                upl += '<input type="hidden" name="medium_url[]" value="' + file.medium_url + '">';
-					                upl += '<input type="hidden" name="full_url[]" value="' + file.full_url + '">';
-					                upl += '<input type="hidden" name="filetype[]" value="' + file.filetype + '">';
-					                upl += '<input type="hidden" name="fileurl[]" value="' + file.fileurl + '">';
-					                upl += '<input type="hidden" name="file_id[]" value="' + file.file_id + '"></li>';
+                                    var isdefault = (defaultpic == file.file_id)?'checked':'';
+                                    var isbrchead = (brchead == file.file_id)?'checked':'';
+                                    var isbrc1 = (brc1 == file.file_id)?'checked':'';
+                                    var isbrc2 = (brc2 == file.file_id)?'checked':'';
+                                    var isbrc3 = (brc3 == file.file_id)?'checked':'';
 
-					                $(upl).appendTo('#pictureupload_uploadedform ul');
+                                    {{ View::make('fupload.jsajdetail') }}
 
-					            });
+                                    {{--
 
 
+                                    var thumb = '<li><img style="width:125px;"  src="' + file.thumbnail_url + '" />'+
+                                        '<span class="file_del" id="' + file.file_id +'"><i class="fa fa-trash"></i></span>'+
+                                        '&nbsp;&nbsp;<span class="img-title">' + file.filename + '</span><br />' +
+                                        '<input type="radio" name="defaultpic" ' + isdefault + ' value="' + file.file_id + '"> Default<br />'+
+                                        'Brochure <br />' +
+                                        '<input type="radio" name="brchead" ' + isbrchead + ' value="' + file.file_id + '"> Head &nbsp;'+
+                                        '<input type="radio" name="brc1" ' + isbrc1 + ' value="' + file.file_id + '"> Pic 1 &nbsp;'+
+                                        '<input type="radio" name="brc2" ' + isbrc2 + ' value="' + file.file_id + '"> Pic 2 &nbsp;'+
+                                        '<input type="radio" name="brc3" ' + isbrc3 + ' value="' + file.file_id + '"> Pic 3 <br />'+
+                                    '<label for="caption">Caption</label><input type="text" name="caption[]" />' +
+                                    //'<label for="material">Material & Finish</label><input type="text" name="material[]" />' +
+                                    //'<label for="tags">Tags</label><input type="text" name="tag[]" />' +
+                                    '</li>';
 
-							}
+                                    --}}
 
-						}
 
-					},'json');
+                                    $(thumb).appendTo('#pictureupload_files ul');
 
-				$('#upload-modal').modal();
+                                    var upl = '<li id="fdel_' + file.file_id +'" ><input type="hidden" name="delete_type[]" value="' + file.delete_type + '">';
+                                    upl += '<input type="hidden" name="delete_url[]" value="' + file.delete_url + '">';
+                                    upl += '<input type="hidden" name="filename[]" value="' + file.filename  + '">';
+                                    upl += '<input type="hidden" name="filesize[]" value="' + file.filesize  + '">';
+                                    upl += '<input type="hidden" name="temp_dir[]" value="' + file.temp_dir  + '">';
+                                    upl += '<input type="hidden" name="thumbnail_url[]" value="' + file.thumbnail_url + '">';
+                                    upl += '<input type="hidden" name="large_url[]" value="' + file.large_url + '">';
+                                    upl += '<input type="hidden" name="medium_url[]" value="' + file.medium_url + '">';
+                                    upl += '<input type="hidden" name="full_url[]" value="' + file.full_url + '">';
+                                    upl += '<input type="hidden" name="filetype[]" value="' + file.filetype + '">';
+                                    upl += '<input type="hidden" name="fileurl[]" value="' + file.fileurl + '">';
+                                    upl += '<input type="hidden" name="file_id[]" value="' + file.file_id + '"></li>';
 
-				$('#upload-id').val(_id);
+                                    $(upl).appendTo('#pictureupload_uploadedform ul');
 
-				$('#upload-title-id').html('SKU : ' + _rel);
+                                });
 
-		   	}
+
+
+                            }
+
+                        }
+
+                    },'json');
+
+                $('#upload-modal').modal();
+
+                $('#upload-id').val(_id);
+
+                $('#upload-title-id').html('SKU : ' + _rel);
+
+            }
 
 			if ($(e.target).is('.upinv')) {
 				var _id = e.target.id;

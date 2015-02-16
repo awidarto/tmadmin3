@@ -27,7 +27,7 @@
       body {
         padding-top: 40px;
         padding-bottom: 40px;
-        background-color: #b60e10;
+        background-color: #607D8B;
         color: #C1C3C6
       }
 
@@ -42,6 +42,7 @@
 
       .form-signin input {
         background-color: #FFF;
+        color: #000;
       }
 
       .btn-primary, .btn-primary.active, .btn-primary.disabled, .btn-primary:active, .btn-primary[disabled] {

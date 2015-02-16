@@ -10,6 +10,26 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
+
+Route::controller('inventory', 'InventoryController');
+Route::controller('pos', 'PosController');
+Route::controller('document', 'DocumentController');
+Route::controller('products', 'ProductsController');
+Route::controller('productcategory', 'ProductcategoryController');
+Route::controller('transaction', 'TransactionController');
+Route::controller('outlet', 'OutletController');
+Route::controller('user', 'UserController');
+Route::controller('buyer', 'BuyerController');
+Route::controller('report', 'ReportController');
+Route::controller('showcase', 'ShowcaseController');
+Route::controller('pages', 'PagesController');
+Route::controller('posts', 'PostsController');
+Route::controller('category', 'CategoryController');
+Route::controller('section', 'SectionController');
+Route::controller('menu', 'MenuController');
+
+
+
 Route::controller('user', 'UserController');
 Route::controller('usergroup', 'UsergroupController');
 
@@ -25,11 +45,25 @@ Route::controller('activity', 'ActivityController');
 Route::controller('scanner', 'ScannerController');
 
 Route::controller('dashboard', 'DashboardController');
+Route::controller('stockcheck', 'StockcheckController');
+Route::controller('stockchecklist', 'StockchecklistController');
 
-Route::controller('assettype', 'AssettypeController');
-Route::controller('assetlocation', 'AssetlocationController');
-Route::controller('rack', 'RackController');
-Route::controller('asset', 'AssetController');
+Route::controller('event', 'EventController');
+
+Route::controller('faq', 'FaqController');
+Route::controller('faqcat', 'FaqcatController');
+
+Route::controller('picture','PictureController');
+
+Route::controller('enquiry', 'EnquiryController');
+
+Route::controller('order', 'OrderController');
+Route::controller('salesreport', 'SalesreportController');
+
+Route::controller('newsletter', 'NewsletterController');
+Route::controller('campaign', 'CampaignController');
+Route::controller('contactgroup', 'ContactgroupController');
+
 
 Route::controller('approval', 'ApprovalController');
 Route::controller('activity', 'ActivityController');

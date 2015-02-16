@@ -370,6 +370,16 @@ class AdminController extends Controller {
 
                     $q[$field] = $qval;
 
+                }elseif($type == 'picture'){
+
+                    $str = Input::get('sSearch_'.$idx);
+
+                    if($str == 'has_picture'){
+                        $q['files'] = array( '$not'=>array('$size'=>0));
+                    }elseif ($str == 'no_picture') {
+                        $q['files'] = array('$size'=>0);
+                    }
+
 				}elseif($type == 'date'|| $type == 'datetime'){
 					$datestring = Input::get('sSearch_'.$idx);
                     $datestring = date('d-m-Y', $datestring / 1000);
