@@ -72,6 +72,10 @@
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
+        {{ Former::select('colorVariantParent','Show as Main Color Item')->options(array('yes'=>'Yes','no'=>'No')) }}
+
+        {{ Former::text('colorVariant','Color Variant')->class('tag_color') }}
+
         {{ Former::text('relatedProducts','Related Products')->class('tag_related') }}
 
         {{ Former::text('recommendedProducts','Recommended Products')->class('tag_recommended') }}

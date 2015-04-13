@@ -58,7 +58,7 @@
 <div id="detail-modal" class="modal fade large" tabindex="-1" role="dialog" aria-labelledby="myPrintModalLabel" aria-hidden="true">
     <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myPrintModalLabel">Sales Detail</span></h3>
+    <h4 id="myPrintModalLabel">Purchase Detail</span></h4>
     </div>
     <div class="modal-body" >
 
@@ -68,8 +68,7 @@
 
     </div>
     <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button class="btn btn-primary" id="do-change-status">Change Status</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     <button class="btn btn-primary" id="do-sales-print">Print</button>
     </div>
 </div>

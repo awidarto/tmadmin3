@@ -109,7 +109,13 @@ class SalesreportController extends AdminController {
             array('value'=>'<h3>IDR '.Ks::idr($sales['payable_amount']).'</h3>','attr'=>'')
         );
 
-        $btab[] = array('Current Status',(isset($sales['transactionstatus']))?$sales['transactionstatus']:'');
+        if(isset($sales['transactionstatus'])){
+            $transactionstatus = '<a href="#" id="transactionstatus" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >'.$sales['transactionstatus'].'</a>';
+        }else{
+            $transactionstatus = '<a href="#" id="transactionstatus" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >n/a</a>';
+        }
+
+        $btab[] = array('Current Status',$transactionstatus);
         $btab[] = array('Outlet',$sales['outletName']);
         $btab[] = array('Transaction Type',(isset($sales['transactiontype']))?$sales['transactiontype']:'' );
 
@@ -117,12 +123,35 @@ class SalesreportController extends AdminController {
         $t = new HtmlTable($btab, $attr, $head);
         $tablepurchase = $t->build();
 
+        if(isset($sales['shipment']['delivery_status'])){
+            $delivery_status = '<a href="#" id="delivery_status" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >'.$sales['shipment']['delivery_status'].'</a>';
+        }else{
+            $delivery_status = '<a href="#" id="delivery_status" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >Pending</a>';
+        }
+
+        if(isset($sales['shipment']['delivery_number'])){
+            $delivery_number = '<a href="#" id="delivery_number" data-type="text" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >'.$sales['shipment']['delivery_number'].'</a>';
+        }else{
+            $delivery_number = '<a href="#" id="delivery_number" data-type="text" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >n/a</a>';
+        }
+
+        $head = array(array('value'=>'Shipment Detail','attr'=>'colspan="2"'));
+        $btab = array();
+        $btab[] = array('Shipped Via',(isset($sales['payment']['delivery_method']))?$sales['payment']['delivery_method']:'');
+        $btab[] = array('Shipment Number',$delivery_number);
+        $btab[] = array('Shipment Status',$delivery_status );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($btab, $attr, $head);
+        $tableshipment = $t->build();
+
 
         $tabletrans = $this->trxDetail($sales['sessionId']);
 
         return View::make('salesreport.detail')
                 ->with('tablebuyer',$tablebuyer)
                 ->with('tablepurchase',$tablepurchase)
+                ->with('tableshipment',$tableshipment)
                 ->with('tabletrans',$tabletrans);
     }
 
@@ -671,7 +700,9 @@ class SalesreportController extends AdminController {
         $itemtable = '';
         $session_id = $trxid;
         $trx = Transaction::where('sessionId',$session_id)->get()->toArray();
-        $pay = Payment::where('sessionId',$session_id)->get()->toArray();
+        $pay = Payment::where('sessionId',$session_id)->first()->toArray();
+
+        //print_r($pay);
 
         $tab = array();
         foreach($trx as $t){
@@ -697,11 +728,20 @@ class SalesreportController extends AdminController {
 
         $gt += $gt * 0.1;
 
-        $totalform = Former::hidden('totalprice',$gt);
+
+        $delivery_charge = ( isset($pay['delivery_charge']) )?$pay['delivery_charge']:0;
+
+        //$totalform = Former::hidden('totalprice',$gt);
+
+        $totalform = Former::hidden('totalprice',$gt + doubleval($delivery_charge));
 
         $tab_data[] = array('','',array('value'=>'PPN 10%', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt * 0.1), 'attr'=>'class="right"'));
 
-        $tab_data[] = array('','',$totalform,array('value'=>Ks::idr($gt), 'attr'=>'class="right"'));
+        $tab_data[] = array('','',array('value'=>'Sub Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt), 'attr'=>'class="right"'));
+
+        $tab_data[] = array('','',array('value'=>'Shipping Charges', 'attr'=>'class="right"'),array('value'=>Ks::idr($delivery_charge), 'attr'=>'class="right"'));
+
+        $tab_data[] = array('',$totalform,array('value'=>'Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt + doubleval($delivery_charge) ), 'attr'=>'class="right"'));
 
         $header = array(
             'things to buy',

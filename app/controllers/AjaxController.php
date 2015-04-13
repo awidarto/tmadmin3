@@ -111,6 +111,28 @@ class AjaxController extends BaseController {
         return Response::json($tree);
     }
 
+
+    public function postSalesedit(){
+        $in = Input::get();
+        $name = $in['name'];
+        $_id = $in['pk'];
+        $value = $in['value'];
+
+        $sales = Sales::find($_id);
+        if($sales){
+            if($name == 'delivery_status' || $name == 'delivery_number'){
+                $sales->{'shipment.'.$name} = $value;
+            }else{
+                $sales->{$name} = $value;
+            }
+            $sales->save();
+            return Response::json(array('result'=>'OK'));
+        }else{
+            return Response::json(array('result'=>'NOK'));
+        }
+
+    }
+
     public function postScan()
     {
         $in = Input::get();
@@ -917,6 +939,37 @@ class AjaxController extends BaseController {
 
             $label = $display.' '.$r['SKU'].'-'.$r['itemDescription'];
             $result[] = array('id'=>$r['_id'],'value'=>$r['SKU'],'link'=>$r['SKU'],'pic'=>$display,'description'=>$r['itemDescription'],'label'=>$label);
+        }
+
+        return Response::json($result);
+    }
+
+    public function getColor()
+    {
+        $q = Input::get('term');
+
+        $mreg = new MongoRegex('/'.$q.'/i');
+
+        $res = Product::where('SKU', 'regex', $mreg)
+                    ->orWhere('itemDescription', 'regex', $mreg)
+                    ->orWhere('series', 'regex', $mreg)
+                    ->get()->toArray();
+
+                    //print_r($res);
+
+        $result = array();
+
+        foreach($res as $r){
+            //print_r($r);
+
+            if(isset($r['defaultpictures']['thumbnail_url'])){
+                $display = HTML::image( $r['defaultpictures']['thumbnail_url'].'?'.time(),'thumb', array('id' => $r['_id']));
+            }else{
+                $display = HTML::image( URL::to('images/no-thumb.jpg').'?'.time(),'thumb', array('id' => $r['_id']));
+            }
+
+            $label = $display.' '.$r['SKU'].'-'.$r['itemDescription'];
+            $result[] = array('id'=>$r['_id'],'value'=>$r['SKU'],'link'=>$r['SKU'],'pic'=>$display,'description'=>$r['itemDescription'].' - '.$r['colour'],'label'=>$label);
         }
 
         return Response::json($result);

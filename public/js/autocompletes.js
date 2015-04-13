@@ -64,6 +64,38 @@ $(document).ready(function() {
                 .appendTo( ul );
         };
 
+    $('.tag_color').tagsInput({
+        'autocomplete_url': base + 'ajax/color',
+        'height':'100px',
+        'width':'100%',
+        'interactive':true,
+        'onChange' : function(c){
+
+        },
+        'onAddTag' : function(t){
+            console.log(t);
+        },
+        'onRemoveTag' : function(t){
+            console.log(t);
+        },
+        'defaultText':'add SKU',
+        'removeWithBackspace' : true,
+        'minChars' : 0,
+        'maxChars' : 0, //if not provided there is no limit,
+        'placeholderColor' : '#666666'
+    });
+
+
+    $('#colorVariant_tag')
+        .data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
+            var inner_html = '<a><div class="list_item_container"><div class="image" style="display:inline-block;">' + item.pic + '</div><div class="item-info">' + item.value + '<div class="item-description">' + item.description + '</div></div></div></a>';
+            return $( "<li></li>" )
+                .data( "item.autocomplete", item )
+                .append(inner_html)
+                .appendTo( ul );
+        };
+
+
     /*
     $('.autocomplete_product').autocomplete({
         source: base + 'ajax/product', // name of controller followed by function

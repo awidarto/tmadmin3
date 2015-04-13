@@ -35,8 +35,6 @@
             //->data_format('dd-mm-yyyy')
             ->append('<i class="fa fa-th"></i>') }}
 
-        {{ Former::text('material','Material') }}
-        {{ Former::text('colour','Colour')->class('form-control col-md-4') }}
         {{--
 
         <div class="row form-vertical">
@@ -48,6 +46,17 @@
             </div>
         </div>
         --}}
+        <div class="row form-vertical">
+            <div class="col-md-4">
+                {{ Former::text('material','Material') }}
+            </div>
+            <div class="col-md-4">
+                {{ Former::text('colour','Colour')->class('form-control col-md-4') }}
+            </div>
+            <div class="col-md-4">
+                {{ Former::select('colorVariantParent','Show as Main Color Item')->options(array('yes'=>'Yes','no'=>'No')) }}
+            </div>
+        </div>
 
         <div class="row form-vertical">
             <div class="col-md-4">
@@ -73,6 +82,8 @@
         </div>
 
         {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
+        {{ Former::text('colorVariant','Color Variant')->class('tag_color') }}
 
         {{ Former::text('relatedProducts','Related Products')->class('tag_related') }}
 
@@ -132,6 +143,82 @@
                 </tr>
             @endforeach
         </table>
+        {{--
+
+        <h5>Pricing</h5>
+
+        <table class="table " >
+            <tr>
+                <th>
+                    Outlet
+                </th>
+                <th>
+                    From
+                </th>
+                <th>
+                    To
+                </th>
+                <th>
+                    Regular Price
+                </th>
+                <th>
+                    Discount Price
+                </th>
+                <th>
+                    Tax
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    {{ Former::text('tOutlet','')->id('tOutlet') }}
+                </th>
+                <th>
+                    {{ Former::text('tFrom','')->id('tFrom') }}
+                </th>
+                <th>
+                    {{ Former::text('tUntil','')->id('tUntil') }}
+                </th>
+                <th>
+                    {{ Former::text('tReg','')->id('tReg') }}
+                </th>
+                <th>
+                    {{ Former::text('tDisc','')->id('tDisc') }}
+                </th>
+                <th>
+                    {{ Former::text('tTax','')->id('tTax') }}
+                </th>
+                <th>
+                    <button class="btn btn-success" ><i class="fa fa-plus"></i></button>
+                </th>
+            </tr>
+            @foreach( Prefs::getOutlet()->OutletToArray() as $o)
+                <tr>
+                    <td>
+                        {{ $o->name }}
+                    </td>
+                    <td>
+                        {{ $formdata['stocks'][$o->_id]['sold'] }}
+                    </td>
+                    <td>
+                        {{ $formdata['stocks'][$o->_id]['reserved'] }}
+                    </td>
+                    <td>
+                        {{ $formdata['stocks'][$o->_id]['sold'] }}
+                    </td>
+                    <td>
+                        {{ $formdata['stocks'][$o->_id]['reserved'] }}
+                    </td>
+                    <td>
+                        {{ $formdata['stocks'][$o->_id]['available'] }}
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+
+        --}}
 
         <h5>Pictures</h5>
         <?php

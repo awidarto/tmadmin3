@@ -138,6 +138,47 @@ class ProfileController extends AdminController {
 
         $data['fullname'] = $data['firstname'].' '.$data['lastname'];
 
+            if( isset($data['file_id']) && count($data['file_id'])){
+
+                $mediaindex = 0;
+
+                for($i = 0 ; $i < count($data['thumbnail_url']);$i++ ){
+
+                    $index = $mediaindex;
+
+                    $data['files'][ $data['file_id'][$i] ]['ns'] = $data['ns'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['role'] = $data['role'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['thumbnail_url'] = $data['thumbnail_url'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['large_url'] = $data['large_url'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['medium_url'] = $data['medium_url'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['full_url'] = $data['full_url'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['delete_type'] = $data['delete_type'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['delete_url'] = $data['delete_url'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['filename'] = $data['filename'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['filesize'] = $data['filesize'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['temp_dir'] = $data['temp_dir'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['filetype'] = $data['filetype'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['is_image'] = $data['is_image'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['is_audio'] = $data['is_audio'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['is_video'] = $data['is_video'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['fileurl'] = $data['fileurl'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['file_id'] = $data['file_id'][$i];
+                    $data['files'][ $data['file_id'][$i] ]['sequence'] = $mediaindex;
+
+                    $mediaindex++;
+
+                    $data['defaultpic'] = $data['file_id'][$i];
+                    $data['defaultpictures'] = $data['files'][$data['file_id'][$i]];
+
+                }
+
+            }else{
+
+                $data['defaultpic'] = '';
+                $data['defaultpictures'] = '';
+            }
+
+
             $photo = array();
             $avatar = '';
 

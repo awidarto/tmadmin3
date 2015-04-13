@@ -32,7 +32,10 @@
 
 
     {{ HTML::script('js/jquery-1.9.1.js')}}
+    {{ HTML::script('bootflat/js/site.min.js')}}
 
+    {{ HTML::style('bootstrap3-editable/css/bootstrap-editable.css') }}
+    {{ HTML::script('bootstrap3-editable/js/bootstrap-editable.min.js') }}
 
     {{-- HTML::script('js/jquery.ui.addresspicker.js') --}}
 

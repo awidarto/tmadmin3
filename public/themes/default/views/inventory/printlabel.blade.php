@@ -136,12 +136,12 @@
     <div class="label">
         <table>
             <tr>
-                <td colspan="2" style="text-align:center">
+                <td colspan="3" style="text-align:center">
                     {{ isset($pd['itemDescription'])?$pd['itemDescription']:'';}}
                 </td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align:center">
+                <td colspan="3" style="text-align:center">
                     @if($code_type == 'qr')
                         <img src="{{ URL::to('qr/'.base64_encode($l['_id']))}}" alt="{{ $l['_id'] }}" style="width:45px;height:auto;" />
                     @else
@@ -154,6 +154,9 @@
             <tr>
                 <td style="text-align:center">
                     <img style="width:40px;" src="{{ URL::to('/')}}/images/tm_logo_trans_sm.png" alt="TOIMOI" />
+                </td>
+                <td style="text-align:center">
+                    {{ $outlets[$l['outletId']]['code'] }}
                 </td>
                 <td style="text-align:center">
                     {{ Ks::idr($pd['priceRegular'])}}
