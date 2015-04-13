@@ -2,13 +2,16 @@
 
 return array(
         'entities'=>array(
-                'asset',
-                'location',
-                'rack',
-                'approval',
-                'devicetype',
-                'report',
+                'dashboard',
+                'pos',
+                'products',
+                'inventory',
+                'sales',
+                'marketing',
+                'templates',
+                'content',
                 'log',
+                'system',
                 'user'
             ),
         'actions'=>array(

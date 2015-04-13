@@ -77,7 +77,7 @@ class ProductcategoryController extends AdminController {
             'slug'=> 'required'
         );
 
-        $this->backlink = 'content/category';
+        //$this->backlink = 'content/category';
 
         return parent::postEdit($id,$data);
     }

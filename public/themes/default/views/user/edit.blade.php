@@ -33,7 +33,7 @@
 
         <h5>Avatar</h5>
         <?php
-            $fupload = new Fupload();
+            $fupload = new Fupload2();
         ?>
 
         {{ $fupload->id('photoupload')->title('Select Photo')->label('Upload Photo')

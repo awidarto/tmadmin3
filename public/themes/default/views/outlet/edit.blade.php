@@ -1,42 +1,38 @@
-@extends('layout.front')
+@extends('layout.fixedtwo')
 
 
-@section('content')
+@section('left')
 
-<h3>{{$title}}</h3>
+    {{ Former::hidden('id')->value($formdata['_id']) }}
+    {{ Former::text('name','Outlet Name') }}
+    {{ Former::text('code','Outlet Code / Initial') }}
+    {{ Former::text('slug','Permalink')->id('permalink') }}
+    {{ Former::text('venue','Venue') }}
+    {{ Former::text('address','Address') }}
+    {{ Former::text('phone','Phone') }}
 
-{{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
-
-{{ Former::hidden('id')->value($formdata['_id']) }}
-<div class="row-fluid">
-    <div class="col-md-6">
-        {{ Former::text('name','Outlet Name') }}
-        {{ Former::text('code','Outlet Code / Initial') }}
-        {{ Former::text('slug','Permalink')->id('permalink') }}
-        {{ Former::text('venue','Venue') }}
-        {{ Former::text('address','Address') }}
-        {{ Former::text('phone','Phone') }}
-
-        <h6>Geo Point ( for Google Map Marker )</h6>
-        {{ Former::text('latitude','Latitude') }}
-        {{ Former::text('longitude','Longitude') }}
-
+    <h6>Geo Point ( for Google Map Marker )</h6>
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            {{ Former::text('latitude','Latitude') }}
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            {{ Former::text('longitude','Longitude') }}
+        </div>
     </div>
-    <div class="col-md-6">
-        {{ Former::select('category')->options(Config::get('tm.outlet_category'))->label('Outlet Category') }}
-        {{ Former::textarea('description','Description')->class('editor') }}
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
-    </div>
-</div>
 
-<div class="row-fluid">
-    <div class="col-md-12">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
+    {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
-{{Former::close()}}
+@stop
+
+@section('right')
+    {{ Former::select('category')->options(Config::get('tm.outlet_category'))->label('Outlet Category') }}
+    {{ Former::textarea('description','Description') }}
+    {{ Former::text('tags','Tags')->class('tag_keyword') }}
+@stop
+
+@section('aux')
 
 <script type="text/javascript">
 
@@ -48,7 +44,6 @@ $(document).ready(function() {
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
     });
-
 
 });
 
