@@ -1,5 +1,14 @@
 $(document).ready(function() {
 
+    $('.auto_color').autocomplete({
+        source: base + 'ajax/colorhex',
+        select: function(event, ui){
+            $('#groupid').val(ui.item.id);
+        }
+    });
+
+
+
     $('.tag_related').tagsInput({
         'autocomplete_url': base + 'ajax/product',
         'height':'100px',

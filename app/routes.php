@@ -21,6 +21,7 @@ Route::controller('outlet', 'OutletController');
 Route::controller('user', 'UserController');
 Route::controller('buyer', 'BuyerController');
 Route::controller('report', 'ReportController');
+
 Route::controller('showcase', 'ShowcaseController');
 Route::controller('pages', 'PagesController');
 Route::controller('posts', 'PostsController');
@@ -70,8 +71,19 @@ Route::controller('activity', 'ActivityController');
 Route::controller('access', 'AccessController');
 Route::controller('apiaccess', 'ApiaccessController');
 
+Route::get('content/pages', 'PagesController@getIndex');
+Route::get('content/posts', 'PostsController@getIndex');
+Route::get('content/category', 'CategoryController@getIndex');
+Route::get('content/section', 'SectionController@getIndex');
+Route::get('content/menu', 'MenuController@getIndex');
+
+
 //report routes
 Route::controller('approvalreport', 'ApprovalreportController');
+
+Route::controller('home', 'HomeController');
+Route::controller('homeslide', 'HomeslideController');
+Route::controller('header', 'HeaderController');
 
 
 Route::controller('upload', 'UploadController');

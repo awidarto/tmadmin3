@@ -10,7 +10,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ URL::to('logout')}}" style="font-size:20px;"><i class="fa fa-sign-out"></i></a>
+                            <a href="{{ URL::to('logout')}}" ><i class="fa fa-sign-out"></i> Logout</a>
                         </li>
                     </ul>
                 </li>

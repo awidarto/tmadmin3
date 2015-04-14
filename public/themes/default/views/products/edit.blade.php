@@ -51,7 +51,8 @@
                 {{ Former::text('material','Material') }}
             </div>
             <div class="col-md-4">
-                {{ Former::text('colour','Colour')->class('form-control col-md-4') }}
+                {{ Former::text('colour','Colour')->class('form-control col-md-4 auto_color') }}
+                <div id="color-chip"></div>
             </div>
             <div class="col-md-4">
                 {{ Former::select('colorVariantParent','Show as Main Color Item')->options(array('yes'=>'Yes','no'=>'No')) }}

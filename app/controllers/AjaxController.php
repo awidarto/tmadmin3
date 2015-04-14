@@ -975,6 +975,30 @@ class AjaxController extends BaseController {
         return Response::json($result);
     }
 
+    public function getColorhex()
+    {
+        $q = Input::get('term');
+
+        $q = trim($q);
+
+        $mreg = new MongoRegex('/'.$q.'/i');
+
+        $res = Color::where('color', 'regex', $mreg)
+                    ->get()->toArray();
+
+        $result = array();
+
+        foreach($res as $r){
+            //print_r($r);
+
+            $display = '<div style="background-color:'.$r['hex'].';width:45px;height:35px;" ></div>';
+            $result[] = array('id'=>$r['_id'],'value'=>$r['color'],'pic'=>$display,'description'=>$r['color'],'label'=>$r['color']);
+        }
+
+        return Response::json($result);
+    }
+
+
     public function getProductplain()
     {
         $q = Input::get('term');
