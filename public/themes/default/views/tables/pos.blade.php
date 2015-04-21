@@ -98,172 +98,174 @@ div.payform h3{
 
 </style>
 
-<div class="row">
-   <div class="col-md-6">
-        <div class="panel panel-info">
-            <header class="panel-heading">{{ $title }}</header>
-            <div class="panel-body">
-                    <table class="table table-condensed dataTable">
-                        <thead>
-                            <tr>
-                                @foreach($heads as $head)
-                                    @if(is_array($head))
-                                        <th
-                                            @foreach($head[1] as $key=>$val)
-                                                @if(!is_array($val))
-                                                    {{ $key }}="{{ $val }}"
-                                                @endif
-                                            @endforeach
-                                        >
-                                        {{ $head[0] }}
-                                        </th>
-                                    @else
-                                    <th>
-                                        {{ $head }}
-                                    </th>
-                                    @endif
-                                @endforeach
-                            </tr>
-                            @if(isset($secondheads) && !is_null($secondheads))
+<div class="container">
+    <div class="row">
+       <div class="col-md-8">
+            <div class="panel panel-info">
+                <header class="panel-heading">{{ $title }}</header>
+                <div class="panel-body">
+                        <table class="table table-condensed dataTable">
+                            <thead>
                                 <tr>
-                                @foreach($secondheads as $head)
-                                    @if(is_array($head))
-                                        <th
-                                            @foreach($head[1] as $key=>$val)
-                                                @if($key != 'search')
-                                                    {{ $key }}="{{ $val }}"
-                                                @endif
-                                            @endforeach
-                                        >
-                                        {{ $head[0] }}
+                                    @foreach($heads as $head)
+                                        @if(is_array($head))
+                                            <th
+                                                @foreach($head[1] as $key=>$val)
+                                                    @if(!is_array($val))
+                                                        {{ $key }}="{{ $val }}"
+                                                    @endif
+                                                @endforeach
+                                            >
+                                            {{ $head[0] }}
+                                            </th>
+                                        @else
+                                        <th>
+                                            {{ $head }}
                                         </th>
-                                    @else
-                                    <th>
-                                        {{ $head }}
-                                    </th>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                                @if(isset($secondheads) && !is_null($secondheads))
+                                    <tr>
+                                    @foreach($secondheads as $head)
+                                        @if(is_array($head))
+                                            <th
+                                                @foreach($head[1] as $key=>$val)
+                                                    @if($key != 'search')
+                                                        {{ $key }}="{{ $val }}"
+                                                    @endif
+                                                @endforeach
+                                            >
+                                            {{ $head[0] }}
+                                            </th>
+                                        @else
+                                        <th>
+                                            {{ $head }}
+                                        </th>
+                                        @endif
+                                    @endforeach
+                                    </tr>
+                                @endif
+                            </thead>
+
+                            <?php
+                                $form = new Former();
+                            ?>
+
+                            <thead id="searchinput">
+                                <tr>
+                                <?php $index = -1 ;?>
+                                @foreach($heads as $in)
+                                    @if( $in[0] != 'select_all' && $in[0] != '')
+                                        @if(isset($in[1]['search']) && $in[1]['search'] == true)
+                                            @if(isset($in[1]['date']) && $in[1]['date'])
+                                                <td>
+                                                    <div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+                                                        <input class="col-md-8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                                    </div>
+                                                    {{--
+                                                    <div id="{{ $index }}" class="input-append datepickersearch">
+                                                        <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
+                                                        <span class="add-on">
+                                                            <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
+                                                            </i>
+                                                        </span>
+                                                    </div>
+
+                                                    --}}
+
+                                                </td>
+                                            @elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
+                                                <td>
+                                                    <div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
+                                                        <input class="col-md-8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
+                                                    </div>
+                                                    {{--
+                                                    <div id="{{ $index }}" class="input-append datetimepickersearch">
+                                                        <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
+                                                        <span class="add-on">
+                                                            <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
+                                                            </i>
+                                                        </span>
+                                                    </div>
+                                                    --}}
+                                                </td>
+                                            @elseif(isset($in[1]['select']) && is_array($in[1]['select']))
+                                                <td>
+                                                    <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+                                                    <div class="styled-select">
+                                                        {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small','id'=>$index ))}}
+                                                    </div>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
+                                                </td>
+                                            @endif
+                                        @else
+                                            @if(isset($in[1]['clear']) && $in[1]['clear'] == true)
+                                                <td><span id="clearsearch" style="cursor:pointer;">Clear Search</span></td>
+                                            @else
+                                                <td>&nbsp;</td>
+                                            @endif
+                                        @endif
+
+                                        <?php $index++; ?>
+
+                                    @elseif($in[0] == 'select_all')
+                                        <td>{{ Former::checkbox('select_all') }}</td>
+                                    @elseif($in[0] == '')
+                                        <td>&nbsp;</td>
                                     @endif
+
+
                                 @endforeach
                                 </tr>
-                            @endif
-                        </thead>
+                            </thead>
 
-                        <?php
-                            $form = new Former();
-                        ?>
+                         <tbody>
+                            <!-- will be replaced by ajax content -->
+                         </tbody>
 
-                        <thead id="searchinput">
-                            <tr>
-                            <?php $index = -1 ;?>
-                            @foreach($heads as $in)
-                                @if( $in[0] != 'select_all' && $in[0] != '')
-                                    @if(isset($in[1]['search']) && $in[1]['search'] == true)
-                                        @if(isset($in[1]['date']) && $in[1]['date'])
-                                            <td>
-                                                <div class="input-append date datepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                                    <input class="col-md-8 search_init dateinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                                </div>
-                                                {{--
-                                                <div id="{{ $index }}" class="input-append datepickersearch">
-                                                    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy" class="search_init dateinput" type="text" placeholder="{{$in[0]}}" ></input>
-                                                    <span class="add-on">
-                                                        <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
-                                                        </i>
-                                                    </span>
-                                                </div>
+                        </table>
 
-                                                --}}
-
-                                            </td>
-                                        @elseif(isset($in[1]['datetime']) && $in[1]['datetime'])
-                                            <td>
-                                                <div class="input-append date datetimepickersearch" id="{{ $index }}" data-date="" data-date-format="dd-mm-yyyy">
-                                                    <input class="col-md-8 search_init datetimeinput" size="16" type="text" value="" placeholder="{{$in[0]}}" >
-                                                </div>
-                                                {{--
-                                                <div id="{{ $index }}" class="input-append datetimepickersearch">
-                                                    <input id="{{ $index }}" name="search_{{$in[0]}}" data-format="dd-MM-yyyy hh:mm:ss" class="search_init datetimeinput" type="text" placeholder="{{$in[0]}}" ></input>
-                                                    <span class="add-on">
-                                                        <i data-time-icon="fa fa-clock" data-date-icon="fa fa-calendar">
-                                                        </i>
-                                                    </span>
-                                                </div>
-                                                --}}
-                                            </td>
-                                        @elseif(isset($in[1]['select']) && is_array($in[1]['select']))
-                                            <td>
-                                                <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" style="display:none;" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
-                                                <div class="styled-select">
-                                                    {{ Form::select('select_'.$in[0],$in[1]['select'],null,array('class'=>'selector input-small','id'=>$index ))}}
-                                                </div>
-                                            </td>
-                                        @else
-                                            <td>
-                                                <input id="{{ $index }}" type="text" name="search_{{$in[0]}}" id="search_{{$in[0]}}" placeholder="{{$in[0]}}" value="" class="search_init {{ (isset($in[1]['class']))?$in[1]['class']:'filter'}}" />
-                                            </td>
-                                        @endif
-                                    @else
-                                        @if(isset($in[1]['clear']) && $in[1]['clear'] == true)
-                                            <td><span id="clearsearch" style="cursor:pointer;">Clear Search</span></td>
-                                        @else
-                                            <td>&nbsp;</td>
-                                        @endif
-                                    @endif
-
-                                    <?php $index++; ?>
-
-                                @elseif($in[0] == 'select_all')
-                                    <td>{{ Former::checkbox('select_all') }}</td>
-                                @elseif($in[0] == '')
-                                    <td>&nbsp;</td>
-                                @endif
-
-
-                            @endforeach
-                            </tr>
-                        </thead>
-
-                     <tbody>
-                        <!-- will be replaced by ajax content -->
-                     </tbody>
-
-                    </table>
-
-                    <div class="row-fluid">
-                        <div class="col-md-6">
-                            {{ Former::button('Cancel')->id('btn-cancel')->class('btn btn-danger btn-block btn-large') }}
+                        <div class="row-fluid">
+                            <div class="col-md-6">
+                                {{ Former::button('Cancel')->id('btn-cancel')->class('btn btn-danger btn-block btn-large') }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ Former::button('Pay')->id('btn-pay')->class('btn btn-primary btn-block btn-large') }}
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            {{ Former::button('Pay')->id('btn-pay')->class('btn btn-primary btn-block btn-large') }}
-                        </div>
-                    </div>
+                </div>
             </div>
-        </div>
-   </div>
-   <div class="col-md-5">
+       </div>
+       <div class="col-md-3">
 
-        <div class="panel panel-info">
-            <header class="panel-heading">Session</header>
-            <div class="panel-body">
+            <div class="panel panel-info">
+                <header class="panel-heading">Session</header>
+                <div class="panel-body">
 
-                @if(isset($can_add) && $can_add == true)
-                    <a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
-                    <a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
-                    <a class="btn" id="download-xls">Download Excel</a>
-                    <a class="btn" id="download-csv">Download CSV</a>
-                @endif
+                    @if(isset($can_add) && $can_add == true)
+                        <a href="{{ URL::to($addurl) }}" class="btn btn-primary">Add</a>
+                        <a href="{{ URL::to($importurl) }}" class="btn btn-primary">Import Excel</a>
+                        <a class="btn" id="download-xls">Download Excel</a>
+                        <a class="btn" id="download-csv">Download CSV</a>
+                    @endif
 
-                @if(isset($is_report) && $is_report == true)
-                    {{ $report_action }}
-                @endif
+                    @if(isset($is_report) && $is_report == true)
+                        {{ $report_action }}
+                    @endif
 
-                @if(isset($is_additional_action) && $is_additional_action == true)
-                    {{ $additional_action }}
-                @endif
+                    @if(isset($is_additional_action) && $is_additional_action == true)
+                        {{ $additional_action }}
+                    @endif
 
+                </div>
             </div>
-        </div>
 
-   </div>
+       </div>
+    </div>
 </div>
 
 <div id="print-modal" class="modal fade medium" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -497,7 +499,7 @@ div.payform h3{
                 .draw();
         });
 
-        //register and re register form inside table cell
+        //register and re register form inside table
         oTable.on( 'draw.dt', function () {
             $('#tax_pct').on('change',function(){
                 oTable.draw();
@@ -668,6 +670,8 @@ div.payform h3{
             var payable_amount = $('#payable-amount').val();
             var cash_amount = $('#cash-amount').val();
             var cash_change = $('#cash-change').val();
+            var tax_pct = $('#tax_pct').val();
+            var tax_value = $('#tax_value').val();
 
             $.post('{{ URL::to('pos/save') }}',
                 {
@@ -683,6 +687,8 @@ div.payform h3{
                     payable_amount: payable_amount,
                     cash_amount: cash_amount,
                     cash_change: cash_change,
+                    tax_pct:tax_pct,
+                    tax_value:tax_value,
                     status:'print'
 
                 },
@@ -709,6 +715,8 @@ div.payform h3{
             var payable_amount = $('#payable-amount').val();
             var cash_amount = $('#cash-amount').val();
             var cash_change = $('#cash-change').val();
+            var tax_pct = $('#tax_pct').val();
+            var tax_value = $('#tax_value').val();
 
             $.post('{{ URL::to('pos/save') }}',
                 {
@@ -724,6 +732,8 @@ div.payform h3{
                     payable_amount: payable_amount,
                     cash_amount: cash_amount,
                     cash_change: cash_change,
+                    tax_pct:tax_pct,
+                    tax_value:tax_value,
                     status:'final'
                 },
                 function(data){

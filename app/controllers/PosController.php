@@ -442,7 +442,8 @@ class PosController extends AdminController {
 
         $tax = Input::get('tax');
 
-        if($tax == 0){
+        if($tax == 0 || is_null($tax) || $tax == ''){
+            $tax = 0;
             $total_tax = 0;
             $grand_total = $total_price + $total_tax;
         }else{
@@ -450,23 +451,22 @@ class PosController extends AdminController {
             $grand_total = $total_price + $total_tax;
         }
 
-
-        $taxform = '<div class="input-group" style="margin-top:8px;text-align:right;">
-                        <select id="tax_pct" class="form-control">
-                            <option value="0" '.$this->taxSelect($tax, 0).' >No Tax</option>
-                            <option value="10" '.$this->taxSelect($tax,10).' >PPn 10%</option>
-                        </select>
-                        <input type="hidden" id="total_tax_value" value="'.$total_tax.'">
+        $taxform = '<div style="display:block;text-align:right">
+                        <div class="input-group" style="margin-top:8px;text-align:right;">
+                            <select id="tax_pct" class="form-control">
+                                <option value="0" '.$this->taxSelect($tax, 0).' >No Tax</option>
+                                <option value="10" '.$this->taxSelect($tax,10).' >PPn 10%</option>
+                            </select>
+                            <input type="hidden" id="total_tax_value" value="'.$total_tax.'">
+                        </div>
                     </div>';
 
-        $taxform = '<div style="display:block;text-align:right">'.$taxform.'</div>';
-
-
+        //print $taxform;
 
         $aadata[] = array('','','','','<h5 style="text-align:right;">Subtotal</h5>','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_price).'</h5><input type="hidden" id="subtotal_price_value" value="'.$total_price.'">');
         //$aadata[] = array('','Discount',Former::text('')->id('disc_pct')->class('form-control col-md-3 total_disc_pct')->placeholder('%')->render(),'','<h5 style="text-align:right;">Total Discount</h5>','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_price).'</h5><input type="hidden" id="subtotal_price_value" value="'.$total_price.'">');
         //$aadata[] = array('','','','<h5 style="text-align:right;">Tax</h5>',Former::text('')->id('tax_pct')->value(10)->class('form-control col-md-2 tax_pct')->placeholder('%')->render(),'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="total_tax_value" value="'.$total_tax.'">');
-        $aadata[] = array('','','','',$taxform,'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5>');
+        $aadata[] = array('','','','',$taxform,'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="tax_value" value="'.$total_tax.'" >');
         $aadata[] = array('','','','','<h4 style="text-align:right;">Total</h4>','<h4 style="text-align:right;">IDR</h4>','<h4 style="text-align:right;">'.Ks::idr($grand_total).'</h4><input type="hidden" id="total_price_value" value="'.$grand_total.'">');
 
         $sEcho = (int) Input::get('sEcho');
@@ -511,7 +511,82 @@ class PosController extends AdminController {
         return Response::json($result);
     }
 
-    public function getPrint($session_id)
+    public function getPrint($id){
+        //$sales = Sales::find($id)->toArray();
+
+        $sales = Sales::where('sessionId',$id)->first()->toArray();
+
+        //print_r($sales);
+
+        //exit();
+
+        $head = array(array('value'=>'Buyer Detail','attr'=>'colspan="2"'));
+        $btab = array();
+        $btab[] = array('Name',(isset($sales['buyer_name']))?$sales['buyer_name']:'');
+        $btab[] = array('Address',(isset($sales['buyer_address']) )?$sales['buyer_address']:'');
+        $btab[] = array('City',(isset($sales['buyer_city']))?$sales['buyer_city']:'');
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($btab, $attr, $head);
+        $tablebuyer = $t->build();
+
+
+        $head = array(array('value'=>'Purchase Detail','attr'=>'colspan="2"'));
+        $btab = array();
+        $btab[] = array(
+            array('value'=>'<h3>Total</h3>','attr'=>''),
+            array('value'=>'<h3>IDR '.Ks::idr($sales['payable_amount']).'</h3>','attr'=>'')
+        );
+
+        if(isset($sales['transactionstatus'])){
+            $transactionstatus = '<a href="#" id="transactionstatus" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >'.$sales['transactionstatus'].'</a>';
+        }else{
+            $transactionstatus = '<a href="#" id="transactionstatus" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >n/a</a>';
+        }
+
+        $btab[] = array('Current Status',$transactionstatus);
+        $btab[] = array('Outlet',$sales['outletName']);
+        $btab[] = array('Transaction Type',(isset($sales['transactiontype']))?$sales['transactiontype']:'' );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($btab, $attr, $head);
+        $tablepurchase = $t->build();
+
+        if(isset($sales['shipment']['delivery_status'])){
+            $delivery_status = '<a href="#" id="delivery_status" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >'.$sales['shipment']['delivery_status'].'</a>';
+        }else{
+            $delivery_status = '<a href="#" id="delivery_status" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >Pending</a>';
+        }
+
+        if(isset($sales['shipment']['delivery_number'])){
+            $delivery_number = '<a href="#" id="delivery_number" data-type="text" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >'.$sales['shipment']['delivery_number'].'</a>';
+        }else{
+            $delivery_number = '<a href="#" id="delivery_number" data-type="text" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >n/a</a>';
+        }
+
+        $head = array(array('value'=>'Shipment Detail','attr'=>'colspan="2"'));
+        $btab = array();
+        $btab[] = array('Shipped Via',(isset($sales['payment']['delivery_method']))?$sales['payment']['delivery_method']:'');
+        $btab[] = array('Shipment Number',$delivery_number);
+        $btab[] = array('Shipment Status',$delivery_status );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($btab, $attr, $head);
+        $tableshipment = $t->build();
+
+
+        $tabletrans = $this->trxDetail($sales['sessionId']);
+
+        return View::make('print.purchasedetail')
+                ->with('sales',$sales)
+                ->with('tablebuyer',$tablebuyer)
+                ->with('tablepurchase',$tablepurchase)
+                ->with('tableshipment',$tableshipment)
+                ->with('tabletrans',$tabletrans);
+    }
+
+
+    public function getPrinto($session_id)
     {
         $trx = Transaction::where('sessionId',$session_id)->get()->toArray();
         $pay = Payment::where('sessionId',$session_id)->first()->toArray();
@@ -627,6 +702,8 @@ class PosController extends AdminController {
             $trx->payable_amount = $in['payable_amount'];
             $trx->cash_amount = $in['cash_amount'];
             $trx->cash_change = $in['cash_change'];
+            $trx->tax_value = $in['tax_value'];
+            $trx->tax_pct = $in['tax_pct'];
             $trx->lastUpdate = new MongoDate();
 
             if(isset($trx->invoice_number) && $trx->invoice_number != '' ){
@@ -660,14 +737,16 @@ class PosController extends AdminController {
 
                     $unit = Stockunit::find($item->unitId);
                     //print_r($unit);
-                    $unit->status = 'sold';
-                    $unit->lastUpdate = new MongoDate();
+                    if($unit){
+                        $unit->status = 'sold';
+                        $unit->lastUpdate = new MongoDate();
+                        $itarray[] = $item->toArray();
+                        $unitarr[] = $unit->toArray();
 
-                    $itarray[] = $item->toArray();
-                    $unitarr[] = $unit->toArray();
+                        $unit->save();
+                        $item->save();
+                    }
 
-                    $unit->save();
-                    $item->save();
                 }
 
                 $sales = Sales::where('sessionId', $in['current_trx'])->first();
@@ -692,11 +771,14 @@ class PosController extends AdminController {
                 $sales->payable_amount = $in['payable_amount'];
                 $sales->cash_amount = $in['cash_amount'];
                 $sales->cash_change = $in['cash_change'];
+                $sales->tax_value = $in['tax_value'];
+                $sales->tax_pct = $in['tax_pct'];
 
                 $sales->transaction = $itarray;
                 $sales->stockunit = $unitarr;
                 $sales->payment = $payment;
                 $sales->transactiontype = 'pos';
+                $sales->lastUpdate = new MongoDate();
                 $sales->save();
             }
 
@@ -1358,6 +1440,70 @@ class PosController extends AdminController {
     {
 
     }
+
+    public function trxDetail($trxid)
+    {
+        $itemtable = '';
+        $session_id = $trxid;
+        $trx = Transaction::where('sessionId',$session_id)->get()->toArray();
+        $pay = Payment::where('sessionId',$session_id)->first()->toArray();
+
+        //print_r($pay);
+
+        $tab = array();
+        foreach($trx as $t){
+
+            $tab[ $t['SKU'] ]['description'] = $t['productDetail']['itemDescription'];
+            $tab[ $t['SKU'] ]['qty'] = ( isset($tab[ $t['SKU'] ]['qty']) )? $tab[ $t['SKU'] ]['qty'] + 1:1;
+            $tab[ $t['SKU'] ]['tagprice'] = $t['productDetail']['priceRegular'];
+            $tab[ $t['SKU'] ]['total'] = ( isset($tab[ $t['SKU'] ]['total']) )? $tab[ $t['SKU'] ]['total'] + $t['productDetail']['priceRegular']:$t['productDetail']['priceRegular'];
+
+        }
+
+        $tab_data = array();
+        $gt = 0;
+        foreach($tab as $k=>$v){
+            $tab_data[] = array(
+                    array('value'=>$v['description'], 'attr'=>'class="left"'),
+                    array('value'=>$v['qty'], 'attr'=>'class="center"'),
+                    array('value'=>Ks::idr($v['tagprice']), 'attr'=>'class="right"'),
+                    array('value'=>Ks::idr($v['total']), 'attr'=>'class="right" id="total_'.$k.'"'),
+                );
+            $gt += $v['total'];
+        }
+
+        $gt += $gt * 0.1;
+
+
+        $delivery_charge = ( isset($pay['delivery_charge']) )?$pay['delivery_charge']:0;
+
+        //$totalform = Former::hidden('totalprice',$gt);
+
+        $totalform = Former::hidden('totalprice',$gt + doubleval($delivery_charge));
+
+        $tab_data[] = array('','',array('value'=>'PPN 10%', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt * 0.1), 'attr'=>'class="right"'));
+
+        $tab_data[] = array('','',array('value'=>'Sub Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt), 'attr'=>'class="right"'));
+
+        $tab_data[] = array('','',array('value'=>'Shipping Charges', 'attr'=>'class="right"'),array('value'=>Ks::idr($delivery_charge), 'attr'=>'class="right"'));
+
+        $tab_data[] = array('',$totalform,array('value'=>'Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt + doubleval($delivery_charge) ), 'attr'=>'class="right"'));
+
+        $header = array(
+            'things to buy',
+            'unit',
+            'tagprice',
+            array('value'=>'price to pay', 'attr'=>'style="text-align:right"')
+            );
+
+        $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
+        $t = new HtmlTable($tab_data, $attr, $header);
+        $itemtable = $t->build();
+
+        return $itemtable;
+
+    }
+
 
     public function updateStock($data){
 

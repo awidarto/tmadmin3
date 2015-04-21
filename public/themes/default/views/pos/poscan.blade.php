@@ -42,9 +42,9 @@
     #session-list button,
     #btn-func button,
     #scan-mode button{
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
-        min-width: 150px;
+        min-width: 50px;
         margin-bottom: 30px;
     }
 
@@ -82,9 +82,9 @@
     }
 
     input.scan-in{
-        font-size: 26px;
-        line-height: 30px;
-        height:55px;
+        font-size: 20px;
+        line-height: 24px;
+        height:45px;
     }
 
 </style>
