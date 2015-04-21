@@ -60,7 +60,7 @@ class PosController extends AdminController {
 
         $this->additional_action = View::make('pos.poscan')->with('additional_page_data',$this->additional_page_data)->render();
 
-        $this->js_additional_param = "aoData.push( { 'name':'session', 'value': $('#current_session').val() } );";
+        $this->js_additional_param = "aoData.push( { 'name':'session', 'value': $('#current_session').val() }, { 'name':'tax', 'value': $('#tax_pct').val() } );";
 
         $this->title = 'Point of Sales';
 
@@ -440,13 +440,34 @@ class PosController extends AdminController {
             $counter++;
         }
 
-        $total_tax = $total_price * (10 / 100);
-        $grand_total = $total_price + $total_tax;
+        $tax = Input::get('tax');
+
+        if($tax == 0){
+            $total_tax = 0;
+            $grand_total = $total_price + $total_tax;
+        }else{
+            $total_tax = $total_price * ( $tax / 100);
+            $grand_total = $total_price + $total_tax;
+        }
+
+
+        $taxform = '<div class="input-group" style="margin-top:8px;text-align:right;">
+                        <select id="tax_pct" class="form-control">
+                            <option value="0" '.$this->taxSelect($tax, 0).' >No Tax</option>
+                            <option value="10" '.$this->taxSelect($tax,10).' >PPn 10%</option>
+                        </select>
+                        <input type="hidden" id="total_tax_value" value="'.$total_tax.'">
+                    </div>';
+
+        $taxform = '<div style="display:block;text-align:right">'.$taxform.'</div>';
+
+
 
         $aadata[] = array('','','','','<h5 style="text-align:right;">Subtotal</h5>','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_price).'</h5><input type="hidden" id="subtotal_price_value" value="'.$total_price.'">');
         //$aadata[] = array('','Discount',Former::text('')->id('disc_pct')->class('form-control col-md-3 total_disc_pct')->placeholder('%')->render(),'','<h5 style="text-align:right;">Total Discount</h5>','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_price).'</h5><input type="hidden" id="subtotal_price_value" value="'.$total_price.'">');
-        $aadata[] = array('','<h5 style="text-align:right;">Tax</h5>',Former::text('')->id('tax_pct')->class('form-control col-md-3 tax_pct')->placeholder('%')->render(),'','','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="total_tax_value" value="'.$total_tax.'">');
-        $aadata[] = array('','','','','<h1 style="text-align:right;">Total</h1>','<h1 style="text-align:right;">IDR</h1>','<h1>'.Ks::idr($grand_total).'</h1><input type="hidden" id="total_price_value" value="'.$grand_total.'">');
+        //$aadata[] = array('','','','<h5 style="text-align:right;">Tax</h5>',Former::text('')->id('tax_pct')->value(10)->class('form-control col-md-2 tax_pct')->placeholder('%')->render(),'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="total_tax_value" value="'.$total_tax.'">');
+        $aadata[] = array('','','','',$taxform,'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5>');
+        $aadata[] = array('','','','','<h4 style="text-align:right;">Total</h4>','<h4 style="text-align:right;">IDR</h4>','<h4 style="text-align:right;">'.Ks::idr($grand_total).'</h4><input type="hidden" id="total_price_value" value="'.$grand_total.'">');
 
         $sEcho = (int) Input::get('sEcho');
 
@@ -460,6 +481,14 @@ class PosController extends AdminController {
         );
 
         return Response::json($result);
+    }
+
+    public function taxSelect($tax, $val){
+        if($tax == $val){
+            return 'selected';
+        }else{
+            return '';
+        }
     }
 
     public function getSku()
@@ -1311,7 +1340,7 @@ class PosController extends AdminController {
 
     public function toIdr($data, $field)
     {
-        return '<h5 style="text-align:right;">IDR '. Ks::idr( $data[$field] ) .'</h5>' ;
+        return '<h5 style="text-align:right;">'. Ks::idr( $data[$field] ) .'</h5>' ;
     }
 
     public function pics($data)

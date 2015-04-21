@@ -29,10 +29,10 @@
     </div>
     <div class="row payform"   style="border-top:thin solid #AAA;margin-top:8px;">
         <div class="col-md-7 hidden-phone" style="text-align:right;">
-            <h2>Total due</h2>
+            <h4>Total due</h4>
         </div>
         <div class="col-md-5 pull-right" style="text-align:right;">
-            <h2 id="payable-total">0</h2>
+            <h4 id="payable-total">0</h4>
         </div>
     </div>
 </form>

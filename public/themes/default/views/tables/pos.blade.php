@@ -497,6 +497,14 @@ div.payform h3{
                 .draw();
         });
 
+        //register and re register form inside table cell
+        oTable.on( 'draw.dt', function () {
+            $('#tax_pct').on('change',function(){
+                oTable.draw();
+            });
+        } );
+
+
         $('#download-xls').on('click',function(){
             var flt = $('thead td input, thead td select');
             var dlfilter = [];
