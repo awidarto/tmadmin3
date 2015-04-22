@@ -456,7 +456,7 @@ class ProductsController extends AdminController {
 
             return $ts;
         }else{
-            return array($sku);
+            return array($skus);
         }
 
     }
