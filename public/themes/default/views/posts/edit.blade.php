@@ -1,19 +1,17 @@
-@extends('layout.front')
+@extends('layout.fixedtwo')
 
 
-@section('content')
+@section('left')
 
-<h3>{{$title}}</h3>
-
-{{Former::open_for_files_vertical($submit,'POST',array('class'=>''))}}
-
-{{ Former::hidden('id')->value($formdata['_id']) }}
-
-<div class="row-fluid">
-    <div class="span8">
+        {{ Former::hidden('id')->value($formdata['_id']) }}
         {{ Former::textarea('body','Body')->name('body')->id('body')->style('min-height:600px;') }}
-    </div>
-    <div class="col-md-4">
+
+        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
+
+@stop
+
+@section('right')
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
@@ -26,19 +24,11 @@
         ?>
 
         {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make($formdata) }}
-    </div>
-
 </div>
 
-<div class="row-fluid">
-    <div class="col-md-12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
+@stop
 
-{{Former::close()}}
-
+@section('aux')
 
 
 {{-- HTML::script('js/ace/ace.js') --}}

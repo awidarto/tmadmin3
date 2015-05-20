@@ -461,11 +461,26 @@ class PosController extends AdminController {
                         </div>
                     </div>';
 
+        $disc_pct_form = '<div style="display:block;text-align:right">
+                        <div class="input-group" style="text-align:right;padding-top:8px;">
+                            <input type="text" class="form-control" id="disc_percentage" value="" placeholder="%" />
+                        </div>
+                    </div>';
+
+        $disc_nominal_form = '<div style="display:block;text-align:right">
+                        <div class="input-group" style="text-align:right;padding-top:8px;">
+                            <input type="text" class="form-control" id="disc_nominal" value="" />
+                        </div>
+                    </div>';
+
         //print $taxform;
 
         $aadata[] = array('','','','','<h5 style="text-align:right;">Subtotal</h5>','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_price).'</h5><input type="hidden" id="subtotal_price_value" value="'.$total_price.'">');
         //$aadata[] = array('','Discount',Former::text('')->id('disc_pct')->class('form-control col-md-3 total_disc_pct')->placeholder('%')->render(),'','<h5 style="text-align:right;">Total Discount</h5>','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_price).'</h5><input type="hidden" id="subtotal_price_value" value="'.$total_price.'">');
         //$aadata[] = array('','','','<h5 style="text-align:right;">Tax</h5>',Former::text('')->id('tax_pct')->value(10)->class('form-control col-md-2 tax_pct')->placeholder('%')->render(),'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="total_tax_value" value="'.$total_tax.'">');
+
+        $aadata[] = array('','','','<h5>Disc.</h5>',$disc_pct_form,'<h5 style="text-align:right;">IDR</h5>',$disc_nominal_form);
+
         $aadata[] = array('','','','',$taxform,'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="tax_value" value="'.$total_tax.'" >');
         $aadata[] = array('','','','','<h4 style="text-align:right;">Total</h4>','<h4 style="text-align:right;">IDR</h4>','<h4 style="text-align:right;">'.Ks::idr($grand_total).'</h4><input type="hidden" id="total_price_value" value="'.$grand_total.'">');
 

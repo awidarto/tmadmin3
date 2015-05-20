@@ -1,17 +1,16 @@
-@extends('layout.front')
+@extends('layout.fixedtwo')
 
 
-@section('content')
+@section('left')
 
-<h3>{{$title}}</h3>
-
-{{Former::open_for_files_vertical($submit,'POST',array('class'=>''))}}
-
-<div class="row-fluid">
-    <div class="span8">
         {{ Former::textarea('body','Body')->name('body')->id('body')->style('min-height:600px;') }}
-    </div>
-    <div class="col-md-4">
+
+        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
+
+@stop
+
+@section('right')
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
@@ -24,18 +23,12 @@
         ?>
 
         {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make() }}
-    </div>
-
 </div>
 
-<div class="row-fluid">
-    <div class="col-md-12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
+@stop
 
-{{Former::close()}}
+@section('aux')
+
 
 {{-- HTML::script('js/ace/ace.js') --}}
 {{-- HTML::script('js/ace/theme-twilight.js') --}}
@@ -47,6 +40,7 @@
 {{ HTML::script('js/codemirror/mode/php/php.js') }}
 {{ HTML::script('js/codemirror/mode/xml/xml.js') }}
 
+
 {{ HTML::style('css/summernote-bs2.css') }}
 {{ HTML::style('css/summernote.css')}}
 {{ HTML::style('css/summernote-bp.css')}}
@@ -54,7 +48,6 @@
 
 {{ HTML::style('js/codemirror/lib/codemirror.css') }}
 {{ HTML::style('js/codemirror/theme/twilight.css') }}
-
 
 <style type="text/css">
 #lyric{
@@ -65,6 +58,7 @@
 </style>
 
 <script type="text/javascript">
+
 
 $(document).ready(function() {
 
@@ -81,6 +75,7 @@ $(document).ready(function() {
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
     });
+
 
 });
 

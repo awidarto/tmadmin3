@@ -1,50 +1,52 @@
-@extends('layout.front')
+@extends('layout.fixedtwo')
 
 
-@section('content')
-
-<h3>{{$title}}</h3>
+@section('left')
 
 {{Former::open_for_files_vertical($submit,'POST',array('class'=>''))}}
 
 {{ Former::hidden('id')->value($formdata['_id']) }}
 
 <div class="row-fluid">
-    <div class="col-md-8">
-        {{ Former::textarea('body','Body')->name('body')->id('body')->style('min-height:600px;') }}
-    </div>
-    <div class="col-md-4">
-        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
-        {{ Former::text('title','Title') }}
-        {{ Former::text('slug','Permalink')->id('permalink') }}
-        {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('slug','title'))->label('Section') }}
-        {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('slug','title'))->label('Category') }}
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
-        <?php
-            $fupload = new Fupload();
-        ?>
+    {{ Former::textarea('body','Body')->name('body')->id('body')->style('min-height:600px;') }}
 
-        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make($formdata) }}
-    </div>
+    {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
 </div>
+
+@stop
+
+@section('right')
+    {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
+    {{ Former::text('title','Title') }}
+    {{ Former::text('slug','Permalink')->id('permalink') }}
+    {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('slug','title'))->label('Section') }}
+    {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('slug','title'))->label('Category') }}
+    {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
+    <?php
+        $fupload = new Fupload();
+    ?>
+
+    {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make($formdata) }}
 
 <div class="row-fluid">
     <div class="col-md-12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
     </div>
 </div>
 
-{{Former::close()}}
+@stop
 
 
+@section('aux')
 
 {{-- HTML::script('js/ace/ace.js') --}}
 {{-- HTML::script('js/ace/theme-twilight.js') --}}
 {{-- HTML::script('js/ace/mode-php.js') --}}
 {{-- HTML::script('js/jquery-ace.min.js') --}}
+
 
 
 {{ HTML::script('js/codemirror/lib/codemirror.js') }}
