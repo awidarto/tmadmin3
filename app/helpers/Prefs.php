@@ -8,6 +8,8 @@ class Prefs {
     public static $productcategory;
     public static $outlet;
     public static $role;
+    public static $contactgroup;
+    public static $newsletter;
 
     public function __construct()
     {
@@ -68,6 +70,35 @@ class Prefs {
     {
         return self::$category;
     }
+
+    public static function getFAQCategory(){
+        $c = Faqcat::get();
+
+        self::$faqcategory = $c;
+        return new self;
+    }
+
+    public function FAQcatToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'All');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$faqcategory as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function FAQcatToArray()
+    {
+        return self::$faqcategory;
+    }
+
 
     public static function getRole(){
         $c = Role::get();
@@ -153,6 +184,74 @@ class Prefs {
     {
         return self::$outlet;
     }
+
+    //contact group
+    public static function getContactGroup(){
+        $c = Contactgroup::get();
+
+        self::$category = $c;
+        return new self;
+    }
+
+    public function contactGroupToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'All');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$category as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function contactGroupToArray()
+    {
+        return self::$category;
+    }
+
+
+    //newsletter
+    public static function getNewsletter(){
+        $c = Template::where('type','newsletter')->get();
+
+        self::$newsletter = $c;
+        return new self;
+    }
+
+    public function newsletterToSelection($value, $label, $all = true)
+    {
+        if($all){
+            $ret = array(''=>'All');
+        }else{
+            $ret = array();
+        }
+
+        foreach (self::$newsletter as $c) {
+            $ret[$c->{$value}] = $c->{$label};
+        }
+
+
+        return $ret;
+    }
+
+    public function newsletterToArray()
+    {
+        return self::$newsletter;
+    }
+
+    public static function getPrincipal(){
+        $c = Principal::get();
+
+        self::$principal = $c;
+
+        return new self;
+    }
+
 
     public static function yearSelection(){
         $ya = array();

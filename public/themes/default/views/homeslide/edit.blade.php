@@ -1,83 +1,69 @@
 @extends('layout.fixedtwo')
 
+@section('left')
+    {{ Former::hidden('id')->value($formdata['_id']) }}
+    {{ Former::text('widgetLocation','Widget Location')->class('wlocautocomplete form-control')->help('Group slides in the same location / position in page') }}
 
-@section('content')
+    {{ Former::text('linkTo','Link to')->help('Link to URL on click event ( local controller or absolute URL )') }}
 
-<h3>{{$title}}</h3>
+    {{ Former::select('slidetype')->options( Config::get('ia.slidetype') )->label('Type')->required() }}
+    {{ Former::text('sequence','Sequence')->value(1)->help('ascending display sequence') }}
+    {{ Former::select('publishing')->options(array('unpublished'=>'Unpublished','published'=>'Published'))->label('Status') }}
 
-{{Former::open_for_files($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
+    <h6>Video</h6>
+    {{ Former::text('videoTitle','Title') }}
+    {{ Former::text('youtubeUrl','Youtube ID') }}
 
-{{ Former::hidden('id')->value($formdata['_id']) }}
-<div class="row-fluid">
-    <div class="col-md-6">
-        {{ Former::text('widgetLocation','Widget Location')->class('wlocautocomplete')->help('Group slides in the same location / position in page') }}
+    <h6>Content</h6>
+    {{ Former::textarea('content','HTML Content')->class('col-md-10 editor')->rows(8)->help('Use HTML tags to format content') }}
 
-        {{ Former::text('linkTo','Link to')->help('Link to URL on click event ( local controller or absolute URL )') }}
+    {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
-        {{ Former::select('slidetype')->options( Config::get('ia.slidetype') )->label('Type')->required() }}
-        {{ Former::text('sequence','Sequence')->class('col-md-2')->value(1)->help('ascending display sequence') }}
-        {{ Former::select('publishing')->options(array('unpublished'=>'Unpublished','published'=>'Published'))->label('Status') }}
+@stop
 
-        <h6>Video</h6>
-        {{ Former::text('videoTitle','Title') }}
-        {{ Former::text('youtubeUrl','Youtube ID') }}
+@section('right')
+    <h6>Image</h6>
+    <?php
+        $fupload = new Fupload();
+    ?>
 
-        <h6>Content</h6>
-        {{ Former::textarea('content','HTML Content')->class('col-md-10 editor')->rows(8)->help('Use HTML tags to format content') }}
+    {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->url('upload/slide')->make($formdata) }}
 
-    </div>
-    <div class="col-md-6">
-        <h6>Image</h6>
-        <?php
-            $fupload = new Fupload();
-        ?>
+@stop
 
-        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->url('upload/slide')->make($formdata) }}
+@section('aux')
+    {{ HTML::script('js/codemirror/lib/codemirror.js') }}
+    {{ HTML::script('js/codemirror/mode/php/php.js') }}
+    {{ HTML::script('js/codemirror/mode/xml/xml.js') }}
 
-    </div>
-</div>
+    {{ HTML::style('css/summernote-bs2.css') }}
+    {{ HTML::style('css/summernote.css')}}
+    {{ HTML::style('css/summernote-bp.css')}}
+    {{ HTML::script('js/summernote.min.js') }}
 
-<div class="row-fluid">
-    <div class="col-md-12 pull-right">
+    {{ HTML::style('js/codemirror/lib/codemirror.css') }}
+    {{ HTML::style('js/codemirror/theme/twilight.css') }}
 
-        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
+    <script type="text/javascript">
 
-{{Former::close()}}
+    $(document).ready(function() {
 
-{{ HTML::script('js/codemirror/lib/codemirror.js') }}
-{{ HTML::script('js/codemirror/mode/php/php.js') }}
-{{ HTML::script('js/codemirror/mode/xml/xml.js') }}
-
-{{ HTML::style('css/summernote-bs2.css') }}
-{{ HTML::style('css/summernote.css')}}
-{{ HTML::style('css/summernote-bp.css')}}
-{{ HTML::script('js/summernote.min.js') }}
-
-{{ HTML::style('js/codemirror/lib/codemirror.css') }}
-{{ HTML::style('js/codemirror/theme/twilight.css') }}
-
-<script type="text/javascript">
+        $('.editor').summernote({
+            height:'300px',
+            codemirror: {
+                'theme':'twilight',
+                'mode':'php'
+            }
+        });
 
 
-$(document).ready(function() {
+        $('.wlocautocomplete').autocomplete({
+            source: base + 'homeslide/location'
+        });
 
-    $('.editor').summernote({
-        height:'300px',
-        codemirror: {
-            'theme':'twilight',
-            'mode':'php'
-        }
     });
 
-    $('.wlocautocomplete').autocomplete({
-        source: base + 'homeslide/location'
-    });
-
-});
-
-</script>
+    </script>
 
 @stop

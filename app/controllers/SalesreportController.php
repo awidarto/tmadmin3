@@ -54,6 +54,8 @@ class SalesreportController extends AdminController {
 
         $this->place_action ='first';
 
+        $this->can_add = false;
+
         return parent::getIndex();
 
     }
@@ -726,22 +728,31 @@ class SalesreportController extends AdminController {
             $gt += $v['total'];
         }
 
-        $gt += $gt * 0.1;
-
-
         $delivery_charge = ( isset($pay['delivery_charge']) )?$pay['delivery_charge']:0;
+        $disc_pct = ( isset($pay['disc_pct']) )?$pay['disc_pct']:0;
+        $tax = ( isset($pay['tax_pct']) )?$pay['tax_pct']:0;
 
+        $total_discount = $gt * (doubleval($disc_pct) / 100);
         //$totalform = Former::hidden('totalprice',$gt);
 
-        $totalform = Former::hidden('totalprice',$gt + doubleval($delivery_charge));
+        $total_payable = $gt - $total_discount;
 
-        $tab_data[] = array('','',array('value'=>'PPN 10%', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt * 0.1), 'attr'=>'class="right"'));
+        $total_tax = $total_payable  * (doubleval($tax) / 100);
+
+        $total_payable = $total_payable + $total_tax + doubleval($delivery_charge);
+
+        $totalform = Former::hidden('totalprice',$total_payable);
+
 
         $tab_data[] = array('','',array('value'=>'Sub Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt), 'attr'=>'class="right"'));
 
+        $tab_data[] = array('','',array('value'=>'Discount '.$disc_pct.'%', 'attr'=>'class="right"'),array('value'=>'- '.Ks::idr($total_discount), 'attr'=>'class="right"'));
+
+        $tab_data[] = array('','',array('value'=>'PPN '.$tax.'%', 'attr'=>'class="right"'),array('value'=>Ks::idr($total_tax), 'attr'=>'class="right"'));
+
         $tab_data[] = array('','',array('value'=>'Shipping Charges', 'attr'=>'class="right"'),array('value'=>Ks::idr($delivery_charge), 'attr'=>'class="right"'));
 
-        $tab_data[] = array('',$totalform,array('value'=>'Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt + doubleval($delivery_charge) ), 'attr'=>'class="right"'));
+        $tab_data[] = array('',$totalform,array('value'=>'Total', 'attr'=>'class="right bold"'),array('value'=>Ks::idr($total_payable), 'attr'=>'class="right bold"'));
 
         $header = array(
             'things to buy',

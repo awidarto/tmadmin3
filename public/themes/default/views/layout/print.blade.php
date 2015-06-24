@@ -53,6 +53,12 @@
 
       h3{
         margin-top: 8px;
+        font-size: 18px;
+      }
+
+      .bold{
+        font-weight: bold;
+        font-size: 1.1em;
       }
     </style>
 
@@ -72,8 +78,6 @@
 
     <div class="container">
         @yield('content')
-
-      <hr>
 
       <footer>
         <p>&copy; {{ Config::get('site.name')}} {{ date('Y',time()) }}</p>

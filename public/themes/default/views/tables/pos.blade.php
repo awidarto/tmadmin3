@@ -504,6 +504,10 @@ div.payform h3{
             $('#tax_pct').on('change',function(){
                 oTable.draw();
             });
+
+            $('#disc_percentage').on('keyup',function(){
+               oTable.draw();
+            });
         } );
 
 
@@ -672,6 +676,8 @@ div.payform h3{
             var cash_change = $('#cash-change').val();
             var tax_pct = $('#tax_pct').val();
             var tax_value = $('#tax_value').val();
+            var disc_pct = $('#disc_percentage').val();
+            var disc_nominal = $('#disc_nominal').val();
 
             $.post('{{ URL::to('pos/save') }}',
                 {
@@ -689,6 +695,8 @@ div.payform h3{
                     cash_change: cash_change,
                     tax_pct:tax_pct,
                     tax_value:tax_value,
+                    disc_pct:disc_pct,
+                    disc_nominal:disc_nominal,
                     status:'print'
 
                 },
@@ -717,6 +725,8 @@ div.payform h3{
             var cash_change = $('#cash-change').val();
             var tax_pct = $('#tax_pct').val();
             var tax_value = $('#tax_value').val();
+            var disc_pct = $('#disc_percentage').val();
+            var disc_nominal = $('#disc_nominal').val();
 
             $.post('{{ URL::to('pos/save') }}',
                 {
@@ -734,6 +744,8 @@ div.payform h3{
                     cash_change: cash_change,
                     tax_pct:tax_pct,
                     tax_value:tax_value,
+                    disc_pct:disc_pct,
+                    disc_nominal:disc_nominal,
                     status:'final'
                 },
                 function(data){

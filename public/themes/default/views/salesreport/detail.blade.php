@@ -3,23 +3,20 @@
 @section('content')
 <h4>Purchase Detail</h4>
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         {{ $tablebuyer }}
     </div>
-    <div class="col-md-1">
-        &nbsp;
-    </div>
-    <div class="col-md-5">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         {{ $tablepurchase }}
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         {{ $tabletrans}}
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         {{ $tableshipment}}
     </div>
 </div>

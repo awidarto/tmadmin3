@@ -1,45 +1,39 @@
 @extends('layout.fixedtwo')
 
+@section('left')
+    {{ Former::hidden('id')->value($formdata['_id']) }}
 
-@section('content')
+    {{ Former::textarea('body','Body')->name('body')->id('body')->style('min-height:600px;') }}
+    {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
-<h3>{{$title}}</h3>
+@stop
 
-{{Former::open_for_files_vertical($submit,'POST',array('class'=>''))}}
-
-{{ Former::hidden('id')->value($formdata['_id']) }}
-
-<div class="row-fluid">
-    <div class="span8">
-        {{ Former::textarea('body','Body')->name('body')->id('body')->style('min-height:600px;') }}
-    </div>
-    <div class="col-md-4">
+@section('right')
         {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
         {{ Former::text('title','Title') }}
         {{ Former::text('slug','Permalink')->id('permalink') }}
-        {{ Former::select('section')->options(Prefs::getSection()->sectionToSelection('slug','title'))->label('Section') }}
+
+
+        {{ Former::text('tags','Content Filter Tags')->class('tag_keyword')->help('Use tags to extract show case content from Posts') }}
+
+        <h4>Categorization</h4>
+        {{ Former::select('criteria')->options(array('year'=>'By Year','category'=>'By Category'))->label('Cluster') }}
+
+        {{ Former::select('yearFrom')->options(Prefs::yearSelection())->selected( date('Y',time()))->label('From Year') }}
+        {{ Former::select('yearTo')->options(Prefs::yearSelection())->selected(date('Y',time()))->label('To Year') }}
+
         {{ Former::select('category')->options(Prefs::getCategory()->catToSelection('slug','title'))->label('Category') }}
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
 
         <?php
             $fupload = new Fupload();
         ?>
 
         {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->make($formdata) }}
-    </div>
 
-</div>
+@stop
 
-<div class="row-fluid">
-    <div class="col-md-12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
-
-{{Former::close()}}
-
-
+@section('aux')
 
 {{-- HTML::script('js/ace/ace.js') --}}
 {{-- HTML::script('js/ace/theme-twilight.js') --}}
@@ -51,7 +45,6 @@
 {{ HTML::script('js/codemirror/mode/php/php.js') }}
 {{ HTML::script('js/codemirror/mode/xml/xml.js') }}
 
-
 {{ HTML::style('css/summernote-bs2.css') }}
 {{ HTML::style('css/summernote.css')}}
 {{ HTML::style('css/summernote-bp.css')}}
@@ -59,6 +52,7 @@
 
 {{ HTML::style('js/codemirror/lib/codemirror.css') }}
 {{ HTML::style('js/codemirror/theme/twilight.css') }}
+
 
 <style type="text/css">
 #lyric{
@@ -69,7 +63,6 @@
 </style>
 
 <script type="text/javascript">
-
 
 $(document).ready(function() {
 
@@ -86,7 +79,6 @@ $(document).ready(function() {
         var slug = string_to_slug(title);
         $('#permalink').val(slug);
     });
-
 
 });
 

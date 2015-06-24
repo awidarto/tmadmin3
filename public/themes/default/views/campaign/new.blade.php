@@ -1,58 +1,55 @@
 @extends('layout.fixedtwo')
 
+@section('left')
+    {{ Former::text('title','Campaign Title') }}
+    {{ Former::text('slug','Permalink')->id('permalink') }}
 
-@section('content')
+    {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
 
-<h3>{{$title}}</h3>
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            {{ Former::text('fromDate','From')->class('col-md-3 eventdate form-control')
+                ->id('fromDate')
+                ->append('<i class="fa fa-th"></i>') }}
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            {{ Former::text('toDate','Until')->class('col-md-3 eventdate form-control')
+                ->id('toDate')
+                ->append('<i class="fa fa-th"></i>') }}
 
-{{Former::open_for_files($submit,'POST',array('class'=>''))}}
-
-<div class="row-fluid">
-    <div class="col-md-6">
-        {{ Former::text('title','Campaign Title') }}
-        {{ Former::text('slug','Permalink')->id('permalink') }}
-
-        {{ Former::select('status')->options(array('inactive'=>'Inactive','active'=>'Active'))->label('Status') }}
-
-        {{ Former::text('fromDate','From')->class('span7 eventdate')
-            ->id('fromDate')
-            ->append('<i class="fa fa-th"></i>') }}
-
-        {{ Former::text('toDate','Until')->class('span7 eventdate')
-            ->id('toDate')
-            ->append('<i class="fa fa-th"></i>') }}
-
-
-        {{-- Former::select('category')->options(Config::get('ia.eventcat'))->label('Category') --}}
-        {{ Former::textarea('description','Description') }}
-        {{ Former::text('tags','Tags')->class('tag_keyword') }}
+        </div>
     </div>
-    <div class="col-md-6">
-        <h6>Target</h6>
-        {{ Former::select('contactGroup', 'Contact Group')
-            ->options(Prefs::getContactGroup()->contactGroupToSelection('_id','title',false)) }}
-        <h6>Content</h6>
-        {{ Former::select('newsletterTemplate', 'Newsletter')
-            ->options(Prefs::getNewsletter()->newsletterToSelection('_id','title',false)) }}
-        <h6>Send Mail</h6>
-        {{ Former::select('sendOption', 'Trigger')
-            ->options( Config::get('kickstart.send_options') ) }}
 
-        {{ Former::text('sendDate','Date')->class('span7 datepicker')
-            //->data_format('dd-mm-yyyy')
-            ->help('use if option "At Specified Date" is selected')
-            ->append('<i class="fa fa-th"></i>') }}
-   </div>
-</div>
 
-<div class="row-fluid">
-    <div class="col-md-12 pull-right">
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
 
-{{Former::close()}}
+    {{-- Former::select('category')->options(Config::get('ia.eventcat'))->label('Category') --}}
+    {{ Former::textarea('description','Description') }}
+    {{ Former::text('tags','Tags')->class('tag_keyword') }}
+
+    {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
+
+@stop
+
+@section('right')
+    <h6>Target</h6>
+    {{ Former::select('contactGroup', 'Contact Group')
+        ->options(Prefs::getContactGroup()->contactGroupToSelection('_id','title',false)) }}
+    <h6>Content</h6>
+    {{ Former::select('newsletterTemplate', 'Newsletter')
+        ->options(Prefs::getNewsletter()->newsletterToSelection('_id','title',false)) }}
+    <h6>Send Mail</h6>
+    {{ Former::select('sendOption', 'Trigger')
+        ->options( Config::get('kickstart.send_options') ) }}
+
+    {{ Former::text('sendDate','Date')->class('span7 datepicker')
+        //->data_format('dd-mm-yyyy')
+        ->help('use if option "At Specified Date" is selected')
+        ->append('<i class="fa fa-th"></i>') }}
+
+@stop
+
+@section('aux')
 
 <script type="text/javascript">
 

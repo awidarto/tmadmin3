@@ -35,8 +35,8 @@ class TransactionController extends AdminController {
             array('Quantity',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
             array('Unit Price',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
             array('Total',array('search'=>false,'sort'=>false ,'attr'=>array('class'=>''))),
-            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
-            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Created',array('search'=>true,'sort'=>true,'daterange'=>true)),
+            array('Last Update',array('search'=>true,'sort'=>true,'daterange'=>true)),
         );
 
         //print $this->model->where('docFormat','picture')->get()->toJSON();
@@ -48,7 +48,7 @@ class TransactionController extends AdminController {
 
         $this->js_additional_param = "aoData.push( { 'name':'outletNameFilter', 'value': $('#outlet-filter').val() } );";
         */
-
+        $this->can_add = false;
         $this->place_action ='none';
 
         return parent::getIndex();
@@ -65,8 +65,8 @@ class TransactionController extends AdminController {
             array('quantity',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
             array('unitPrice',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true, 'callback'=>'toIdr' )),
             array('unitTotal',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true, 'callback'=>'toIdr')),
-            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'datetimerange','query'=>'like','pos'=>'both','show'=>true)),
         );
         /*
         $outletFilter = Input::get('outletNameFilter');

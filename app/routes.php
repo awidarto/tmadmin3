@@ -54,6 +54,8 @@ Route::controller('event', 'EventController');
 Route::controller('faq', 'FaqController');
 Route::controller('faqcat', 'FaqcatController');
 
+Route::controller('glossary', 'GlossaryController');
+
 Route::controller('picture','PictureController');
 
 Route::controller('enquiry', 'EnquiryController');

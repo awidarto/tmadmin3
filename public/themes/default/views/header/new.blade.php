@@ -1,75 +1,60 @@
 @extends('layout.fixedtwo')
 
+@section('left')
 
-@section('content')
+    {{ Former::text('title','Title') }}
+    {{ Former::text('slug','Permalink')->id('permalink') }}
+    {{ Former::select('publishing')->options(array('unpublished'=>'Unpublished','published'=>'Published'))->label('Status') }}
 
-<h3>{{$title}}</h3>
+    {{ Former::textarea('body','HTML Content')->class('col-md-10 editor')->rows(8)->help('Use HTML tags to format content') }}
+    {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
-{{Former::open_for_files($submit,'POST',array('class'=>''))}}
+@stop
 
-<div class="row-fluid">
-    <div class="col-md-6">
-        {{ Former::text('title','Title') }}
-        {{ Former::text('slug','Permalink')->id('permalink') }}
-        {{ Former::select('publishing')->options(array('unpublished'=>'Unpublished','published'=>'Published'))->label('Status') }}
+@section('right')
 
-        {{ Former::textarea('body','HTML Content')->class('col-md-10 editor')->rows(8)->help('Use HTML tags to format content') }}
+    <h6>Image</h6>
+    <?php
+        $fupload = new Fupload();
+    ?>
 
-    </div>
-    <div class="col-md-6">
-        <h6>Image</h6>
-        <?php
-            $fupload = new Fupload();
-        ?>
+    {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->url('upload/slide')->make() }}
 
-        {{ $fupload->id('imageupload')->title('Select Images')->label('Upload Images')->url('upload/slide')->make() }}
+@stop
 
-    </div>
-</div>
+@section('aux')
+    {{ HTML::script('js/codemirror/lib/codemirror.js') }}
+    {{ HTML::script('js/codemirror/mode/php/php.js') }}
+    {{ HTML::script('js/codemirror/mode/xml/xml.js') }}
 
-<div class="row-fluid">
-    <div class="col-md-12 pull-right">
+    {{ HTML::style('css/summernote-bs2.css') }}
+    {{ HTML::style('css/summernote.css')}}
+    {{ HTML::style('css/summernote-bp.css')}}
+    {{ HTML::script('js/summernote.min.js') }}
 
-        {{ Form::submit('Save',array('class'=>'btn primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-    </div>
-</div>
+    {{ HTML::style('js/codemirror/lib/codemirror.css') }}
+    {{ HTML::style('js/codemirror/theme/twilight.css') }}
 
-{{Former::close()}}
+    <script type="text/javascript">
 
-</style>
 
-{{ HTML::script('js/codemirror/lib/codemirror.js') }}
-{{ HTML::script('js/codemirror/mode/php/php.js') }}
-{{ HTML::script('js/codemirror/mode/xml/xml.js') }}
+    $(document).ready(function() {
 
-{{ HTML::style('css/summernote-bs2.css') }}
-{{ HTML::style('css/summernote.css')}}
-{{ HTML::style('css/summernote-bp.css')}}
-{{ HTML::script('js/summernote.min.js') }}
+        $('.editor').summernote({
+            height:'300px',
+            codemirror: {
+                'theme':'twilight',
+                'mode':'php'
+            }
+        });
 
-{{ HTML::style('js/codemirror/lib/codemirror.css') }}
-{{ HTML::style('js/codemirror/theme/twilight.css') }}
+        $('.wlocautocomplete').autocomplete({
+            source: base + 'homeslide/location'
+        });
 
-<script type="text/javascript">
-
-$(document).ready(function() {
-
-    $('.editor').summernote({
-        height:'300px',
-        codemirror: {
-            'theme':'twilight',
-            'mode':'php'
-        }
     });
 
-
-    $('.wlocautocomplete').autocomplete({
-        source: base + 'homeslide/location'
-    });
-
-});
-
-</script>
+    </script>
 
 @stop

@@ -60,7 +60,7 @@ class PosController extends AdminController {
 
         $this->additional_action = View::make('pos.poscan')->with('additional_page_data',$this->additional_page_data)->render();
 
-        $this->js_additional_param = "aoData.push( { 'name':'session', 'value': $('#current_session').val() }, { 'name':'tax', 'value': $('#tax_pct').val() } );";
+        $this->js_additional_param = "aoData.push( { 'name':'session', 'value': $('#current_session').val() }, { 'name':'tax', 'value': $('#tax_pct').val() }, { 'name':'disc_percentage', 'value': $('#disc_percentage').val() }, { 'name':'disc_nominal', 'value': $('#disc_nominal').val() }  );";
 
         $this->title = 'Point of Sales';
 
@@ -440,16 +440,31 @@ class PosController extends AdminController {
             $counter++;
         }
 
+        $disc_pct = Input::get('disc_percentage');
+
+        if($disc_pct == 0 || is_null($disc_pct) || $disc_pct == ''){
+            $disc_pct = '';
+            $disc_nominal = 0;
+            $total_disc = 0;
+            $total_disc_price = $total_price;
+        }else{
+            $total_disc = $total_price * ( $disc_pct / 100);
+            $total_disc_price = $total_price - $total_disc;
+        }
+
+
         $tax = Input::get('tax');
 
         if($tax == 0 || is_null($tax) || $tax == ''){
             $tax = 0;
             $total_tax = 0;
-            $grand_total = $total_price + $total_tax;
+            $grand_total = $total_disc_price + $total_tax;
         }else{
-            $total_tax = $total_price * ( $tax / 100);
-            $grand_total = $total_price + $total_tax;
+            $total_tax = $total_disc_price * ( $tax / 100);
+            $grand_total = $total_disc_price + $total_tax;
         }
+
+
 
         $taxform = '<div style="display:block;text-align:right">
                         <div class="input-group" style="margin-top:8px;text-align:right;">
@@ -463,13 +478,13 @@ class PosController extends AdminController {
 
         $disc_pct_form = '<div style="display:block;text-align:right">
                         <div class="input-group" style="text-align:right;padding-top:8px;">
-                            <input type="text" class="form-control" id="disc_percentage" value="" placeholder="%" />
+                            <input type="text" class="form-control" id="disc_percentage" value="'.$disc_pct.'" placeholder="%" />
                         </div>
                     </div>';
 
         $disc_nominal_form = '<div style="display:block;text-align:right">
                         <div class="input-group" style="text-align:right;padding-top:8px;">
-                            <input type="text" class="form-control" id="disc_nominal" value="" />
+                            <input type="text" class="form-control" id="disc_nominal" value="'.$total_disc.'" />
                         </div>
                     </div>';
 
@@ -479,7 +494,8 @@ class PosController extends AdminController {
         //$aadata[] = array('','Discount',Former::text('')->id('disc_pct')->class('form-control col-md-3 total_disc_pct')->placeholder('%')->render(),'','<h5 style="text-align:right;">Total Discount</h5>','<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_price).'</h5><input type="hidden" id="subtotal_price_value" value="'.$total_price.'">');
         //$aadata[] = array('','','','<h5 style="text-align:right;">Tax</h5>',Former::text('')->id('tax_pct')->value(10)->class('form-control col-md-2 tax_pct')->placeholder('%')->render(),'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="total_tax_value" value="'.$total_tax.'">');
 
-        $aadata[] = array('','','','<h5>Disc.</h5>',$disc_pct_form,'<h5 style="text-align:right;">IDR</h5>',$disc_nominal_form);
+        //$aadata[] = array('','','','<h5>Disc.</h5>',$disc_pct_form,'<h5 style="text-align:right;">IDR</h5>',$disc_nominal_form);
+        $aadata[] = array('','','','<h5>Disc.</h5>',$disc_pct_form,'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_disc).'</h5><input type="hidden" id="disc_nominal" value="'.$total_disc.'" >');
 
         $aadata[] = array('','','','',$taxform,'<h5 style="text-align:right;">IDR</h5>','<h5 style="text-align:right;">'.Ks::idr($total_tax).'</h5><input type="hidden" id="tax_value" value="'.$total_tax.'" >');
         $aadata[] = array('','','','','<h4 style="text-align:right;">Total</h4>','<h4 style="text-align:right;">IDR</h4>','<h4 style="text-align:right;">'.Ks::idr($grand_total).'</h4><input type="hidden" id="total_price_value" value="'.$grand_total.'">');
@@ -558,11 +574,11 @@ class PosController extends AdminController {
         }else{
             $transactionstatus = '<a href="#" id="transactionstatus" data-type="select" data-pk="'.$sales['_id'].'" data-url="'.URL::to('ajax/salesedit').'" data-title="Delivery Status" >n/a</a>';
         }
-
+        /*
         $btab[] = array('Current Status',$transactionstatus);
         $btab[] = array('Outlet',$sales['outletName']);
         $btab[] = array('Transaction Type',(isset($sales['transactiontype']))?$sales['transactiontype']:'' );
-
+        */
         $attr = array('class'=>'table', 'id'=>'transTab', 'style'=>'width:100%;', 'border'=>'0');
         $t = new HtmlTable($btab, $attr, $head);
         $tablepurchase = $t->build();
@@ -719,6 +735,8 @@ class PosController extends AdminController {
             $trx->cash_change = $in['cash_change'];
             $trx->tax_value = $in['tax_value'];
             $trx->tax_pct = $in['tax_pct'];
+            $trx->disc_nominal = $in['disc_nominal'];
+            $trx->disc_pct = $in['disc_pct'];
             $trx->lastUpdate = new MongoDate();
 
             if(isset($trx->invoice_number) && $trx->invoice_number != '' ){
@@ -735,7 +753,7 @@ class PosController extends AdminController {
             $trx->save();
 
 
-            if($in['status'] == 'final'){
+            //if($in['status'] == 'final'){
 
                 $itarray = array();
                 $unitarr = array();
@@ -786,6 +804,8 @@ class PosController extends AdminController {
                 $sales->payable_amount = $in['payable_amount'];
                 $sales->cash_amount = $in['cash_amount'];
                 $sales->cash_change = $in['cash_change'];
+                $sales->disc_nominal = $in['disc_nominal'];
+                $sales->disc_pct = $in['disc_pct'];
                 $sales->tax_value = $in['tax_value'];
                 $sales->tax_pct = $in['tax_pct'];
 
@@ -795,7 +815,7 @@ class PosController extends AdminController {
                 $sales->transactiontype = 'pos';
                 $sales->lastUpdate = new MongoDate();
                 $sales->save();
-            }
+            //}
 
             return Response::json(array( 'result'=>'OK', 'status'=>$in['status'] ));
 
@@ -815,9 +835,10 @@ class PosController extends AdminController {
 
             Stockunit::where('_id', $id)->update(array('status'=>'available'));
 
-            $stat = Stockunit::where('_id', $id)->first()->toArray();
+            $stat = Stockunit::where('_id', $id)->first();
 
-            if(isset($stat['status']) && $stat['status'] == 'available'){
+            if( isset($stat) && isset($stat->status) && $stat->status == 'available'){
+
                 if($model->where('unitId',$id)->delete()){
                     Event::fire($controller_name.'.delete_unit',array('id'=>$id,'result'=>'OK'));
                     $result = array('status'=>'OK','data'=>'UNITDELETED');
@@ -1487,27 +1508,38 @@ class PosController extends AdminController {
             $gt += $v['total'];
         }
 
-        $gt += $gt * 0.1;
+        //$gt += $gt * 0.1;
 
 
         $delivery_charge = ( isset($pay['delivery_charge']) )?$pay['delivery_charge']:0;
+        $disc_pct = ( isset($pay['disc_pct']) )?$pay['disc_pct']:0;
+        $tax = ( isset($pay['tax_pct']) )?$pay['tax_pct']:0;
 
+        $total_discount = $gt * (doubleval($disc_pct) / 100);
         //$totalform = Former::hidden('totalprice',$gt);
 
-        $totalform = Former::hidden('totalprice',$gt + doubleval($delivery_charge));
+        $total_payable = $gt - $total_discount;
 
-        $tab_data[] = array('','',array('value'=>'PPN 10%', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt * 0.1), 'attr'=>'class="right"'));
+        $total_tax = $total_payable  * (doubleval($tax) / 100);
+
+        $total_payable = $total_payable + $total_tax + doubleval($delivery_charge);
+
+        $totalform = Former::hidden('totalprice',$total_payable);
 
         $tab_data[] = array('','',array('value'=>'Sub Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt), 'attr'=>'class="right"'));
 
+        $tab_data[] = array('','',array('value'=>'Discount '.$disc_pct.'%', 'attr'=>'class="right"'),array('value'=>'- '.Ks::idr($total_discount), 'attr'=>'class="right"'));
+
+        $tab_data[] = array('','',array('value'=>'PPN '.$tax.'%', 'attr'=>'class="right"'),array('value'=>Ks::idr($total_tax), 'attr'=>'class="right"'));
+
         $tab_data[] = array('','',array('value'=>'Shipping Charges', 'attr'=>'class="right"'),array('value'=>Ks::idr($delivery_charge), 'attr'=>'class="right"'));
 
-        $tab_data[] = array('',$totalform,array('value'=>'Total', 'attr'=>'class="right"'),array('value'=>Ks::idr($gt + doubleval($delivery_charge) ), 'attr'=>'class="right"'));
+        $tab_data[] = array('',$totalform,array('value'=>'Total', 'attr'=>'class="right bold"'),array('value'=>Ks::idr($total_payable), 'attr'=>'class="right bold"'));
 
         $header = array(
             'things to buy',
             'unit',
-            'tagprice',
+            array('value'=>'tag price', 'attr'=>'style="text-align:right"'),
             array('value'=>'price to pay', 'attr'=>'style="text-align:right"')
             );
 

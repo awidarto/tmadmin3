@@ -1,35 +1,21 @@
 @extends('layout.fixedtwo')
 
 
-@section('content')
+@section('left')
 
-<h3>{{$title}}</h3>
+    {{ Former::hidden('id')->value($formdata['_id']) }}
+    {{ Former::text('value', $formdata['label'] ) }}
 
-{{Former::open_for_files_horizontal($submit,'POST',array('class'=>'custom addAttendeeForm'))}}
+    {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
+    {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
 
-{{ Former::hidden('id')->value($formdata['_id']) }}
+@stop
 
-<div class="row-fluid">
-    <div class="col-md-6">
-        {{ Former::text('value', $formdata['label'] ) }}
-
-        {{ Form::submit('Save',array('class'=>'btn btn-primary'))}}&nbsp;&nbsp;
-        {{ HTML::link($back,'Cancel',array('class'=>'btn'))}}
-
-    </div>
-</div>
-
-{{Former::close()}}
+@section('aux')
 
 <script type="text/javascript">
 
 $(document).ready(function() {
-
-    $('#title').keyup(function(){
-        var title = $('#title').val();
-        var slug = string_to_slug(title);
-        $('#permalink').val(slug);
-    });
 
 });
 

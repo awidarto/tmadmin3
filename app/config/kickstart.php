@@ -16,6 +16,13 @@ return array(
             'Mrs'=>'Mrs',
             'Ms'=>'Ms',
         ),
+    'send_options'=>array(
+            'immediately'=>'Send Now',
+            'atdate'=>'At Specified Date'/*,
+            'onceaweek'=>'Once A Week',
+            'onceamonth'=>'Once A Month'*/
+        ),
+
     'admin_roles'=>array(
             'root'=>'Super Administrator',
             'admin'=>'Administrator',

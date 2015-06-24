@@ -9,8 +9,8 @@ class FaqcatController extends AdminController {
         $this->controller_name = str_replace('Controller', '', get_class());
 
         //$this->crumb = new Breadcrumb();
-        $this->crumb->append('Home','left',true);
-        $this->crumb->append(strtolower($this->controller_name));
+        //$this->crumb->append('Home','left',true);
+        //$this->crumb->append(strtolower($this->controller_name));
 
         $this->model = new Faqcat();
         //$this->model = DB::collection('documents');
