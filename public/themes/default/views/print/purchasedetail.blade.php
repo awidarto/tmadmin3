@@ -10,7 +10,7 @@
 <table style="width:100%;margin-top:10px;">
     <tr>
         <td>
-            <img src="{{ URL::to('images')}}/tmlogotrans.png" style="width: 129px; height: 38.27px;">
+            <img src="{{URL::to('images')}}/tmlogotrans.png" style="width: 129px; height: 38.27px;">
             <div>
               <address>
                   <strong>Toimoi Indonesia</strong>
