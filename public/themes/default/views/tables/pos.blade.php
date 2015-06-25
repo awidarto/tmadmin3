@@ -96,6 +96,10 @@ div.payform h3{
     font-size: 16px;
 }
 
+h3{
+    font-size: 18px;
+}
+
 </style>
 
 <div class="container">
