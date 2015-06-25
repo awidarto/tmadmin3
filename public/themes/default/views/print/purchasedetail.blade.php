@@ -6,6 +6,10 @@
         line-height: 0.9em !important;
     }
 
+    body{
+        font-size: 9px;
+    }
+
 </style>
 <table style="width:100%;margin-top:10px;">
     <tr>
@@ -25,7 +29,7 @@
         </td>
         <td>
             <div class="pull-right text-right">
-                <h3>Purchase Detail</h3>
+                <h3>Sales Invoice</h3>
                 <p>Date : {{ date('d-m-Y',$sales['payment']['createdDate']->sec)}}</p>
                 <h5 class="text-uppercase">Invoice # : {{ $sales['payment']['invoice_number'] }}</h5>
             </div>
