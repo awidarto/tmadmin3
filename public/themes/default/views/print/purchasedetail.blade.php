@@ -10,8 +10,22 @@
         font-size: 9px;
     }
 
+    h5{
+        font-size: 12px !important;
+    }
+
+    table#header td{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    address{
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
 </style>
-<table style="width:100%;margin-top:10px;">
+<table id="header" style="width:100%;margin-top:10px;">
     <tr>
         <td>
             <img src="{{URL::to('images')}}/tmlogotrans.png" style="width: 129px; height: 38.27px;">
@@ -29,7 +43,7 @@
         </td>
         <td>
             <div class="pull-right text-right">
-                <h3>Sales Invoice</h3>
+                <h3 style="margin-top:0px;">Sales Invoice</h3>
                 <p>Date : {{ date('d-m-Y',$sales['payment']['createdDate']->sec)}}</p>
                 <h5 class="text-uppercase">Invoice # : {{ $sales['payment']['invoice_number'] }}</h5>
             </div>
