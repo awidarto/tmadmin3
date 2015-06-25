@@ -4,6 +4,7 @@
 <style type="text/css">
     table.table td{
         line-height: 0.9em !important;
+        padding: 6px !important;
     }
 
     body{
