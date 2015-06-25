@@ -35,8 +35,7 @@
                   <strong>Toimoi Indonesia</strong>
                     <br />The Mansion Kemang GF15
                     <br />Jl Kemang Raya no. 3-5
-                    <br />Jakarta Selatan 12730
-                    <br />Indonesia
+                    <br />Jakarta Selatan 12730, Indonesia
                     <br />p. +62 21 29055525  f. +62 21 29055526
               </address>
             </div>

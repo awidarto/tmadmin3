@@ -52,8 +52,12 @@
       }
 
       h3{
-        margin-top: 8px;
-        font-size: 18px;
+        margin-top: 4px;
+        font-size: 12px;
+      }
+
+      h5{
+          font-size: 12px !important;
       }
 
       .bold{
