@@ -116,6 +116,20 @@ Route::group(array('prefix' => 'api/v1'), function (){
     Route::resource('asset', 'Api\AssetapiController');
 });
 
+Route::get('testmail',function(){
+    $data['email'] = 'andy.awidarto@gmail.com';
+    $data['name'] = 'Andy Awidarto';
+    $data['subject'] = 'Emailer Test from Admin';
+    $template = 'emails.confirmation';
+
+    Emailer::sendnotification($data, $template);
+
+});
+
+Route::get('discs',function(){
+    print_r(Commerce::getLatestPrice('531ea790ccae5b7c0200016b'));
+});
+
 Route::get('tonumber',function(){
     $property = new Property();
 

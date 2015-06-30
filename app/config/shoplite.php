@@ -116,8 +116,8 @@ return array(
 		'manual'=>'Manual',
 		'auto'=>'Auto'
 	),
-	'admin_email'=>'peachtoblack@gmail.com',
-	'admin_name'=>'Shopkeeper@PeachtoBlack',
+	'admin_name'=>'toimoi',
+    'admin_email'=>'toimoiindonesia@gmail.com',
 
 	'banks'=>array(
 		'bca'=>'Bank BCA',

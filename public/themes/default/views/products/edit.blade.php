@@ -144,9 +144,8 @@
                 </tr>
             @endforeach
         </table>
-        {{--
 
-        <h5>Pricing</h5>
+        <h5>Price & Discounts</h5>
 
         <table class="table " >
             <tr>
@@ -163,63 +162,31 @@
                     Regular Price
                 </th>
                 <th>
-                    Discount Price
-                </th>
-                <th>
-                    Tax
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    {{ Former::text('tOutlet','')->id('tOutlet') }}
-                </th>
-                <th>
-                    {{ Former::text('tFrom','')->id('tFrom') }}
-                </th>
-                <th>
-                    {{ Former::text('tUntil','')->id('tUntil') }}
-                </th>
-                <th>
-                    {{ Former::text('tReg','')->id('tReg') }}
-                </th>
-                <th>
-                    {{ Former::text('tDisc','')->id('tDisc') }}
-                </th>
-                <th>
-                    {{ Former::text('tTax','')->id('tTax') }}
-                </th>
-                <th>
-                    <button class="btn btn-success" ><i class="fa fa-plus"></i></button>
+                    Discount %
                 </th>
             </tr>
             @foreach( Prefs::getOutlet()->OutletToArray() as $o)
                 <tr>
                     <td>
+                        <input type="hidden" name="disc_outlets[]"  value="{{ $o->_id }}">
                         {{ $o->name }}
                     </td>
-                    <td>
-                        {{ $formdata['stocks'][$o->_id]['sold'] }}
-                    </td>
-                    <td>
-                        {{ $formdata['stocks'][$o->_id]['reserved'] }}
-                    </td>
-                    <td>
-                        {{ $formdata['stocks'][$o->_id]['sold'] }}
-                    </td>
-                    <td>
-                        {{ $formdata['stocks'][$o->_id]['reserved'] }}
-                    </td>
-                    <td>
-                        {{ $formdata['stocks'][$o->_id]['available'] }}
-                    </td>
-                    <td>
-
-                    </td>
+                    <th>
+                        <input type="text" class="col-md-10 form-control datepicker" id="tFrom_{{ $o->_id }}" name="tFrom[]" value="{{ $formdata['prices'][$o->_id]['tFrom'] }}" />
+                    </th>
+                    <th>
+                        <input type="text" class="col-md-10 form-control datepicker" id="tUntil_{{ $o->_id }}" name="tUntil[]" value="{{ $formdata['prices'][$o->_id]['tUntil'] }}" />
+                    </th>
+                    <th>
+                        <input type="text" class="col-md-10 form-control" id="tReg_{{ $o->_id }}" name="tReg[]" value="{{ $formdata['prices'][$o->_id]['tReg'] }}" />
+                    </th>
+                    <th>
+                        <input type="text" class="col-md-10 form-control" id="tDisc_{{ $o->_id }}" name="tDisc[]" value="{{ $formdata['prices'][$o->_id]['tDisc'] }}" />
+                    </th>
                 </tr>
+
             @endforeach
         </table>
-
-        --}}
 
         <h5>Pictures</h5>
         <?php

@@ -2,7 +2,8 @@
 
 class Commerce{
 
-    public static function updateStock($data, $positive = 'available', $negative = 'deleted'){
+    public static function updateStock($data, $positive = 'available', $negative = 'deleted')
+    {
 
         //print_r($data);
 
@@ -87,6 +88,114 @@ class Commerce{
             }
 
         }
+    }
+
+    public static function updatePrice($data)
+    {
+        if(isset($data['disc_outlets'])){
+
+
+            $outlets = $data['disc_outlets'];
+            $from = $data['tFrom'];
+            $until = $data['tUntil'];
+            $reg_price = $data['tReg'];
+            $discs = $data['tDisc'];
+
+
+            for($i = 0; $i < count($outlets);$i++){
+                $disc = new Discount();
+
+                $disc->productId = $data['id'];
+                $disc->outletId = $outlets[$i];
+                $disc->from = $from[$i];
+                $disc->until = $until[$i];
+                $disc->regPrice = $reg_price[$i];
+                $disc->discount = $discs[$i];
+                $disc->createdDate = new MongoDate();
+
+                $disc->save();
+            }
+
+        }
+
+    }
+
+    public static function getPrice($productId, $outletId, $defaultprice)
+    {
+        $productId = new MongoId($productId);
+        $l = Discount::where('productId', $productId)
+                ->where('outletId', $outletId )->orderBy('createdDate','desc')->first();
+
+        if($l){
+            if($l->regPrice != 0 && $l->regPrice != ''){
+                return doubleval($l->regPrice);
+            }else{
+                return $defaultprice;
+            }
+        }else{
+            return $defaultprice;
+        }
+    }
+
+    public static function getDiscountPrice($productId, $outletId, $defaultprice)
+    {
+        $productId = new MongoId($productId);
+        $l = Discount::where('productId', $productId)
+                ->where('outletId', $outletId )->orderBy('createdDate','desc')->first();
+
+        if($l){
+            if($l->discount != '' && $l->discount != 0){
+                if( doubleval($l->discount) <= 100){
+                    return doubleval($l->regPrice) * ( doubleval($l->discount)/ 100);
+                }else{
+                    if($l->regPrice != 0 && $l->regPrice != ''){
+                        return doubleval($l->regPrice);
+                    }else{
+                        return $defaultprice;
+                    }
+                }
+            }else{
+                if($l->regPrice != 0 && $l->regPrice != ''){
+                    return doubleval($l->regPrice);
+                }else{
+                    return $defaultprice;
+                }
+            }
+        }else{
+            return $defaultprice;
+        }
+    }
+
+    public static function getLatestPrice($productId)
+    {
+        $productId = new MongoId($productId);
+
+        $outlets = Outlet::get();
+
+        $latest = array();
+        foreach($outlets as $o){
+            $l = Discount::where('productId', $productId)
+                    ->where('outletId', $o->_id )->orderBy('createdDate','desc')->first();
+            //$l = $l->toArray();
+            if($l){
+                $out = $l->outletId;
+                $latest[$out]['tFrom'] = $l->from;
+                $latest[$out]['tUntil'] = $l->until;
+                $latest[$out]['tReg'] = $l->regPrice;
+                $latest[$out]['tDisc'] = $l->discount;
+            }else{
+                $out = $o->_id;
+                $latest[$out]['tFrom'] = '';
+                $latest[$out]['tUntil'] = '';
+                $latest[$out]['tReg'] = '';
+                $latest[$out]['tDisc'] = '';
+            }
+
+        }
+
+        //print_r($latest);
+
+        return $latest;
     }
 
 }

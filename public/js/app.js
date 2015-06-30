@@ -105,6 +105,12 @@
             timePickerSeconds: true
         });
 
+        $('.datepicker').daterangepicker({
+            singleDatePicker : true,
+            timePicker: false,
+            format:'YYYY-MM-DD'
+        });
+
 		$('.pop').click(function(){
 			var _id = $(this).attr('id');
 

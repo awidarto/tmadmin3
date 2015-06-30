@@ -8,7 +8,7 @@
         "jenssegers/mongodb": "*",
         "nitmedia/wkhtml2pdf": "dev-master",
         "anahkiasen/former": "dev-master",
-        "intervention/image": "2.0.*",
+        "intervention/image": "2.2.*",
         "intervention/imagecache": "dev-master",
         "intervention/helper": "dev-master",
         "intervention/validation": "dev-master",
@@ -20,8 +20,10 @@
         "flynsarmy/db-blade-compiler": "1.*",
         "pingpong/menus": "1.0.*",
         "simplesoftwareio/simple-qrcode": "1.1.*",
-        "dinesh/barcode": "dev-master",
-        "creitive/breadcrumbs": "dev-master"
+        "dinesh/barcode": "V3.0",
+        "creitive/laravel4-breadcrumbs": "dev-master",
+        "guzzlehttp/guzzle": "~4.0"
+
 	},
 	"autoload": {
 		"classmap": [

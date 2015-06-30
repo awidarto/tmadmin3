@@ -269,10 +269,19 @@ class ProductsController extends AdminController {
 
         Commerce::updateStock($unitdata);
 
+        Commerce::updatePrice($unitdata);
+
         unset($data['outlets']);
         unset($data['outletNames']);
         unset($data['addQty']);
         unset($data['adjustQty']);
+
+        unset( $data['disc_outlets'] );
+        unset( $data['tFrom'] );
+        unset( $data['tUntil'] );
+        unset( $data['tReg'] );
+        unset( $data['tFrom'] );
+        unset( $data['tDisc'] );
 
         return $data;
     }
@@ -309,6 +318,8 @@ class ProductsController extends AdminController {
             $population['stocks'][$o->_id]['reserved'] = $rsv;
             $population['stocks'][$o->_id]['sold'] = $sld;
         }
+
+        $population['prices'] = Commerce::getLatestPrice($population['_id']);
 
         if( !isset($population['full_url']))
         {

@@ -136,3 +136,7 @@ dl dd {
     width:150px;
     height: auto;
 }
+
+.form-control{
+    font-size: 12px !important;
+}
