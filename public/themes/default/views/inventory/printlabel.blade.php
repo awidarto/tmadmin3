@@ -156,7 +156,7 @@
                     <img style="width:40px;" src="{{ URL::to('/')}}/images/tm_logo_trans_sm.png" alt="TOIMOI" />
                 </td>
                 <td style="text-align:center">
-                    {{ $outlets[$l['outletId']]['code'] }}
+                    {{ (isset($outlets[$l['outletId']]['code']))?$outlets[$l['outletId']]['code']:'' }}
                 </td>
                 <td style="text-align:center">
                     {{ Ks::idr($pd['priceRegular'])}}
