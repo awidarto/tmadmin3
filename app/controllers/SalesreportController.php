@@ -433,23 +433,32 @@ class SalesreportController extends AdminController {
     public function postDlxl()
     {
 
-        $this->heads = null;
+        $this->heads = array(
+            array('Transaction Id',array('search'=>true,'sort'=>true)),
+            array('Status',array('search'=>true,'sort'=>true)),
+            array('Outlet',array('search'=>true,'sort'=>true )),
+            array('Buyer',array('search'=>true,'sort'=>false)),
+            array('Address',array('search'=>true,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Total',array('search'=>true,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Cash',array('search'=>true,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Debit',array('search'=>true,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Credit Card',array('search'=>true,'sort'=>false ,'attr'=>array('class'=>''))),
+            array('Created',array('search'=>true,'sort'=>true,'date'=>true)),
+            array('Last Update',array('search'=>true,'sort'=>true,'date'=>true)),
+        );
 
         $this->fields = array(
-                array('SKU',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-                array('itemDescription',array('kind'=>'text','query'=>'like','pos'=>'both','attr'=>array('class'=>'expander'),'show'=>true)),
-                array('series',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('itemGroup',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('category',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('L',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('W',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('H',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('D',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('colour',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('material',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('tags',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
-                array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
-                array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true))
+            array('sessionId',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('transactionstatus',array('kind'=>'text','query'=>'like','pos'=>'both','show'=>true)),
+            array('outletName',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
+            array('buyer_name',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
+            array('buyer_address',array('kind'=>'text','query'=>'like','pos'=>'after','show'=>true)),
+            array('payable_amount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true )),
+            array('cash_amount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('dc_amount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('cc_amount',array('kind'=>'numeric','query'=>'like','pos'=>'both','show'=>true)),
+            array('createdDate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
+            array('lastUpdate',array('kind'=>'datetime','query'=>'like','pos'=>'both','show'=>true)),
         );
 
         return parent::postDlxl();
