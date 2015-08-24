@@ -95,7 +95,7 @@
                         <a href="{{ URL::to('content/menu') }}" class="submenu {{ sa('content/menu') }}" ><i class="fa fa-sitemap"></i> Menu</a>
                     </li>
                     <li>
-                        <a href="{{ URL::to('showcase') }}" class="submenu {{ sa('showcase') }}" >fa-eye Showcases</a>
+                        <a href="{{ URL::to('showcase') }}" class="submenu {{ sa('showcase') }}" ><i class="fa fa-eye"></i> Showcases</a>
                     </li>
                     <li>
                         <a href="{{ URL::to('homeslide') }}" class="submenu {{ sa('homeslide') }}" ><i class="fa fa-home"></i> Home Slide Show</a>
