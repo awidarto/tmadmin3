@@ -54,16 +54,18 @@
             <li class="dropdown {{ sa('event') }} {{ sa('buyer') }} {{ sa('contactgroup') }} {{ sa('enquiry') }} {{ sa('campaign') }}">
                 <a href="#" data-toggle="dropdown">
                     <i class="fa fa-bullhorn"></i> Marketing <span class="caret"></span>
-                  </a>
+                </a>
                 <ul class="dropdown-menu">
-                    <li class="{{ sa('event') }}><a href="{{ URL::to('event') }}" ><i class="fa fa-lightbulb"></i> Events</a></li>
+                    <li class="{{ sa('event') }}">
+                        <a href="{{ URL::to('event') }}" ><i class="fa fa-lightbulb-o"></i> Events</a>
+                    </li>
                     <li class="{{ sa('buyer') }}" ><a href="{{ URL::to('buyer') }}"><i class="fa fa-group"></i> Buyers</a></li>
-                    <li class="{{ sa('contactgroup') }}" ><a href="{{ URL::to('contactgroup') }}"><i class="fa fa-folder-close"></i> Contact Groups</a></li>
-                    <li class="{{ sa('enquiry') }}" ><a href="{{ URL::to('enquiry') }}"><i class="fa fa-question-sign"></i> Enquiries</a></li>
+                    <li class="{{ sa('contactgroup') }}" ><a href="{{ URL::to('contactgroup') }}"><i class="fa fa-folder-open"></i> Contact Groups</a></li>
+                    <li class="{{ sa('enquiry') }}" ><a href="{{ URL::to('enquiry') }}"><i class="fa fa-question-circle"></i> <i class="fa fa-question-sign"></i> Enquiries</a></li>
                     <li class="{{ sa('campaign') }}" ><a href="{{ URL::to('campaign') }}"><i class="fa fa-bullhorn"></i> Campaign</a></li>
-                    <li class="{{ sa('newsletter') }}" ><a href="{{ URL::to('newsletter') }}"><i class="fa fa-file-alt"></i> Newsletter</a></li>
-                    <li class="{{ sa('brochure') }}" ><a href="{{ URL::to('brochure') }}"><i class="fa fa-file-alt"></i> Brochure</a></li>
-                    <li class="{{ sa('templates') }}" ><a href="{{ URL::to('templates') }}"><i class="fa fa-file-alt"></i> Other Templates</a></li>
+                    <li class="{{ sa('newsletter') }}" ><a href="{{ URL::to('newsletter') }}"><i class="fa fa-newspaper-o"></i> Newsletter</a></li>
+                    <li class="{{ sa('brochure') }}" ><a href="{{ URL::to('brochure') }}"><i class="fa fa-clipboard"></i> Brochure</a></li>
+                    <li class="{{ sa('templates') }}" ><a href="{{ URL::to('templates') }}"><i class="fa fa-paperclip"></i> Other Templates</a></li>
 
                 </ul>
             </li>
@@ -93,7 +95,7 @@
                         <a href="{{ URL::to('content/menu') }}" class="submenu {{ sa('content/menu') }}" ><i class="fa fa-sitemap"></i> Menu</a>
                     </li>
                     <li>
-                        <a href="{{ URL::to('showcase') }}" class="submenu {{ sa('showcase') }}" ><i class="fa fa-eye-open"></i> Showcases</a>
+                        <a href="{{ URL::to('showcase') }}" class="submenu {{ sa('showcase') }}" >fa-eye Showcases</a>
                     </li>
                     <li>
                         <a href="{{ URL::to('homeslide') }}" class="submenu {{ sa('homeslide') }}" ><i class="fa fa-home"></i> Home Slide Show</a>
@@ -102,7 +104,7 @@
                         <a href="{{ URL::to('header') }}" class="submenu {{ sa('header') }}" ><i class="fa fa-home"></i> Site Header</a>
                     </li>
                     <li>
-                        <a href="{{ URL::to('faq') }}" class="submenu {{ sa('faq') }}" ><i class="fa fa-question-sign"></i> FAQ Entries</a>
+                        <a href="{{ URL::to('faq') }}" class="submenu {{ sa('faq') }}" ><i class="fa fa-question"></i> FAQ Entries</a>
                     </li>
                     <li>
                         <a href="{{ URL::to('faqcat') }}" class="submenu {{ sa('faqcat') }}" ><i class="fa fa-sitemap"></i> FAQ Category</a>
