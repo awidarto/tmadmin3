@@ -45,9 +45,12 @@
                 {{ Former::text('label_offset_right','Page left offset')->value('40')->id('label_offset_right')->class('form-control input-sm') }}
                 {{ Former::text('label_offset_bottom','Page top offset')->value('20')->id('label_offset_bottom')->class('form-control input-sm') }}
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 {{ Former::text('font_size','Font size')->value('8')->id('font_size')->class('form-control input-sm') }}
                 {{ Former::select('code_type','Code type')->id('code_type')->options(array('qr'=>'QR','barcode'=>'Barcode') )}}
+            </div>
+            <div class="col-md-1">
+                {{ Former::select('tax','With Tax')->id('tax')->options(array('yes'=>'Yes','no'=>'No') )}}
             </div>
             <div class="col-md-2">
                 <button id="label_default" class="form-control" >make default</button>
@@ -114,7 +117,8 @@
             var code_type = $('#code_type').val();
             var offset_left = $('#label_offset_left').val();
             var offset_top = $('#label_offset_top').val();
-            var src = '{{ URL::to('inventory/printlabel')}}/' + sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
+            var tax = $('#tax').val();
+            var src = '{{ URL::to('inventory/printlabel')}}/' + sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top + ':' + tax;
 
             $('#label_frame').attr('src',src);
 
@@ -150,7 +154,8 @@
                             var code_type = $('#code_type').val();
                             var offset_left = $('#label_offset_left').val();
                             var offset_top = $('#label_offset_top').val();
-                            var src = '{{ URL::to('inventory/printlabel')}}/' + data.sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top;
+                            var tax = $('#tax').val();
+                            var src = '{{ URL::to('inventory/printlabel')}}/' + data.sessionname + '/' + col + ':' + res + ':' + cell_width + ':' + cell_height + ':' + margin_right + ':' + margin_bottom + ':' + font_size + ':' + code_type + ':' + offset_left + ':' + offset_top + ':' + tax ;
                             $('#label_frame').attr('src',src);
                             $('#print-modal').modal('show');
                         }else{
@@ -182,6 +187,7 @@
             var margin_right = $('#label_margin_right').val();
             var margin_bottom = $('#label_margin_bottom').val();
             var font_size = $('#font_size').val();
+            var tax = $('#tax').val();
             var code_type = $('#code_type').val();
             var offset_left = $('#label_offset_left').val();
             var offset_top = $('#label_offset_top').val();
@@ -197,7 +203,8 @@
                     font_size : font_size,
                     code_type : code_type,
                     offset_left : offset_left,
-                    offset_top : offset_top
+                    offset_top : offset_top,
+                    tax : tax
                 },
                 function(data){
                     if(data.result == 'OK'){

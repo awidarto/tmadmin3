@@ -101,6 +101,7 @@ class InventoryController extends AdminController {
         $code_type = $pr[7];
         $left_offset = $pr[8];
         $top_offset = $pr[9];
+        $tax = $pr[10];
 
         $session = Printsession::find($sessionname)->toArray();
         $labels = Stockunit::whereIn('_id', $session)->get()->toArray();
@@ -141,6 +142,7 @@ class InventoryController extends AdminController {
             ->with('code_type',$code_type)
             ->with('left_offset', $left_offset)
             ->with('top_offset', $top_offset)
+            ->with('tax',$tax)
             ->with('products',$plist)
             ->with('outlets',$olist)
             ->with('labels', $labels);

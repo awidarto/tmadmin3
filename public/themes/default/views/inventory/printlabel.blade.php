@@ -159,7 +159,11 @@
                     {{ (isset($outlets[$l['outletId']]['code']))?$outlets[$l['outletId']]['code']:'' }}
                 </td>
                 <td style="text-align:center">
-                    {{ Ks::idr($pd['priceRegular'])}}
+                    @if($tax == 'yes')
+                        IDR {{ Ks::idr($pd['priceRegular'] + ($pd['priceRegular'] * Config::get('shoplite.ppn') ) , 0  ) }}
+                    @else
+                        IDR {{ Ks::idr($pd['priceRegular'], 0 ) }}
+                    @endif
                 </td>
             </tr>
         </table>

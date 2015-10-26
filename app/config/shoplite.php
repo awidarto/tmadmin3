@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'ppn'=>0.1,
     'inventory_status'=>array(
             'available',
             'reserved',
