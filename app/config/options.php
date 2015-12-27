@@ -17,6 +17,11 @@ return array(
                 'value'=>'admin@mail.co',
                 'type'=>'text'
             ),
+        'sales_notification_email'=>array(
+                'label'=>'Sales Notification Email',
+                'value'=>'toimoiindonesia@gmail.com',
+                'type'=>'text'
+            ),
 
         )
     );

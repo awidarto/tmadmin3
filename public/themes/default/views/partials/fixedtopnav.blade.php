@@ -34,7 +34,9 @@
                 <ul class="dropdown-menu">
                     <li class="{{ sa('inventory') }}" ><a href="{{ URL::to('inventory') }}"><i class="fa fa-tags"></i> Stock List</a></li>
                     <li class="{{ sa('stockcheck') }}" ><a  href="{{ URL::to('stockcheck') }}"><i class="fa fa-barcode"></i> Stock Check</a></li>
+                    {{--
                     <li class="{{ sa('stockchecklist') }}" ><a href="{{ URL::to('stockchecklist') }}"><i class="fa fa-table"></i> Stock Check Log</a></li>
+                    --}}
                 </ul>
             </li>
 
