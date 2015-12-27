@@ -138,6 +138,7 @@
             <tr>
                 <td colspan="3" style="text-align:center">
                     {{ isset($pd['itemDescription'])?$pd['itemDescription']:'';}}
+                    {{ isset($pd['material'])?'<br />'.$pd['material']:'';}}
                 </td>
             </tr>
             <tr>
