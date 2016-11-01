@@ -20,7 +20,6 @@
         "flynsarmy/db-blade-compiler": "1.*",
         "pingpong/menus": "1.0.*",
         "simplesoftwareio/simple-qrcode": "1.1.*",
-        "dinesh/barcode": "V3.0",
         "creitive/laravel4-breadcrumbs": "dev-master",
         "guzzlehttp/guzzle": "~4.0"
 

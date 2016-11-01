@@ -117,7 +117,7 @@ return array(
         'AlexWhitman\ViewThemes\ViewThemesServiceProvider',
         'Barryvdh\Snappy\ServiceProvider',
         'Flynsarmy\DbBladeCompiler\DbBladeCompilerServiceProvider',
-        'Dinesh\Barcode\BarcodeServiceProvider',
+        //'Dinesh\Barcode\BarcodeServiceProvider',
         'SimpleSoftwareIO\QrCode\QrCodeServiceProvider',
         'Creitive\Breadcrumbs\BreadcrumbsServiceProvider',
 
