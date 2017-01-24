@@ -10,7 +10,7 @@
         "anahkiasen/former": "dev-master",
         "intervention/image": "2.2.*",
         "intervention/imagecache": "dev-master",
-        "intervention/helper": "dev-master",
+        "intervention/helper": "dev-master@dev",
         "intervention/validation": "dev-master",
         "maatwebsite/excel": "1.*",
         "alexwhitman/view-themes": "1.2.*",

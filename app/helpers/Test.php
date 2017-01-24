@@ -1,8 +1,7 @@
 <?php
 
-class Prefs {
+class Test {
 
-    public static $product;
     public static $category;
     public static $section;
     public static $faqcategory;
@@ -311,8 +310,18 @@ class Prefs {
     }
 
     public static function ExtractProductCategory($selection = true)
-    {
-        $category = Product::distinct('category')->get()->toArray();
+    {   
+
+        $c = new Product();
+
+
+        $collection = $c->category;
+
+        $category = Product::all();
+
+        //$data = $collection->find->all()->toArray();
+
+       // $category = Product::distinct('category')->get()->toArray();
         if($selection){
             $cats = array(''=>'All');
         }else{
