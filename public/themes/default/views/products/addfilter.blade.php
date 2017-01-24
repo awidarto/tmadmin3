@@ -1,5 +1,5 @@
 {{ Former::select('assigned', 'Show only product in category : ')
-        ->options(Prefs::ExtractProductCategory() )
+        ->options(Test::ExtractProductCategory() )
         ->id('assigned-product-filter');
 }}&nbsp;&nbsp;<br />
 <a class="btn btn-info btn-sm" id="refresh_filter">Refresh</a>
